@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+# downloaded third-party slides (never committed)
+cs224n/*.pdf
