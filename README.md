@@ -92,6 +92,11 @@ This repository hosts the teaching materials for **AI Application Development**,
 ai-application-development/
 ├── README.md                  ← you are here
 ├── syllabus.md                ← full bilingual syllabus outline
+├── lectures/                  ← original weekly slide decks (EN + CN), week-XX/lecture-{en,zh}.pptx
+├── lesson-plans/              ← original A/B lesson plans (90-min lecture + 75-min lab), EN + CN
+├── textbook/                  ← original bilingual textbook chapters
+├── lecture-scripts/           ← original word-for-word lecture scripts (EN speech + CN reference)
+├── labs/                      ← original student-facing lab materials (starter notebooks, checkers, guides)
 ├── slides/
 │   └── mit-6s191/             ← 6 official MIT 6.S191 lecture PDFs (bundled, MIT license)
 ├── cs224n/                    ← Stanford CS224n slot: fetched on demand (not bundled)
@@ -101,13 +106,27 @@ ai-application-development/
 └── LICENSE                    ← CC BY-NC-SA 4.0 (this repo's own materials)
 ```
 
-Weekly lecture decks, lesson plans (EN/CN), lab handouts and micro-lesson videos are being authored and pushed progressively during the semester — watch this repo to get them as they land.
+New weeks are pushed as the semester progresses — **watch** the repo (or the author's Xiaohongshu below) to catch each week's materials as they land.
 
 ---
 
 ## Courseware Map
 
 The course deliberately leans on the world's best open teaching materials instead of reinventing every slide.
+
+### Original: weekly courseware authored for this course
+
+Every week ships five assets, each in **English** and **Chinese** (or bilingual):
+
+| Folder | What's inside | Files per week |
+|---|---|---|
+| `lectures/` | the 32-page slide deck students see in class | `lecture-en.pptx`, `lecture-zh.pptx` |
+| `lesson-plans/` | A: 90-min theory plan · B: 75-min lab plan (objectives, timing, activities, rubric) | `lecture-{en,zh}.html`, `lab-{en,zh}.html` |
+| `textbook/` | self-contained bilingual chapter notes | `chapter-XX/{en,zh}.html` |
+| `lecture-scripts/` | word-for-word English delivery script with Chinese reference (ASK/TIP/TIME cues) | `week-XX-bilingual.html` |
+| `labs/` | student-facing starter notebook, environment checker, setup guide with FAQ | `starter-notebook.ipynb`, `env-check.py`, `setup-guide.html` |
+
+**Currently published: Weeks 1–2** (all five asset types, both languages).
 
 ### Bundled: MIT 6.S191 (2024) — included in `slides/mit-6s191/`
 

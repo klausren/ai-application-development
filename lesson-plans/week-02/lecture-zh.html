@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W2-A (Lecture Part · 90 min) — Data Handling Fundamentals | 第2周教案A · 理论段</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  .en { color: var(--text-sec); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · 教案 · Week 2 · Lecture Part (Theory · 90 min)</div>
+  <h1>AI 数据处理基础<span class="en">Data Handling Fundamentals for AI</span></h1>
+  <div class="meta">
+    <span>⏱ 每周 180 min 一体课 · 本教案为理论段 90 min（L1–L5）</span>
+    <span>📚 Chapter 2.1–2.5</span>
+    <span>🎯 Module 1 · AI & ML Foundations</span>
+    <span>🧩 教案编号 LP-W2-A</span>
+    <span>🌐 English (with Chinese support)</span>
+  </div>
+</div>
+
+<!-- ===== 一、教学目标 ===== -->
+<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标 · Knowledge</h4>
+    <ul>
+      <li>能说出数据质量的六个维度及 GIGO 原则<span class="en"> — six data quality dimensions & GIGO</span></li>
+      <li>能解释 NumPy 向量化为何比循环快 10-100 倍<span class="en"> — why vectorization outperforms loops</span></li>
+      <li>能描述 Pandas 四大核心操作（加载/筛选/聚合/合并）<span class="en"> — four core Pandas operations</span></li>
+      <li>能复述可视化四件套及适用场景<span class="en"> — four chart types & when to use each</span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>技能目标 · Skills</h4>
+    <ul>
+      <li>能用 NumPy 完成向量化运算与广播操作<span class="inline"> — vectorized ops & broadcasting</span></li>
+      <li>能用 Pandas 完成布尔筛选、<code class="inline">groupby</code> 聚合、<code class="inline">merge</code> 合并<span class="en"> — filtering, groupby, merge</span></li>
+      <li>能用 Matplotlib/Seaborn 画出直方图、散点图、箱线图、热力图<span class="en"> — 4 key chart types</span></li>
+      <li>能描述 EDA 五步法与数据清洗六步流程<span class="en"> — 5-step EDA & 6-step cleaning workflow</span></li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标 · Attitudes</span>
+  建立"数据质量决定模型上限"的工程意识；理解为什么 AI 项目 80% 时间花在数据处理环节；养成"先看数据再碰模型"的职业习惯。
+</div>
+
+<!-- ===== 二、重难点 ===== -->
+<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<table>
+  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
+  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>NumPy 向量化与广播机制；Pandas 布尔筛选 + groupby 聚合；EDA 五步法与清洗六步流程</td><td>每个知识点配一段 live coding（Jupyter 投影），学生跟练 → 每段代码 3-5 分钟可运行</td></tr>
+  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>广播机制形状匹配规则；数据泄漏概念（先 split 再填充）；groupby 多层聚合</td><td>广播用"形状对齐"口诀 + 3 个对比例子；数据泄漏画数据流图说明；groupby 用 Titanic 生存率案例演示</td></tr>
+</table>
+
+<!-- ===== 三、时间分配 ===== -->
+<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
+<div class="timebar"><div class="lec">Lecture Part · Theory · 90 min（每周 180 min 一体课的前半段）</div></div>
+<table>
+  <tr><th style="width:70px;">时段</th><th style="width:80px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:80px;">课件页</th><th style="width:90px;">方法 / Method</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>开场：数据为王</strong>：上周回顾（W1 五要点 + Module 1 四周走位）；数据在 AI 中的角色与质量六维度；数据类型与来源；坏数据案例（AI 招聘偏见）+ 六维度快问互动</td><td>p1–p7</td><td>讲授 + 举手投票</td></tr>
+  <tr><td>L2</td><td>25 min</td><td><strong>NumPy 与 Pandas</strong>：双工具分工图；向量化 vs 循环速度对决（<code class="inline">%%timeit</code> 实测）；索引、切片与广播规则三例；Pandas 操作链五步；实战速查 9 行代码 + 链式索引陷阱</td><td>p8–p13</td><td>讲授 + Live Coding</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>可视化与 EDA</strong>：四类图回答四个问题（直方/散点/条形/热力）+ 图表选择急诊活动；EDA 五步法；Titanic EDA 走查（五步逐一落地）</td><td>p14–p17</td><td>讲授 + 快问快答</td></tr>
+  <tr><td>L4</td><td>25 min</td><td><strong>数据清洗</strong>：清洗六步流程；缺失值决策路径（比例分档 + 填充策略）；异常值三法（IQR / Z-score / 领域规则）；GIGO 法则收尾——"数据质量是模型上限"</td><td>p18–p22</td><td>讲授 + 案例讨论</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>Lab 衔接与预告</strong>：预告本课后半段 Lab 四段任务（NumPy 热身 → Pandas 探索 → 可视化 → 清洗实战）；环境与数据检查；说明课末随堂小测安排（见教案 B）</td><td>p23–p24</td><td>预告 + Q&A</td></tr>
+</table>
+
+<!-- ===== 四、教学活动 ===== -->
+<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 数据质量六维度快问（L1，p7）</h4>
+  <p style="font-size:13.5px;">投影 4 个真实数据问题场景（手机号 40% 为空、跨系统年龄不一致、2015 年房价预测 2026 年、只采集白天交通流量），学生举手投票属于哪个质量维度，再逐一揭晓。先建立"维度感"，再用 AI 招聘偏见案例讲"缺陷会被系统性放大"。<span class="en">Vote on which quality dimension each scenario violates, then reveal.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 向量化 vs 循环速度对决（L2，p10）</h4>
+  <p style="font-size:13.5px;">在 Jupyter 中现场写两段代码：①用 <code class="inline">for</code> 循环计算 1000×1000 矩阵每列均值；②用 <code class="inline">np.mean(axis=0)</code>。用 <code class="inline">%%timeit</code> 计时，学生亲眼看到 100 倍差距。这一刻"向量化"从概念变成信念。<span class="en">Live benchmark: loop vs np.mean on 1000×1000 — students see the 100x gap.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · Titanic 生存率探索（L2–L3，p12 + p17）</h4>
+  <p style="font-size:13.5px;">现场用 <code class="inline">df.groupby(["Sex", "Pclass"])["Survived"].mean()</code> 一行代码揭示"女性 + 一等舱存活率 96.8%"——这个结果比任何文字都更有冲击力。随后在 EDA 走查页用五步法复现完整侦察过程，学生跟着在本地跑。<span class="en">One line of groupby reveals survival patterns; the 5-step walkthrough repeats it as a process.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 图表选择急诊（L3，p15）</h4>
+  <p style="font-size:13.5px;">给 4 个数据分析问题（①年龄分布长什么样？②票价和年龄有没有关系？③各舱位生还率谁高？④哪些特征之间相关性最强？），学生 30 秒内说出用什么图。正确答案对应直方图/散点图/条形图/热力图。强化"先问题，后图表"口诀。<span class="en">4 questions → 30 seconds to pick the right chart type each.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 缺失值决策演练（L4，p20）</h4>
+  <p style="font-size:13.5px;">给出三个情境（缺失 &lt;5% / 5–30% / &gt;30%），学生按决策路径说出处理方案并说明理由；教师追问"为什么缺失"——区分随机缺失与系统性缺失。这是 Lab D 清洗实战的直接预演。<span class="en">Three missing-ratio scenarios → students walk the decision path aloud.</span></p>
+</div>
+
+<!-- ===== 五、作业与评估 ===== -->
+<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<table>
+  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">占比 / Weight</th></tr>
+  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>本节课末（Lab 段结束后）进行 3 题随堂小测（2 单选 + 1 判断，举手投票形式），计入 Lab 成绩 10%（详见教案 B 与课件 p30）</td><td>Lab 10%</td></tr>
+  <tr><td>课堂衔接<br><span class="en">Mid-Class</span></td><td>理论段结束后休息 10 分钟，随后进入同日 Lab 段（教案 LP-W2-B）：NumPy 热身 → Pandas 探索 → 可视化 → 清洗实战 → 交付</td><td>—</td></tr>
+  <tr><td>课后任务①<br><span class="en">Reading</span></td><td>阅读教材 Chapter 2.6–2.7（数据清洗实战 + 小结），巩固 Lab 中用到的清洗决策</td><td>—</td></tr>
+  <tr><td>课后任务②<br><span class="en">Assignment</span></td><td>完成 Lab 交付：lab02_eda.ipynb + 三张图解读 + 假设清单（≥3 条），下周一 23:59 截止，Git 推送</td><td>实验参与 20%</td></tr>
+  <tr><td>课程考核<br><span class="en">Course Grading</span></td><td>平时作业 30% + 期中项目 15% + Capstone 35% + 实验参与 20%（本周 Lab 交付物计入"实验参与"）</td><td>全学期</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Mid-Class · 本节课后衔接说明</span>
+  理论段（90 min）结束后休息 10 分钟，随后进入 Lab 段（75 min，教案 LP-W2-B）：NumPy 热身 → Pandas 探索 Titanic → 三张图可视化 → 清洗实战 → 交付与推送。教师在休息期间巡视确认学生 <code class="inline">ai-app</code> 环境可 <code class="inline">import numpy, pandas, matplotlib, seaborn</code>，并备好 Titanic CSV 本地副本（防止网络问题）。
+</div>
+
+<!-- ===== 六、预习与资源 ===== -->
+<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前预习 · Before Class</h4>
+    <ul>
+      <li>复习教材 Chapter 1（第 1 周内容，尤其 80% 法则与项目生命周期）</li>
+      <li>阅读教材 Chapter 2.1–2.5（本节课对应章节）</li>
+      <li>思考题：你接触过的数据集中，最大的数据质量问题是什么？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>配套资源 · Resources</h4>
+    <ul>
+      <li>课件：Week 2 Lecture（32 页版，p1–p24 对应本教案理论段与 Lab 衔接）</li>
+      <li>教材 Chapter 2（本套件产出）</li>
+      <li>NumPy 官方快速入门：numpy.org/doc/stable/user/quickstart.html</li>
+      <li>Pandas 10 分钟入门：pandas.pydata.org/docs/getting_started/intro_tutorials/</li>
+      <li>Seaborn 教程：seaborn.pydata.org/tutorial.html</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W2-A (Lecture Part · Theory · 90 min)</p>
+  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

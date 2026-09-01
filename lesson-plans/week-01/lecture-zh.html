@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W1-A (Theory, 90 min) — Introduction to AI | 第1周教案A · 理论段</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+    --orange: #d97706;
+    --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+
+  h2 {
+    font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px;
+  }
+  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  .en { color: var(--text-sec); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 50; }
+  .timebar .lab { background: var(--green); flex: 50; }
+
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · 教案 · Week 1 · Part A (Theory · 90 min)</div>
+  <h1>导论与 AI 基础<span class="en">Introduction to AI & Course Overview</span></h1>
+  <div class="meta">
+    <span>⏱ 90 min（L1–L5）· 每周 180 min 一体课 · 前半段理论</span>
+    <span>📚 Chapter 1.1–1.4</span>
+    <span>🎯 Module 1 · AI & ML Foundations</span>
+    <span>🧩 教案编号 LP-W1-A</span>
+    <span>🖥️ 课件 p1–p22（32 页版）</span>
+    <span>🌐 English (with Chinese support)</span>
+  </div>
+</div>
+
+<!-- ===== 一、教学目标 ===== -->
+<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标 · Knowledge</h4>
+    <ul>
+      <li>能区分 AI / ML / DL / GenAI 的层级关系与各自定义<span class="en"> — distinguish AI/ML/DL/GenAI</span></li>
+      <li>能说出三大学习范式（监督 / 无监督 / 强化）的区别与典型任务<span class="en"> — three learning paradigms</span></li>
+      <li>能复述 AI 三次发展浪潮、两次寒冬的因果与当前阶段特征<span class="en"> — three waves & two AI winters</span></li>
+      <li>能描述 AI 项目生命周期的六个阶段、80% 法则与工具链地图<span class="en"> — lifecycle, 80% rule & toolchain</span></li>
+      <li>能复述课程结构、16 周日历与考核方式（30/15/35/20）<span class="en"> — course structure, calendar & grading</span></li>
+      <li>能说出 AI 开发中的三类伦理风险与学术诚信红线<span class="en"> — AI ethics risks & academic integrity</span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>技能目标 · Skills</h4>
+    <ul>
+      <li>能对现实产品快速归类（属于 ML / DL / GenAI 哪一层）<span class="en"> — classify real products</span></li>
+      <li>能对照职业角色表，说出各方向与课程模块的对应关系<span class="en"> — map careers to modules</span></li>
+      <li>能用生命周期六阶段描述一个已知 AI 应用<span class="en"> — describe an AI app via lifecycle</span></li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标 · Attitudes</span>
+  建立"AI 是工程系统而非魔法"的认知框架；理解软件工程师在 AI 产品中的核心价值（80% 法则）；明确本课程学习契约（出勤、作业、诚信政策）。
+</div>
+
+<!-- ===== 二、重难点 ===== -->
+<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<table>
+  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
+  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>AI 技术谱系嵌套关系与三大学习范式；三次浪潮与两次寒冬时间轴；项目生命周期六阶段框架（含食堂排队案例走查）</td><td>四个视觉框架各讲一次并配现实案例：一张关系图 + 一条范式对照表 + 一条时间轴 + 一个生命周期流程（含案例）</td></tr>
+  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>AI/ML/DL/GenAI 概念边界模糊、监督与强化学习易混；学生易把"AI 应用开发"误解为纯算法研究；伦理议题容易流于空谈</td><td>用"判断三连问"口诀 + 现实产品归类互动化解；范式用"有没有标准答案"一句话锚定；伦理用三个真实翻车案例落地；反复强调课程定位 = 把模型变成可部署产品</td></tr>
+</table>
+
+<!-- ===== 三、时间分配 ===== -->
+<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
+<div class="timebar"><div class="lec">Lecture · 理论 90 min（每周 180 min 一体课 · 前半段）</div></div>
+<table>
+  <tr><th style="width:70px;">时段 / Phase</th><th style="width:90px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:110px;">课件页 / Slides</th><th style="width:90px;">方法 / Method</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>课程总览</strong>：自我介绍与课程契约；四大模块结构；考核方式 30/15/35/20；<b>16 周课程日历与里程碑</b>（W4/W7/W8/W10/W16）；<b>学术诚信政策</b>（作业协作边界 / AI 工具使用规范）</td><td>p1–p6</td><td>讲授 + 互动提问</td></tr>
+  <tr><td>L2</td><td>25 min</td><td><strong>AI 是什么</strong>：AI/ML/DL/GenAI 嵌套关系图（判断三连问）；<b>三大学习范式（监督 / 无监督 / 强化）与典型任务对照</b>；三次发展浪潮时间轴；<b>两次 AI 寒冬的成因与启示</b>；为什么软件工程师要学 AI</td><td>p7–p12</td><td>讲授 + 关系图可视化</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>应用领域、职业与伦理</strong>：CV / NLP / 语音多模态 / 推荐决策四域；<b>六大标志性突破时间轴（2012–2023+）</b>；四种职业角色对照课程模块；<b>AI 伦理三类风险（偏见 / 隐私 / 滥用）与工程师责任</b></td><td>p13–p17</td><td>讲授 + 职业自评互动</td></tr>
+  <tr><td>L4</td><td>25 min</td><td><strong>AI 项目生命周期</strong>：六阶段详解；<b>食堂排队预测案例全流程走查</b>（问题定义→部署监控）；80% 法则；<b>工具链地图</b>（M1–M4 各模块对应工具一览）</td><td>p18–p22</td><td>讲授 + 流程图 + 案例</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>Lab 衔接与预告</strong>：预告本课后半段 Lab 任务（conda → Jupyter → Git → Iris）；环境前置清单；说明课末随堂小测（3 题，举手投票，计入 Lab 成绩 10%）安排</td><td>p23 起</td><td>预告 + Q&A</td></tr>
+</table>
+
+<!-- ===== 四、教学活动 ===== -->
+<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 关系图互动（L2）</h4>
+  <p style="font-size:13.5px;">板书 AI ⊃ ML ⊃ DL ⊃ GenAI 四个同心嵌套圆，逐个问学生"这个系统属于哪一层"，用现实产品举例：ChatGPT = GenAI、照片人脸解锁 = DL、垃圾邮件过滤 = ML、Siri 问答 = 跨层。紧接三大范式快问快答："垃圾邮件过滤有没有标准答案？"（有 → 监督）、"用户分群呢？"（无 → 无监督）、"游戏 AI 打怪呢？"（试错奖励 → 强化）。<span class="en">Nested-circle diagram + real-product classification quiz, then a quick paradigm check.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 职业对照自评（L3）</h4>
+  <p style="font-size:13.5px;">发一张四职业对照表（ML Engineer / AI App Engineer / Data Scientist / MLOps Engineer），让学生凭直觉圈出最想去的方向并举手统计，教师说明各方向与本课程四大模块的对应关系。<span class="en">Career-matching self-assessment with show-of-hands tally.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 伦理快讨论（L3 末，5 min）</h4>
+  <p style="font-size:13.5px;">抛一个真实场景："如果你们做的食堂排队预测模型持续低估某个窗口的排队时长，导致该窗口阿姨总被投诉——这是模型问题还是伦理问题？"2 人一组讨论 2 分钟，教师收束到三类风险框架：偏见（数据偏）、隐私（采集过）、滥用（用途歪），并落到"工程师在交付前有责任检查"这一结论。<span class="en">A 5-minute ethics micro-discussion anchored on the canteen case.</span></p>
+</div>
+
+<!-- ===== 五、作业与评估 ===== -->
+<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<table>
+  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">占比 / Weight</th></tr>
+  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>本节课末（Lab 结束后）进行 3 题随堂小测（举手投票形式，60 秒一题），覆盖本教案全部知识点，计入 Lab 成绩 10%（详见教案 B）</td><td>—</td></tr>
+  <tr><td>课后任务①<br><span class="en">Reading</span></td><td>阅读教材 Chapter 1.4–1.8（生命周期、伦理与小结），巩固案例走查与伦理框架</td><td>—</td></tr>
+  <tr><td>课后任务②<br><span class="en">Setup</span></td><td>安装 Miniconda（或 Anaconda）；注册 GitHub 与 Google 账号——这是本节课后半段 Lab 的前置条件，未完成的同学提前发邮件说明（用 Google Colab 兜底）</td><td>—</td></tr>
+  <tr><td>课程考核<br><span class="en">Course Grading</span></td><td>平时作业 30% + 期中项目 15% + Capstone 35% + 实验参与 20%（本周 Lab 的交付物计入"实验参与"）</td><td>全学期</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Next · 后半段 Lab 衔接说明</span>
+  <b>同一节课后半段（约 75 min）</b>将完成：conda 环境搭建 → Jupyter/Colab 验证 → Git 推送 → 第一个 Iris 分类程序 → 交付与评分说明 → 随堂小测与小结。学生在 L5 间隙安装 Miniconda；理论段结束前提醒学生准备好笔记本与电源。
+</div>
+
+<!-- ===== 六、预习与资源 ===== -->
+<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前预习 · Before Class</h4>
+    <ul>
+      <li>阅读教材 Chapter 1.1–1.4（技术谱系与范式、发展历程、应用领域、生命周期）</li>
+      <li>观看 1 个 AI 行业年度回顾视频（任选，10min 内）</li>
+      <li>思考题：你每天使用的产品中，哪个最可能是 AI 驱动的？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>配套资源 · Resources</h4>
+    <ul>
+      <li>课件：Week 1 Lecture <b>32 页版 p1–p22</b>（理论段，随本教案配套）</li>
+      <li>教材 Chapter 1（本套件产出，含 1.7 AI 伦理与负责任开发）</li>
+      <li>补充阅读：Dive into Deep Learning 前言（免费 d2l.ai）</li>
+      <li>课程大纲（Syllabus）全文</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W1-A (Theory, 90 min of a 180-min session)</p>
+  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

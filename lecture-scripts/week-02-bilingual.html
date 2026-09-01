@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>讲课稿 W2 · Data Handling Fundamentals（中英对照）</title>
+<style>
+  :root {
+    --blue: #1E4FA8; --blue-l: #3D7BD9; --blue-d: #0E3F8C;
+    --ink: #1A2230; --ink2: #4A5568; --ink3: #8B97A8;
+    --bg: #F5F7FA; --card: #FFFFFF; --line: #E5E7EB; --soft: #F7F9FC; --soft2: #F0F5FC;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: "Source Han Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; line-height: 1.7; font-size: 15px; }
+  .page { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  header.doc { background: var(--blue); color: #fff; border-radius: 14px; padding: 26px 30px; }
+  header.doc .kicker { font-size: 12.5px; letter-spacing: 2px; opacity: .8; }
+  header.doc h1 { font-size: 25px; margin: 6px 0 4px; }
+  header.doc .sub { font-size: 14px; opacity: .88; }
+  header.doc .meta { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 14px; font-size: 13px; }
+  header.doc .meta span { background: rgba(255,255,255,.14); border-radius: 20px; padding: 3px 13px; }
+
+  .usage { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--blue); border-radius: 12px; padding: 16px 20px; margin: 18px 0; font-size: 13.5px; color: var(--ink2); }
+  .usage b { color: var(--blue-d); }
+  .usage .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; }
+  .badge { display: inline-block; font-size: 12px; border-radius: 6px; padding: 1px 9px; margin-right: 4px; font-weight: 600; }
+  .b-ask { background: #FDF3E3; color: #9A6A12; }
+  .b-tip { background: #E9F3EC; color: #1F7A46; }
+  .b-warn { background: #FBEAEA; color: #B34040; }
+  .b-time { background: var(--soft2); color: var(--blue-d); }
+
+  section.phase { margin-top: 26px; }
+  .phase-head { display: flex; align-items: center; gap: 14px; background: linear-gradient(90deg, var(--blue-d), var(--blue)); color: #fff; border-radius: 12px; padding: 12px 20px; }
+  .phase-head .no { font-size: 22px; font-weight: 800; opacity: .55; }
+  .phase-head .t { flex: 1; }
+  .phase-head .t h2 { font-size: 17.5px; }
+  .phase-head .t .e { font-size: 12.5px; opacity: .8; }
+  .phase-head .time { background: rgba(255,255,255,.16); border-radius: 20px; padding: 4px 14px; font-size: 13px; white-space: nowrap; }
+
+  .slide-block { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 22px 14px; margin-top: 12px; }
+  .slide-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 12px; }
+  .slide-head .pn { font-size: 12px; font-weight: 800; color: #fff; background: var(--blue); border-radius: 7px; padding: 2px 10px; white-space: nowrap; }
+  .slide-head .tt { font-size: 15.5px; font-weight: 700; }
+  .slide-head .te { font-size: 12.5px; color: var(--ink3); }
+  .slide-head .dur { margin-left: auto; font-size: 12px; color: var(--ink3); white-space: nowrap; }
+
+  p.en { font-size: 15px; color: var(--ink); line-height: 1.78; }
+  p.en strong { color: var(--blue-d); }
+  p.en code { font-family: Consolas, Menlo, monospace; font-size: 13.5px; background: var(--soft2); border-radius: 5px; padding: 1px 6px; color: var(--blue-d); }
+  p.zh { font-size: 13.5px; color: var(--ink2); background: var(--soft); border-left: 4px solid #C9D8EE; border-radius: 0 8px 8px 0; padding: 9px 14px; margin-top: 10px; }
+  .cue { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .cue span { font-size: 12.5px; }
+
+  footer.doc { margin-top: 30px; text-align: center; font-size: 12.5px; color: var(--ink3); }
+  @media print {
+    body { background: #fff; }
+    .page { padding: 0; max-width: none; }
+    .slide-block, .usage { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc">
+  <div class="kicker">AI APPLICATION DEVELOPMENT · LECTURE SCRIPT · 中英对照讲课稿</div>
+  <h1>第 2 周 · AI 数据处理基础</h1>
+  <div class="sub">Week 2 · Data Handling Fundamentals for AI — 面向大三软件工程专业留学生（国际班）</div>
+  <div class="meta">
+    <span>⏱ 180 min 一体课</span><span>理论 90 min（p1–p22）</span><span>Lab 75 min（p23–p29）</span><span>小测与小结 15 min（p30–p32）</span>
+  </div>
+</header>
+
+<div class="usage">
+  <b>使用说明 · How to use this script</b><br>
+  黑色英文段落 = 可直接照念的讲稿；浅蓝底中文段 = 对照译文（备课核对用，不必念）。徽章含义：
+  <div class="legend">
+    <span><span class="badge b-ask">提问 ASK</span>向全班提问，等 3–5 秒再点名</span>
+    <span><span class="badge b-tip">提示 TIP</span>教学处理建议</span>
+    <span><span class="badge b-warn">注意 WATCH</span>易错点 / 节奏提醒</span>
+    <span><span class="badge b-time">时间 TIME</span>到点提醒</span>
+  </div>
+</div>
+
+<!-- ============ L1 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L1</div>
+    <div class="t"><h2>数据为王 · Why Data</h2><div class="e">上周回顾、数据角色、类型来源、坏数据案例</div></div>
+    <div class="time">15 min · p1–p7</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p1</span><span class="tt">封面 · Cover</span><span class="te">Data Handling Fundamentals</span><span class="dur">~1 min</span></div>
+    <p class="en">Welcome back, everyone. Last week you learned <em>what</em> AI is and got your environment running. This week we go one level down, to the thing that actually decides whether your model succeeds or fails: <strong>data</strong>. Remember the eighty-percent rule? This week is that eighty percent. By the end of today you will do a complete exploratory analysis and data cleaning on the most famous dataset in machine learning — the Titanic passenger list.</p>
+    <p class="zh">欢迎回来。上周大家搞懂了 AI <em>是什么</em>、环境也跑起来了。这周我们下沉一层，去看真正决定模型成败的东西：<strong>数据</strong>。还记得 80% 法则吗？这一周就是那 80%。今天结束时，你将对机器学习界最有名的数据集——泰坦尼克号乘客名单——完成一次完整的探索性分析与数据清洗。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p2</span><span class="tt">目录 · Roadmap</span><span class="te">5 Parts · 180 min</span><span class="dur">~1 min</span></div>
+    <p class="en">Five parts today. First, why data matters and what "bad data" looks like. Second, the two tools you will use every single week from now on: NumPy and Pandas. Third, visualization and exploratory data analysis. Fourth, data cleaning. And fifth, the Lab: you do all of it yourselves on the Titanic dataset. Same structure as last week — theory until about minute ninety, a ten-minute break, then Lab, then a short quiz.</p>
+    <p class="zh">今天五个部分。一，数据为什么重要、"坏数据"长什么样；二，从今往后每周都要用的两个工具：NumPy 与 Pandas；三，可视化与探索性数据分析；四，数据清洗；五，实验：你自己在 Titanic 数据集上把全部流程做一遍。结构与上周相同——理论到第 90 分钟左右，休息 10 分钟，然后实验，最后小测。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p3</span><span class="tt">扉页 01 · 数据为王</span><span class="te">Part 01 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part one. Before we touch any tool, let's understand what data means to an AI project — and what it costs when data goes wrong.</p>
+    <p class="zh">第一部分。碰任何工具之前，先理解数据对 AI 项目意味着什么——以及数据出错时代价有多大。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p4</span><span class="tt">上周回顾 · Review &amp; Position</span><span class="te">W1 Recap · Module 1 Map</span><span class="dur">~3 min</span></div>
+    <p class="en">Quick recap of last week — five things. The hierarchy: AI contains ML, contains deep learning, contains generative AI. Three paradigms: supervised, unsupervised, reinforcement. The six-stage project lifecycle. The eighty-percent rule. And your working environment. Look at the module map: Week 1, done. <strong>This week, Week 2 — data. Week 3, machine learning with scikit-learn. Week 4, model evaluation and tuning.</strong> So today's three goals: understand data types and quality; master the NumPy-Pandas basics; and complete your first full EDA and cleaning cycle. Everything in Weeks 3 and 4 is built on what you do today.</p>
+    <p class="zh">快速回顾上周——五件事：层级关系（AI⊃ML⊃DL⊃GenAI）；三大范式（监督/无监督/强化）；六阶段生命周期；80% 法则；以及你的可用环境。看模块地图：第 1 周，完成；<strong>本周第 2 周——数据；第 3 周——scikit-learn 机器学习；第 4 周——模型评估与调优</strong>。所以今天三个目标：理解数据类型与质量；掌握 NumPy-Pandas 基础；完成你的第一个完整 EDA 与清洗循环。第 3、4 周的一切都建立在今天的成果上。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">口头抽查 1-2 人："说一个上周的三连问？"（快速激活记忆）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p5</span><span class="tt">数据角色与质量六维度 · Data Role &amp; Quality</span><span class="te">Hero · 6 Dimensions</span><span class="dur">~4 min</span></div>
+    <p class="en">Here is the thesis of this whole week: <strong>in traditional software, logic is king — you write the rules. In AI software, data is king — the rules are learned from the data.</strong> Same input, same algorithm, but better data beats a better algorithm almost every time. So how do you judge data? Six dimensions. <strong>Completeness</strong> — are values missing? <strong>Accuracy</strong> — do values match reality? <strong>Consistency</strong> — does the same fact look the same everywhere, or does age say 20 in one table and 200 in another? <strong>Timeliness</strong> — is it fresh enough for the question? <strong>Relevance</strong> — does it actually relate to what you're predicting? And <strong>representativeness</strong> — the sneakiest one: does your sample look like the real world it will face? Keep these six words in your head — they are your stethoscope for every dataset you'll ever meet.</p>
+    <p class="zh">这是本周的总论点：<strong>传统软件里逻辑为王——你写规则；AI 软件里数据为王——规则是从数据里学出来的。</strong>同样的输入、同样的算法，更好的数据几乎总能打败更好的算法。那怎么评判数据？六个维度。<strong>完整性</strong>——有缺失吗？<strong>准确性</strong>——值与事实相符吗？<strong>一致性</strong>——同一事实在各处长得一样吗，还是这张表年龄 20、那张表 200？<strong>及时性</strong>——对这个问题够新吗？<strong>相关性</strong>——和你要预测的东西真有关系吗？<strong>代表性</strong>——最阴险的一个：你的样本像它将来要面对的真实世界吗？把这六个词装进脑子——它们是你今后遇到任何数据集时的听诊器。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">六维度只点名不展开，p7 快问会回炉</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p6</span><span class="tt">数据类型与来源 · Types &amp; Sources</span><span class="te">Structured / Semi / Unstructured</span><span class="dur">~3 min</span></div>
+    <p class="en">Data comes in three shapes. <strong>Structured data</strong> — tables with rows and columns, like a spreadsheet or a database: every value has a fixed place. This is what Pandas eats for breakfast. <strong>Semi-structured</strong> — JSON files, XML, logs: organized, but flexible — keys can appear or disappear. <strong>Unstructured</strong> — images, audio, free text, video: no schema at all, and roughly eighty percent of the world's data lives here. And where does data come from? Databases, APIs, files, sensors, web scraping, and human labeling. One warning I'll repeat all semester: <strong>your data source decides your quality ceiling</strong>. If the source is biased or broken, no model downstream can fix it. Choose sources like you choose ingredients — the chef can't rescue rotten fish.</p>
+    <p class="zh">数据有三种形态。<strong>结构化</strong>——行列分明的表，像电子表格或数据库，每个值都有固定位置；这是 Pandas 的早餐。<strong>半结构化</strong>——JSON、XML、日志：有组织但灵活，字段可出现可消失。<strong>非结构化</strong>——图像、音频、自由文本、视频：完全没有 schema，世界上约 80% 的数据在这里。数据从哪来？数据库、API、文件、传感器、爬虫、人工标注。一个我整学期都会重复的警告：<strong>数据来源决定质量上限</strong>——来源有偏或损坏，下游任何模型都救不回来。选数据源要像选食材——厨师救不了烂鱼。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p7</span><span class="tt">坏数据案例 · When Data Goes Wrong</span><span class="te">AI Hiring Bias Case</span><span class="dur">~3.5 min</span></div>
+    <p class="en">Let me tell you a true story about what bad data costs. Around 2014, one of the world's largest tech companies built an AI to screen job applications — trained on ten years of their own hiring history. Sounded smart. But their historical hires were mostly men, so the model learned a dangerous shortcut: <em>penalize the word "women's"</em> — as in "women's chess club captain" — and downgrade graduates of women's colleges. The system was quietly discriminating, and by 2018 they shut it down entirely. Now map the story onto our six dimensions: the data was complete and accurate — the resumes were real. It was <strong>representativeness</strong> that failed: the data reflected a biased past, and the model faithfully amplified it. The lesson is not "AI is evil". The lesson is: <strong>a model trained on your history will repeat your history — at scale.</strong> Quick check, four questions on the slide — shout the dimension: temperatures recorded in Fahrenheit but stored as Celsius? ... Accuracy. A customer table where twenty percent of emails are empty? ... Completeness. Training a face detector only on photos of young people, then deploying it on everyone? ... Representativeness. A stock model trained on data that ends in 2019? ... Timeliness. Good — the stethoscope works.</p>
+    <p class="zh">讲一个关于坏数据代价的真实故事。大约 2014 年，全球最大的科技公司之一做了个 AI 简历初筛系统——用他们自己十年的招聘历史训练。听起来很聪明。但历史录用者大多为男性，于是模型学到一个危险捷径：<em>惩罚"women's"这个词</em>——比如"女子国际象棋社社长"——并压低女子学院毕业生的评分。系统在悄悄歧视，2018 年被彻底关停。把故事对到六维度上：这些数据完整且准确——简历都是真的；失败的是<strong>代表性</strong>：数据反映了有偏的过去，模型忠实地放大了它。教训不是"AI 是恶的"，教训是：<strong>用你的历史训练的模型，会规模化地重演你的历史。</strong>快问快答，幻灯片上四道题，齐声喊维度：华氏度当摄氏度存？——准确性。客户表 20% 邮箱为空？——完整性。人脸检测只用年轻人照片训练却要服务所有人？——代表性。股票模型的数据止于 2019 年？——及时性。很好，听诊器好使了。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">四连问节奏要快，齐答为主；此活动对应教案「六维度快问」</span></div>
+  </div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L2</div>
+    <div class="t"><h2>核心工具 · NumPy &amp; Pandas</h2><div class="e">双工具分工、向量化、索引切片广播、操作链、速查</div></div>
+    <div class="time">20 min · p8–p13</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p8</span><span class="tt">扉页 02 · 核心工具</span><span class="te">Part 02 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part two. From now on, every dataset you touch will pass through these two libraries. Learn them well once, and they pay you back every week for the rest of the semester — and honestly, for the rest of your career.</p>
+    <p class="zh">第二部分。从现在起，你碰到的每个数据集都会经过这两个库。认真学一次，它们会在本学期剩下的每一周——说实话，是你职业生涯的每一天——持续回报你。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p9</span><span class="tt">双工具谱系 · NumPy &amp; Pandas</span><span class="te">Hero · Division of Labor</span><span class="dur">~3 min</span></div>
+    <p class="en">Here's the mental model I want you to keep forever. <strong>NumPy is the engine; Pandas is the cockpit.</strong> NumPy gives you the ndarray — a grid of numbers, all the same type, stored in one contiguous block of memory, with math that runs at C speed. Pandas builds on top of it: it wraps NumPy arrays with labels — row index and column names — so you can say <code>df["Age"]</code> instead of <code>arr[:, 3]</code>. The rule of thumb: <strong>when your data is pure numbers and you're doing math, stay in NumPy. When your data is a real table — mixed types, missing cells, meaningful column names — reach for Pandas.</strong> And here's the part most beginners miss: under the hood, every Pandas column <em>is</em> a NumPy array. So when you write <code>df["Price"] * 0.9</code>, Pandas hands the whole column to NumPy and the vectorized math runs there. Two tools, one stack.</p>
+    <p class="zh">这是我要你们永远记住的心智模型：<strong>NumPy 是发动机，Pandas 是驾驶舱。</strong>NumPy 给你 ndarray——一个数字网格，类型统一、连续内存存放、数学运算以 C 速度执行。Pandas 建在它之上：给 NumPy 数组套上标签——行索引和列名——于是你可以写 <code>df["Age"]</code> 而不是 <code>arr[:, 3]</code>。经验法则：<strong>纯数字、纯数学 → 留在 NumPy；真实的表——混合类型、缺失格、有意义的列名 → 用 Pandas。</strong>多数初学者漏掉的一点是：底层上，Pandas 的每一列<em>就是</em>一个 NumPy 数组。所以你写 <code>df["Price"] * 0.9</code> 时，Pandas 把整列交给 NumPy，向量化数学在那里跑。两个工具，一条技术栈。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"发动机 vs 驾驶舱"这个比喻谁能在 30 秒内用自己的话复述一遍？（点 1 人）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p10</span><span class="tt">向量化 · Vectorization</span><span class="te">Loop vs Vectorized</span><span class="dur">~4 min</span></div>
+    <p class="en">Look at the two code blocks on the slide. Left: the Python loop — create an empty list, iterate ten million times, append, append, append. Right: <code>prices * 1.1</code>. One line. And when we time them, the one-liner is not slightly faster — it's often <strong>fifty to a hundred times faster</strong>. Why? Three reasons, top to bottom. First: <strong>a Python loop re-interprets every operation</strong>, every single iteration — type checks, dispatch, object overhead. NumPy calls a pre-compiled C routine once. Second: <strong>contiguous memory</strong>. A NumPy array is one unbroken block, so the CPU loads it into fast cache and streams through it; a Python list is a bag of pointers scattered across the heap. Third: <strong>SIMD</strong> — single instruction, multiple data — the CPU can apply one instruction to four or eight numbers at the same cycle. So the habit I'm grading you on from today: <strong>whenever you find yourself writing a for-loop over numbers, stop and ask: can NumPy do this whole array at once?</strong> Ninety percent of the time, the answer is yes.</p>
+    <p class="zh">看幻灯片上两段代码。左边：Python 循环——建空列表、迭代一千万次、append、append、append。右边：<code>prices * 1.1</code>，一行。计时之后，这行代码不是快一点——常常<strong>快 50 到 100 倍</strong>。为什么？三条原因，自上而下。第一：<strong>Python 循环每次迭代都重新解释操作</strong>——类型检查、分发、对象开销；NumPy 只调用一次预编译的 C 例程。第二：<strong>连续内存</strong>。NumPy 数组是一整块，CPU 可以整块装进高速缓存流式处理；Python 列表是一袋指针，散落堆上各处。第三：<strong>SIMD</strong>——单指令多数据——CPU 可以一个周期对四到八个数同时执行同一指令。所以从今天起我要考核的习惯是：<strong>每当你要对数字写 for 循环，停下来问一句：NumPy 能不能整列一次做完？</strong>九成情况下，答案是能。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">三原因只需记住关键词：C 层 / 连续内存 / SIMD，Lab A 会在热身任务里摸到</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p11</span><span class="tt">索引 · 切片 · 广播</span><span class="te">Index / Slice / Broadcast</span><span class="dur">~5 min</span></div>
+    <p class="en">Three survival skills for NumPy. <strong>Indexing and slicing:</strong> <code>a[0]</code> first element, <code>a[1:4]</code> elements one to three, and for a 2-D array, <code>a[rows, cols]</code> with a comma — <code>a[:, 0]</code> means all rows, first column. One trap, and it bites everyone at least once: <strong>a slice is a view, not a copy.</strong> Modify the slice, and you've modified the original array. If you need independence, say so explicitly: <code>a[1:4].copy()</code>. <strong>Aggregation:</strong> <code>a.sum()</code>, <code>a.mean()</code>, <code>a.max()</code>, <code>a.argmax()</code> — and for 2-D, the axis argument: axis 0 collapses <em>down the rows</em> giving you one number per column, axis 1 collapses <em>across the columns</em> giving you one number per row. My memory trick: <em>axis is the direction the result shrinks along</em>. <strong>Broadcasting</strong> is the magic that makes shapes play together. Rule: compare shapes from the trailing edge; dimensions are compatible if they're equal, or one of them is 1 — the size-1 dimension stretches. Matrix times vector, matrix plus scalar, column vector plus row vector becomes a full outer sum. Broadcasting is why NumPy code stays short — but always check shapes when something breaks: <code>a.shape</code> is your best debugging friend.</p>
+    <p class="zh">NumPy 三条生存技能。<strong>索引与切片：</strong><code>a[0]</code> 第一个元素，<code>a[1:4]</code> 第 1 到第 3 个，二维数组用逗号 <code>a[行, 列]</code>——<code>a[:, 0]</code> 表示所有行、第一列。一个陷阱，人人至少中招一次：<strong>切片是视图不是副本</strong>——改了切片，原数组也变了。需要独立就明说：<code>a[1:4].copy()</code>。<strong>聚合：</strong><code>a.sum()</code>、<code>a.mean()</code>、<code>a.max()</code>、<code>a.argmax()</code>；二维还有 axis 参数：axis 0 沿行向下塌缩，得到每列一个数；axis 1 沿列横向塌缩，得到每行一个数。我的记忆口诀：<em>axis 就是结果收缩的方向</em>。<strong>广播</strong>是让形状互相配合的魔法。规则：从尾部对齐比较；相等或其中一个为 1 即兼容——长度 1 的维度会被拉伸。矩阵乘向量、矩阵加标量、列向量加行向量变成完整的外和。广播正是 NumPy 代码短的原因——但出问题时永远先查形状：<code>a.shape</code> 是你最好的调试朋友。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">「切片是视图」是本页最大考点，小测可能出；Lab A 任务 3 会验证这一点</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p12</span><span class="tt">Pandas 操作链 · Workflow</span><span class="te">Load → Inspect → Select → Transform → Aggregate</span><span class="dur">~4 min</span></div>
+    <p class="en">Every Pandas session you will ever run follows the same five-step chain — memorize the verbs. <strong>Load:</strong> <code>pd.read_csv("titanic.csv")</code> — one line, and your file becomes a DataFrame. <strong>Inspect:</strong> <code>df.head()</code> first five rows, <code>df.info()</code> — column types and missing counts, this is your first diagnostic, run it every time, no exceptions — and <code>df.describe()</code> for the statistical snapshot. <strong>Select:</strong> single column <code>df["Age"]</code> gives a Series; double brackets <code>df[["Age", "Fare"]]</code> give a DataFrame; and boolean masks: <code>df[df["Age"] &gt; 30]</code> returns only the rows where the condition is True. <strong>Transform:</strong> create new columns — <code>df["FamilySize"] = df["SibSp"] + df["Parch"] + 1</code> — that's feature engineering in embryo, remember this move for Week 3. <strong>Aggregate:</strong> <code>df.groupby("Pclass")["Fare"].mean()</code> — split the table by class, apply mean to Fare, combine back. That split-apply-combine pattern answers half of all real analysis questions. Five verbs, one chain — load, inspect, select, transform, aggregate. In the Lab today you will run this exact chain, in this exact order, on the Titanic data.</p>
+    <p class="zh">你今后跑的每一次 Pandas 会话都是同一条五步链——把这些动词背下来。<strong>加载：</strong><code>pd.read_csv("titanic.csv")</code>——一行，文件变 DataFrame。<strong>检查：</strong><code>df.head()</code> 前五行；<code>df.info()</code>——列类型与缺失计数，这是你的第一诊断，每次必跑、没有例外；<code>df.describe()</code> 看统计快照。<strong>选取：</strong>单列 <code>df["Age"]</code> 得到 Series；双括号 <code>df[["Age", "Fare"]]</code> 得到 DataFrame；布尔掩码：<code>df[df["Age"] &gt; 30]</code> 只返回条件为 True 的行。<strong>变换：</strong>建新列——<code>df["FamilySize"] = df["SibSp"] + df["Parch"] + 1</code>——这就是特征工程的雏形，第 3 周还会用到。<strong>聚合：</strong><code>df.groupby("Pclass")["Fare"].mean()</code>——按舱位切表、对 Fare 求均值、合并回来。split-apply-combine 模式能回答一半的真实分析问题。五个动词、一条链——加载、检查、选取、变换、聚合。今天 Lab 你们就要按这条链、按这个顺序，在 Titanic 数据上跑一遍。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p13</span><span class="tt">实战速查 · Cheat Sheet</span><span class="te">9 Lines + Chain Indexing Trap</span><span class="dur">~3.5 min</span></div>
+    <p class="en">These nine lines on the slide are your cheat sheet — I'd suggest photographing this page right now; you'll use it in the Lab in twenty minutes. Walk through them fast: read_csv, head, info, describe, boolean mask, value_counts — which, by the way, is the fastest way to see category balance, like how many passengers embarked at each port — sort_values, groupby-mean, and dropna. Now the trap at the bottom: <strong>chained indexing</strong>. <code>df[df["Age"] &gt; 30]["Fare"]</code> — read-only, fine. But <code>df[df["Age"] &gt; 30]["Fare"] = 0</code>? Pandas returns a <em>temporary copy</em> for the first bracket, assigns into that copy, and throws it away — your assignment silently vanishes, and you may get the famous SettingWithCopyWarning. The fix: one shot, with <code>.loc</code> — <code>df.loc[df["Age"] &gt; 30, "Fare"] = 0</code> — row condition and column target in a single indexing operation. Rule to remember: <strong>when you assign, never chain; use .loc and do it in one step.</strong></p>
+    <p class="zh">幻灯片上这九行就是你的速查表——建议现在就拍照，二十分钟后 Lab 就要用。快速过一遍：read_csv、head、info、describe、布尔掩码、value_counts——顺带说，这是看类别均衡最快的方法，比如每个登船港口各有多少人——sort_values、groupby-mean、dropna。然后底部的陷阱：<strong>链式索引</strong>。<code>df[df["Age"] &gt; 30]["Fare"]</code>——只读，没事。但 <code>df[df["Age"] &gt; 30]["Fare"] = 0</code> 呢？Pandas 为第一层括号返回一个<em>临时副本</em>，赋值进了副本，然后扔掉——你的赋值无声消失，还可能收到著名的 SettingWithCopyWarning。修法：用 <code>.loc</code> 一步到位——<code>df.loc[df["Age"] &gt; 30, "Fare"] = 0</code>——行条件与列目标放在同一次索引操作里。要记住的规则：<strong>赋值时永远不要链式；用 .loc 一步完成。</strong></p>
+    <div class="cue"><span class="badge b-time">时间 TIME</span><span style="color:#4A5568">到点提醒：约第 35 分钟，休息 10 分钟放在 Part 3 之前（p14 讲完前不休息则顺延至 p17 后）</span></div>
+  </div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L3</div>
+    <div class="t"><h2>可视化与 EDA · Visualization &amp; EDA</h2><div class="e">四图四问、EDA 五步法、Titanic 走查</div></div>
+    <div class="time">18 min · p14–p17</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p14</span><span class="tt">扉页 03 · 可视化与 EDA</span><span class="te">Part 03 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Welcome back from the break. Part three: how to <em>see</em> your data before you trust it. Numbers summarize; pictures reveal.</p>
+    <p class="zh">欢迎回来。第三部分：在信任数据之前，先学会<em>看见</em>它。数字负责概括，图形负责揭示。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p15</span><span class="tt">四图四问 · Chart Selection</span><span class="te">Histogram / Scatter / Bar / Heatmap</span><span class="dur">~4 min</span></div>
+    <p class="en">You don't pick a chart because it looks pretty — you pick it because you have a question. Four charts, four questions, matched one-to-one on the slide. <strong>Histogram — "how is this value distributed?"</strong> One numeric column, binned: is Age centered on thirty, or bimodal with a children's bump? Shape, center, spread, outliers — all visible in one glance. <strong>Scatter plot — "do these two numbers relate?"</strong> Two numeric columns, one dot per row: is there a line, a curve, a funnel, or just a cloud? <strong>Bar chart — "which category is bigger?"</strong> One categorical, one numeric: average fare by passenger class — three bars, instant answer. <strong>Heatmap — "which pairs correlate?"</strong> The whole correlation matrix colored at once — in the Titanic data you'll see a strong negative block between Pclass and Fare: higher class, lower number, higher price. And Matplotlib mechanics in one breath: <code>plt.figure</code>, <code>plt.hist</code> / <code>plt.scatter</code> / <code>plt.bar</code>, always <code>plt.xlabel</code>, <code>plt.ylabel</code>, <code>plt.title</code> — <strong>in this course, a chart without axis labels and a title loses points. No exceptions.</strong></p>
+    <p class="zh">选图不是因为好看，而是因为你有问题。四张图、四个问题，幻灯片上一一对应。<strong>直方图——"这个数值怎么分布？"</strong>单数值列分箱：Age 是集中在 30 岁，还是有儿童凸起的双峰？形状、中心、离散、离群，一眼全见。<strong>散点图——"这两个数有关系吗？"</strong>两数值列，一行一个点：是直线、曲线、喇叭口，还是一团云？<strong>条形图——"哪个类别更大？"</strong>一分类型一数值：各舱位平均票价——三根柱子，即刻有答案。<strong>热力图——"哪些变量两两相关？"</strong>整个相关矩阵一次上色——Titanic 数据里你会看到 Pclass 与 Fare 之间的强负相关块：舱位等级数字越小、价格越高。Matplotlib 机制一口气说完：<code>plt.figure</code>、<code>plt.hist</code>/<code>plt.scatter</code>/<code>plt.bar</code>，永远加 <code>plt.xlabel</code>、<code>plt.ylabel</code>、<code>plt.title</code>——<strong>本课程里，没有轴标签和标题的图直接扣分，没有例外。</strong></p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"想看性别和生还率的关系，选哪张图？"（条形图——类别 × 数值）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p16</span><span class="tt">EDA 五步法 · The Five Steps</span><span class="te">Shape → Quality → Distributions → Relations → Questions</span><span class="dur">~5 min</span></div>
+    <p class="en">Exploratory Data Analysis is not wandering around your data hoping for inspiration — it's a fixed route with five stations, and this exact sequence is also in your textbook, section 2.5.1, so the numbering there matches this slide. <strong>Step 1 — Shape:</strong> <code>df.shape</code>. 891 rows, 12 columns. Ten seconds, and you already know the scale of the world you're entering. <strong>Step 2 — Quality:</strong> <code>df.info()</code> and <code>df.isnull().sum()</code>. Which columns have holes, which types are wrong. This step decides your cleaning plan — never skip it. <strong>Step 3 — Distributions:</strong> <code>df.describe()</code>, plus histograms for the numeric columns that matter. Where's the center, what's the spread, is anything absurd. <strong>Step 4 — Relations:</strong> group means for categorical-versus-target, scatter or correlation for numeric pairs. This is where hypotheses are born — does first class really survive more? <strong>Step 5 — Questions:</strong> write down what surprised you and what you'd check next. EDA ends not with an answer, but with a sharper question. Three lines of code preview on the slide — <code>df.shape</code>, <code>df.info()</code>, <code>df.describe()</code> — that's the skeleton of steps 1 to 3; the Lab will complete all five.</p>
+    <p class="zh">探索性数据分析不是在数据里闲逛等灵感——它是一条固定路线、五个站点，这个顺序教材 2.5.1 节也有，编号和这页一致。<strong>第 1 步——形状：</strong><code>df.shape</code>，891 行 12 列，十秒钟就知道你要进入的世界的规模。<strong>第 2 步——质量：</strong><code>df.info()</code> 和 <code>df.isnull().sum()</code>，哪些列有洞、哪些类型不对。这一步决定你的清洗计划——永远不要跳过。<strong>第 3 步——分布：</strong><code>df.describe()</code>，加上重要数值列的直方图。中心在哪、离散多大、有没有荒谬值。<strong>第 4 步——关系：</strong>类别对目标用分组均值，数值对用散点或相关系数。假设在这里诞生——头等舱真的生还更多吗？<strong>第 5 步——问题：</strong>写下什么让你意外、下一步想查什么。EDA 的终点不是答案，而是更锋利的问题。幻灯片上三行代码——<code>df.shape</code>、<code>df.info()</code>、<code>df.describe()</code>——就是第 1 至 3 步的骨架；Lab 会把五步走完。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">五步法与教材 2.5.1 编号对齐，提醒学生课后对照；「EDA 止于更好的问题」是小测考点之一</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p17</span><span class="tt">Titanic EDA 走查 · Live Walkthrough</span><span class="te">Five Steps on Real Data</span><span class="dur">~8 min</span></div>
+    <p class="en">Now watch me run all five steps live on the Titanic dataset — this is a rehearsal of exactly what you'll do in the Lab. <strong>Shape:</strong> <code>df.shape</code> → 891 rows, 12 columns. Under nine hundred passengers — small data, everything runs instantly. <strong>Quality:</strong> <code>df.info()</code> → Age has 714 non-null out of 891 — that's 177 missing, about twenty percent. Cabin has only 204 non-null — seventy-seven percent missing, that column is mostly holes. Embarked is missing just 2. Right away, three different severities, three different decisions later. <strong>Distributions:</strong> <code>df["Age"].describe()</code> → min is 0.42 — that's a five-month-old baby, not an error; max is 80. Fare: mean around 32, but max 512 — a heavy right tail, first skew you've caught. <strong>Relations:</strong> <code>df.groupby("Sex")["Survived"].mean()</code> → women about 74%, men about 19%. <code>df.groupby("Pclass")["Survived"].mean()</code> → first class 63%, third class 24%. Two variables, each moving survival by dozens of points — remember these two, they'll matter in Week 3 when we build a model. <strong>Questions:</strong> why is Age missing for one in five passengers? Did crew record it only for some ports? And does the missing-ness itself correlate with survival? Notice what happened: five mechanical steps, and we ended with questions a data scientist would actually ask. That's EDA done right.</p>
+    <p class="zh">现在看我现场在 Titanic 数据集上跑完五步——这就是你们 Lab 要做的事的预演。<strong>形状：</strong><code>df.shape</code> → 891 行 12 列。不到九百名乘客——小数据，一切秒出。<strong>质量：</strong><code>df.info()</code> → Age 非空 714/891——缺 177 个，约两成；Cabin 只有 204 个非空——缺 77%，这列基本是洞；Embarked 只缺 2。立刻出现三种严重程度，对应后面三种不同决策。<strong>分布：</strong><code>df["Age"].describe()</code> → 最小值 0.42——那是五个月大的婴儿，不是错误；最大 80。Fare：均值约 32，最大 512——重右尾，你们抓到的第一个偏态。<strong>关系：</strong><code>df.groupby("Sex")["Survived"].mean()</code> → 女性约 74%，男性约 19%；<code>df.groupby("Pclass")["Survived"].mean()</code> → 头等舱 63%，三等舱 24%。两个变量各自把生还率拉动几十个点——记住这两个，第 3 周建模时它们还会回来。<strong>问题：</strong>为什么五分之一乘客的 Age 缺失？船员只在某些港口登记了吗？缺失本身和生还有关系吗？注意刚才发生了什么：五个机械步骤，最后落到的是数据科学家真正会问的问题。这才叫 EDA 做对了。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">走查要真跑代码不空讲；74%/19%、63%/24% 两组数字写板书留到 Lab 复用</span></div>
+  </div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L4</div>
+    <div class="t"><h2>数据清洗 · Data Cleaning</h2><div class="e">六步流程、缺失值决策、异常值三法、GIGO</div></div>
+    <div class="time">17 min · p18–p22</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p18</span><span class="tt">扉页 04 · 数据清洗</span><span class="te">Part 04 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part four — the least glamorous, most decisive hour of any AI project: cleaning. The EDA you just saw told us where the problems are. Now we fix them, methodically.</p>
+    <p class="zh">第四部分——任何 AI 项目里最不光鲜、最决定成败的环节：清洗。刚才的 EDA 告诉我们问题在哪；现在有条不紊地修掉它们。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p19</span><span class="tt">清洗六步 · Six-Step Pipeline</span><span class="te">Standard Workflow</span><span class="dur">~3.5 min</span></div>
+    <p class="en">Six steps, in order. <strong>One — inspect:</strong> you've done it; info, isnull-sum, describe — you know your enemy. <strong>Two — handle missing values:</strong> we'll spend a whole slide on the decision path. <strong>Three — handle outliers:</strong> detect, then decide — three methods and three dispositions, next slide. <strong>Four — fix types and duplicates:</strong> a date column read as string? <code>pd.to_datetime</code>. Numeric column with stray text? Coerce and re-inspect. Duplicates: <code>df.duplicated().sum()</code> then <code>df.drop_duplicates()</code>. <strong>Five — standardize formats:</strong> "M"/"male"/"Male" are three spellings of one category — unify them; also watch units, kilograms versus pounds — the Mars Climate Orbiter was lost to exactly that mistake, three hundred million dollars. <strong>Six — validate:</strong> re-run info and describe, confirm the holes are filled, ranges are sane, and document every change you made in a cleaning log. That last habit — <strong>write down what you did to the data</strong> — is what separates a professional from a tinkerer: in six months, you won't remember, but your log will.</p>
+    <p class="zh">六步，按顺序。<strong>一——检查：</strong>刚才做过了；info、isnull-sum、describe——知己知彼。<strong>二——处理缺失值：</strong>整个下一页讲决策路径。<strong>三——处理异常值：</strong>先检测再决策——三法三选，再下一页。<strong>四——修类型与去重：</strong>日期列被读成字符串？<code>pd.to_datetime</code>。数值列混进文本？强制转换后重新检查。重复行：<code>df.duplicated().sum()</code> 再 <code>df.drop_duplicates()</code>。<strong>五——统一格式：</strong>"M"/"male"/"Male" 是一个类别的三种写法——统一；还要盯单位，千克对磅——火星气候探测器就是栽在这一处，三亿美元。<strong>六——验证：</strong>重跑 info 和 describe，确认洞已补、范围合理，并把每一步改动写进清洗日志。最后这个习惯——<strong>把你对数据做过什么写下来</strong>——是专业者与折腾者的分界线：六个月后你自己会忘，但日志记得。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p20</span><span class="tt">缺失值决策 · Missing Data</span><span class="te">Tiers by Ratio + 4 Fill Strategies</span><span class="dur">~4.5 min</span></div>
+    <p class="en">Missing values are not a bug to stamp out — they're a decision to make, and the first question is always: <strong>how much is missing?</strong> Three tiers. <strong>Under 5%:</strong> the column is basically healthy — fill or drop with a clear conscience. <strong>5% to 30%:</strong> filling starts to distort — the choice matters, think before you act. Age at 20% sits right in this band. <strong>Over 30%:</strong> like Cabin at 77% — the column is mostly vacuum; filling it means inventing data. Standard move: drop the column, or convert it into a signal — "was cabin recorded: yes/no" — because sometimes <em>missingness itself carries meaning</em>: maybe cabin numbers were recorded mainly for first-class survivors. Then, four fill strategies, in rising order of sophistication. <strong>Drop:</strong> <code>df.dropna(subset=["Embarked"])</code> — two rows out of 891, safe. <strong>Fill with constant:</strong> unknown category. <strong>Fill with statistic:</strong> Age gets the median — median, not mean, because Fare's right tail drags means but leaves medians untouched. <strong>Model-based fill:</strong> predict Age from other columns — that's Week 3 material, just know it exists. The one thing you must never do: <strong>fill with zero or -1 and forget about it</strong> — you'd tell the model that five-month-old babies and the unrecorded are the same thing.</p>
+    <p class="zh">缺失值不是要消灭的 bug，而是要做的决策，第一个问题永远是：<strong>缺了多少？</strong>三档。<strong>5% 以下：</strong>这列基本健康——放心填或放心删。<strong>5% 到 30%：</strong>填充开始失真——选择有讲究，先想后动；Age 的 20% 正落在这档。<strong>30% 以上：</strong>像 Cabin 的 77%——这列基本是真空，填它等于编造数据。标准动作：删列，或转成信号——"舱位是否被记录：是/否"——因为有时<em>缺失本身有含义</em>：也许舱号主要记录的是头等舱生还者。然后四种填充策略，按精巧程度递增。<strong>删除：</strong><code>df.dropna(subset=["Embarked"])</code>——891 里删 2 行，安全。<strong>常数填充：</strong>unknown 类别。<strong>统计量填充：</strong>Age 用中位数——中位数而非均值，因为 Fare 的右尾会拖动均值，却动不了中位数。<strong>模型填充：</strong>用其他列预测 Age——第 3 周的内容，知道存在即可。绝对不能做的一件事：<strong>填 0 或 -1 然后忘了</strong>——那是告诉模型，五个月大的婴儿和没登记的人是同一种东西。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"Cabin 缺 77%，你会怎么处理？举手选：删列 / 填常数 / 缺失当信号"（大多数场景选删列或转信号）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p21</span><span class="tt">异常值 · Outliers</span><span class="te">IQR / Z-score / Domain Rules + 3 Dispositions</span><span class="dur">~4.5 min</span></div>
+    <p class="en">An outlier is a point that lives far from the crowd. First — detection, three methods. <strong>IQR:</strong> sort, take the 25th and 75th percentiles, compute the interquartile range, and flag anything below Q1 minus 1.5 IQR or above Q3 plus 1.5 IQR. Robust — one crazy value can't move the quartiles. This is your default. <strong>Z-score:</strong> how many standard deviations from the mean; flag beyond 3. Cleaner math, but the mean and std are themselves dragged by outliers — the detector is infected by what it detects, so use it only for roughly normal data. <strong>Domain rules:</strong> the expert's eye — a human Age of 200 is impossible regardless of statistics; a Fare of 0 might be crew, babies, or a data entry blank. Then — and this is the part students forget — <strong>detection is not deletion.</strong> Three dispositions: <strong>keep</strong>, because it's real — that 512-pound fare was a genuine luxury ticket, deleting it would erase the truth; <strong>fix</strong>, when there's evidence of an error — a misplaced decimal, a unit slip; <strong>remove</strong>, only when it's provably wrong and would poison the model. My rule: <strong>every removal gets a reason written in the log, and "it looked weird" is not a reason.</strong></p>
+    <p class="zh">异常值是离群索居的点。先说检测，三种方法。<strong>IQR：</strong>排序，取 25% 和 75% 分位数，算四分位距，低于 Q1−1.5·IQR 或高于 Q3+1.5·IQR 的标记出来。稳健——一个疯值拖不动分位数，这是你的默认选择。<strong>Z-score：</strong>偏离均值几个标准差，超过 3 标记。数学更干净，但均值和标准差本身就会被异常值拖走——探测器被探测对象感染——只用于近似正态的数据。<strong>领域规则：</strong>专家的眼睛——人类 Age=200 无论统计上多"正常"都不可能；Fare=0 可能是船员、婴儿，也可能是录入空格。然后——学生最容易忘的部分——<strong>检测不等于删除。</strong>三种处置：<strong>保留</strong>，因为它是真实的——512 英镑的票价是真实存在的奢华票，删了它等于抹掉真相；<strong>修正</strong>，有证据表明是错误时——小数点错位、单位搞混；<strong>删除</strong>，仅当可证明是错的且会毒害模型。我的规矩：<strong>每一次删除都要在日志里写明理由，"看着不顺眼"不算理由。</strong></p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p22</span><span class="tt">GIGO · 垃圾进，垃圾出</span><span class="te">Hero · Garbage In, Garbage Out</span><span class="dur">~3 min</span></div>
+    <p class="en">Let this dark slide burn itself into your memory — it's the motto of everything we did today. <strong>Garbage in, garbage out.</strong> The model is a mirror, not a magician: it reflects the data you feed it. Feed it clean, representative data, and it learns real patterns. Feed it noise, bias, or holes, and it will confidently, efficiently, at scale — produce garbage. No algorithm rescues bad data; that's not an opinion, that's the architecture of machine learning itself: the model can only be as good as its training distribution. So when your model fails in the future — and it will — before you blame the algorithm, before you tune hyperparameters at midnight, <strong>go back and interrogate the data first</strong>. Nine times out of ten, the bug is not in the model. The bug is in the pipeline that fed it. That's why this week exists, and that's why Week 3 will feel easy by comparison: the person who cleaned the data well has already won half the modeling battle.</p>
+    <p class="zh">让这页深色幻灯片烧进你的记忆——它是今天所有内容的主旋律。<strong>垃圾进，垃圾出。</strong>模型是镜子，不是魔法师：它照出你喂给它的数据。喂干净、有代表性的数据，它学到真实模式；喂噪声、偏见和空洞，它会自信地、高效地、规模化地——产出垃圾。没有任何算法能拯救坏数据——这不是观点，是机器学习的架构本身：模型的上限就是它训练分布的上限。所以将来你的模型失败时——一定会有那么一天——在你怪算法之前、在半夜调超参数之前，<strong>先回去审问数据</strong>。十次里有九次，bug 不在模型里，而在喂它的管线里。这就是为什么有这一周，也是为什么第 3 周相比之下会显得轻松：把数据洗干净的人，建模战役已经赢了一半。</p>
+    <div class="cue"><span class="badge b-time">时间 TIME</span><span style="color:#4A5568">到点检查：约第 90 分钟结束理论；若超时，p22 的金句可压缩到 1 分钟内说完</span></div>
+  </div>
+</section>
+
+<!-- ============ LAB ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">Lab</div>
+    <div class="t"><h2>Lab · Titanic 实战</h2><div class="e">五段 A–E · 75 min · 环境就绪、独立完成、可小声讨论</div></div>
+    <div class="time">75 min · p23–p29</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p23</span><span class="tt">扉页 05 · Lab</span><span class="te">Part 05 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Now it's your turn. Everything I demonstrated, you now do — on the same dataset, with your own hands. Laptops open, environment ready. The rule is simple: <strong>type every line yourself. No copy-paste. Copy-paste is how you learn to paste, not to code.</strong></p>
+    <p class="zh">现在轮到你们。我演示过的一切，你们亲手做一遍——同一个数据集。打开电脑、环境就绪。规则很简单：<strong>每一行都自己敲，不许复制粘贴。复制粘贴只能学会粘贴，学不会写代码。</strong></p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p24</span><span class="tt">Lab 总览 · Overview</span><span class="te">A–E · 75 min · Rules</span><span class="dur">~2 min</span></div>
+    <p class="en">Five segments, seventy-five minutes. <strong>A — NumPy warm-up, ten minutes:</strong> prove to yourself that vectorization beats loops, and meet the slice-is-a-view behavior. <strong>B — Pandas exploration, twenty-five minutes:</strong> run the five-step chain and answer four questions about the data. <strong>C — Visualization, twenty minutes:</strong> three charts, each with a one-sentence interpretation — a chart without a sentence is just decoration. <strong>D — Cleaning, fifteen minutes:</strong> apply the missing-value decisions and outlier treatment to Age and Fare. <strong>E — Wrap-up, five minutes:</strong> commit, export your notebook, and check the deliverables list. Rules of the room: work individually, but quiet discussion with your neighbor is allowed — explaining to a neighbor is actually the best way to learn; ask me to come over when truly stuck, and I will — but I'll answer with a question first. The dataset file and the starter notebook are already in today's folder. Questions before we start? ... Then segment A, start now — timer is running.</p>
+    <p class="zh">五段，七十五分钟。<strong>A——NumPy 热身，10 分钟：</strong>亲手验证向量化打败循环，并撞上"切片是视图"。<strong>B——Pandas 探索，25 分钟：</strong>跑五步链，回答关于数据的四个问题。<strong>C——可视化，20 分钟：</strong>三张图，每张配一句解读——没有句子的图只是装饰。<strong>D——清洗，15 分钟：</strong>对 Age 和 Fare 落实缺失值决策与异常值处理。<strong>E——收尾，5 分钟：</strong>提交、导出 notebook、对照交付清单。教室规则：独立完成，但允许与邻座小声讨论——给邻座讲一遍其实是最好的学习方式；真卡住了叫我过去，我会来——但我会先用一个问题回答你。数据文件和起始 notebook 已在今天的学习资料里。开始前有问题吗？……那 A 段，现在开始——计时。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">「用问题回答问题」防止直接给答案；巡场优先看还没跑通第一个 cell 的学生</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p25</span><span class="tt">Lab A · NumPy 热身</span><span class="te">3 Tasks · 10 min</span><span class="dur">10 min</span></div>
+    <p class="en">Segment A, three tasks, and the starter skeleton is already in your notebook. <strong>Task 1:</strong> create an array of one million random prices; double them with a Python loop, then with <code>prices * 2</code>; time both with <code>%%time</code>. Write down the ratio — when your neighbor gets a different ratio, that's normal, it depends on the machine. <strong>Task 2:</strong> a 4×3 matrix; take the second column, and compute the mean of each row — think about which axis that is before you run it, then check yourself. <strong>Task 3, the trap:</strong> slice out a row, modify an element of the slice, then print the original matrix. If the original changed — you've just experienced that a slice is a view. Fix it with <code>.copy()</code> and re-run. When all three outputs make sense to you, move to segment B — don't wait for me.</p>
+    <p class="zh">A 段三个任务，起始骨架已在你的 notebook 里。<strong>任务 1：</strong>造一个一百万随机价格的数组；分别用 Python 循环和 <code>prices * 2</code> 翻倍；用 <code>%%time</code> 计时。写下比值——邻座比值不同很正常，取决于机器。<strong>任务 2：</strong>一个 4×3 矩阵；取第二列，并计算每行的均值——先想清楚这是哪个 axis 再运行，然后自查。<strong>任务 3，陷阱：</strong>切出一行，修改切片里的一个元素，再打印原矩阵。如果原矩阵变了——你刚刚亲历了"切片是视图"。用 <code>.copy()</code> 修好再跑一遍。三个输出你都能解释了，就进 B 段——不用等我。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p26</span><span class="tt">Lab B · Pandas 探索</span><span class="te">Five-Step Chain + 4 Questions · 25 min</span><span class="dur">25 min</span></div>
+    <p class="en">Segment B: the full five-step chain on <code>titanic.csv</code>, ending in four written answers. Load with <code>pd.read_csv</code>, then run shape, info, describe — steps one to three of EDA. Then answer, in one sentence each, in a markdown cell: <strong>Q1:</strong> which three columns have missing values, and what percentage each — show the <code>isnull().sum()</code> evidence. <strong>Q2:</strong> what is the median Age, and why did I insist on median rather than mean for this column? <strong>Q3:</strong> survival rate by passenger class — write the numbers, and state which class survives most. <strong>Q4:</strong> use <code>value_counts()</code> on Embarked — which port sent the most passengers? Then one stretch move for the fast ones: create <code>FamilySize = SibSp + Parch + 1</code> and check whether travelling alone or with family changes survival — that's a genuine feature-engineering move, and a taste of Week 3. Keep each answer short — one sentence, one piece of code as evidence. Brevity is a professional virtue.</p>
+    <p class="zh">B 段：在 <code>titanic.csv</code> 上跑完整五步链，以四个书面答案收尾。用 <code>pd.read_csv</code> 加载，然后跑 shape、info、describe——EDA 第 1 至 3 步。接着在 markdown 单元格里各用一句话回答：<strong>Q1：</strong>哪三列有缺失、各占多少百分比——给出 <code>isnull().sum()</code> 证据。<strong>Q2：</strong>Age 的中位数是多少？为什么这列我坚持用中位数而不是均值？<strong>Q3：</strong>各舱位生还率——写出数字，并说明哪一舱生还最多。<strong>Q4：</strong>对 Embarked 用 <code>value_counts()</code>——哪个港口上船的人最多？然后给快的人一个加分动作：建 <code>FamilySize = SibSp + Parch + 1</code>，看看独行与携家带口是否改变生还率——这是真正的特征工程动作，也是第 3 周的预告。每个答案保持简短——一句话、一行代码作证据。简洁是专业美德。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">Q3 的数字应与 p17 走查一致（63%/47%/24% 左右）；差异大说明 groupby 写错，优先排查布尔掩码</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p27</span><span class="tt">Lab C · 可视化</span><span class="te">3 Charts · 3 Sentences · 20 min</span><span class="dur">20 min</span></div>
+    <p class="en">Segment C: three charts, three sentences. <strong>Chart 1 — histogram of Age.</strong> Describe the shape: where's the bulk, where's the bump — is that children's bump real? One sentence under the chart. <strong>Chart 2 — bar chart of survival rate by class.</strong> Three bars, y-axis is the <em>rate</em>, not the count — a count chart answers the wrong question. One sentence: what's the trend and how big is the gap? <strong>Chart 3 — scatter of Age versus Fare.</strong> Describe the cloud: is there any visible relation? What's that point at Fare 512 — and based on this afternoon's outlier discussion, keep, fix, or remove — and why? That third sentence is deliberately open — I'm grading your reasoning, not your guess. Mechanics reminder: every chart gets xlabel, ylabel, title — an unlabeled chart loses points, as promised. If your histogram looks like one giant spike at zero — stop: that's missing Ages being read as zeros, go back and look at your data types. Fast finishers: color the scatter by Survived and see what pops out.</p>
+    <p class="zh">C 段：三张图，三句话。<strong>图 1——Age 直方图。</strong>描述形状：主体在哪、凸起在哪——儿童凸起是真的吗？图下写一句话。<strong>图 2——各舱位生还率条形图。</strong>三根柱，y 轴是<em>比率</em>不是计数——计数图回答的是错误的问题。一句话：趋势是什么、差距多大？<strong>图 3——Age 对 Fare 散点图。</strong>描述这团云：有可见关系吗？Fare 512 那个点是什么——按今天下午的异常值讨论，保留、修正还是删除——为什么？第三句是故意开放的——我评的是你的推理，不是你的猜测。操作提醒：每张图都要 xlabel、ylabel、title——说过没有标签的图扣分，说到做到。如果你的直方图在 0 处一根巨刺——停下：那是缺失的 Age 被读成了 0，回去查数据类型。快的人：把散点按 Survived 上色，看看能看出什么。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p28</span><span class="tt">Lab D · 数据清洗</span><span class="te">5-Step Checklist · 15 min</span><span class="dur">15 min</span></div>
+    <p class="en">Segment D: apply today's decisions to the Titanic data, five checklist items. <strong>One:</strong> drop the two rows where Embarked is missing — justify the tier: it's under 5%, safe to drop. <strong>Two:</strong> fill missing Age with the median — and in a markdown cell, write one line explaining why median. <strong>Three:</strong> Cabin — decide: drop it, or convert to "was recorded" yes/no. Either is defensible; write your reason. <strong>Four:</strong> outliers on Fare — compute the IQR fences, count how many rows fall outside, then <em>decide and justify</em>: keep, fix, or remove. There is no single right answer; there is only reasoned and unreasoned. <strong>Five:</strong> validate — re-run <code>df.info()</code> and <code>df.describe()</code>; Age should show zero missing, ranges should be sane. Then the professional habit: at the bottom of your notebook, a cleaning log — three to five bullets: what you changed, and why. This log is graded. The skeleton is in the starter notebook; the decisions are yours.</p>
+    <p class="zh">D 段：把今天的决策落实到 Titanic 数据上，五项清单。<strong>一：</strong>删掉 Embarked 缺失的两行——说明档位理由：低于 5%，删了安全。<strong>二：</strong>Age 用中位数填充——并在 markdown 单元格里写一行为什么用中位数。<strong>三：</strong>Cabin——决策：删列，或转成"是否被记录"的是/否。两个都站得住，写下你的理由。<strong>四：</strong>Fare 异常值——算出 IQR 围栏，数出界外行数，然后<em>决策并论证</em>：保留、修正还是删除。没有唯一正确答案，只有"讲理的"和"不讲理的"。<strong>五：</strong>验证——重跑 <code>df.info()</code> 和 <code>df.describe()</code>；Age 应显示零缺失、范围合理。然后是专业习惯：在 notebook 末尾写清洗日志——三到五条：改了什么、为什么。日志计入评分。骨架在起始 notebook 里，决策是你的。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p29</span><span class="tt">交付与评分 · Deliverables &amp; Rubric</span><span class="te">Checklist · 100 pts</span><span class="dur">~3 min</span></div>
+    <p class="en">Five minutes left in segment E — check your deliverables against this list. One: a single notebook, named <code>W02_yourname.ipynb</code>, that runs top to bottom without errors — restart the kernel and run all before you submit; a notebook that doesn't run clean loses ten points automatically. Two: segments A to D each present with their outputs. Three: the four one-sentence answers from segment B. Four: three charts, each with labels, title, and interpretation. Five: the cleaning log with reasons. Rubric out of one hundred: correctness of operations, forty; quality of interpretation — your sentences, your reasons — thirty; charts with proper labels, fifteen; cleaning log, ten; reproducibility — clean run, sensible naming — five. Notice what the rubric is telling you: <strong>thirty-five points — more than a third — are for words, not code.</strong> Explaining what you did and why is not decoration; in this course it is the job. Submit to the course platform before midnight tonight. Late policy: minus ten percent per day, no exceptions — same as the real world.</p>
+    <p class="zh">E 段最后五分钟——对照清单检查交付。一：一个 notebook，命名 <code>W02_你的名字.ipynb</code>，从头到尾无错跑通——提交前重启内核跑一遍；跑不干净的 notebook 自动扣 10 分。二：A 到 D 四段齐全且带输出。三：B 段的四个一句话答案。四：三张图，各有标签、标题、解读。五：带理由的清洗日志。评分满分 100：操作正确性 40；解读质量——你的句子、你的理由——30；图表规范带标签 15；清洗日志 10；可复现性——干净运行、命名合理——5。注意评分表在告诉你什么：<strong>35 分——超过三分之一——给的是文字，不是代码。</strong>解释你做了什么、为什么，不是装饰；在这门课里，这就是工作本身。今晚 24 点前提交到课程平台。迟交政策：每天扣 10%，没有例外——和真实世界一样。</p>
+    <div class="cue"><span class="badge b-time">时间 TIME</span><span style="color:#4A5568">Lab 75 分钟到此结束；收作业前口头确认「还没跑通 restart-and-run-all 的现在做」</span></div>
+  </div>
+</section>
+
+<!-- ============ QUIZ & WRAP ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">Q</div>
+    <div class="t"><h2>小测与小结 · Quiz &amp; Summary</h2><div class="e">3 题举手投票 · 五要点 · 下周预告</div></div>
+    <div class="time">15 min · p30–p32</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p30</span><span class="tt">随堂小测 · Quiz</span><span class="te">3 Questions · Raise Your Hands</span><span class="dur">~10 min</span></div>
+    <p class="en">Three questions, hands up, this counts toward your Lab grade as ten percent. <strong>Question one:</strong> <code>a = np.array([1,2,3,4,5])</code>, then <code>b = a[1:3]</code>, then <code>b[0] = 99</code>. What is <code>a[1]</code> now — 2, or 99? ... <em>99 — because a slice is a view.</em> If you said 2, you're in good company, and now you'll never say it again. <strong>Question two:</strong> a column is missing 25% of its values, roughly symmetric distribution. You want to fill it — mean, median, or mode? ... <em>Median — and the reason matters: with symmetric data mean ≈ median anyway, but the median is the safe habit because it can't be dragged by whatever outliers are hiding in the tail.</em> <strong>Question three:</strong> you detect an outlier with Z-score beyond 3. What must you do — remove it, fix it, or...? ... <em>Trick question: detection is not deletion. You must investigate, then choose keep, fix, or remove — with a written reason.</em> If you got all three, you've absorbed today. Votes recorded — let's summarize.</p>
+    <p class="zh">三道题，举手作答，计入 Lab 成绩的 10%。<strong>第一题：</strong><code>a = np.array([1,2,3,4,5])</code>，<code>b = a[1:3]</code>，然后 <code>b[0] = 99</code>。现在 <code>a[1]</code> 是 2 还是 99？……<em>是 99——因为切片是视图。</em>答 2 的不止你一个，但今后你再也不会答错了。<strong>第二题：</strong>一列缺 25% 的值，分布近似对称。要填充——均值、中位数还是众数？……<em>中位数——理由很重要：对称数据下均值≈中位数，但中位数是安全的习惯，因为尾巴里藏的离群值拖不动它。</em><strong>第三题：</strong>你用 Z-score 超过 3 检出一个异常值。接下来必须做什么——删掉、修正，还是……？……<em>陷阱题：检测不等于删除。必须先调查，再在保留/修正/删除中选择——并写下理由。</em>三题全对，说明今天的内容你已经吃透了。投票已记录——来总结。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">每题先全班举手再揭晓；第 1 题与 Lab A 任务 3、第 3 题与 p21 呼应，答错率高的知识点下周开头再回炉</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p31</span><span class="tt">五要点小结 · Summary</span><span class="te">5 Takeaways + TODO + Next Week</span><span class="dur">~4 min</span></div>
+    <p class="en">Five things to walk out with. <strong>One:</strong> data quality caps model quality — six dimensions, with representativeness the sneakiest. <strong>Two:</strong> NumPy is the engine, Pandas the cockpit — vectorize, never loop over numbers. <strong>Three:</strong> EDA is a fixed five-step route — shape, quality, distributions, relations, questions — not a random walk. <strong>Four:</strong> missing values and outliers are decisions with written reasons, not reflexes — detection is not deletion. <strong>Five:</strong> GIGO — the model is a mirror; interrogate the data before you blame the algorithm. Your TODO before next week: finish and submit today's notebook if you haven't; read textbook section 2.5.1 and compare their Titanic walkthrough with yours; and one small exercise — find any public dataset and run just the first three EDA steps on it. Twenty minutes of your time, and it locks all of this in. Next week we finally cross the line every course promises: <strong>you will train your first real machine learning model</strong> — scikit-learn, the fit-predict-evaluate rhythm — using the clean Titanic data you produced today. Your cleaned dataset is not homework; it's ammunition.</p>
+    <p class="zh">带走五件事。<strong>一：</strong>数据质量封顶模型质量——六维度，最阴险的是代表性。<strong>二：</strong>NumPy 是发动机、Pandas 是驾驶舱——向量化，别对数字写循环。<strong>三：</strong>EDA 是固定五步路线——形状、质量、分布、关系、问题——不是随机游走。<strong>四：</strong>缺失值和异常值是带书面理由的决策，不是条件反射——检测不等于删除。<strong>五：</strong>GIGO——模型是镜子；怪算法之前先审问数据。下周之前的 TODO：没交的交今天 notebook；读教材 2.5.1，把他们的 Titanic 走查和你的对照；再做个小练习——任找一个公开数据集，只跑 EDA 前三步。二十分钟，把今天全部焊牢。下周我们终于要跨过每门课都承诺的那条线：<strong>你将训练你的第一个真正的机器学习模型</strong>——scikit-learn、fit-predict-evaluate 节奏——用的正是你今天产出的干净 Titanic 数据。你清洗的数据集不是作业，是弹药。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p32</span><span class="tt">结束页 · Ending</span><span class="te">Hero · Quote + Next Week</span><span class="dur">~1 min</span></div>
+    <p class="en">One sentence to carry home, from a statistician who spent his life on exactly what we did today — John Tukey, the man who invented the word "software" and the field of EDA: <strong>"The combination of some data and an aching desire for an answer does not ensure that a reasonable answer can be extracted."</strong> Data plus wanting is not enough — method is what closes the gap. Today you learned the method. Next week: your first model. Same room, same time. Get some rest — you've earned it.</p>
+    <p class="zh">带一句话回家，出自一位毕生都在做我们今天之事的统计学家——John Tukey，他发明了"软件"这个词，也创立了 EDA 这个领域：<strong>"拥有数据、又对答案满怀渴望，并不能保证就能从中提取出合理的答案。"</strong>数据加渴望并不足够——弥补差距的是方法。今天你们学的就是方法。下周：你的第一个模型。同一间教室、同一时间。好好休息——你们配得上。</p>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

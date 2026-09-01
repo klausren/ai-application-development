@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W2-B (Lab Part · 75 min + Quiz 15 min) — EDA & Data Cleaning Lab | 第2周教案B · Lab段</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  .en { color: var(--text-sec); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · 教案 · Week 2 · Lab Part (Lab 75 min + Quiz & Summary 15 min)</div>
+  <h1>EDA 与数据清洗实战<span class="en">Exploratory Data Analysis & Data Cleaning Lab</span></h1>
+  <div class="meta">
+    <span>⏱ 每周 180 min 一体课 · 本教案为 Lab 段 75 min + 小测与小结 15 min</span>
+    <span>📚 Chapter 2.5–2.6</span>
+    <span>🔧 Hands-on Lab</span>
+    <span>🧩 教案编号 LP-W2-B</span>
+    <span>🌐 English (with Chinese support)</span>
+  </div>
+</div>
+
+<!-- ===== 一、教学目标 ===== -->
+<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标 · Knowledge</h4>
+    <ul>
+      <li>能复述 EDA 五步法流程<span class="en"> — 5-step EDA workflow</span></li>
+      <li>能说出缺失值的三种处理策略及各自适用条件<span class="en"> — 3 missing value strategies</span></li>
+      <li>能解释 IQR 异常值检测原理<span class="en"> — IQR outlier detection</span></li>
+      <li>能描述数据泄漏为何要"先 split 再填充"<span class="en"> — data leakage prevention</span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>技能目标 · Skills</h4>
+    <ul>
+      <li>能独立完成 Titanic 数据集的完整 EDA（五步法）<span class="en"> — full EDA on Titanic</span></li>
+      <li>能对缺失值制定差异化策略并实现<span class="en"> — per-column missing value strategy</span></li>
+      <li>能用 IQR 检测异常值并做截断处理<span class="en"> — IQR outlier handling</span></li>
+      <li>选做：从现有列构造新特征<span class="en"> — engineer new features (optional)</span></li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标 · Attitudes</span>
+  建立"先理解数据再碰模型"的工程纪律；体会"80% 法则"在实践中的体感（数据处理确实花大量时间）；养成每次处理数据都做 EDA 的职业习惯。
+</div>
+
+<!-- ===== 二、重难点 ===== -->
+<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<table>
+  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
+  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>EDA 五步法实操；缺失值按列差异化处理；IQR 异常值检测</td><td>教师先演示一步 → 学生跟练 → 教师巡视答疑 → 进入下一步。每步设 checkpoint，学生须跑通才能继续</td></tr>
+  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>数据泄漏概念（先 split 再填充）；特征工程"想什么特征有用"的思维转换（选做环节）</td><td>数据泄漏画数据流图（训练集信息→测试集=作弊）；特征工程用 Titanic 的 Title 提取做思维示范</td></tr>
+</table>
+
+<!-- ===== 三、时间分配 ===== -->
+<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
+<div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min（每周 180 min 一体课的后半段）</div></div>
+<table>
+  <tr><th style="width:70px;">时段</th><th style="width:80px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:80px;">课件页</th><th style="width:90px;">方法 / Method</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>NumPy 热身</strong>：创建 4×4 矩阵 → 切片练习（行/列/子块，强调切片是视图）→ 广播运算（每行加 [0,1,2,3]）。检查点：三个任务全绿再进入下一步</td><td>p25</td><td>学生跟练 + 巡视</td></tr>
+  <tr><td>Lab B</td><td>25 min</td><td><strong>Pandas 探索</strong>：加载 <code class="inline">titanic.csv</code> → <code class="inline">info()</code>/<code class="inline">describe()</code>/<code class="inline">isna().sum()</code> 数据体检 → 用代码回答四个必答问题（哪几列缺失 / 各舱位票价均值 / 30 岁以上男性生还率 / 女性生还率是男性几倍）→ 每个答案写一句「我发现……」</td><td>p26</td><td>学生自主探索 + 巡视</td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>三张图，三个问题</strong>：年龄直方图（分布）→ 各舱位生还率条形图（比较）→ 年龄×票价散点图（关系）；每图配 1-2 句 Markdown 解读；形成 ≥3 个可检验假设</td><td>p27</td><td>学生自主 + 快问快答</td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>清洗实战</strong>：age 中位数填充 + <code class="inline">age_missing</code> 标记 → embarked 众数填充 → fare IQR 上下界截断 → <code class="inline">duplicated()</code> 检查 → 清洗后复检（重跑 info + describe）。每步前写一行「为什么这么做」</td><td>p28</td><td>教师演示 → 学生跟练</td></tr>
+  <tr><td>Lab E</td><td>5 min</td><td><strong>收尾提交</strong>：核对交付清单（notebook + 三图解读 + 假设清单）；Git 推送到 <code class="inline">week2-lab</code> 分支</td><td>p29</td><td>检查清单</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>随堂小测</strong>：3 题（2 单选 + 1 判断），先举手投票再讲评，请答对的同学说理由。计入 Lab 成绩 10%；3 题全对者期末「实验参与」加 0.5 分</td><td>p30</td><td>投票 + 讲评</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>小结与预告</strong>：五要点回顾；课后 TODO（Lab 交付 / Git 推送 / 预习 Chapter 3）；下周预告：scikit-learn 第一个完整模型</td><td>p31–p32</td><td>回顾 + 预告</td></tr>
+</table>
+
+<!-- ===== 四、教学活动 ===== -->
+<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 数据体检站（Lab B，p26）</h4>
+  <p style="font-size:13.5px;">学生在 3 分钟内用 <code class="inline">info()</code> + <code class="inline">describe()</code> + <code class="inline">isna().sum()</code> 三条命令"体检"Titanic 数据集，然后写下"3 个最让你意外的发现"。教师收集 2-3 个学生的发现，如"Cabin 列缺失 77%——是否该删？"为清洗环节埋下伏笔。<span class="en">3-minute data health check — students write 3 surprising findings.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 假设生成与验证（Lab C，p27）</h4>
+  <p style="font-size:13.5px;">学生在三张图的基础上提出至少 3 个假设（如"三等舱生还率最低""票价越高生还率越高""儿童生还率高于成人"），写在 notebook 的 Markdown 里。这一环节训练的是"用数据回答问题"的思维——先观察再提出假设，而不是先有结论再找数据。<span class="en">Generate 3+ hypotheses from the three charts.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 清洗策略快辩论（Lab D，p28）</h4>
+  <p style="font-size:13.5px;">对 Age 列缺失值（177/891 = 20%），教师快速举手调查：删除 vs 中位数填充 vs 按舱位分组填充？请两三位不同选择的学生各说一句理由，教师总结"没有唯一正确答案，但要有依据并留痕"。引出"正式 ML 流程中先 train_test_split 再填充"的正确做法。<span class="en">Quick poll: how to handle Age missing values — no single answer, but there must be reasoning.</span></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 特征工程挑战（选做加分，Lab E 后）</h4>
+  <p style="font-size:13.5px;">挑战题：除了教材示例的 Title / FamilySize / IsAlone，你还能从现有列中提取什么新特征？最有创意的特征（如从 Ticket 编号规律提取舱位信息、从 Cabin 首字母提取楼层）在下周课开头展示。学有余力的同学课后完成，计入 Lab 加分。<span class="en">Optional bonus: engineer a creative feature beyond textbook examples.</span></p>
+</div>
+
+<!-- ===== 五、作业与评估 ===== -->
+<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<table>
+  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">分值 / Score</th></tr>
+  <tr><td>代码质量<br><span class="en">Code</span></td><td>代码可运行、逻辑清晰、无报错；Markdown 结构清楚</td><td>30 分</td></tr>
+  <tr><td>EDA 完整性<br><span class="en">EDA</span></td><td>五步法每步有产出；四个必答问题有答案与「我发现……」记录</td><td>30 分</td></tr>
+  <tr><td>清洗留痕<br><span class="en">Cleaning</span></td><td>缺失值按列差异化处理并记录策略理由；IQR 截断有前后对比复检</td><td>20 分</td></tr>
+  <tr><td>可视化<br><span class="en">Charts</span></td><td>三张图选型正确、有标题轴标签，各配 1-2 句解读</td><td>10 分</td></tr>
+  <tr><td>假设清单<br><span class="en">Hypotheses</span></td><td>≥3 条可检验、有图表依据的假设（Markdown）</td><td>10 分</td></tr>
+  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>课末 3 题小测（p30），计入 Lab 成绩 10%；特征工程挑战为选做加分项</td><td>另计</td></tr>
+</table>
+<div class="callout info">
+  <span class="label">交付物清单</span>
+  <strong>提交到 GitHub <code class="inline">week2-lab</code> 分支（下周一 23:59 截止，迟交每 24h 扣 10%）：</strong>① <code class="inline">lab02_eda.ipynb</code>（主 notebook：NumPy 热身 + EDA + 清洗 + Markdown 留痕） ② 三张图（在 notebook 内）+ 各自解读 ③ 假设清单（≥3 条） ④ <code class="inline">environment.yml</code>（更新版） ⑤ 选做：<code class="inline">figures/</code> PNG 导出与 <code class="inline">README.md</code> 摘要（加分）
+</div>
+<div class="callout warn">
+  <span class="label">教师备注 · Lab 注意事项</span>
+  <ul style="margin-bottom:0;">
+    <li><strong>网络问题预案：</strong>如果在线下载失败，教师准备好本地 <code class="inline">titanic.csv</code> 备用副本，学生改用 <code class="inline">pd.read_csv()</code> 加载</li>
+    <li><strong>环境检查：</strong>Lab 开始前统一跑 <code class="inline">import numpy, pandas, matplotlib, seaborn; print("all imports OK")</code>，报错的同学用 Google Colab 兜底</li>
+    <li><strong>时间压力预案：</strong>Lab 段仅 75 min。若 Lab C 进度落后，可只完成前两张图（直方图 + 条形图），散点图转为课后完成；Quiz 环节不可省略</li>
+    <li><strong>数据泄漏提示：</strong>Lab D 清洗环节，教师需明确提醒"正式 ML 流程中要先 train_test_split 再做缺失值填充"——本 Lab 为简化暂用全局填充，第 3-4 周会讲 Pipeline 正确做法</li>
+  </ul>
+</div>
+
+<!-- ===== 六、预习与资源 ===== -->
+<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前预习 · Before Class</h4>
+    <ul>
+      <li>完成理论段（教案 LP-W2-A）后即进入本 Lab，无前置课后任务；理论段休息期间确认 <code class="inline">ai-app</code> 环境 <code class="inline">import numpy, pandas, matplotlib, seaborn</code> 成功</li>
+      <li>浏览 Kaggle Titanic Competition 页面，了解数据集字段含义</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>配套资源 · Resources</h4>
+    <ul>
+      <li>教材 Chapter 2（本套件产出）</li>
+      <li>课件：Week 2 Lecture（32 页版，p23–p32 对应本教案 Lab 段与小测小结）</li>
+      <li>Titanic 数据集文档：kaggle.com/c/titanic/data</li>
+      <li>Pandas Cookbook（免费）：pandas.pydata.org/docs/user_guide/cookbook.html</li>
+      <li>Seaborn Gallery：seaborn.pydata.org/examples/index.html</li>
+      <li>第 3 周预告：scikit-learn 工作流（fit → predict → evaluate）</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W2-B (Lab Part · 75 min + Quiz & Summary · 15 min)</p>
+  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

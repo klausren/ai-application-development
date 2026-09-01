@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2 — Data Handling Fundamentals for AI | 第2章 AI数据处理基础</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header h1 .en { display: block; font-size: 21px; font-weight: 600; color: var(--text-sec); margin-top: 6px; letter-spacing: 0; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14px; color: var(--text-sec); }
+
+  .section { margin-bottom: 36px; }
+  h2 { font-size: 21px; font-weight: 800; color: var(--text); padding: 12px 0 8px; margin: 32px 0 14px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2 .en { font-size: 15px; font-weight: 500; color: var(--text-sec); }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  h3 .en { font-size: 13.5px; font-weight: 500; color: var(--text-sec); margin-left: 6px; }
+  p { margin-bottom: 10px; }
+  .en { color: var(--text-sec); }
+
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  pre { background: var(--code-bg); color: var(--code-text); border-radius: 10px; padding: 16px 20px; margin: 12px 0; font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term .en { font-size: 12.5px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before { content: counter(step); flex-shrink: 0; width: 28px; height: 28px; background: var(--accent); color: #fff; border-radius: 8px; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .steps .step .body { font-size: 14.5px; }
+  .steps .step .body .en { font-size: 13px; }
+
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) { .container { padding: 24px 16px 48px; } .terms { grid-template-columns: 1fr; } .chapter-header h1 { font-size: 24px; } .chapter-header h1 .en { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 02 · Module 1 · Week 2</div>
+  <h1>AI 数据处理基础<span class="en">Data Handling Fundamentals for AI</span></h1>
+  <p class="overview">数据是 AI 的燃料。本章从"数据在 AI 中的角色"出发，系统讲授 NumPy 向量化运算、Pandas 数据操作、Matplotlib/Seaborn 可视化、探索性数据分析（EDA）与数据清洗实战。你将完成一个真实数据集的端到端数据处理流程，为第 3-4 周的机器学习建模打好数据基础。<br>
+  <span class="en">Data is the fuel of AI. This chapter systematically covers NumPy vectorized computing, Pandas data manipulation, Matplotlib/Seaborn visualization, exploratory data analysis (EDA), and hands-on data cleaning. You will complete an end-to-end data pipeline on a real dataset, preparing the data foundation for ML modeling in Weeks 3-4.</span></p>
+</div>
+
+<!-- ========== 2.1 ========== -->
+<div class="section">
+  <h2>2.1 数据在 AI 中的角色<span class="en">The Role of Data in AI</span></h2>
+  <p>在第 1 章的项目生命周期中，"数据获取与探索"和"数据处理与特征工程"占了约 80% 的工作量。这一节回答一个根本问题：什么样的数据，才能训练出好模型？</p>
+  <p class="en">In the project lifecycle from Chapter 1, data acquisition and feature engineering account for ~80% of effort. This section answers: what makes data "good enough" to train a model?</p>
+
+  <h3>2.1.1 数据类型<span class="en">Data Types</span></h3>
+  <div class="terms">
+    <div class="term"><h4>结构化数据</h4><div class="en">Structured Data</div><p>行列表格形式，有明确字段类型。如 CSV/Excel、数据库表。Pandas 的主战场。<span class="en">Tabular format with defined schema; Pandas territory.</span></p></div>
+    <div class="term"><h4>非结构化数据</h4><div class="en">Unstructured Data</div><p>图像、文本、音频、视频。需先做特征提取或嵌入才能喂给模型。Module 2-3 重点。<span class="en">Images, text, audio — require feature extraction or embeddings first.</span></p></div>
+    <div class="term"><h4>半结构化数据</h4><div class="en">Semi-structured</div><p>JSON、XML、HTML。有层级结构但无固定 schema，需解析后转为结构化表。<span class="en">JSON, XML — hierarchical but schemaless; needs parsing.</span></p></div>
+    <div class="term"><h4>时间序列数据</h4><div class="en">Time Series</div><p>按时间排序的观测值。如股票价格、传感器读数。需处理时间索引与周期性。<span class="en">Ordered observations — stock prices, sensor logs; needs temporal indexing.</span></p></div>
+  </div>
+
+  <h3>2.1.2 数据来源<span class="en">Data Sources</span></h3>
+  <table>
+    <tr><th>来源 / Source</th><th>示例 / Examples</th><th>特点 / Characteristics</th></tr>
+    <tr><td>公开数据集</td><td>UCI ML Repository, Kaggle Datasets, Hugging Face Datasets, sklearn.datasets</td><td>免费、已标注、适合教学；需注意许可协议</td></tr>
+    <tr><td>企业内部数据</td><td>用户行为日志、交易记录、IoT 传感器流</td><td>真实场景价值高；涉及隐私合规、数据治理</td></tr>
+    <tr><td>API / 爬虫</td><td>REST API、Web Scraping、公开政府数据</td><td>实时获取；需处理速率限制、反爬、数据质量波动</td></tr>
+    <tr><td>合成数据</td><td>数据增强、GAN 生成、LLM 生成</td><td>补充稀缺标签；需验证与真实分布的一致性</td></tr>
+  </table>
+
+  <h3>2.1.3 数据质量维度<span class="en">Data Quality Dimensions</span></h3>
+  <div class="callout key">
+    <span class="label">Key Insight · 数据质量 = 模型上限</span>
+    模型再好，也救不了垃圾数据。工业界有一个共识：<strong>"Garbage In, Garbage Out"（GIGO）</strong>。数据质量的六个维度决定了模型性能的上限。<br>
+    <span class="en">No model can save bad data. "Garbage In, Garbage Out" — six quality dimensions cap model performance.</span>
+  </div>
+  <table>
+    <tr><th>维度 / Dimension</th><th>含义 / Meaning</th><th>典型问题 / Common Issues</th></tr>
+    <tr><td>完整性 Completeness</td><td>数据是否有缺失</td><td>空值、NaN、缺失行</td></tr>
+    <tr><td>准确性 Accuracy</td><td>数据是否反映真实值</td><td>录入错误、传感器噪声</td></tr>
+    <tr><td>一致性 Consistency</td><td>不同来源数据是否矛盾</td><td>单位不统一、重复记录冲突</td></tr>
+    <tr><td>时效性 Timeliness</td><td>数据是否反映当前状态</td><td>过时数据、更新延迟</td></tr>
+    <tr><td>唯一性 Uniqueness</td><td>有无重复记录</td><td>重复采集、合并冲突</td></tr>
+    <tr><td>合理性 Validity</td><td>值是否符合业务约束</td><td>年龄为负数、概率超出 [0,1]</td></tr>
+  </table>
+</div>
+
+<!-- ========== 2.2 ========== -->
+<div class="section">
+  <h2>2.2 NumPy 数组与向量化运算<span class="en">NumPy Arrays & Vectorized Computing</span></h2>
+  <p>NumPy 是 Python 科学计算的基石。几乎所有上层库（Pandas、PyTorch、scikit-learn）底层都依赖 NumPy 的 <code class="inline">ndarray</code>。掌握 NumPy 的核心是理解<strong>向量化</strong>：用数组运算替代循环，性能可提升 10-100 倍。</p>
+  <p class="en">NumPy is the cornerstone of Python scientific computing. Nearly all higher-level libraries build on ndarray. The key insight is vectorization: array operations replace loops, yielding 10-100x speedup.</p>
+
+  <h3>2.2.1 创建数组<span class="en">Creating Arrays</span></h3>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># From Python lists</span>
+a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+b = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
+
+<span class="cm"># Built-in generators</span>
+zeros = np.zeros((<span class="num">3</span>, <span class="num">4</span>))       <span class="cm"># 3×4 zero matrix</span>
+ones = np.ones(<span class="num">5</span>)              <span class="cm"># [1,1,1,1,1]</span>
+arange = np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)     <span class="cm"># [0,2,4,6,8]</span>
+linspace = np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>) <span class="cm"># [0, 0.25, 0.5, 0.75, 1.0]</span>
+rand = np.random.randn(<span class="num">3</span>, <span class="num">3</span>)   <span class="cm"># 3×3 standard normal</span>
+
+print(a.shape, b.shape)  <span class="cm"># (5,) (2,3)</span>
+print(a.dtype)           <span class="cm"># int64</span></pre>
+
+  <h3>2.2.2 向量化与广播<span class="en">Vectorization & Broadcasting</span></h3>
+  <pre><span class="cm"># Vectorized arithmetic — NO loops needed</span>
+a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+print(a * <span class="num">2</span>)          <span class="cm"># [2 4 6 8]  — element-wise</span>
+print(a ** <span class="num">2</span>)         <span class="cm"># [1 4 9 16]</span>
+print(np.sqrt(a))      <span class="cm"># [1. 1.41 1.73 2.]</span>
+print(a.sum(), a.mean(), a.std())  <span class="cm"># 10 2.5 1.12</span>
+
+<span class="cm"># Broadcasting: shapes auto-expand for compatibility</span>
+matrix = np.ones((<span class="num">3</span>, <span class="num">4</span>))
+row = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+result = matrix + row   <span class="cm"># row broadcasts to 3 rows</span>
+<span class="cm"># [[2,3,4,5], [2,3,4,5], [2,3,4,5]]</span></pre>
+  <div class="callout tip">
+    <span class="label">Performance Tip</span>
+    向量化比 Python 循环快 10-100 倍。规则：<strong>永远优先用 NumPy 内置函数而非 for 循环</strong>。处理百万级数据时差距是秒 vs 分钟。<span class="en">Vectorized ops are 10-100x faster than loops. Rule: always prefer NumPy built-in functions over for-loops.</span>
+  </div>
+
+  <h3>2.2.3 索引与切片<span class="en">Indexing & Slicing</span></h3>
+  <pre>a = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]])
+
+<span class="cm"># Basic indexing</span>
+print(a[<span class="num">0</span>, <span class="num">1</span>])       <span class="cm"># 2  (row 0, col 1)</span>
+print(a[:, <span class="num">0</span>])       <span class="cm"># [1 4 7]  (all rows, col 0)</span>
+
+<span class="cm"># Boolean masking — filter by condition</span>
+mask = a > <span class="num">5</span>
+print(a[mask])        <span class="cm"># [6 7 8 9]</span>
+
+<span class="cm"># Fancy indexing — select by index array</span>
+print(a[[<span class="num">0</span>, <span class="num">2</span>]])    <span class="cm"># rows 0 and 2</span>
+
+<span class="cm"># Where: conditional assignment</span>
+np.where(a > <span class="num">5</span>, <span class="str">"big"</span>, <span class="str">"small"</span>)</pre>
+</div>
+
+<!-- ========== 2.3 ========== -->
+<div class="section">
+  <h2>2.3 Pandas 数据操作<span class="en">Pandas Data Manipulation</span></h2>
+  <p>Pandas 是结构化数据处理的事实标准。<code class="inline">Series</code> 是一维带标签数组，<code class="inline">DataFrame</code> 是二维表格——你可以把它理解为"带行列标签的 Excel + SQL 查询能力"。</p>
+
+  <h3>2.3.1 加载与概览<span class="en">Loading & Overview</span></h3>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Load from CSV</span>
+df = pd.read_csv(<span class="str">"titanic.csv"</span>)
+
+<span class="cm"># Quick overview — the first 3 commands you always run</span>
+df.head()          <span class="cm"># first 5 rows</span>
+df.info()          <span class="cm"># dtypes, non-null counts, memory</span>
+df.describe()      <span class="cm"># statistical summary of numeric columns</span>
+df.shape           <span class="cm"># (rows, cols)</span>
+df.columns         <span class="cm"># column names</span>
+df.dtypes          <span class="cm"># data types per column</span></pre>
+
+  <h3>2.3.2 索引、筛选与赋值<span class="en">Indexing, Filtering & Assignment</span></h3>
+  <pre><span class="cm"># Column selection</span>
+df[<span class="str">"Age"</span>]                    <span class="cm"># single column → Series</span>
+df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Survived"</span>]]  <span class="cm"># multiple → DataFrame</span>
+
+<span class="cm"># .loc = label-based, .iloc = position-based</span>
+df.loc[<span class="num">0</span>:<span class="num">4</span>, [<span class="str">"Name"</span>, <span class="str">"Age"</span>]]    <span class="cm"># rows 0-4, specific cols</span>
+df.iloc[<span class="num">0</span>:<span class="num">5</span>, <span class="num">0</span>:<span class="num">3</span>]              <span class="cm"># first 5 rows, first 3 cols</span>
+
+<span class="cm"># Boolean filtering — the most common pattern</span>
+survived = df[df[<span class="str">"Survived"</span>] == <span class="num">1</span>]
+women_first = df[(df[<span class="str">"Sex"</span>] == <span class="str">"female"</span>) & (df[<span class="str">"Pclass"</span>] == <span class="num">1</span>)]
+
+<span class="cm"># Column creation from existing columns</span>
+df[<span class="str">"FamilySize"</span>] = df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] + <span class="num">1</span>
+df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"FamilySize"</span>] == <span class="num">1</span>).astype(int)</pre>
+
+  <h3>2.3.3 分组聚合<span class="en">GroupBy & Aggregation</span></h3>
+  <pre><span class="cm"># Group by one column, aggregate multiple ways</span>
+df.groupby(<span class="str">"Pclass"</span>)[<span class="str">"Fare"</span>].agg([<span class="str">"mean"</span>, <span class="str">"median"</span>, <span class="str">"count"</span>])
+
+<span class="cm"># Group by multiple columns</span>
+df.groupby([<span class="str">"Sex"</span>, <span class="str">"Pclass"</span>])[<span class="str">"Survived"</span>].mean()
+<span class="cm"># → survival rate by gender × class</span>
+
+<span class="cm"># Custom aggregation</span>
+df.groupby(<span class="str">"Pclass"</span>).agg({
+    <span class="str">"Age"</span>: [<span class="str">"mean"</span>, <span class="str">"median"</span>],
+    <span class="str">"Fare"</span>: [<span class="str">"sum"</span>, <span class="str">"max"</span>],
+    <span class="str">"Survived"</span>: <span class="str">"mean"</span>
+})
+
+<span class="cm"># Pivot table — spreadsheet-style cross-tab</span>
+pd.pivot_table(df, values=<span class="str">"Survived"</span>, index=<span class="str">"Sex"</span>,
+               columns=<span class="str">"Pclass"</span>, aggfunc=<span class="str">"mean"</span>)</pre>
+
+  <h3>2.3.4 合并与连接<span class="en">Merge & Join</span></h3>
+  <pre><span class="cm"># Two DataFrames with a shared key</span>
+passengers = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>], <span class="str">"name"</span>: [<span class="str">"Alice"</span>,<span class="str">"Bob"</span>,<span class="str">"Carol"</span>]})
+tickets = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>], <span class="str">"fare"</span>: [<span class="num">50</span>,<span class="num">80</span>,<span class="num">120</span>]})
+
+<span class="cm"># Four join types — same as SQL</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"inner"</span>)  <span class="cm"># only matches</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"left"</span>)   <span class="cm"># keep all passengers</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"outer"</span>)  <span class="cm"># keep all rows</span>
+pd.concat([df1, df2], axis=<span class="num">0</span>)  <span class="cm"># vertical stacking (more rows)</span></pre>
+  <div class="callout warn">
+    <span class="label">Common Pitfall</span>
+    <code class="inline">merge</code> 后行数变了？检查 <code class="inline">how</code> 参数和 key 的唯一性。<code class="inline">left</code> 保留左表全部行、缺失填 NaN；<code class="inline">inner</code> 只取交集。忘了检查会导致数据泄漏或静默丢行。<span class="en">Row count changed after merge? Check the how= parameter and key uniqueness.</span>
+  </div>
+</div>
+
+<!-- ========== 2.4 ========== -->
+<div class="section">
+  <h2>2.4 数据可视化<span class="en">Data Visualization with Matplotlib & Seaborn</span></h2>
+  <p>可视化是 EDA 的核心武器：一张图比一千行 <code class="inline">describe()</code> 更能暴露数据问题。Matplotlib 是底层引擎，Seaborn 在其上封装了统计图表，用更少的代码画出更专业的图。</p>
+
+  <h3>2.4.1 Matplotlib 基础<span class="en">Matplotlib Basics</span></h3>
+  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+fig, axes = plt.subplots(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+
+<span class="cm"># Histogram — distribution of a numeric variable</span>
+axes[<span class="num">0</span>].hist(df[<span class="str">"Age"</span>].dropna(), bins=<span class="num">30</span>, edgecolor=<span class="str">"white"</span>)
+axes[<span class="num">0</span>].set_title(<span class="str">"Age Distribution"</span>)
+
+<span class="cm"># Scatter plot — relationship between two variables</span>
+axes[<span class="num">1</span>].scatter(df[<span class="str">"Age"</span>], df[<span class="str">"Fare"</span>], alpha=<span class="num">0.5</span>, s=<span class="num">10</span>)
+axes[<span class="num">1</span>].set_xlabel(<span class="str">"Age"</span>); axes[<span class="num">1</span>].set_ylabel(<span class="str">"Fare"</span>)
+axes[<span class="num">1</span>].set_title(<span class="str">"Age vs Fare"</span>)
+
+plt.tight_layout(); plt.show()</pre>
+
+  <h3>2.4.2 Seaborn 统计图表<span class="en">Seaborn Statistical Plots</span></h3>
+  <pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
+sns.set_style(<span class="str">"whitegrid"</span>)
+
+<span class="cm"># Count plot — categorical frequency</span>
+sns.countplot(data=df, x=<span class="str">"Pclass"</span>, hue=<span class="str">"Survived"</span>)
+
+<span class="cm"># Box plot — detect outliers by group</span>
+sns.boxplot(data=df, x=<span class="str">"Pclass"</span>, y=<span class="str">"Age"</span>)
+
+<span class="cm"># Violin plot — distribution shape by category</span>
+sns.violinplot(data=df, x=<span class="str">"Sex"</span>, y=<span class="str">"Age"</span>, split=<span class="kw">True</span>)
+
+<span class="cm"># Correlation heatmap — the EDA power move</span>
+corr = df.select_dtypes(include=[<span class="str">"number"</span>]).corr()
+sns.heatmap(corr, annot=<span class="kw">True</span>, cmap=<span class="str">"coolwarm"</span>, center=<span class="num">0</span>)
+
+<span class="cm"># Pair plot — pairwise relationships at a glance</span>
+sns.pairplot(df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Pclass"</span>, <span class="str">"Survived"</span>]], hue=<span class="str">"Survived"</span>)</pre>
+  <div class="callout key">
+    <span class="label">Key Insight · 图表选择口诀</span>
+    <strong>看分布用直方图/密度图；看关系用散点图；看比较用箱线图/小提琴图；看相关用热力图。</strong>记住这四类，覆盖 90% 的 EDA 需求。<span class="en">Distribution → histogram/KDE; Relationship → scatter; Comparison → box/violin; Correlation → heatmap. These four cover 90% of EDA.</span>
+  </div>
+</div>
+
+<!-- ========== 2.5 ========== -->
+<div class="section">
+  <h2>2.5 探索性数据分析（EDA）<span class="en">Exploratory Data Analysis</span></h2>
+  <p>EDA 不是"画画"，而是<strong>用数据回答问题的系统性方法</strong>。目标是：理解数据分布 → 发现异常 → 检验假设 → 为特征工程做准备。一个标准的 EDA 流程如下：</p>
+  <p class="en">EDA is not "making plots" — it's a systematic method of answering questions with data: understand distributions → find anomalies → test hypotheses → prepare for feature engineering.</p>
+
+  <div class="steps">
+    <div class="step"><div class="body"><strong>概览全局</strong> — <code class="inline">df.shape</code>, <code class="inline">df.info()</code>, <code class="inline">df.describe()</code>。回答：有多少行多少列？哪些是数值/类别/时间？有没有缺失？<span class="en">Overview: shape, info, describe.</span></div></div>
+    <div class="step"><div class="body"><strong>单变量分析</strong> — 数值变量画直方图，类别变量用 <code class="inline">value_counts</code>。回答：每个变量自己的分布长什么样？偏不偏？有没有离群值？<span class="en">Univariate analysis: each variable on its own.</span></div></div>
+    <div class="step"><div class="body"><strong>双变量分析</strong> — 散点图、分组聚合、交叉表；多变量时加相关系数矩阵 + 热力图。回答：哪些特征与目标变量相关？特征之间有没有共线性？<span class="en">Bivariate analysis: scatter, groupby, correlation matrix.</span></div></div>
+    <div class="step"><div class="body"><strong>异常与缺失</strong> — 极端值、缺失模式（<code class="inline">isnull().sum()</code> + 缺失热力图）。回答：是录入错误还是真实现象？缺失是随机的还是有规律的？<span class="en">Anomalies and missingness: error or reality?</span></div></div>
+    <div class="step"><div class="body"><strong>形成假设</strong> — 基于以上观察写下猜想（如"女性存活率更高"），用分组统计验证。回答：哪些特征可能有预测力？需要什么变换？<span class="en">Hypotheses: write them down, then verify.</span></div></div>
+  </div>
+
+  <h3>2.5.1 Titanic 走查：五步法完整示例<span class="en">A Full Walkthrough on Titanic</span></h3>
+  <p>下面用 <code class="inline">sns.load_dataset("titanic")</code> 把五步法完整走一遍（与课件 p16–p17 对应）。注意：每一步都产出<strong>一条写进 notebook 的发现</strong>，而不是一张看完就关的图。</p>
+  <p class="en">Below, the five steps applied end-to-end to the Titanic dataset (mirrors slides p16–p17). Every step must yield a finding written into the notebook — not a chart you glance at and close.</p>
+  <pre><span class="cm"># Step 1 · 概览全局</span>
+df = sns.load_dataset(<span class="str">"titanic"</span>)
+df.shape          <span class="cm"># (891, 12)</span>
+df.info()         <span class="cm"># age 缺 177，deck 缺 688，embarked 缺 2</span>
+
+<span class="cm"># Step 2 · 单变量</span>
+df[<span class="str">"age"</span>].plot.hist()      <span class="cm"># 年龄右偏，集中在 20–40；fare 严重长尾（最高 512）</span>
+
+<span class="cm"># Step 3 · 双变量</span>
+df.groupby(<span class="str">"sex"</span>)[<span class="str">"survived"</span>].mean()
+<span class="cm"># female 0.74 vs male 0.19 —— 性别是强特征</span>
+
+<span class="cm"># Step 4 · 异常与缺失</span>
+df[<span class="str">"fare"</span>].describe()    <span class="cm"># 票价 0 元的票有 15 张——员工票还是录入错误？</span>
+
+<span class="cm"># Step 5 · 形成假设（写在 Markdown 里）</span>
+<span class="cm"># 假设1：sex + class + age 组合可预测生还</span>
+<span class="cm"># 假设2：deck 缺失超过 75%，应考虑删列</span>
+<span class="cm"># 假设3：fare=0 的记录需要单独核查</span></pre>
+  <div class="callout tip">
+    <span class="label">Takeaway · 五步即可行动</span>
+    同一份数据，五步就能得出可行动的结论——还没建模，特征清单已经成形。你的发现不必和示例一样：数据一样，视角可以不同。<span class="en">Five steps yield actionable conclusions — the feature shortlist takes shape before any modeling. Your findings don't have to match the example.</span>
+  </div>
+</div>
+
+<!-- ========== 2.6 ========== -->
+<div class="section">
+  <h2>2.6 数据清洗实战<span class="en">Hands-On Data Cleaning</span></h2>
+  <p>真实数据集永远不干净。本节以 Titanic 数据集为例，演示最常见的四类清洗操作。</p>
+
+  <h3>2.6.1 缺失值处理<span class="en">Handling Missing Values</span></h3>
+  <pre><span class="cm"># Step 1: Find them</span>
+df.isnull().sum()
+<span class="cm"># Age            177  ← lots of missing
+# Cabin         687  ← mostly missing → consider dropping
+# Embarked        2  ← trivial → fill with mode</span>
+
+<span class="cm"># Step 2: Strategy per column</span>
+<span class="cm"># Option A: Drop columns with too many missing</span>
+df = df.drop(columns=[<span class="str">"Cabin"</span>])
+
+<span class="cm"># Option B: Fill numeric with median (robust to outliers)</span>
+df[<span class="str">"Age"</span>] = df[<span class="str">"Age"</span>].fillna(df[<span class="str">"Age"</span>].median())
+
+<span class="cm"># Option C: Fill categorical with mode</span>
+df[<span class="str">"Embarked"</span>] = df[<span class="str">"Embarked"</span>].fillna(df[<span class="str">"Embarked"</span>].mode()[<span class="num">0</span>])</pre>
+  <div class="callout warn">
+    <span class="label">Warning · 数据泄漏</span>
+    如果用整个数据集的统计量（如全局中位数）来填缺失值，再做 train/test split，测试集信息会泄漏到训练集。正确做法：<strong>先 split，再用训练集统计量填充</strong>。这在 scikit-learn 中由 <code class="inline">SimpleImputer</code> + <code class="inline">Pipeline</code> 保证。<span class="en">Filling missing values with global stats before splitting causes data leakage. Always split first, then impute with training statistics.</span>
+  </div>
+
+  <h3>2.6.2 异常值检测<span class="en">Outlier Detection</span></h3>
+  <pre><span class="cm"># IQR method — robust to extreme values</span>
+Q1 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.25</span>)
+Q3 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.75</span>)
+IQR = Q3 - Q1
+lower = Q1 - <span class="num">1.5</span> * IQR
+upper = Q3 + <span class="num">1.5</span> * IQR
+
+outliers = df[(df[<span class="str">"Fare"</span>] < lower) | (df[<span class="str">"Fare"</span>] > upper)]
+print(<span class="str">f"Found {len(outliers)} outliers in Fare"</span>)
+
+<span class="cm"># Z-score method — assumes normal distribution</span>
+from scipy <span class="kw">import</span> stats
+z = np.abs(stats.zscore(df[<span class="str">"Age"</span>].dropna()))
+print(<span class="str">f"Z-score outliers (>3): {(z > 3).sum()}"</span>)</pre>
+
+  <h3>2.6.3 重复值与类型转换<span class="en">Duplicates & Type Conversion</span></h3>
+  <pre><span class="cm"># Remove exact duplicates</span>
+df = df.drop_duplicates()
+print(<span class="str">f"After dedup: {df.shape}"</span>)
+
+<span class="cm"># Type conversion — save memory, enable operations</span>
+df[<span class="str">"Pclass"</span>] = df[<span class="str">"Pclass"</span>].astype(<span class="str">"category"</span>)  <span class="cm"># saves ~90% memory</span>
+df[<span class="str">"Sex"</span>] = df[<span class="str">"Sex"</span>].map({<span class="str">"male"</span>: <span class="num">0</span>, <span class="str">"female"</span>: <span class="num">1</span>})  <span class="cm"># label encoding</span></pre>
+
+  <h3>2.6.4 特征工程初探<span class="en">Feature Engineering Preview</span></h3>
+  <pre><span class="cm"># Extract title from name — a proxy for social status</span>
+df[<span class="str">"Title"</span>] = df[<span class="str">"Name"</span>].str.extract(<span class="str">r' ([A-Za-z]+)\.'</span>)
+df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace([<span class="str">"Mlle"</span>, <span class="str">"Ms"</span>], <span class="str">"Miss"</span>)
+df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace(<span class="str">"Mme"</span>, <span class="str">"Mrs"</span>)
+
+<span class="cm"># Bin age into groups — converts continuous to ordinal</span>
+df[<span class="str">"AgeBin"</span>] = pd.cut(df[<span class="str">"Age"</span>], bins=[<span class="num">0</span>, <span class="num">12</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">60</span>, <span class="num">100</span>],
+                     labels=[<span class="str">"Child"</span>, <span class="str">"Teen"</span>, <span class="str">"Young"</span>, <span class="str">"Adult"</span>, <span class="str">"Senior"</span>])
+
+<span class="cm"># Family size → alone flag (feature compression)</span>
+df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] == <span class="num">0</span>).astype(int)</pre>
+  <div class="callout tip">
+    <span class="label">Pro Tip</span>
+    特征工程是"用领域知识把数据变信息"的过程。Titanic 的经典例子：<strong>从 Name 提取 Title</strong>（Mr/Mrs/Master/Dr），比单纯用 Sex 多了一层社会地位信息——历史上"Women and children first"中，Master（男孩）的存活率显著高于 Mr。<span class="en">Feature engineering turns domain knowledge into signal. The Titanic "Title" extraction captures social status beyond mere gender.</span>
+  </div>
+</div>
+
+<!-- ========== 2.7 ========== -->
+<div class="section">
+  <h2>2.7 本章小结<span class="en">Chapter Summary</span></h2>
+  <ul>
+    <li>数据质量六维度（完整性/准确性/一致性/时效性/唯一性/合理性）决定模型上限，GIGO 是铁律。</li>
+    <li>NumPy 向量化运算比循环快 10-100 倍，广播机制让不同形状数组自动对齐运算。</li>
+    <li>Pandas 四大操作：加载概览（<code class="inline">read_csv</code> + <code class="inline">info</code> + <code class="inline">describe</code>）→ 筛选（<code class="inline">loc/iloc</code> + 布尔）→ 聚合（<code class="inline">groupby</code>）→ 合并（<code class="inline">merge</code>）。</li>
+    <li>可视化四件套：直方图看分布、散点图看关系、箱线图看比较、热力图看相关。</li>
+    <li>EDA 五步法：概览全局 → 单变量 → 双变量 → 异常与缺失 → 形成假设（详见 2.5.1 Titanic 走查）。</li>
+    <li>数据清洗核心：缺失值按列策略处理（删除/填充/插值）、异常值用 IQR 检测、先 split 再填充防止数据泄漏。</li>
+  </ul>
+</div>
+
+<!-- ========== EXERCISES ========== -->
+<div class="section">
+  <h2>本章练习<span class="en">Exercises</span></h2>
+  <div class="exercise">
+    <h4>练习 1 · NumPy 向量化（必做）</h4>
+    <ol>
+      <li>创建一个 1000×1000 的随机矩阵 <code class="inline">A</code>，分别用 <code class="inline">for</code> 循环和 NumPy 向量化计算每列的均值，用 <code class="inline">%timeit</code> 对比两者耗时。</li>
+      <li>用布尔掩码筛选矩阵中所有大于 0.5 的元素，替换为 1.0，其余替换为 0.0。</li>
+      <li>用 <code class="inline">np.where</code> 实现分段函数：x &lt; 0 → -1，x == 0 → 0，x &gt; 0 → 1。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 2 · Pandas EDA（必做）</h4>
+    <ol>
+      <li>从 <code class="inline">seaborn</code> 加载 Titanic 数据集：<code class="inline">df = sns.load_dataset("titanic")</code>。</li>
+      <li>完成本章 2.5 节的 EDA 五步法，每步至少产出一个图或一张表，并写下一条发现。</li>
+      <li>提出至少 3 个假设并验证（如"三等舱存活率最低"），用 <code class="inline">groupby</code> + 可视化支撑结论。</li>
+      <li>输出一份 3-5 行的 EDA 报告（Markdown），记录关键发现。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 3 · 数据清洗实战（必做）</h4>
+    <ol>
+      <li>加载练习 2 的数据集，处理所有缺失值（至少 3 列），记录每列的处理策略和理由。</li>
+      <li>用 IQR 方法检测 <code class="inline">"fare"</code> 列的异常值，对比去除异常值前后分布的变化。</li>
+      <li>从 <code class="inline">"who"</code> 或 <code class="inline">"class"</code> 列做 Label Encoding，新增 <code class="inline">"_alone"</code> 布尔列。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 4 · 思考题（讨论）</h4>
+    <ol>
+      <li>为什么"先 split 再填缺失值"是正确的？如果你先填再 split，具体会发生什么？画一个数据流图说明。</li>
+      <li>你有 100 万行数据、50 列，其中 5 列有 30% 缺失。你会全部删除还是填充？决策依据是什么？</li>
+      <li>从 Titanic 的 <code class="inline">"deck"</code> 列（缺失率 > 70%），你能想到什么方式让它仍有信息价值？</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 / AI Application Development — Chapter 2</p>
+  <p>64 课时 · 大三软件工程专业留学生 · Week 2 / 16</p>
+  <p style="margin-top:8px;">教材由 AI 辅助生成，任课教师可结合实际调整。 / Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

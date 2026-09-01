@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 — Introduction to AI Application Development &amp; Environment Setup</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Timeline */
+  .timeline { margin: 16px 0; border-left: 3px solid var(--accent-bright); padding-left: 20px; }
+  .timeline .item { position: relative; margin-bottom: 18px; }
+  .timeline .item::before { content: ""; position: absolute; left: -27px; top: 7px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent-bright); border: 3px solid var(--accent-bg); }
+  .timeline .year { font-weight: 800; color: var(--accent-bright); font-size: 14px; }
+  .timeline .evt { font-size: 14.5px; margin-top: 2px; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 01 · Module 1 · Week 1</div>
+  <h1>Introduction to AI Application Development &amp; Environment Setup</h1>
+  <p class="overview">This chapter is your starting point. You will understand what "AI application development" really is — the AI technology landscape (ML / DL / GenAI) and the three learning paradigms, three waves and two AI winters, typical application domains and career paths, the complete AI project lifecycle (with a case walkthrough), and AI ethics and academic integrity. You will also set up your development environment and run your first machine learning program.</p>
+</div>
+
+<!-- ========== 1.1 ========== -->
+<div class="section">
+  <h2>1.1 What is Artificial Intelligence?</h2>
+  <p>Artificial Intelligence (AI) is the science and engineering of making computer systems perform tasks that typically require human intelligence: visual perception, language communication, reasoning and decision-making, learning and adaptation. It is not a single technology but an evolving family of technologies.</p>
+
+  <h3>1.1.1 Key Definitions</h3>
+  <div class="terms">
+    <div class="term">
+      <h4>Artificial Intelligence (AI)</h4>
+      <p>The broad field of making machines simulate intelligent human behavior — reasoning, knowledge representation, planning, learning, natural language processing, and perception.</p>
+    </div>
+    <div class="term">
+      <h4>Machine Learning (ML)</h4>
+      <p>A subset of AI: instead of explicitly programming rules, the system learns patterns from data automatically. Three core elements: data, model, objective function.</p>
+    </div>
+    <div class="term">
+      <h4>Deep Learning (DL)</h4>
+      <p>A subset of ML: uses multi-layer neural networks to automatically learn feature representations, excelling on large-scale image, speech, and text tasks.</p>
+    </div>
+    <div class="term">
+      <h4>Generative AI (GenAI)</h4>
+      <p>Technologies based on large models (LLMs / Diffusion) that generate new content — text, images, code, audio. The core of this course's Module 3–4.</p>
+    </div>
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key Insight · The Hierarchy</span>
+    <strong>AI ⊃ ML ⊃ DL ⊃ GenAI</strong> — each level is a subset of the level above. To classify a system, ask three questions: Does it learn from data (ML)? Does it use neural networks (DL)? Does it generate new content (GenAI)?
+  </div>
+
+  <h3>1.1.2 Three Learning Paradigms</h3>
+  <p>Machine learning splits into three paradigms according to "is there a labeled answer, and how is feedback obtained." The quick test: <strong>Are there labels? Are there rewards?</strong></p>
+  <table>
+    <tr><th>Paradigm</th><th>In One Line</th><th>Typical Tasks</th><th>In This Course</th></tr>
+    <tr><td><strong>Supervised</strong></td><td>With labels: learn a mapping from input → ground-truth answer pairs</td><td>Classification (spam detection), regression (house prices)</td><td>Week 3 (KNN / regression)</td></tr>
+    <tr><td><strong>Unsupervised</strong></td><td>Without labels: discover structure in the data itself</td><td>Clustering (user segmentation), dimensionality reduction (visualization)</td><td>Week 4 (K-Means / PCA)</td></tr>
+    <tr><td><strong>Reinforcement</strong></td><td>Trial and error + rewards: an agent learns a policy by interacting with an environment</td><td>Game AI (AlphaGo), robot control, RLHF</td><td>Concepts (mentioned in Module 3)</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">How to Tell</span>
+    "Spam filtering" has a ground-truth answer (spam / not) → supervised; "split 100k users into 5 groups" has no labels → unsupervised; "game AI learns by winning or losing" uses rewards from interaction → reinforcement.
+  </div>
+
+  <h3>1.1.3 A Brief History: Three Waves &amp; Two Winters</h3>
+  <div class="timeline">
+    <div class="item">
+      <div class="year">1950s–1970s · The Symbolic Era</div>
+      <div class="evt">Turing Test (1950); the Dartmouth Conference coins "AI" (1956); expert systems emerge. Limited by compute and data, the first AI winter arrives.</div>
+    </div>
+    <div class="item">
+      <div class="year">1980s–2000s · The Rise of Machine Learning</div>
+      <div class="evt">Backpropagation revives neural networks (1986); SVM and random forests mature; the internet brings massive training data.</div>
+    </div>
+    <div class="item">
+      <div class="year">2012–Present · Deep Learning &amp; Generative AI</div>
+      <div class="evt">AlexNet wins ImageNet (2012), opening the DL era; the Transformer architecture (2017) leads to GPT and BERT; since 2022, large language models and generative AI drive the application-engineering era.</div>
+    </div>
+  </div>
+  <div class="callout key">
+    <span class="label">Key Insight · The Two AI Winters</span>
+    <strong>First winter (1974–1980):</strong> symbolic AI over-promised while compute and data lagged behind; funding collapsed. <strong>Second winter (1987–1993):</strong> expert systems proved costly to maintain and poorly generalizable; the industry retreated again.<br>
+    The lesson: each winter came from promises exceeding engineering reality, and each revival was driven by <strong>compute + data + algorithms</strong> advancing together — the deep-learning wave since 2012 is exactly such a convergence. When you evaluate today's AI hype, ask the same question first: "can it actually be engineered into a product?"
+  </div>
+</div>
+
+<!-- ========== 1.2 ========== -->
+<div class="section">
+  <h2>1.2 Why Should Software Engineering Students Learn AI Application Development?</h2>
+  <p>AI capabilities are now commoditized through frameworks (PyTorch), APIs, and pre-trained models. The software engineer's role has shifted from "training models" to "turning models into products." This creates three structural changes:</p>
+  <ul>
+    <li><strong>From feature engineering to data engineering:</strong> with model capability built in, the center of value moves to data quality and data pipelines.</li>
+    <li><strong>From writing rules to tuning systems:</strong> not "if-then" business rules, but systems of data + model + evaluation + iteration.</li>
+    <li><strong>From single applications to agent ecosystems:</strong> LLMs create new paradigms — agents, RAG, multimodal — each a fresh engineering challenge.</li>
+  </ul>
+  <p>This course is positioned as "solid theory + balanced application": you will understand what models do (so you can judge, tune, and diagnose), and you will be able to ship models as deployable software systems.</p>
+</div>
+
+<!-- ========== 1.3 ========== -->
+<div class="section">
+  <h2>1.3 Application Domains &amp; Career Paths</h2>
+  <h3>1.3.1 Typical Application Domains</h3>
+  <div class="terms">
+    <div class="term"><h4>Computer Vision (CV)</h4><p>Image classification, object detection, face recognition, defect inspection, autonomous-driving perception.</p></div>
+    <div class="term"><h4>Natural Language Processing (NLP)</h4><p>Machine translation, sentiment analysis, text summarization, question answering, intelligent customer service.</p></div>
+    <div class="term"><h4>Speech &amp; Multimodal</h4><p>Speech recognition/synthesis, text-to-image, video understanding, multimodal assistants.</p></div>
+    <div class="term"><h4>Recommendation &amp; Decision</h4><p>Recommender systems, risk control and fraud detection, supply-chain forecasting, pricing optimization.</p></div>
+  </div>
+
+  <h3>1.3.2 Career Paths</h3>
+  <table>
+    <tr><th>Role</th><th>Core Work</th><th>Course Module</th></tr>
+    <tr><td>ML Engineer</td><td>Train, evaluate, deploy, and monitor models; build ML pipelines</td><td>Module 1–2, 4</td></tr>
+    <tr><td>AI Application Engineer</td><td>Build applications on LLMs/APIs: RAG, agents, product integration</td><td>Module 3–4</td></tr>
+    <tr><td>Data Scientist</td><td>Model business problems, analyze data, design experiments, derive insights</td><td>Module 1</td></tr>
+    <tr><td>MLOps / Platform Engineer</td><td>CI/CD, model serving, monitoring, and reliability engineering</td><td>Module 4</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Career Note</span>
+    For students with a software engineering background, the highest-leverage roles are <strong>AI Application Engineer and MLOps</strong> — they leverage your engineering skills without requiring you to become an algorithm researcher.
+  </div>
+</div>
+
+<!-- ========== 1.4 ========== -->
+<div class="section">
+  <h2>1.4 The AI Project Lifecycle</h2>
+  <p>AI application development is not "write a model" and done — it is a complete pipeline from problem definition to ongoing operations. Your Capstone project in this course will take you through the entire path. The six stages:</p>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>Problem Definition</strong> — define the business goal, success metrics, and constraints (data compliance, latency, cost).</div></div>
+    <div class="step"><div class="body"><strong>Data Acquisition &amp; Exploration</strong> — collect data, do exploratory data analysis (EDA), assess quality and feasibility.</div></div>
+    <div class="step"><div class="body"><strong>Data Processing &amp; Feature Engineering</strong> — clean, transform, engineer features; build reproducible data pipelines.</div></div>
+    <div class="step"><div class="body"><strong>Modeling &amp; Evaluation</strong> — baseline → train → evaluate → iterate (tuning, regularization, error analysis).</div></div>
+    <div class="step"><div class="body"><strong>Deployment &amp; Integration</strong> — serve as an API (FastAPI), containerize (Docker), integrate into the product.</div></div>
+    <div class="step"><div class="body"><strong>Monitoring &amp; Iteration</strong> — monitor model performance, detect data drift, retrain continuously.</div></div>
+  </div>
+  <div class="callout key">
+    <span class="label">Key Insight · The 80% Rule</span>
+    In real industry projects, roughly <strong>80% of time</strong> goes to data and engineering work (stages 2–3 and 5–6); only about <strong>20%</strong> goes to "training the model." That is why this course allocates heavy lab time to data handling and deployment.
+  </div>
+
+  <h3>1.4.1 Case Walkthrough: Canteen Queue Prediction</h3>
+  <p>Let's walk all six stages with a scenario you can observe every day.</p>
+  <table>
+    <tr><th style="width:150px;">Stage</th><th>What Happens Here</th></tr>
+    <tr><td>① Problem Definition</td><td>Predict each canteen window's queue length 15 minutes ahead, within ±5 minutes. Key decision: binary classification (crowded / not) or regression (minutes)? → Regression.</td></tr>
+    <tr><td>② Data Acquisition &amp; EDA</td><td>Anonymized POS transaction logs; camera-based queue-length sampling (subject to compliance review). EDA reveals Friday-noon traffic is 1.8× the norm.</td></tr>
+    <tr><td>③ Feature Engineering</td><td>Time of day, weekday, weather, dish popularity, foot traffic in the surrounding 15 minutes. Experience says: common-sense features often beat fancy models.</td></tr>
+    <tr><td>④ Modeling &amp; Evaluation</td><td>Baseline = "same time slot last week's average"; then a gradient-boosted tree for comparison. The MAE must beat the baseline to justify going live.</td></tr>
+    <tr><td>⑤ Deployment &amp; Integration</td><td>Wrap as a REST API with FastAPI; the mini-program pulls predictions every 5 minutes. A model is not a product — the API + interface is.</td></tr>
+    <tr><td>⑥ Monitoring &amp; Iteration</td><td>Detect traffic-distribution drift at semester start → add a "week of semester" feature → automated weekly retraining.</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Takeaway</span>
+    Notice how much work sits in stages ①②③⑤⑥ — that is the 80% rule made concrete. Your Capstone project will follow the same path.
+  </div>
+</div>
+
+<!-- ========== 1.5 ========== -->
+<div class="section">
+  <h2>1.5 Development Environment Setup</h2>
+  <p>All lab environments in this course are based on <strong>Python 3.10+</strong>. By the end of Week 1 you must have a working local environment, and be able to run code in Google Colab (used as a fallback GPU environment).</p>
+
+  <h3>1.5.1 Environment Management: conda / venv / pip</h3>
+  <table>
+    <tr><th>Tool</th><th>Purpose</th><th>When to Use</th></tr>
+    <tr><td>conda</td><td>Package + environment manager; can manage Python versions</td><td>Recommended for this course: cross-platform, clean isolation</td></tr>
+    <tr><td>venv</td><td>Python's built-in virtual environment</td><td>Lightweight cases; fastest when Python is already installed</td></tr>
+    <tr><td>pip</td><td>Python package installer</td><td>Installing dependencies inside any environment</td></tr>
+  </table>
+
+  <h3>1.5.2 Course Standard Environment Stack</h3>
+  <pre><span class="cm"># Create and activate a conda environment</span>
+conda create -n ai-app python=3.11 -y
+conda activate ai-app
+
+<span class="cm"># Core scientific stack</span>
+pip install numpy pandas matplotlib seaborn scikit-learn
+
+<span class="cm"># Deep learning (CPU works for Weeks 1-6; GPU recommended later)</span>
+pip install torch torchvision
+
+<span class="cm"># Notebook &amp; dev tooling</span>
+pip install jupyter ipykernel jupyterlab</pre>
+
+  <div class="callout warn">
+    <span class="label">Common Pitfall</span>
+    <strong>Never install into the global base environment.</strong> An isolated environment per project is a professional habit — it prevents the "works on my machine" dependency hell. This week's lab requires you to submit an <code class="inline">environment.yml</code> or <code class="inline">requirements.txt</code>.
+  </div>
+
+  <h3>1.5.3 Jupyter Notebook &amp; Google Colab</h3>
+  <p><strong>Jupyter Notebook</strong> is the de-facto standard workbench for data science: code cells, rich text, and visualizations coexist — ideal for exploratory analysis and teaching. Course assignments are submitted as <code class="inline">.ipynb</code> files.</p>
+  <p><strong>Google Colab</strong> is a configuration-free cloud Jupyter: it provides free GPU/TPU, requires no local installation, and suits compute-heavy experiments (commonly used after Module 2). Both support Git integration.</p>
+
+  <h3>1.5.4 Git Project Initialization</h3>
+  <pre><span class="cm"># Initialize a project repository</span>
+git init
+git add .
+git commit -m <span class="str">"init: course week 1 project skeleton"</span>
+
+<span class="cm"># Push to GitHub (create an empty repo first on github.com)</span>
+git remote add origin https://github.com/&lt;you&gt;/ai-app-course.git
+git push -u origin main</pre>
+
+  <div class="callout tip">
+    <span class="label">Good Practice</span>
+    Use one branch per weekly lab (e.g. <code class="inline">week1-lab</code>); start every commit message with a clear verb (feat/fix/docs/refactor). Build the Git habit now — it pays off directly in Capstone teamwork.
+  </div>
+</div>
+
+<!-- ========== 1.6 ========== -->
+<div class="section">
+  <h2>1.6 Your First ML Program</h2>
+  <p>We use the classic <strong>Iris dataset</strong> to run a complete first classification program. Small as it is, this example contains every core step of ML: load data → split train/test → train a model → evaluate.</p>
+  <pre><span class="cm"># first_ml.py — Iris classification with scikit-learn</span>
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_iris
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score, classification_report
+
+<span class="cm"># 1. Load data</span>
+iris = load_iris()
+X, y = iris.data, iris.target
+
+<span class="cm"># 2. Train / test split (stratified by class)</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># 3. Train a model</span>
+model = RandomForestClassifier(n_estimators=<span class="num">100</span>, random_state=<span class="num">42</span>)
+model.fit(X_train, y_train)
+
+<span class="cm"># 4. Evaluate</span>
+y_pred = model.predict(X_test)
+print(<span class="str">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
+print(classification_report(y_test, y_pred, target_names=iris.target_names))</pre>
+  <pre>Accuracy: 0.933
+              precision    recall  f1-score   support
+  setosa          1.00      1.00      1.00        10
+  versicolor      0.90      0.90      0.90        10
+  virginica       0.90      0.90      0.90        10</pre>
+  <p>You will deconstruct this program fully in Week 3. For now, grasp the universal scikit-learn interface: <strong>fit → predict → evaluate</strong>. Every model in Module 1 follows this pattern.</p>
+</div>
+
+<!-- ========== 1.7 ========== -->
+<div class="section">
+  <h2>1.7 AI Ethics &amp; Responsible Development</h2>
+  <p>As a future AI engineer, every system you ship affects real people. Ethics is not a compliance checkbox before release — it is part of the design constraints, just like latency and cost, and belongs in the problem-definition stage.</p>
+
+  <h3>1.7.1 Three Core Risks</h3>
+  <div class="terms">
+    <div class="term">
+      <h4>Bias</h4>
+      <p>When training data fails to represent real populations, the model discriminates systematically. Examples: face recognition with markedly higher error rates for darker skin tones; a hiring model that downgrades women's résumés because of biased historical data.</p>
+    </div>
+    <div class="term">
+      <h4>Privacy</h4>
+      <p>Collecting data beyond what is necessary — or a model that inadvertently "memorizes" training samples — can leak personal information. Principles: minimal collection, anonymization, leakage checks before training.</p>
+    </div>
+    <div class="term">
+      <h4>Misuse</h4>
+      <p>Technically feasible ≠ should be done. Example: emotion recognition for customer-service quality checks is contested territory; for employee surveillance it crosses the line. Engineers owe a duty of care to how their deliverables are used.</p>
+    </div>
+  </div>
+  <div class="callout key">
+    <span class="label">Engineer's Duty</span>
+    Before shipping, ask yourself three questions: Who is missing from the data? Who could this system hurt at worst? If this decision made the news, could I explain and defend it?
+  </div>
+
+  <h3>1.7.2 Academic Integrity &amp; AI-Tool Policy</h3>
+  <ul>
+    <li><strong>Collaboration boundaries:</strong> discussing ideas is encouraged; copying code or write-ups is not. Everything you submit must be your own work.</li>
+    <li><strong>AI tools:</strong> this course <em>permits</em> GitHub Copilot / ChatGPT and similar coding assistants, provided that you ① declare in your submission which tools you used and where, and ② can explain and modify any line you submit on the spot — inability to explain counts as a violation.</li>
+    <li><strong>Data compliance:</strong> if your Capstone dataset involves personal information, anonymize it first and report the source to the instructor.</li>
+  </ul>
+</div>
+
+<!-- ========== 1.8 ========== -->
+<div class="section">
+  <h2>1.8 Chapter Summary</h2>
+  <ul>
+    <li>AI ⊃ ML ⊃ DL ⊃ GenAI — classify any system with three questions: Does it learn from data? Does it use neural networks? Does it generate new content?</li>
+    <li>The three learning paradigms: with labels → supervised; structure without labels → unsupervised; trial-and-error with rewards → reinforcement.</li>
+    <li>AI has passed through three waves — symbolic, statistical learning, deep/generative — interrupted by two winters that both came from promises exceeding engineering reality; it now sits in the application-engineering era, the entry window for software engineers.</li>
+    <li>About 80% of AI project effort goes to data and engineering; "training the model" is only a small step — the canteen-queue walkthrough makes this pipeline concrete.</li>
+    <li>Bias, privacy, and misuse are the three core risks of AI development; ethics is a design constraint and engineers must check before delivery; AI tools are allowed in this course with disclosure and the ability to explain your code.</li>
+    <li>Dev environment = Python + conda environment + Jupyter/Colab + Git; follow the "one environment per project" rule.</li>
+    <li>scikit-learn's fit → predict → evaluate is the universal workflow throughout Module 1.</li>
+  </ul>
+</div>
+
+<!-- ========== EXERCISES ========== -->
+<div class="section">
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <h4>Exercise 1 · Environment Setup (Required)</h4>
+    <ol>
+      <li>Create a conda environment named <code class="inline">ai-app</code> (Python 3.11) and install the course standard dependencies.</li>
+      <li>Launch Jupyter Notebook, create a new notebook, and verify that <code class="inline">import numpy, pandas, sklearn, torch</code> all succeed.</li>
+      <li>Open the same notebook in Google Colab and confirm the GPU is available: <code class="inline">torch.cuda.is_available()</code>.</li>
+      <li>Push the notebook to the GitHub repository <code class="inline">ai-app-course/week1</code>.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 2 · Your First Model (Required)</h4>
+    <ol>
+      <li>Run the Iris classification program from Section 1.6 and record the accuracy.</li>
+      <li>Switch to <code class="inline">LogisticRegression</code> and then <code class="inline">SVC</code>, run each once, and compare the three accuracies. Which model performs best on this dataset?</li>
+      <li>Change <code class="inline">random_state</code> to 0 and 123 and observe whether results change. What does this imply for the reproducibility of experiments?</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 3 · Discussion Questions</h4>
+    <ol>
+      <li>Find 3 software products around you that use AI, and classify each as ML, DL, or GenAI.</li>
+      <li>Why are "data and engineering" more often the bottleneck of AI projects than "training the model"? Explain with the lifecycle diagram.</li>
+      <li>Pick an AI application that interests you (e.g. an intelligent customer-service bot, autonomous driving, an AI coding assistant) and sketch its problem-definition and deployment stages.</li>
+      <li>(Ethics) Suppose you are building a "canteen queue prediction" system for your university, and camera sampling requires capturing faces. Identify one risk from each of the three angles — bias, privacy, and misuse — and give a corresponding engineering countermeasure.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Chapter 1</p>
+  <p>64 hours · Year-3 Software Engineering International Students · Week 1 / 16</p>
+  <p style="margin-top:8px;">Generated with AI assistance; the instructor may adapt the content.</p>
+</div>
+
+</div>
+</body>
+</html>

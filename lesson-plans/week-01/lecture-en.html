@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W1-A (Theory, 90 min) — Introduction to AI &amp; Course Overview</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+    --orange: #d97706;
+    --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+
+  h2 {
+    font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 1 · Part A (Theory · 90 min)</div>
+  <h1>Introduction to AI &amp; Course Overview<span class="en">First half of the weekly 180-minute session</span></h1>
+  <div class="meta">
+    <span>⏱ 90 min (L1–L5)</span>
+    <span>📚 Textbook Chapter 1.1–1.4</span>
+    <span>🎯 Module 1 · AI &amp; ML Foundations</span>
+    <span>🧩 Plan ID LP-W1-A</span>
+    <span>🖥️ Slides p1–p22 (32-page deck)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<!-- ===== 1. Objectives ===== -->
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Distinguish the nested hierarchy AI ⊃ ML ⊃ DL ⊃ GenAI and define each layer</li>
+      <li>Explain the three learning paradigms (supervised / unsupervised / reinforcement) with typical tasks</li>
+      <li>Recount the three waves of AI, the two AI winters and their causes, and the current stage</li>
+      <li>Describe the six stages of the AI project lifecycle, the 80% rule, and the toolchain map</li>
+      <li>Restate the course structure, the 16-week calendar with milestones, and grading (30/15/35/20)</li>
+      <li>Identify three categories of AI ethics risks and the academic-integrity red lines</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Classify real-world products into ML / DL / GenAI layers on sight</li>
+      <li>Match career roles to the course modules using the career-mapping table</li>
+      <li>Walk through a known AI application using the six lifecycle stages</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Build the mental frame that "AI is an engineering system, not magic"; understand the software engineer's core value in AI products (the 80% rule); establish the course learning contract (attendance, assignments, integrity policy).
+</div>
+
+<!-- ===== 2. Key points ===== -->
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The AI/ML/DL/GenAI hierarchy and the three learning paradigms; the waves-and-winters timeline; the six-stage lifecycle framework (with the canteen-queue case walkthrough)</td><td>Teach each of the four visual frameworks once with real cases: one nested diagram + one paradigm comparison + one timeline + one lifecycle flow (with case)</td></tr>
+  <tr><td>Difficulties</td><td>Blurred boundaries between AI/ML/DL/GenAI; confusion between supervised and reinforcement learning; mistaking "AI application development" for pure algorithm research; ethics topics drifting into empty talk</td><td>Defuse with the "three-question test" mnemonic + live product classification; anchor paradigms with "is there a labeled answer?"; ground ethics in three real failure cases; keep reinforcing the course positioning = turning models into deployable products</td></tr>
+</table>
+
+<!-- ===== 3. Time allocation ===== -->
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lec">Lecture · Theory 90 min (first half of the weekly 180-min session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:100px;">Slides</th><th style="width:110px;">Method</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>Course overview</strong>: self-introduction &amp; learning contract; four-module structure; grading 30/15/35/20; <b>the 16-week calendar &amp; milestones</b> (W4/W7/W8/W10/W16); <b>academic integrity policy</b> (collaboration boundaries / AI-tool usage rules)</td><td>p1–p6</td><td>Lecture + Q&amp;A</td></tr>
+  <tr><td>L2</td><td>25 min</td><td><strong>What is AI</strong>: nested hierarchy diagram (three-question test); <b>three learning paradigms (supervised / unsupervised / reinforcement) with task examples</b>; three waves timeline; <b>the two AI winters — causes and lessons</b>; why software engineers should learn AI</td><td>p7–p12</td><td>Lecture + visualization</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>Domains, careers &amp; ethics</strong>: CV / NLP / speech-multimodal / recommendation; <b>six breakthrough milestones timeline (2012–2023+)</b>; four career roles mapped to modules; <b>three AI ethics risks (bias / privacy / misuse) and engineer responsibility</b></td><td>p13–p17</td><td>Lecture + self-assessment</td></tr>
+  <tr><td>L4</td><td>25 min</td><td><strong>AI project lifecycle</strong>: six stages in depth; <b>canteen-queue prediction case walkthrough</b> (problem definition → deployment &amp; monitoring); the 80% rule; <b>toolchain map</b> (tools per module M1–M4)</td><td>p18–p22</td><td>Lecture + flow diagram + case</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>Lab hand-off &amp; preview</strong>: preview the second-half Lab tasks (conda → Jupyter → Git → Iris); environment checklist; announce the end-of-class quiz (3 items, show-of-hands, counts 10% toward the Lab grade)</td><td>from p23</td><td>Preview + Q&amp;A</td></tr>
+</table>
+
+<!-- ===== 4. Activities ===== -->
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Hierarchy interaction (L2)</h4>
+  <p style="font-size:13.5px;">Draw the four nested circles AI ⊃ ML ⊃ DL ⊃ GenAI on the board and ask students to place real products: ChatGPT = GenAI, face unlock = DL, spam filtering = ML, Siri Q&amp;A = cross-layer. Follow with a rapid paradigm check: "Does spam filtering have a labeled answer?" (yes → supervised); "User segmentation?" (no → unsupervised); "Game AI learning to fight?" (trial-and-error rewards → reinforcement).</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Career self-assessment (L3)</h4>
+  <p style="font-size:13.5px;">Hand out the four-role career table (ML Engineer / AI App Engineer / Data Scientist / MLOps Engineer); students circle their preferred direction, tally by show of hands, and the instructor maps each direction to the course modules.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Ethics micro-discussion (end of L3, 5 min)</h4>
+  <p style="font-size:13.5px;">Pose a real scenario: "If your canteen-queue model keeps underestimating one window's waiting time and the staff there keep getting complaints — is that a model problem or an ethics problem?" Pairs discuss for 2 minutes; the instructor lands it on the three-risk frame: bias (skewed data), privacy (over-collection), misuse (wrong purpose) — and the conclusion that engineers are responsible for checking before delivery.</p>
+</div>
+
+<!-- ===== 5. Assignments ===== -->
+<h2>5. Assignments &amp; Assessment</h2>
+<table>
+  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
+  <tr><td>Quiz</td><td>End-of-class quiz after the Lab (3 items, show-of-hands, 60 seconds each), covering all knowledge points of this plan; counts 10% toward the Lab grade (see Plan B)</td><td>—</td></tr>
+  <tr><td>Task ①<br>Reading</td><td>Read Textbook Chapter 1.4–1.8 (lifecycle, ethics &amp; summary) to consolidate the case walkthrough and ethics framework</td><td>—</td></tr>
+  <tr><td>Task ②<br>Setup</td><td>Install Miniconda (or Anaconda); register GitHub and Google accounts — prerequisites for the second-half Lab; email the instructor if not done (Google Colab fallback)</td><td>—</td></tr>
+  <tr><td>Course grading</td><td>Assignments 30% + Midterm project 15% + Capstone 35% + Lab participation 20% (this week's Lab deliverable counts toward "Lab participation")</td><td>Semester</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Next · Second-half Lab hand-off</span>
+  <b>Same session, second half (≈75 min):</b> conda environment setup → Jupyter/Colab verification → Git push → first Iris classifier → deliverables &amp; rubric → quiz and wrap-up. Students install Miniconda during the L5 break; before the theory half ends, remind students to have laptops and chargers ready.
+</div>
+
+<!-- ===== 6. Preparation ===== -->
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Read Textbook Chapter 1.1–1.4 (hierarchy &amp; paradigms, history, domains, lifecycle)</li>
+      <li>Watch one AI year-in-review video (any, under 10 min)</li>
+      <li>Think: which product you use daily is most likely AI-driven?</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Slides: Week 1 Lecture <b>32-page deck, p1–p22</b> (theory half)</li>
+      <li>Textbook Chapter 1 (includes 1.7 AI Ethics &amp; Responsible Development)</li>
+      <li>Further reading: Dive into Deep Learning, preface (free at d2l.ai)</li>
+      <li>Full course syllabus</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W1-A (Theory, 90 min of a 180-min session)</p>
+  <p>Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

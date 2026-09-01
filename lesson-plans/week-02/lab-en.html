@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W2-B (Lab Part · 75 min + Quiz &amp; Summary 15 min) — EDA &amp; Data Cleaning Lab</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 2 · Lab Part (Lab 75 min + Quiz &amp; Summary 15 min)</div>
+  <h1>Exploratory Data Analysis &amp; Data Cleaning Lab</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the Lab Part 75 min + Quiz &amp; Summary 15 min</span>
+    <span>📚 Chapter 2.5–2.6</span>
+    <span>🔧 Hands-on Lab</span>
+    <span>🧩 Lesson Plan ID: LP-W2-B</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<!-- ===== Learning Objectives ===== -->
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Recall the 5-step EDA workflow</li>
+      <li>State three missing value handling strategies and their applicable conditions</li>
+      <li>Explain the IQR outlier detection principle</li>
+      <li>Explain why "split before imputing" prevents data leakage</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Complete a full EDA on the Titanic dataset independently (five steps)</li>
+      <li>Design and implement per-column missing value strategies</li>
+      <li>Detect outliers with IQR and apply clipping</li>
+      <li>Optional: engineer new features from existing columns</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Build the engineering discipline of "understand data before touching models"; experience the "80% rule" firsthand (data processing genuinely takes a lot of time); develop the professional habit of always performing EDA when handling data.
+</div>
+
+<!-- ===== Key Points & Difficulties ===== -->
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>Hands-on 5-step EDA; per-column missing value strategies; IQR outlier detection</td><td>Instructor demos one step → students follow → instructor patrols for Q&amp;A → move to the next step. Each step has a checkpoint; students must get it running before proceeding</td></tr>
+  <tr><td>Difficulties</td><td>Data leakage concept (split before imputing); the feature engineering mindset shift — "which features are useful?" (optional segment)</td><td>Data leakage: draw a data flow diagram (training info → test set = cheating); feature engineering: use Titanic Title extraction as a thinking demo</td></tr>
+</table>
+
+<!-- ===== Time Allocation ===== -->
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min (second half of the weekly 180-min integrated session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>NumPy Warm-up</strong>: create a 4×4 matrix → slicing drills (rows/columns/sub-blocks, emphasizing that slices are views) → broadcasting (add [0,1,2,3] to each row). Checkpoint: all three tasks green before moving on</td><td>p25</td><td>Follow-along + patrol</td></tr>
+  <tr><td>Lab B</td><td>25 min</td><td><strong>Pandas Exploration</strong>: load <code class="inline">titanic.csv</code> → data health check with <code class="inline">info()</code>/<code class="inline">describe()</code>/<code class="inline">isna().sum()</code> → answer four must-answer questions in code (which columns are missing / mean fare per class / survival rate of men over 30 / how many times higher is female survival than male) → write one "I found…" sentence per answer</td><td>p26</td><td>Self exploration + patrol</td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>Three Charts, Three Questions</strong>: age histogram (distribution) → survival rate by class bar chart (comparison) → age × fare scatter plot (relationship); each chart with 1-2 sentences of Markdown interpretation; form ≥3 testable hypotheses</td><td>p27</td><td>Self practice + rapid Q&amp;A</td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>Cleaning Practice</strong>: median-fill age + add an <code class="inline">age_missing</code> flag → mode-fill embarked → clip fare at IQR bounds → check <code class="inline">duplicated()</code> → post-cleaning re-check (re-run info + describe). Write one line of "why I did this" before each step</td><td>p28</td><td>Demo → follow-along</td></tr>
+  <tr><td>Lab E</td><td>5 min</td><td><strong>Wrap-up &amp; Submission</strong>: check the deliverables list (notebook + three chart interpretations + hypothesis list); push to the Git <code class="inline">week2-lab</code> branch</td><td>p29</td><td>Checklist</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 3 items (2 multiple choice + 1 true/false), hand-vote first, then debrief; ask students who got it right to explain their reasoning. Counted as 10% of the Lab grade; students with all 3 correct earn +0.5 bonus points on the final "Lab Participation" score</td><td>p30</td><td>Vote + debrief</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO (Lab deliverables / Git push / preview Chapter 3); next week preview: your first complete model with scikit-learn</td><td>p31–p32</td><td>Recap + preview</td></tr>
+</table>
+
+<!-- ===== Activity Design ===== -->
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Data Health Check Station (Lab B, p26)</h4>
+  <p style="font-size:13.5px;">In 3 minutes, students use <code class="inline">info()</code> + <code class="inline">describe()</code> + <code class="inline">isna().sum()</code> to "health-check" the Titanic dataset, then write down "3 most surprising findings." The instructor collects 2-3 student findings, e.g. "the Cabin column is 77% missing — should we drop it?" — setting up the cleaning discussion.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Hypothesis Generation &amp; Verification (Lab C, p27)</h4>
+  <p style="font-size:13.5px;">Building on the three charts, students propose at least 3 hypotheses (e.g. "third-class survival rate is lowest," "higher fare means higher survival," "children survived more than adults") and write them in the notebook's Markdown. This trains the mindset of "answering questions with data" — observe first, then form hypotheses, rather than starting with a conclusion and finding data to match.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Cleaning Strategy Quick Debate (Lab D, p28)</h4>
+  <p style="font-size:13.5px;">For the Age column missing values (177/891 = 20%), the instructor runs a quick hand poll: drop vs median-fill vs fill-by-class? Two or three students with different choices each give a one-sentence rationale; the instructor summarizes "there is no single right answer, but there must be reasoning — and a record of it." This leads into the correct "split before imputing" workflow for formal ML projects.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · Feature Engineering Challenge (optional bonus, after Lab E)</h4>
+  <p style="font-size:13.5px;">Challenge: beyond the textbook examples (Title / FamilySize / IsAlone), what new features can you extract from existing columns? The most creative feature (e.g. extracting cabin info from Ticket number patterns, extracting the deck from the Cabin first letter) will be showcased at the start of next week's class. Students with spare capacity complete it after class; it counts as Lab bonus points.</p>
+</div>
+
+<!-- ===== Assignment & Assessment ===== -->
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Score</th></tr>
+  <tr><td>Code</td><td>Code runs, logic is clear, no errors; Markdown structure is clean</td><td>30 pts</td></tr>
+  <tr><td>EDA</td><td>Every step of the five-step workflow has output; the four must-answer questions have answers plus "I found…" notes</td><td>30 pts</td></tr>
+  <tr><td>Cleaning</td><td>Per-column missing value handling with documented strategy rationale; IQR clipping with before/after re-check</td><td>20 pts</td></tr>
+  <tr><td>Charts</td><td>Three charts with correct type selection, titles, and axis labels, each with 1-2 sentences of interpretation</td><td>10 pts</td></tr>
+  <tr><td>Hypotheses</td><td>≥3 testable hypotheses supported by charts (in Markdown)</td><td>10 pts</td></tr>
+  <tr><td>Quiz</td><td>End-of-class 3-item quiz (p30), counted as 10% of the Lab grade; the feature engineering challenge is an optional bonus item</td><td>Counted separately</td></tr>
+</table>
+<div class="callout info">
+  <span class="label">Deliverables</span>
+  <strong>Submit to the GitHub <code class="inline">week2-lab</code> branch (due next Monday 23:59; late submissions lose 10% per 24h):</strong> ① <code class="inline">lab02_eda.ipynb</code> (main notebook: NumPy warm-up + EDA + cleaning + Markdown documentation) ② three charts (inside the notebook) with interpretations ③ hypothesis list (≥3 items) ④ <code class="inline">environment.yml</code> (updated) ⑤ optional: <code class="inline">figures/</code> PNG exports and a <code class="inline">README.md</code> summary (bonus)
+</div>
+<div class="callout warn">
+  <span class="label">Instructor Notes · Lab Reminders</span>
+  <ul style="margin-bottom:0;">
+    <li><strong>Network fallback:</strong> if the online download fails, the instructor provides a local <code class="inline">titanic.csv</code> backup; students switch to <code class="inline">pd.read_csv()</code></li>
+    <li><strong>Environment check:</strong> before the Lab starts, everyone runs <code class="inline">import numpy, pandas, matplotlib, seaborn; print("all imports OK")</code>; students with errors fall back to Google Colab</li>
+    <li><strong>Time-pressure plan:</strong> the Lab part is only 75 min. If Lab C falls behind, complete just the first two charts (histogram + bar chart) and turn the scatter plot into homework; the Quiz segment must not be skipped</li>
+    <li><strong>Data leakage reminder:</strong> during Lab D cleaning, the instructor must explicitly remind students that "in a formal ML workflow, train_test_split must come before missing value imputation" — this Lab uses global imputation for simplicity; the correct Pipeline approach is covered in Weeks 3-4</li>
+  </ul>
+</div>
+
+<!-- ===== Preparation & Resources ===== -->
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>This Lab follows the Lecture part (Lesson Plan LP-W2-A) on the same day with no pre-class assignment; during the lecture break, confirm the <code class="inline">ai-app</code> environment passes <code class="inline">import numpy, pandas, matplotlib, seaborn</code></li>
+      <li>Browse the Kaggle Titanic Competition page to understand dataset field meanings</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Textbook Chapter 2 (produced with this kit)</li>
+      <li>Slides: Week 2 Lecture (32-page edition; p23–p32 correspond to this Lab part and the quiz &amp; summary)</li>
+      <li>Titanic dataset documentation: kaggle.com/c/titanic/data</li>
+      <li>Pandas Cookbook (free): pandas.pydata.org/docs/user_guide/cookbook.html</li>
+      <li>Seaborn Gallery: seaborn.pydata.org/examples/index.html</li>
+      <li>Week 3 preview: the scikit-learn workflow (fit → predict → evaluate)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W2-B (Lab Part · 75 min + Quiz &amp; Summary · 15 min)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

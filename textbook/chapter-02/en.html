@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 2 — Data Handling Fundamentals for AI</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 02 · Module 1 · Week 2</div>
+  <h1>Data Handling Fundamentals for AI</h1>
+  <p class="overview">Data is the fuel of AI. This chapter systematically covers NumPy vectorized computing, Pandas data manipulation, Matplotlib/Seaborn visualization, exploratory data analysis (EDA), and hands-on data cleaning. You will complete an end-to-end data pipeline on a real dataset, preparing the data foundation for ML modeling in Weeks 3-4.</p>
+</div>
+
+<!-- ========== 2.1 ========== -->
+<div class="section">
+  <h2>2.1 The Role of Data in AI</h2>
+  <p>In the project lifecycle from Chapter 1, data acquisition and feature engineering account for ~80% of effort. This section answers: what makes data "good enough" to train a model?</p>
+
+  <h3>2.1.1 Data Types</h3>
+  <div class="terms">
+    <div class="term"><h4>Structured Data</h4><p>Tabular format with defined schema; e.g. CSV/Excel, database tables. Pandas territory.</p></div>
+    <div class="term"><h4>Unstructured Data</h4><p>Images, text, audio, video. Require feature extraction or embeddings before feeding to models. Focus of Module 2-3.</p></div>
+    <div class="term"><h4>Semi-structured Data</h4><p>JSON, XML, HTML. Hierarchical but schemaless; needs parsing to convert to structured tables.</p></div>
+    <div class="term"><h4>Time Series Data</h4><p>Time-ordered observations — stock prices, sensor logs. Needs temporal indexing and handling of periodicity.</p></div>
+  </div>
+
+  <h3>2.1.2 Data Sources</h3>
+  <table>
+    <tr><th>Source</th><th>Examples</th><th>Characteristics</th></tr>
+    <tr><td>Public Datasets</td><td>UCI ML Repository, Kaggle Datasets, Hugging Face Datasets, sklearn.datasets</td><td>Free, labeled, suitable for teaching; check license terms</td></tr>
+    <tr><td>Enterprise Internal Data</td><td>User behavior logs, transaction records, IoT sensor streams</td><td>High real-world value; involves privacy compliance and data governance</td></tr>
+    <tr><td>API / Scraping</td><td>REST APIs, web scraping, open government data</td><td>Real-time access; handle rate limits, anti-scraping, quality fluctuations</td></tr>
+    <tr><td>Synthetic Data</td><td>Data augmentation, GAN-generated, LLM-generated</td><td>Supplements scarce labels; validate consistency with real distribution</td></tr>
+  </table>
+
+  <h3>2.1.3 Data Quality Dimensions</h3>
+  <div class="callout key">
+    <span class="label">Key Insight · Data Quality = Model Ceiling</span>
+    No model can save bad data. The industry consensus is <strong>"Garbage In, Garbage Out" (GIGO)</strong>. Six data quality dimensions cap model performance.
+  </div>
+  <table>
+    <tr><th>Dimension</th><th>Meaning</th><th>Common Issues</th></tr>
+    <tr><td>Completeness</td><td>Whether data has missing values</td><td>Nulls, NaN, missing rows</td></tr>
+    <tr><td>Accuracy</td><td>Whether data reflects true values</td><td>Entry errors, sensor noise</td></tr>
+    <tr><td>Consistency</td><td>Whether data from different sources contradicts</td><td>Inconsistent units, duplicate record conflicts</td></tr>
+    <tr><td>Timeliness</td><td>Whether data reflects the current state</td><td>Outdated data, update delays</td></tr>
+    <tr><td>Uniqueness</td><td>Whether there are duplicate records</td><td>Duplicate collection, merge conflicts</td></tr>
+    <tr><td>Validity</td><td>Whether values conform to business constraints</td><td>Negative age, probability outside [0,1]</td></tr>
+  </table>
+</div>
+
+<!-- ========== 2.2 ========== -->
+<div class="section">
+  <h2>2.2 NumPy Arrays &amp; Vectorized Computing</h2>
+  <p>NumPy is the cornerstone of Python scientific computing. Nearly all higher-level libraries (Pandas, PyTorch, scikit-learn) build on the <code class="inline">ndarray</code>. The key insight is <strong>vectorization</strong>: array operations replace loops, yielding 10-100x speedup.</p>
+
+  <h3>2.2.1 Creating Arrays</h3>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># From Python lists</span>
+a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
+b = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
+
+<span class="cm"># Built-in generators</span>
+zeros = np.zeros((<span class="num">3</span>, <span class="num">4</span>))       <span class="cm"># 3×4 zero matrix</span>
+ones = np.ones(<span class="num">5</span>)              <span class="cm"># [1,1,1,1,1]</span>
+arange = np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)     <span class="cm"># [0,2,4,6,8]</span>
+linspace = np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>) <span class="cm"># [0, 0.25, 0.5, 0.75, 1.0]</span>
+rand = np.random.randn(<span class="num">3</span>, <span class="num">3</span>)   <span class="cm"># 3×3 standard normal</span>
+
+print(a.shape, b.shape)  <span class="cm"># (5,) (2,3)</span>
+print(a.dtype)           <span class="cm"># int64</span></pre>
+
+  <h3>2.2.2 Vectorization &amp; Broadcasting</h3>
+  <pre><span class="cm"># Vectorized arithmetic — NO loops needed</span>
+a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+print(a * <span class="num">2</span>)          <span class="cm"># [2 4 6 8]  — element-wise</span>
+print(a ** <span class="num">2</span>)         <span class="cm"># [1 4 9 16]</span>
+print(np.sqrt(a))      <span class="cm"># [1. 1.41 1.73 2.]</span>
+print(a.sum(), a.mean(), a.std())  <span class="cm"># 10 2.5 1.12</span>
+
+<span class="cm"># Broadcasting: shapes auto-expand for compatibility</span>
+matrix = np.ones((<span class="num">3</span>, <span class="num">4</span>))
+row = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
+result = matrix + row   <span class="cm"># row broadcasts to 3 rows</span>
+<span class="cm"># [[2,3,4,5], [2,3,4,5], [2,3,4,5]]</span></pre>
+  <div class="callout tip">
+    <span class="label">Performance Tip</span>
+    Vectorized ops are 10-100x faster than loops. Rule: <strong>always prefer NumPy built-in functions over for-loops</strong>. On million-row data, the difference is seconds vs minutes.
+  </div>
+
+  <h3>2.2.3 Indexing &amp; Slicing</h3>
+  <pre>a = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]])
+
+<span class="cm"># Basic indexing</span>
+print(a[<span class="num">0</span>, <span class="num">1</span>])       <span class="cm"># 2  (row 0, col 1)</span>
+print(a[:, <span class="num">0</span>])       <span class="cm"># [1 4 7]  (all rows, col 0)</span>
+
+<span class="cm"># Boolean masking — filter by condition</span>
+mask = a > <span class="num">5</span>
+print(a[mask])        <span class="cm"># [6 7 8 9]</span>
+
+<span class="cm"># Fancy indexing — select by index array</span>
+print(a[[<span class="num">0</span>, <span class="num">2</span>]])    <span class="cm"># rows 0 and 2</span>
+
+<span class="cm"># Where: conditional assignment</span>
+np.where(a > <span class="num">5</span>, <span class="str">"big"</span>, <span class="str">"small"</span>)</pre>
+</div>
+
+<!-- ========== 2.3 ========== -->
+<div class="section">
+  <h2>2.3 Pandas Data Manipulation</h2>
+  <p>Pandas is the de-facto standard for structured data processing. <code class="inline">Series</code> is a one-dimensional labeled array; <code class="inline">DataFrame</code> is a two-dimensional table — think of it as "Excel with row/column labels + SQL query capabilities".</p>
+
+  <h3>2.3.1 Loading &amp; Overview</h3>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Load from CSV</span>
+df = pd.read_csv(<span class="str">"titanic.csv"</span>)
+
+<span class="cm"># Quick overview — the first 3 commands you always run</span>
+df.head()          <span class="cm"># first 5 rows</span>
+df.info()          <span class="cm"># dtypes, non-null counts, memory</span>
+df.describe()      <span class="cm"># statistical summary of numeric columns</span>
+df.shape           <span class="cm"># (rows, cols)</span>
+df.columns         <span class="cm"># column names</span>
+df.dtypes          <span class="cm"># data types per column</span></pre>
+
+  <h3>2.3.2 Indexing, Filtering &amp; Assignment</h3>
+  <pre><span class="cm"># Column selection</span>
+df[<span class="str">"Age"</span>]                    <span class="cm"># single column → Series</span>
+df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Survived"</span>]]  <span class="cm"># multiple → DataFrame</span>
+
+<span class="cm"># .loc = label-based, .iloc = position-based</span>
+df.loc[<span class="num">0</span>:<span class="num">4</span>, [<span class="str">"Name"</span>, <span class="str">"Age"</span>]]    <span class="cm"># rows 0-4, specific cols</span>
+df.iloc[<span class="num">0</span>:<span class="num">5</span>, <span class="num">0</span>:<span class="num">3</span>]              <span class="cm"># first 5 rows, first 3 cols</span>
+
+<span class="cm"># Boolean filtering — the most common pattern</span>
+survived = df[df[<span class="str">"Survived"</span>] == <span class="num">1</span>]
+women_first = df[(df[<span class="str">"Sex"</span>] == <span class="str">"female"</span>) & (df[<span class="str">"Pclass"</span>] == <span class="num">1</span>)]
+
+<span class="cm"># Column creation from existing columns</span>
+df[<span class="str">"FamilySize"</span>] = df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] + <span class="num">1</span>
+df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"FamilySize"</span>] == <span class="num">1</span>).astype(int)</pre>
+
+  <h3>2.3.3 GroupBy &amp; Aggregation</h3>
+  <pre><span class="cm"># Group by one column, aggregate multiple ways</span>
+df.groupby(<span class="str">"Pclass"</span>)[<span class="str">"Fare"</span>].agg([<span class="str">"mean"</span>, <span class="str">"median"</span>, <span class="str">"count"</span>])
+
+<span class="cm"># Group by multiple columns</span>
+df.groupby([<span class="str">"Sex"</span>, <span class="str">"Pclass"</span>])[<span class="str">"Survived"</span>].mean()
+<span class="cm"># → survival rate by gender × class</span>
+
+<span class="cm"># Custom aggregation</span>
+df.groupby(<span class="str">"Pclass"</span>).agg({
+    <span class="str">"Age"</span>: [<span class="str">"mean"</span>, <span class="str">"median"</span>],
+    <span class="str">"Fare"</span>: [<span class="str">"sum"</span>, <span class="str">"max"</span>],
+    <span class="str">"Survived"</span>: <span class="str">"mean"</span>
+})
+
+<span class="cm"># Pivot table — spreadsheet-style cross-tab</span>
+pd.pivot_table(df, values=<span class="str">"Survived"</span>, index=<span class="str">"Sex"</span>,
+               columns=<span class="str">"Pclass"</span>, aggfunc=<span class="str">"mean"</span>)</pre>
+
+  <h3>2.3.4 Merge &amp; Join</h3>
+  <pre><span class="cm"># Two DataFrames with a shared key</span>
+passengers = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>], <span class="str">"name"</span>: [<span class="str">"Alice"</span>,<span class="str">"Bob"</span>,<span class="str">"Carol"</span>]})
+tickets = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>], <span class="str">"fare"</span>: [<span class="num">50</span>,<span class="num">80</span>,<span class="num">120</span>]})
+
+<span class="cm"># Four join types — same as SQL</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"inner"</span>)  <span class="cm"># only matches</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"left"</span>)   <span class="cm"># keep all passengers</span>
+pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"outer"</span>)  <span class="cm"># keep all rows</span>
+pd.concat([df1, df2], axis=<span class="num">0</span>)  <span class="cm"># vertical stacking (more rows)</span></pre>
+  <div class="callout warn">
+    <span class="label">Common Pitfall</span>
+    Row count changed after <code class="inline">merge</code>? Check the <code class="inline">how</code> parameter and key uniqueness. <code class="inline">left</code> keeps all rows from the left table (missing filled with NaN); <code class="inline">inner</code> keeps only matches. Forgetting to check leads to data leakage or silent row loss.
+  </div>
+</div>
+
+<!-- ========== 2.4 ========== -->
+<div class="section">
+  <h2>2.4 Data Visualization with Matplotlib &amp; Seaborn</h2>
+  <p>Visualization is the core weapon of EDA: one chart reveals data issues better than a thousand lines of <code class="inline">describe()</code>. Matplotlib is the underlying engine; Seaborn wraps it with statistical chart types, producing more professional plots with less code.</p>
+
+  <h3>2.4.1 Matplotlib Basics</h3>
+  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+fig, axes = plt.subplots(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+
+<span class="cm"># Histogram — distribution of a numeric variable</span>
+axes[<span class="num">0</span>].hist(df[<span class="str">"Age"</span>].dropna(), bins=<span class="num">30</span>, edgecolor=<span class="str">"white"</span>)
+axes[<span class="num">0</span>].set_title(<span class="str">"Age Distribution"</span>)
+
+<span class="cm"># Scatter plot — relationship between two variables</span>
+axes[<span class="num">1</span>].scatter(df[<span class="str">"Age"</span>], df[<span class="str">"Fare"</span>], alpha=<span class="num">0.5</span>, s=<span class="num">10</span>)
+axes[<span class="num">1</span>].set_xlabel(<span class="str">"Age"</span>); axes[<span class="num">1</span>].set_ylabel(<span class="str">"Fare"</span>)
+axes[<span class="num">1</span>].set_title(<span class="str">"Age vs Fare"</span>)
+
+plt.tight_layout(); plt.show()</pre>
+
+  <h3>2.4.2 Seaborn Statistical Plots</h3>
+  <pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
+sns.set_style(<span class="str">"whitegrid"</span>)
+
+<span class="cm"># Count plot — categorical frequency</span>
+sns.countplot(data=df, x=<span class="str">"Pclass"</span>, hue=<span class="str">"Survived"</span>)
+
+<span class="cm"># Box plot — detect outliers by group</span>
+sns.boxplot(data=df, x=<span class="str">"Pclass"</span>, y=<span class="str">"Age"</span>)
+
+<span class="cm"># Violin plot — distribution shape by category</span>
+sns.violinplot(data=df, x=<span class="str">"Sex"</span>, y=<span class="str">"Age"</span>, split=<span class="kw">True</span>)
+
+<span class="cm"># Correlation heatmap — the EDA power move</span>
+corr = df.select_dtypes(include=[<span class="str">"number"</span>]).corr()
+sns.heatmap(corr, annot=<span class="kw">True</span>, cmap=<span class="str">"coolwarm"</span>, center=<span class="num">0</span>)
+
+<span class="cm"># Pair plot — pairwise relationships at a glance</span>
+sns.pairplot(df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Pclass"</span>, <span class="str">"Survived"</span>]], hue=<span class="str">"Survived"</span>)</pre>
+  <div class="callout key">
+    <span class="label">Key Insight · Chart Selection Guide</span>
+    <strong>Distribution → histogram/KDE; Relationship → scatter; Comparison → box/violin; Correlation → heatmap.</strong> These four cover 90% of EDA needs.
+  </div>
+</div>
+
+<!-- ========== 2.5 ========== -->
+<div class="section">
+  <h2>2.5 Exploratory Data Analysis</h2>
+  <p>EDA is not "making plots" — it is <strong>a systematic method of answering questions with data</strong>: understand distributions → find anomalies → test hypotheses → prepare for feature engineering. The standard 5-step EDA routine:</p>
+
+  <div class="steps">
+    <div class="step"><div class="body"><strong>Overview</strong> — <code class="inline">df.shape</code>, <code class="inline">df.info()</code>, <code class="inline">df.describe()</code>. Answer: how many rows and columns? Which are numeric/categorical/datetime? Any missing values?</div></div>
+    <div class="step"><div class="body"><strong>Univariate Analysis</strong> — histograms for numeric variables, <code class="inline">value_counts</code> for categorical variables. Answer: what does each variable's own distribution look like? Is it skewed? Are there outliers?</div></div>
+    <div class="step"><div class="body"><strong>Bivariate Analysis</strong> — scatter plots, group statistics, cross-tabulations; add a correlation matrix + heatmap when several variables are involved. Answer: which features relate to the target? Is there collinearity among features?</div></div>
+    <div class="step"><div class="body"><strong>Anomalies &amp; Missingness</strong> — extreme values and missing patterns (<code class="inline">isnull().sum()</code> + missing-value heatmap). Answer: data entry error or genuine phenomenon? Is the missingness random or patterned?</div></div>
+    <div class="step"><div class="body"><strong>Hypotheses</strong> — write down your conjectures based on the observations above (e.g. "female survival rate is higher"), then verify with group statistics. Answer: which features might be predictive? What transformations are needed?</div></div>
+  </div>
+
+  <h3>2.5.1 Titanic Walkthrough: The Five Steps End-to-End</h3>
+  <p>Below, the five steps applied end-to-end to <code class="inline">sns.load_dataset("titanic")</code> (mirrors slides p16–p17). Note: every step must yield <strong>a finding written into the notebook</strong> — not a chart you glance at and close.</p>
+  <pre><span class="cm"># Step 1 · Overview</span>
+df = sns.load_dataset(<span class="str">"titanic"</span>)
+df.shape          <span class="cm"># (891, 12)</span>
+df.info()         <span class="cm"># age: 177 missing, deck: 688, embarked: 2</span>
+
+<span class="cm"># Step 2 · Univariate</span>
+df[<span class="str">"age"</span>].plot.hist()      <span class="cm"># age right-skewed, mostly 20-40; fare heavy tail (max 512)</span>
+
+<span class="cm"># Step 3 · Bivariate</span>
+df.groupby(<span class="str">"sex"</span>)[<span class="str">"survived"</span>].mean()
+<span class="cm"># female 0.74 vs male 0.19 — sex is a strong feature</span>
+
+<span class="cm"># Step 4 · Anomalies &amp; missingness</span>
+df[<span class="str">"fare"</span>].describe()    <span class="cm"># 15 tickets cost 0 — crew tickets or data entry errors?</span>
+
+<span class="cm"># Step 5 · Hypotheses (write them in Markdown)</span>
+<span class="cm"># H1: sex + class + age can predict survival</span>
+<span class="cm"># H2: deck is >75% missing — consider dropping the column</span>
+<span class="cm"># H3: fare = 0 records need a separate check</span></pre>
+  <div class="callout tip">
+    <span class="label">Takeaway · Five Steps Are Enough to Act</span>
+    One dataset, five steps, actionable conclusions — the feature shortlist takes shape before any modeling. Your findings don't have to match the example: same data, different perspectives.
+  </div>
+</div>
+
+<!-- ========== 2.6 ========== -->
+<div class="section">
+  <h2>2.6 Hands-On Data Cleaning</h2>
+  <p>Real datasets are never clean. This section uses the Titanic dataset to demonstrate the four most common cleaning operations.</p>
+
+  <h3>2.6.1 Handling Missing Values</h3>
+  <pre><span class="cm"># Step 1: Find them</span>
+df.isnull().sum()
+<span class="cm"># Age            177  ← lots of missing
+# Cabin         687  ← mostly missing → consider dropping
+# Embarked        2  ← trivial → fill with mode</span>
+
+<span class="cm"># Step 2: Strategy per column</span>
+<span class="cm"># Option A: Drop columns with too many missing</span>
+df = df.drop(columns=[<span class="str">"Cabin"</span>])
+
+<span class="cm"># Option B: Fill numeric with median (robust to outliers)</span>
+df[<span class="str">"Age"</span>] = df[<span class="str">"Age"</span>].fillna(df[<span class="str">"Age"</span>].median())
+
+<span class="cm"># Option C: Fill categorical with mode</span>
+df[<span class="str">"Embarked"</span>] = df[<span class="str">"Embarked"</span>].fillna(df[<span class="str">"Embarked"</span>].mode()[<span class="num">0</span>])</pre>
+  <div class="callout warn">
+    <span class="label">Warning · Data Leakage</span>
+    Filling missing values with global stats (e.g. global median) before train/test split leaks test set information into the training set. Correct approach: <strong>split first, then impute with training statistics</strong>. In scikit-learn, this is enforced by <code class="inline">SimpleImputer</code> + <code class="inline">Pipeline</code>.
+  </div>
+
+  <h3>2.6.2 Outlier Detection</h3>
+  <pre><span class="cm"># IQR method — robust to extreme values</span>
+Q1 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.25</span>)
+Q3 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.75</span>)
+IQR = Q3 - Q1
+lower = Q1 - <span class="num">1.5</span> * IQR
+upper = Q3 + <span class="num">1.5</span> * IQR
+
+outliers = df[(df[<span class="str">"Fare"</span>] < lower) | (df[<span class="str">"Fare"</span>] > upper)]
+print(<span class="str">f"Found {len(outliers)} outliers in Fare"</span>)
+
+<span class="cm"># Z-score method — assumes normal distribution</span>
+from scipy <span class="kw">import</span> stats
+z = np.abs(stats.zscore(df[<span class="str">"Age"</span>].dropna()))
+print(<span class="str">f"Z-score outliers (>3): {(z > 3).sum()}"</span>)</pre>
+
+  <h3>2.6.3 Duplicates &amp; Type Conversion</h3>
+  <pre><span class="cm"># Remove exact duplicates</span>
+df = df.drop_duplicates()
+print(<span class="str">f"After dedup: {df.shape}"</span>)
+
+<span class="cm"># Type conversion — save memory, enable operations</span>
+df[<span class="str">"Pclass"</span>] = df[<span class="str">"Pclass"</span>].astype(<span class="str">"category"</span>)  <span class="cm"># saves ~90% memory</span>
+df[<span class="str">"Sex"</span>] = df[<span class="str">"Sex"</span>].map({<span class="str">"male"</span>: <span class="num">0</span>, <span class="str">"female"</span>: <span class="num">1</span>})  <span class="cm"># label encoding</span></pre>
+
+  <h3>2.6.4 Feature Engineering Preview</h3>
+  <pre><span class="cm"># Extract title from name — a proxy for social status</span>
+df[<span class="str">"Title"</span>] = df[<span class="str">"Name"</span>].str.extract(<span class="str">r' ([A-Za-z]+)\.'</span>)
+df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace([<span class="str">"Mlle"</span>, <span class="str">"Ms"</span>], <span class="str">"Miss"</span>)
+df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace(<span class="str">"Mme"</span>, <span class="str">"Mrs"</span>)
+
+<span class="cm"># Bin age into groups — converts continuous to ordinal</span>
+df[<span class="str">"AgeBin"</span>] = pd.cut(df[<span class="str">"Age"</span>], bins=[<span class="num">0</span>, <span class="num">12</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">60</span>, <span class="num">100</span>],
+                     labels=[<span class="str">"Child"</span>, <span class="str">"Teen"</span>, <span class="str">"Young"</span>, <span class="str">"Adult"</span>, <span class="str">"Senior"</span>])
+
+<span class="cm"># Family size → alone flag (feature compression)</span>
+df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] == <span class="num">0</span>).astype(int)</pre>
+  <div class="callout tip">
+    <span class="label">Pro Tip</span>
+    Feature engineering turns domain knowledge into signal. The classic Titanic example: <strong>extracting Title from Name</strong> (Mr/Mrs/Master/Dr) adds a layer of social status beyond mere Sex — historically, in "women and children first," Master (boys) had significantly higher survival than Mr.
+  </div>
+</div>
+
+<!-- ========== 2.7 ========== -->
+<div class="section">
+  <h2>2.7 Chapter Summary</h2>
+  <ul>
+    <li>Six data quality dimensions (completeness / accuracy / consistency / timeliness / uniqueness / validity) cap model performance — GIGO is the iron law.</li>
+    <li>NumPy vectorized operations are 10-100x faster than loops; broadcasting auto-aligns arrays of different shapes.</li>
+    <li>Pandas four core operations: loading &amp; overview (<code class="inline">read_csv</code> + <code class="inline">info</code> + <code class="inline">describe</code>) → filtering (<code class="inline">loc/iloc</code> + boolean) → aggregation (<code class="inline">groupby</code>) → merging (<code class="inline">merge</code>).</li>
+    <li>Four chart types: histogram for distribution, scatter for relationships, box plot for comparison, heatmap for correlation.</li>
+    <li>5-step EDA routine: overview → univariate → bivariate → anomalies &amp; missingness → hypotheses (see the Titanic walkthrough in 2.5.1).</li>
+    <li>Core data cleaning: per-column missing value strategies (drop/fill/interpolate), IQR outlier detection, split before imputing to prevent data leakage.</li>
+  </ul>
+</div>
+
+<!-- ========== EXERCISES ========== -->
+<div class="section">
+  <h2>Exercises</h2>
+  <div class="exercise">
+    <h4>Exercise 1 · NumPy Vectorization (Required)</h4>
+    <ol>
+      <li>Create a 1000×1000 random matrix <code class="inline">A</code>. Compute column means using both a <code class="inline">for</code> loop and NumPy vectorization, comparing timing with <code class="inline">%timeit</code>.</li>
+      <li>Use a boolean mask to select all elements greater than 0.5, replace them with 1.0, and the rest with 0.0.</li>
+      <li>Use <code class="inline">np.where</code> to implement a piecewise function: x &lt; 0 → -1, x == 0 → 0, x &gt; 0 → 1.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 2 · Pandas EDA (Required)</h4>
+    <ol>
+      <li>Load the Titanic dataset from <code class="inline">seaborn</code>: <code class="inline">df = sns.load_dataset("titanic")</code>.</li>
+      <li>Complete the 5-step EDA from Section 2.5, producing at least one chart or table per step and writing down one finding per step.</li>
+      <li>Propose and verify at least 3 hypotheses (e.g. "third-class passengers had the lowest survival rate"), supporting conclusions with <code class="inline">groupby</code> + visualization.</li>
+      <li>Write a 3-5 line EDA report (Markdown) recording key findings.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 3 · Hands-On Data Cleaning (Required)</h4>
+    <ol>
+      <li>Load the dataset from Exercise 2, handle all missing values (at least 3 columns), and record the strategy and rationale for each column.</li>
+      <li>Use the IQR method to detect outliers in the <code class="inline">"fare"</code> column, and compare the distribution before and after removal.</li>
+      <li>Perform Label Encoding on the <code class="inline">"who"</code> or <code class="inline">"class"</code> column, and add a new <code class="inline">"_alone"</code> boolean column.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 4 · Discussion Questions</h4>
+    <ol>
+      <li>Why is "split first, then impute" correct? What exactly happens if you impute before splitting? Draw a data flow diagram to explain.</li>
+      <li>You have 1 million rows and 50 columns, 5 of which have 30% missing. Would you drop or impute? What is your decision criteria?</li>
+      <li>For the Titanic <code class="inline">"deck"</code> column (>70% missing), what approach could still make it informative?</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Chapter 2</p>
+  <p>64 hours · Year-3 Software Engineering International Students · Week 2 / 16</p>
+  <p style="margin-top:8px;">Generated with AI assistance; the instructor may adapt the content.</p>
+</div>
+
+</div>
+</body>
+</html>

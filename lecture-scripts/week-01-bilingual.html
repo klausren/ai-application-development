@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>讲课稿 W1 · Introduction &amp; Environment Setup（中英对照）</title>
+<style>
+  :root {
+    --blue: #1E4FA8; --blue-l: #3D7BD9; --blue-d: #0E3F8C;
+    --ink: #1A2230; --ink2: #4A5568; --ink3: #8B97A8;
+    --bg: #F5F7FA; --card: #FFFFFF; --line: #E5E7EB; --soft: #F7F9FC; --soft2: #F0F5FC;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--ink); font-family: "Source Han Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; line-height: 1.7; font-size: 15px; }
+  .page { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  header.doc { background: var(--blue); color: #fff; border-radius: 14px; padding: 26px 30px; }
+  header.doc .kicker { font-size: 12.5px; letter-spacing: 2px; opacity: .8; }
+  header.doc h1 { font-size: 25px; margin: 6px 0 4px; }
+  header.doc .sub { font-size: 14px; opacity: .88; }
+  header.doc .meta { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 14px; font-size: 13px; }
+  header.doc .meta span { background: rgba(255,255,255,.14); border-radius: 20px; padding: 3px 13px; }
+
+  .usage { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--blue); border-radius: 12px; padding: 16px 20px; margin: 18px 0; font-size: 13.5px; color: var(--ink2); }
+  .usage b { color: var(--blue-d); }
+  .usage .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; }
+  .badge { display: inline-block; font-size: 12px; border-radius: 6px; padding: 1px 9px; margin-right: 4px; font-weight: 600; }
+  .b-ask { background: #FDF3E3; color: #9A6A12; }
+  .b-tip { background: #E9F3EC; color: #1F7A46; }
+  .b-warn { background: #FBEAEA; color: #B34040; }
+  .b-time { background: var(--soft2); color: var(--blue-d); }
+
+  section.phase { margin-top: 26px; }
+  .phase-head { display: flex; align-items: center; gap: 14px; background: linear-gradient(90deg, var(--blue-d), var(--blue)); color: #fff; border-radius: 12px; padding: 12px 20px; }
+  .phase-head .no { font-size: 22px; font-weight: 800; opacity: .55; }
+  .phase-head .t { flex: 1; }
+  .phase-head .t h2 { font-size: 17.5px; }
+  .phase-head .t .e { font-size: 12.5px; opacity: .8; }
+  .phase-head .time { background: rgba(255,255,255,.16); border-radius: 20px; padding: 4px 14px; font-size: 13px; white-space: nowrap; }
+
+  .slide-block { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 22px 14px; margin-top: 12px; }
+  .slide-head { display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 12px; }
+  .slide-head .pn { font-size: 12px; font-weight: 800; color: #fff; background: var(--blue); border-radius: 7px; padding: 2px 10px; white-space: nowrap; }
+  .slide-head .tt { font-size: 15.5px; font-weight: 700; }
+  .slide-head .te { font-size: 12.5px; color: var(--ink3); }
+  .slide-head .dur { margin-left: auto; font-size: 12px; color: var(--ink3); white-space: nowrap; }
+
+  p.en { font-size: 15px; color: var(--ink); line-height: 1.78; }
+  p.en strong { color: var(--blue-d); }
+  p.zh { font-size: 13.5px; color: var(--ink2); background: var(--soft); border-left: 4px solid #C9D8EE; border-radius: 0 8px 8px 0; padding: 9px 14px; margin-top: 10px; }
+  .cue { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .cue span { font-size: 12.5px; }
+
+  .board { background: var(--soft2); border: 1px dashed #B9CCE8; border-radius: 10px; padding: 10px 16px; margin-top: 10px; font-size: 13.5px; color: var(--blue-d); }
+
+  footer.doc { margin-top: 30px; text-align: center; font-size: 12.5px; color: var(--ink3); }
+  @media print {
+    body { background: #fff; }
+    .page { padding: 0; max-width: none; }
+    .slide-block, .usage { break-inside: avoid; }
+    section.phase { break-inside: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc">
+  <div class="kicker">AI APPLICATION DEVELOPMENT · LECTURE SCRIPT · 中英对照讲课稿</div>
+  <h1>第 1 周 · 导论与开发环境搭建</h1>
+  <div class="sub">Week 1 · Introduction &amp; Environment Setup — 面向大三软件工程专业留学生（国际班）</div>
+  <div class="meta">
+    <span>⏱ 180 min 一体课</span><span>理论 90 min（p1–p22）</span><span>Lab 75 min（p23–p29）</span><span>小测与小结 15 min（p30–p32）</span>
+  </div>
+</header>
+
+<div class="usage">
+  <b>使用说明 · How to use this script</b><br>
+  黑色英文段落 = 可直接照念的讲稿；浅蓝底中文段 = 对照译文（备课核对用，不必念）。徽章含义：
+  <div class="legend">
+    <span><span class="badge b-ask">提问 ASK</span>向全班提问，等 3–5 秒再点名</span>
+    <span><span class="badge b-tip">提示 TIP</span>教学处理建议</span>
+    <span><span class="badge b-warn">注意 WATCH</span>易错点 / 节奏提醒</span>
+    <span><span class="badge b-time">时间 TIME</span>到点提醒</span>
+  </div>
+</div>
+
+<!-- ============ L1 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L1</div>
+    <div class="t"><h2>课程总览 · Course Overview</h2><div class="e">开场、契约、结构与考核 —— 建立课程预期</div></div>
+    <div class="time">15 min · p1–p6</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p1</span><span class="tt">封面 · Cover</span><span class="te">AI Application Development</span><span class="dur">~2 min</span></div>
+    <p class="en">Good morning, everyone. Welcome to <strong>AI Application Development</strong>. I'm Professor Ren — I've been teaching software engineering for nine years, and this course is the one I most wanted to build. Before we start, one quick question: <em>raise your hand if you have used ChatGPT, or any AI tool, in the last week.</em> ... Almost everyone. Good. Keep that hand in your memory — by Week 16, you will understand what is happening inside tools like that, and more importantly, you will be able to <strong>build</strong> applications like that. That is what this course is about: not just using AI, but engineering AI into products.</p>
+    <p class="zh">大家早上好，欢迎来到《AI 应用开发》。我是任老师——我教软件工程已经九年，这门课是我最想做的一门课。开始前先问一句：过去一周用过 ChatGPT 或任何 AI 工具的同学请举手。……几乎全班。很好，记住这只手——到第 16 周，你会明白这类工具内部发生了什么；更重要的是，你能亲手做出类似的应用。这就是本课的主题：不只是用 AI，而是把 AI 工程化成产品。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">举手调查（ChatGPT 使用率），制造"人人相关"的开场锚点</span><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">语速放慢，报自己名字时写板书 "Prof. Ren"</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p2</span><span class="tt">目录 · Today's Roadmap</span><span class="te">5 Parts · 180 min</span><span class="dur">~1.5 min</span></div>
+    <p class="en">Here is our roadmap. Today runs in one continuous block of 180 minutes — <strong>90 minutes of theory, then a 75-minute hands-on Lab, and a short quiz at the end</strong>. In the theory part we cover four things: the course overview, what AI actually is, applications and careers, and the AI project lifecycle. Then, after a short break, we switch to the Lab: you will set up a complete development environment — conda, Jupyter, Git — and run your very first machine learning program today. Not in week five. <strong>Today.</strong></p>
+    <p class="zh">这是今天的路线图。今天是一节连续的 180 分钟一体课——先 90 分钟理论，再 75 分钟上机实验，课末有一次小测。理论部分讲四件事：课程总览、AI 到底是什么、应用与职业、AI 项目生命周期。短暂休息后进入实验环节：你今天就会搭好整套开发环境——conda、Jupyter、Git——并跑出你的第一个机器学习程序。不是第 5 周，就是今天。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">强调 "Today" 制造期待；预告 10 分钟课间在理论段结束后</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p3</span><span class="tt">扉页 01 · 课程总览</span><span class="te">Part 01 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Let's start with the course itself — what you will learn, and how you will be graded.</p>
+    <p class="zh">我们先从课程本身说起——你要学什么、怎么考核。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p4</span><span class="tt">课程结构与考核 · Structure &amp; Assessment</span><span class="te">4 Modules · 30/15/35/20</span><span class="dur">~4 min</span></div>
+    <p class="en">The course has <strong>four modules over sixteen weeks, sixty-four hours in total</strong>. Module 1 gives you AI and machine learning foundations. Module 2 moves into deep learning and computer vision. Module 3 covers NLP and large language models. Module 4 is where everything comes together — AI application engineering: deployment, MLOps, and your Capstone. Now look at the right side — the assessment. <strong>Assignments are 30 percent, the midterm project 15, the Capstone 35, and lab participation plus quizzes 20.</strong> Add them up: projects and labs together are <strong>seventy percent</strong>. There is no written exam. The message is simple: this is not a course you pass by listening. <strong>You learn by building.</strong></p>
+    <p class="zh">课程共 4 个模块、16 周、64 学时。模块一：AI 与机器学习基础；模块二：深度学习与计算机视觉；模块三：NLP 与大语言模型；模块四：AI 应用工程化——部署、MLOps 和你的 Capstone。再看右侧考核：<strong>作业 30%、期中项目 15%、Capstone 35%、实验与小测 20%</strong>。加起来：项目与实验共占 <strong>70%</strong>，而且没有笔试。信息很简单：这门课不是听出来的，<strong>是做出来的</strong>。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"Which module are you most excited about? Shout it out."（30 秒暖场）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p5</span><span class="tt">课程日历 · Course Calendar</span><span class="te">Milestones W4 / W7 / W8 / W10 / W16</span><span class="dur">~4 min</span></div>
+    <p class="en">This is our sixteen-week map. I want you to notice five highlighted milestones, because they are the heartbeat of your semester. <strong>Week 4</strong>: Assignment 1 is released — your first real ML pipeline. <strong>Week 7</strong>: Assignment 2, in the middle of deep learning. <strong>Week 8</strong>: midterm project presentations — team of two or three, five-minute live demo. <strong>Week 10</strong>: Assignment 3 on NLP. And <strong>Week 16</strong>: Capstone showcase, your final product on stage. Please take a photo of this slide now. Plan your semester backwards from these five dates.</p>
+    <p class="zh">这是 16 周的地图。请注意五个高亮里程碑，它们是这学期的节拍器：<strong>第 4 周</strong>发布作业 1——你的第一条完整 ML 流水线；<strong>第 7 周</strong>作业 2，正值深度学习阶段；<strong>第 8 周</strong>期中项目展示——2-3 人小组、5 分钟现场演示；<strong>第 10 周</strong>NLP 作业 3；<strong>第 16 周</strong>Capstone 展示，你的最终产品登台。现在就给这页拍张照，请从这五个时间点倒排你的学期计划。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">停 20 秒让学生拍照；"Plan backwards" 重复两遍</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p6</span><span class="tt">考核细则与学术诚信 · Grading &amp; Integrity</span><span class="te">AI tool policy</span><span class="dur">~3 min</span></div>
+    <p class="en">Two things on this page deserve your full attention. First, the details: each assignment is worth 10 percent and must include code, a short report, and a reproducible run. Late policy is strict — <strong>minus 10 percent per 24 hours, and after 72 hours we cannot accept it</strong>. Second — and this is the part I care most about — <strong>academic integrity in the age of AI</strong>. You CAN use AI tools in this course; in fact, I encourage it. But you must declare which parts were AI-assisted. Undeclared use is a violation. And you must be able to <strong>explain every line you submit</strong> — I will randomly invite students to walk me through their code. If you can't explain it, that part scores zero. Copying scores zero. In team projects, write each member's contribution in the report. This is a course about building AI responsibly — it starts with honest code.</p>
+    <p class="zh">这页有两件事需要你全神贯注。第一，细则：每次作业占 10%，须包含代码、简短报告与可复现运行。迟交政策严格——<strong>每 24 小时扣 10%，超过 72 小时不收</strong>。第二，也是我最在意的——<strong>AI 时代的学术诚信</strong>。本课可以用 AI 工具，我甚至鼓励你用；但必须声明哪些部分由 AI 辅助完成，用了不报即违规。而且你要能<strong>解释你交的每一行代码</strong>——我会随机请同学现场讲解；讲不出，该部分 0 分。抄袭 0 分。小组项目要在报告里写明每个人的分工。这是一门讲"负责任地构建 AI"的课，就从诚实的代码开始。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">语气严肃但不冷峻；"I encourage it" 与 "you must declare" 形成对比是关键</span></div>
+  </div>
+</section>
+
+<!-- ============ L2 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L2</div>
+    <div class="t"><h2>AI 是什么 · What is AI</h2><div class="e">层级关系、三大范式、历史浪潮与寒冬</div></div>
+    <div class="time">25 min · p7–p12</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p7</span><span class="tt">扉页 02 · AI 是什么</span><span class="te">Part 02 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part two. Four words you hear every day — AI, machine learning, deep learning, generative AI. Most people use them interchangeably. By the end of the next slide, you won't.</p>
+    <p class="zh">第二部分。AI、机器学习、深度学习、生成式 AI——四个你每天都听到的词，多数人混着用。下一页之后，你就不会了。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p8</span><span class="tt">AI 层级关系 · The Hierarchy</span><span class="te">AI ⊃ ML ⊃ DL ⊃ GenAI</span><span class="dur">~7 min</span></div>
+    <p class="en">This nested diagram is, in my opinion, the single most important picture of the whole course. From outside in: <strong>Artificial Intelligence</strong> is the big circle — any technique that makes machines behave intelligently, including rule-based systems from the 1980s. Inside it, <strong>Machine Learning</strong> — systems that learn patterns from data instead of being explicitly programmed. Inside that, <strong>Deep Learning</strong> — machine learning that uses multi-layer neural networks to learn features automatically. And at the center, <strong>Generative AI</strong> — deep learning that creates new content: text, images, code. So when someone says "deep learning is not machine learning" — you now know that's wrong; deep learning is a subset. Here is your practical tool: <strong>the three questions</strong>. One — does the system learn from data? If no, it's classic AI. Two — does it use multi-layer neural networks? If yes, it's deep learning. Three — does it generate new content? If yes, it's generative AI. Let's practice: ChatGPT? Learns from data — yes. Deep networks — yes. Generates content — yes. So it's generative AI. A spam filter from 2005? Learns from data — yes. Deep networks — no. So it's classic machine learning. <em>Your turn: a chess engine that searches millions of positions per second but never learns — which circle?</em></p>
+    <p class="zh">这张嵌套图我认为是全课程最重要的一张图。从外到内：<strong>人工智能</strong>是大圈——让机器表现智能的任何技术，包括上世纪 80 年代的规则系统；里面的<strong>机器学习</strong>——从数据中学习规律而非被显式编程；再里面的<strong>深度学习</strong>——用多层神经网络自动学特征的机器学习；最中心的<strong>生成式 AI</strong>——创造新内容的深度学习：文本、图像、代码。所以"深度学习不是机器学习"这种说法是错的，它是子集。给你一个实用工具——<strong>判断三连问</strong>：①系统从数据中学习吗？不学就是经典 AI。②用多层神经网络吗？用了就是深度学习。③生成新内容吗？生成就是生成式 AI。练一下：ChatGPT？从数据学——是；深网络——是；生成内容——是，所以是生成式 AI。2005 年的垃圾邮件过滤器？从数据学——是；深网络——否，所以是经典机器学习。<em>轮到你：一个每秒搜索数百万棋位但从不学习的国际象棋引擎——在哪个圈？</em></p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">留 30 秒讨论再公布答案（经典 AI / 规则系统——不学习）</span><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">本页是理论段核心，宁可超 1 分钟也要把三连问练熟</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p9</span><span class="tt">机器学习三大范式 · Three Paradigms</span><span class="te">Supervised / Unsupervised / RL</span><span class="dur">~6 min</span></div>
+    <p class="en">Machine learning itself comes in three flavors, and the difference is beautifully simple — it's about <strong>what kind of feedback the data gives you</strong>. <strong>Supervised learning</strong>: the data comes with answers. Every email is labeled "spam" or "not spam" — the algorithm learns the mapping from input to answer. That's classification and regression, and it is the focus of this course. <strong>Unsupervised learning</strong>: no answers at all, just raw data, and the algorithm finds hidden structure — customer segmentation, anomaly detection. <strong>Reinforcement learning</strong>: no answers, but rewards. An agent tries things, gets points or penalties, and slowly learns a strategy — that's how AlphaGo learned to play Go. Now the quick check at the bottom: <em>you have 100,000 customers, no labels, and you want to group them into five segments by purchasing behavior — which paradigm?</em> Right — no labels, looking for structure — that's unsupervised learning, clustering. We will do this hands-on in Week 3.</p>
+    <p class="zh">机器学习本身分三种范式，区别简单得漂亮——<strong>取决于数据给你什么样的反馈</strong>。<strong>监督学习</strong>：数据带答案。每封邮件都标注了"垃圾/非垃圾"，算法学习输入到答案的映射——就是分类与回归，也是本课程的重点。<strong>无监督学习</strong>：完全没有答案，只有原始数据，算法自己找隐藏结构——用户分群、异常检测。<strong>强化学习</strong>：没有答案但有奖励。智能体不断尝试、得分或扣分，慢慢学出策略——AlphaGo 就是这么学会下围棋的。底部快问快答：<em>10 万个用户、没有任何标签、想按消费行为分成 5 群——哪种范式？</em>对——无标签、找结构——无监督学习（聚类）。第 3 周我们会动手做。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">快问快答让学生齐答或点名；用"有没有标准答案"一句话锚定范式区别</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p10</span><span class="tt">三次发展浪潮 · Three Waves</span><span class="te">Symbolic → Statistical → Deep</span><span class="dur">~5 min</span></div>
+    <p class="en">A quick history in one timeline — three waves. The <strong>first wave, symbolic AI</strong>: humans hand-wrote rules, "if this then that". It produced expert systems — impressive for narrow tasks, but brittle: every situation needed a new rule, and humans had to know the answer in advance. The <strong>second wave, statistical learning</strong>: instead of writing rules, we feed data to statistical models and let them find the rules — this powered spam filters and search engines, roughly the 1990s to 2000s. The <strong>third wave, deep learning</strong>: massive data plus massive compute plus neural networks — and since 2022, the generative explosion. Here is why this matters to you: <strong>we are living in the application-engineering window of the third wave</strong>. The models exist, the APIs exist, the tooling exists — what the industry lacks is people who can turn them into reliable products. That's you, in three years.</p>
+    <p class="zh">一条时间轴讲完三次浪潮。<strong>第一波符号主义</strong>：人工手写规则、"如果……那么……"，产出了专家系统——窄任务上惊艳但脆弱：每种情况都要新规则，而且人必须提前知道答案。<strong>第二波统计学习</strong>：不写规则了，把数据喂给统计模型让它自己找规律——垃圾邮件过滤、搜索引擎，大约 1990-2000 年代。<strong>第三波深度学习</strong>：海量数据+海量算力+神经网络，2022 年后进入生成式爆发。为什么这与你有关：<strong>我们正处在第三波的应用工程化窗口期</strong>——模型有了、API 有了、工具链有了，行业缺的是能把它们变成可靠产品的人。三年后，那就是你。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p11</span><span class="tt">AI 寒冬 · The AI Winters</span><span class="te">1970s / 1990s</span><span class="dur">~3 min</span></div>
+    <p class="en">But this history is not a straight line — it has two deep valleys, the so-called <strong>AI winters</strong>. Around the mid-1970s, funding collapsed when symbolic AI promised too much and delivered too little — machines could play chess but couldn't understand everyday language. And again in the early 1990s, expert systems proved too expensive to maintain, and the field went quiet for a decade. The lesson I want you to take: <strong>AI progress alternates between hype cycles and winters, and the gap between promise and delivery is what causes the fall.</strong> When you hear "AI will solve everything next year", remember the winters. And when you hear "AI is a bubble that will burst", remember AlexNet, 2012. The truth is in between, and engineers who can tell the difference are the ones who get hired.</p>
+    <p class="zh">但这段历史不是直线——它有两道深谷，即所谓<strong>AI 寒冬</strong>。1970 年代中期，符号主义承诺过多、兑现太少，资金崩塌——机器会下棋却听不懂日常语言。1990 年代初专家系统维护成本过高，整个领域沉寂了十年。我想让你带走的是：<strong>AI 的进步在 hype 周期与寒冬之间交替，而"承诺与兑现的落差"正是坠落的原因。</strong>当你听到"AI 明年解决一切"，想想寒冬；听到"AI 是要破裂的泡沫"，想想 2012 年的 AlexNet。真相在两者之间，而能分辨的人才有人要。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p12</span><span class="tt">为什么是软件工程师 · Why SE Students</span><span class="te">3 Structural Shifts</span><span class="dur">~3 min</span></div>
+    <p class="en">So why is this course in a software engineering program, not a math program? Because three structural shifts happened in this industry. First: <strong>feature engineering is becoming data engineering</strong> — the scarce skill is no longer hand-crafting clever features but building reliable data pipelines. Second: <strong>writing rules is becoming tuning systems</strong> — you no longer encode business logic by hand; you configure, fine-tune and evaluate learned systems. Third: <strong>single applications are becoming agent ecosystems</strong> — today's AI products are systems of models, APIs, memory and tools working together. Notice that all three shifts are engineering problems, not research problems. <strong>Your leverage as an SE student is turning models into products.</strong> The researchers will keep making the models smarter. The market pays for the people who make them usable.</p>
+    <p class="zh">那为什么这门课开在软件工程专业而不是数学系？因为这个行业发生了三个结构性转变。第一：<strong>特征工程正在变成数据工程</strong>——稀缺技能不再是手搓精巧特征，而是构建可靠的数据管道。第二：<strong>写规则正在变成调系统</strong>——业务逻辑不再靠手写编码，而是配置、微调与评估学习型系统。第三：<strong>单应用正在变成智能体生态</strong>——今天的 AI 产品是模型、API、记忆与工具协同的系统。注意：这三个转变全是工程问题，不是研究问题。<strong>软件工程学生的杠杆，就是把模型变成产品。</strong>研究者会让模型更聪明，而市场为"让模型可用"的人付钱。</p>
+  </div>
+</section>
+
+<!-- ============ L3 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L3</div>
+    <div class="t"><h2>应用、职业与伦理 · Domains, Careers &amp; Ethics</h2><div class="e">四域、六大突破、职业地图与工程师责任</div></div>
+    <div class="time">20 min · p13–p17</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p13</span><span class="tt">扉页 03 · 应用与职业</span><span class="te">Part 03 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part three — where AI actually earns money, and where you fit in it.</p>
+    <p class="zh">第三部分——AI 真正赚到钱的地方，以及你在其中的位置。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p14</span><span class="tt">四大应用域 · Four Domains</span><span class="te">CV / NLP / Speech / RecSys</span><span class="dur">~5 min</span></div>
+    <p class="en">Four application domains dominate the industry. <strong>Computer vision</strong> — machines that see: defect inspection, face recognition, medical imaging. <strong>Natural language processing</strong> — machines that read and write: translation, chatbots, code assistants like the one you'll build in Module 3. <strong>Speech and multimodal</strong> — machines that listen and speak: voice assistants, and today's models that handle text, image and audio together. And <strong>recommendation and decision systems</strong> — machines that choose: what video you see next, what route your delivery takes. Here is the unifying insight: all four domains reduce to the same pipeline — <strong>perceive, understand, generate, decide</strong>. Keep that in mind, because your Capstone will be built on exactly this pattern: perceive something, understand it, and act on it.</p>
+    <p class="zh">四个应用域统治着行业。<strong>计算机视觉</strong>——会看的机器：缺陷检测、人脸识别、医学影像。<strong>自然语言处理</strong>——会读写：翻译、聊天机器人、代码助手，你会在模块三亲手做一个。<strong>语音与多模态</strong>——会听会说：语音助手，以及今天同时处理文本图像音频的模型。<strong>推荐与决策系统</strong>——会选择：下一个视频看什么、快递走哪条路。统一性的洞见是：四个域最终都归结为同一条流水线——<strong>感知、理解、生成、决策</strong>。记住它，你的 Capstone 就建立在这个模式上：感知某物、理解它、对它采取行动。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"Which domain does your favorite app belong to?"（收 2 个回答）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p15</span><span class="tt">六大突破 · Six Breakthroughs</span><span class="te">2012–2023+</span><span class="dur">~5 min</span></div>
+    <p class="en">Six moments changed everything. <strong>2012, AlexNet</strong>: a deep network crushed the ImageNet competition, error rate dropped ten points overnight, and GPU training became the standard — that's the ignition of deep learning. <strong>2016, AlphaGo</strong> beat Lee Sedol, and the whole world suddenly paid attention. <strong>2017, Transformer</strong> — one paper, "Attention Is All You Need", became the foundation of every large model you use today. <strong>2020, GPT-3</strong>: 175 billion parameters, and for the first time, scale alone produced new abilities. <strong>2022, ChatGPT</strong>: one hundred million users in two months — generative AI went mainstream. <strong>2023 and beyond</strong>: multimodal models that understand text, image, audio and video together. Now, how to read this timeline: three observations. The pace is accelerating — AlexNet to ChatGPT took ten years, now every year is a milestone. The paradigms are converging — vision, language, speech all converged on the Transformer. And the entry barrier is dropping — paper-to-product used to take years, now months. <strong>That last one is your window.</strong></p>
+    <p class="zh">六个时刻改变了一切。<strong>2012 AlexNet</strong>：深网络横扫 ImageNet，错误率一夜降十个百分点，GPU 训练成为标配——深度学习的引爆点。<strong>2016 AlphaGo</strong> 击败李世石，全世界开始关注。<strong>2017 Transformer</strong>——一篇《Attention Is All You Need》成为你今天用的所有大模型的底座。<strong>2020 GPT-3</strong>：1750 亿参数，第一次"规模本身"带来新能力。<strong>2022 ChatGPT</strong>：两个月一亿用户——生成式 AI 进入主流。<strong>2023+ 多模态</strong>：文本、图像、音频、视频统一理解。这条时间轴怎么读？三个观察：节奏在加快——AlexNet 到 ChatGPT 用了十年，现在每年都是里程碑；范式在收敛——视觉、语言、语音都收敛到 Transformer；门槛在降低——从论文到产品从数年缩到数月。<strong>最后一条就是你的窗口。</strong></p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p16</span><span class="tt">职业地图 · Career Roles</span><span class="te">4 Roles × Course Modules</span><span class="dur">~4 min</span></div>
+    <p class="en">Let me connect this to your future salary. Four roles in an AI team. The <strong>ML researcher</strong> invents new architectures — that path usually needs a PhD; honestly, it's not the majority path. The <strong>data engineer</strong> builds the pipelines that keep data flowing — critical, and covered by our Week 2 focus. The <strong>AI application engineer</strong> takes trained models and turns them into products — APIs, interfaces, integrations. And <strong>MLOps</strong> keeps it all running in production — monitoring, retraining, deployment. Look at the mapping to our modules: we deliberately train you across all four roles, but with a center of gravity on the last two. <strong>For SE students, the highest-leverage careers are AI application engineer and MLOps</strong> — because that's where the industry bottleneck is right now, and where your engineering training is a direct advantage.</p>
+    <p class="zh">把这些和你未来的薪水连起来。AI 团队里有四类角色：<strong>ML 研究员</strong>发明新架构——这条路通常需要 PhD，坦白说不是多数人的路；<strong>数据工程师</strong>构建数据流动的管道——关键，对应我们第 2 周的重点；<strong>AI 应用工程师</strong>把训练好的模型变成产品——API、界面、集成；<strong>MLOps</strong>让一切在生产环境跑起来——监控、重训、部署。看它们与课程模块的对应：我们刻意让你四种角色都接触，但重心在后两个。<strong>对软件工程学生，杠杆最高的就是 AI 应用工程师与 MLOps</strong>——因为那正是当前行业瓶颈，也是你工程训练的直接优势所在。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">可让学生 30 秒自评"我对哪个角色最心动"，为 Capstone 分组埋伏笔</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p17</span><span class="tt">AI 伦理与工程师责任 · Ethics &amp; Responsibility</span><span class="te">Bias / Privacy / Hallucination / Accountability</span><span class="dur">~5 min</span></div>
+    <p class="en">Last page of this part — the one I take most seriously. Four risks will appear again and again in your career. <strong>Bias</strong>: training data carries historical prejudice, and models learn it and amplify it — Amazon's recruiting tool downgraded women's resumes, and they had to abandon it in 2018. <strong>Privacy</strong>: models can memorize and leak personal data from their training set — a chatbot once recited real phone numbers. <strong>Hallucination</strong>: generative models produce fluent, confident, completely fabricated facts — AI-cited papers that don't exist, deepfake fraud. <strong>Accountability</strong>: when an AI system fails, who is responsible — the developer, the deployer, or the user? The autonomous-driving lawsuits are still writing the answer. Now read the blue box with me: in this course, <strong>every deliverable includes an ethics note</strong> — two sentences are enough, but you must answer one question: "who could this system harm, and what did I do about it?" Because when you graduate, that question will be in your code review, whether you like it or not.</p>
+    <p class="zh">这一部分最后一页，也是我最看重的一页。四种风险会反复出现在你的职业生涯里。<strong>偏见</strong>：训练数据携带历史偏见，模型会学并放大它——亚马逊招聘工具压低女性简历评分，2018 年被迫弃用。<strong>隐私</strong>：模型可能记住并泄露训练集中的个人信息——曾有聊天机器人复述出真实手机号。<strong>幻觉</strong>：生成模型会流畅、自信地编造事实——AI 引用的论文根本不存在、深度伪造诈骗。<strong>责任</strong>：AI 系统出错时责任在开发者、部署方还是使用者？自动驾驶的诉讼正在书写答案。跟我读蓝色框：本课程<strong>每次交付物都包含"伦理考量"栏</strong>——两句话就够，但必须回答"这个系统可能伤到谁、我做了什么"。因为毕业后，这个问题会出现在你的代码评审里，不由你喜不喜欢。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">本页不空谈：每个风险都锚定一个真实案例；"伦理考量栏"此处宣布，之后每次作业都要执行</span></div>
+  </div>
+</section>
+
+<!-- ============ L4 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L4</div>
+    <div class="t"><h2>AI 项目生命周期 · Project Lifecycle</h2><div class="e">六阶段、食堂案例走查、80% 法则、工具链</div></div>
+    <div class="time">25 min · p18–p22</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p18</span><span class="tt">扉页 04 · 项目生命周期</span><span class="te">Part 04 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">Part four is the skeleton of everything you will do in this course: the lifecycle of an AI project.</p>
+    <p class="zh">第四部分是你在本课程要做的一切事情的骨架：AI 项目的生命周期。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p19</span><span class="tt">六阶段框架 · The Six Stages</span><span class="te">Define → Data → Features → Model → Deploy → Monitor</span><span class="dur">~5 min</span></div>
+    <p class="en">Every AI project, from a weekend hackathon to a national-scale system, walks through six stages. <strong>One, problem definition</strong> — what exactly are we predicting, and is AI even the right tool? <strong>Two, data collection</strong> — where does the data come from, is it legal to use, is it enough? <strong>Three, feature engineering</strong> — turning raw data into signals a model can learn from. <strong>Four, modeling</strong> — choosing, training and comparing models; notice this is only one stage out of six. <strong>Five, deployment</strong> — wrapping the model behind an API or an app so real users can touch it. <strong>Six, monitoring</strong> — watching performance in production, because data drifts and models decay. Memorize this chain — <strong>your Capstone will be graded against all six stages</strong>, and your midterm proposal must cover the first three.</p>
+    <p class="zh">每个 AI 项目——从周末黑客松到国家级系统——都要走六个阶段。<strong>①问题定义</strong>：到底预测什么？AI 是不是对的工具？<strong>②数据收集</strong>：数据从哪来、用了合法吗、够不够？<strong>③特征工程</strong>：把原始数据变成模型能学的信号。<strong>④建模</strong>：选模型、训练、对比——注意这只是六阶段之一。<strong>⑤部署</strong>：把模型包进 API 或应用，让真实用户摸得到。<strong>⑥监控</strong>：盯着生产环境的表现，因为数据会漂移、模型会衰减。背下这条链——<strong>你的 Capstone 会按这六阶段逐段评分</strong>，期中开题必须覆盖前三阶段。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">在板书写六阶段箭头链，后面案例页反复回指</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p20</span><span class="tt">案例走查：食堂排队预测 · Case Walkthrough</span><span class="te">Canteen Queue Prediction</span><span class="dur">~9 min</span></div>
+    <p class="en">Let's make it real with one example carried through all six stages: <strong>predicting the canteen queue time</strong>. Stage one, definition: we want to predict, for each food window, the queue length in the next fifteen minutes, within a five-minute error. And here's a modeling decision hidden inside the definition — is this classification or regression? Queue time in minutes — that's a number, so <strong>regression</strong>. Stage two, data: POS machine transactions — what dishes, at what time; camera-based people counting; and the university calendar, because exam weeks change everything. And note the pitfall: camera data must be anonymized — no face storage. That's stage-two ethics, not an afterthought. Stage three, features: time of day, day of week, weather, menu popularity, foot traffic in the previous fifteen minutes. Common-sense features often beat fancy models. Stage four, modeling: <strong>always run a mean baseline first</strong> — just predicting the average queue time — then a gradient-boosted tree, and compare. If you skip the baseline, you're flying blind. Stage five, deployment: wrap it in a REST API with FastAPI, and the mini-program pulls a fresh prediction every five minutes. <strong>The model is not the product — the interface is.</strong> Stage six, monitoring: a weekly error report; and when a new canteen opens, the data distribution shifts — that's drift, and it triggers retraining. <strong>The day you deploy is the day the project really begins.</strong></p>
+    <p class="zh">用一个贯穿六阶段的例子把它变真实：<strong>预测食堂排队时长</strong>。阶段一定义：预测每个窗口未来 15 分钟的排队时长，误差 ±5 分钟内。定义里藏着一个建模决策——这是分类还是回归？排队分钟数是数字，所以是<strong>回归</strong>。阶段二数据：POS 机流水（什么菜、什么时间）、摄像头人流计数、校历（考试周改变一切）。注意坑：摄像头数据必须脱敏——不能存人脸，这是阶段二的伦理，不是事后补丁。阶段三特征：时段、星期、天气、菜单热度、前 15 分钟人流量。常识特征常常打败花哨模型。阶段四建模：<strong>永远先跑均值基线</strong>——就预测平均排队时长——再上梯度提升树做对比。跳过基线等于裸奔。阶段五部署：FastAPI 封装 REST 接口，小程序每 5 分钟拉一次新预测。<strong>模型不是产品，接口才是。</strong>阶段六监控：预测误差周报；新食堂开业意味着数据分布变了——这就是漂移，触发重训。<strong>上线那天，项目才真正开始。</strong></p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">在"分类还是回归"处停下让学生投票再公布</span><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">本页 9 分钟是理论段最长单页，配合板书六阶段链回指</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p21</span><span class="tt">80% 法则 · The 80% Rule</span><span class="te">Hero · Data &amp; Engineering</span><span class="dur">~5 min</span></div>
+    <p class="en">Here is a number that might surprise you: across real AI projects, engineers spend roughly <strong>eighty percent of their time on data and engineering</strong> — collecting it, cleaning it, building pipelines, deploying, monitoring — and only about twenty percent on the modeling itself. Training the model is the fun part, yes, but it's the small part. This single number explains two things. It explains <strong>this course's design</strong>: why we spend all of Week 2 on data, why labs are seventy percent of your grade, why Module 4 is entirely about engineering. And it explains <strong>your career advantage</strong>: if you only know how to call model APIs, you compete with everyone. If you can own the other eighty percent — the pipelines, the deployment, the monitoring — you become the person the team cannot ship without.</p>
+    <p class="zh">一个可能让你意外的数字：真实 AI 项目中，工程师大约<strong>80% 的时间花在数据与工程上</strong>——收集、清洗、建管道、部署、监控——建模本身只占约 20%。训练模型当然有趣，但那是小头。这个数字解释了两件事。它解释<strong>这门课的设计</strong>：为什么第 2 周整个星期讲数据、为什么实验占成绩 70%、为什么模块四全讲工程化。它也解释<strong>你的职业优势</strong>：只会调模型 API，你在和所有人竞争；而能拿下另外 80%——管道、部署、监控——你就是团队发版离不开的那个人。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">留 3 秒静默让大字"80%"落地；这是全课记忆锚点之一</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p22</span><span class="tt">课程工具链地图 · Course Toolchain</span><span class="te">M1–M4 Tools</span><span class="dur">~5 min</span></div>
+    <p class="en">This map shows every tool you'll touch, module by module — treat it as your shopping list for the semester. In Module 1: <strong>Python 3.11 with conda</strong> for environments, <strong>JupyterLab and Colab</strong> for interactive work, <strong>Git and GitHub</strong> for version control, and <strong>NumPy, Pandas, scikit-learn</strong> for data and classic ML. Module 2 brings <strong>PyTorch</strong> — our main deep learning framework — plus torchvision, free Colab GPUs, and Matplotlib. Module 3 adds <strong>Hugging Face Transformers</strong>, the second most important library in this course, plus Ollama for running open models locally and LangChain for orchestration. Module 4: <strong>FastAPI</strong> for serving models, Docker for packaging, Streamlit for quick interfaces, MLflow for experiment tracking. You don't need to memorize this now — just know the terrain. By Week 16, every name on this map will be something you have used, not something you have heard of.</p>
+    <p class="zh">这张地图按模块列出你会碰到的每个工具——把它当这学期的购物清单。模块一：<strong>Python 3.11 + conda</strong> 管环境、<strong>JupyterLab 与 Colab</strong> 交互开发、<strong>Git 与 GitHub</strong> 版本控制、<strong>NumPy / Pandas / scikit-learn</strong> 数据与经典 ML。模块二：<strong>PyTorch</strong>——本课程深度学习主框架——加 torchvision、免费 Colab GPU、Matplotlib。模块三：<strong>Hugging Face Transformers</strong>（本课第二重要的库）、本机跑开源模型的 Ollama、编排框架 LangChain。模块四：<strong>FastAPI</strong> 模型服务化、Docker 打包、Streamlit 快速界面、MLflow 实验跟踪。现在不用背，看清地形即可——到第 16 周，这张图上每个名字都该是你"用过"的，而不是"听过"的。</p>
+  </div>
+</section>
+
+<!-- ============ L5 ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">L5</div>
+    <div class="t"><h2>Lab 衔接与预告 · Lab Preview</h2><div class="e">理论段收尾、进入实验</div></div>
+    <div class="time">5 min · p23–p24</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p23</span><span class="tt">扉页 05 · Lab</span><span class="te">Part 05 Divider</span><span class="dur">~0.5 min</span></div>
+    <p class="en">And now — the part where you stop listening and start building. Welcome to your first Lab.</p>
+    <p class="zh">现在——停止听讲、开始动手的部分。欢迎来到你的第一个实验。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p24</span><span class="tt">Lab 总览 · Lab Overview</span><span class="te">A–E · 75 min</span><span class="dur">~4.5 min</span></div>
+    <p class="en">The Lab runs in five segments, seventy-five minutes total. <strong>Segment A</strong>, twenty minutes: environment setup with conda. <strong>Segment B</strong>, fifteen: Jupyter and Colab. <strong>Segment C</strong>, fifteen: Git and GitHub. <strong>Segment D</strong>, twenty: your first ML program on the Iris dataset. <strong>Segment E</strong>, five: deliverables and grading. Three rules for every lab in this course. Rule one: <strong>if you're stuck for more than five minutes, raise your hand</strong> — that's not weakness, that's efficiency; the teaching assistants and I are here exactly for this. Rule two: follow along — we do each step together on the projector. Rule three: <strong>your environment must work today</strong>, because every following week builds on it. If anything fails on your machine, we have a fallback: Google Colab. Nobody gets left behind by a broken laptop. Any questions before we take our break? ... Good — see you in ten minutes, and bring your laptop charged.</p>
+    <p class="zh">实验分五段，共 75 分钟。<strong>A 段</strong> 20 分钟：conda 环境搭建；<strong>B 段</strong> 15 分钟：Jupyter 与 Colab；<strong>C 段</strong> 15 分钟：Git 与 GitHub；<strong>D 段</strong> 20 分钟：Iris 数据集上的第一个 ML 程序；<strong>E 段</strong> 5 分钟：交付与评分。本课程每次实验三条规则：一、<strong>卡壳超过 5 分钟就举手</strong>——这不是示弱，是效率，我和助教就是干这个的；二、跟做——每一步都在投影上一起做；三、<strong>你的环境今天必须能跑</strong>，之后每周都建立在它之上。机器出问题有兜底方案：Google Colab，没有人会被一台坏电脑落下。休息前有问题吗？……好，十分钟后见，笔记本充满电。</p>
+    <div class="cue"><span class="badge b-time">时间 TIME</span><span style="color:#4A5568">此处宣布课间 10 分钟；理论段应在第 90 分钟左右结束</span></div>
+  </div>
+</section>
+
+<!-- ============ LAB ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">LAB</div>
+    <div class="t"><h2>Lab：环境搭建与第一个 ML 程序 · Setup &amp; First ML Program</h2><div class="e">演示 + 跟做，环境问题现场诊所</div></div>
+    <div class="time">75 min · p25–p29</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p25</span><span class="tt">Lab A · conda 环境搭建</span><span class="te">Environment Setup</span><span class="dur">20 min</span></div>
+    <p class="en">Alright, everyone back? Laptops open. We start by creating an isolated Python environment — think of it as a private, disposable workshop for this course: whatever we install stays inside, and if it breaks, we delete it and rebuild in two minutes. Watch the projector, then do the same. First: <code>conda create -n ai-app python=3.11</code> — the environment is called <em>ai-app</em>, Python 3.11. Then <code>conda activate ai-app</code>. Then we install the full dependency list from the course page — NumPy, Pandas, scikit-learn, Matplotlib, JupyterLab, PyTorch. Finally, the environment check script — it just imports every library and prints versions. When you see the green "ALL OK", you're done with segment A. Two most common failures: slow downloads — we switch to a mirror; and "command not found" — that's a PATH problem, raise your hand and we'll fix it together. Remember the rule: five minutes stuck, hand up.</p>
+    <p class="zh">都回来了吗？打开笔记本。先创建一个隔离的 Python 环境——把它想成本课程的私人一次性车间：装的东西都在里面，坏了就删掉两分钟重建。看投影，然后照做。第一步：<code>conda create -n ai-app python=3.11</code>——环境名叫 <em>ai-app</em>，Python 3.11；然后 <code>conda activate ai-app</code>；再从课程页安装完整依赖清单——NumPy、Pandas、scikit-learn、Matplotlib、JupyterLab、PyTorch；最后跑环境检查脚本——它只是把每个库 import 一遍并打印版本。看到绿色 "ALL OK"，A 段就完成了。两个最常见故障：下载慢——换镜像源；"command not found"——PATH 问题，举手我们一起修。记住规则：卡 5 分钟就举手。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">下载阶段有空档，穿插提问"为什么用虚拟环境而不是全局安装？"（答案：隔离/可复现/可丢弃）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p26</span><span class="tt">Lab B · Jupyter 与 Colab</span><span class="te">Notebooks</span><span class="dur">15 min</span></div>
+    <p class="en">Segment B: our main workspace — the Jupyter notebook. Start it with <code>jupyter lab</code>, create a new notebook, and type your first cell: print a "hello", run it with Shift-Enter. Feels simple; do it anyway — muscle memory matters. Then, two cells that matter: <code>import torch</code> followed by <code>torch.__version__</code> — proof that PyTorch really installed. Now the second half: upload this same notebook to Google Colab, and there run <code>torch.cuda.is_available()</code>. If it prints True — congratulations, you just got a free GPU. Colab is our insurance policy for the whole semester: whenever your laptop struggles, the cloud takes over. Same notebook, same code, zero setup.</p>
+    <p class="zh">B 段：我们的主力工作区——Jupyter notebook。用 <code>jupyter lab</code> 启动，新建一个 notebook，敲下第一个 cell：print 一句 hello，Shift-Enter 运行。很简单，但请认真做——肌肉记忆很重要。然后是两个关键 cell：<code>import torch</code> 加 <code>torch.__version__</code>——证明 PyTorch 真的装好了。下半段：把这个 notebook 上传到 Google Colab，在那边跑 <code>torch.cuda.is_available()</code>。如果打印 True——恭喜，你刚拿到一块免费 GPU。Colab 是我们整学期的保险：笔记本跑不动时，云端接管。同一个 notebook、同一份代码、零配置。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p27</span><span class="tt">Lab C · Git 与 GitHub</span><span class="te">Version Control</span><span class="dur">15 min</span></div>
+    <p class="en">Segment C: version control — from today, every piece of code you write in this course lives in Git. Four commands, five minutes, one habit. In your lab folder: <code>git init</code> — creates the repository. <code>git add .</code> — stage everything. <code>git commit -m "first working environment"</code> — save a snapshot with a message that means something; "stuff" and "update" are banned words in my classroom. Now create an empty repository on GitHub under your account, then link and push: <code>git remote add origin</code> your URL, <code>git branch -M main</code>, <code>git push -u origin main</code>. Refresh the GitHub page — your code is on the internet now. That repository link is part of your homework submission today. One more file before you forget: <code>.gitignore</code> — we exclude datasets and giant files; GitHub is for code, not for gigabytes.</p>
+    <p class="zh">C 段：版本控制——从今天起，你在这门课写的每一行代码都活在 Git 里。四条命令、五分钟、一个习惯。在实验文件夹里：<code>git init</code>——创建仓库；<code>git add .</code>——暂存全部；<code>git commit -m "first working environment"</code>——保存快照，提交信息要有意义；"stuff" 和 "update" 在我课堂上属于禁词。然后在 GitHub 你的账号下建一个空仓库，连接并推送：<code>git remote add origin</code> 你的 URL、<code>git branch -M main</code>、<code>git push -u origin main</code>。刷新 GitHub 页面——你的代码上互联网了。这个仓库链接是今天作业提交的一部分。别忘了再放一个文件：<code>.gitignore</code>——排除数据集和大文件；GitHub 放代码，不放几个 G 的东西。</p>
+    <div class="cue"><span class="badge b-warn">注意 WATCH</span><span style="color:#4A5568">push 鉴权是高频卡点（token/SSH），提前把帮助文档链接贴到群里</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p28</span><span class="tt">Lab D · 第一个 ML 程序</span><span class="te">Iris Classification</span><span class="dur">20 min</span></div>
+    <p class="en">Segment D — the moment you've been waiting for: your first machine learning program, and it's five lines of logic. Left side, read it with me top to bottom. Line one: load the Iris dataset — one hundred fifty flowers, four measurements each, three species. Line two: <code>train_test_split</code> — eighty percent for training, twenty percent for testing, and the golden rule: <strong>the model never sees the test data during training</strong>. The test set is the final exam, not the practice sheet. Line three: create and train — <code>KNeighborsClassifier(n_neighbors=3)</code>, then <code>fit</code>. That's it — that's "training a model". Line four: <code>model.score</code> on the test set — the model's grade on unseen data. Line five: <code>predict</code> on a brand-new flower — five point one, three point five, one point four, zero point two — and it tells you the species. Now run it yourself. Then do the assignment: swap in LogisticRegression and SVC, run each, compare accuracies; then change random_state and observe how the result moves. Write one sentence about what you see — that sentence is worth ten points.</p>
+    <p class="zh">D 段——等待已久的时刻：你的第一个机器学习程序，逻辑就五行。左侧跟我从上往下读。第一行：加载 Iris 数据集——150 朵花、每朵 4 个测量值、3 个品种。第二行：<code>train_test_split</code>——80% 训练、20% 测试，黄金法则：<strong>模型训练时绝不能看测试数据</strong>；测试集是期末考，不是练习卷。第三行：创建并训练——<code>KNeighborsClassifier(n_neighbors=3)</code>，然后 <code>fit</code>。就这样——这就是"训练模型"。第四行：在测试集上 <code>model.score</code>——模型在没见过的数据上的成绩。第五行：对一朵全新的花 <code>predict</code>——5.1、3.5、1.4、0.2——它告诉你品种。现在自己跑一遍。然后做任务：换成 LogisticRegression 和 SVC 各跑一遍比较准确率；再改 random_state 观察结果怎么变。用一句话写下你看到的——那句话值 10 分。</p>
+    <div class="cue"><span class="badge b-ask">提问 ASK</span><span style="color:#4A5568">"为什么测试集不能参与训练？"（收 1-2 个回答再强化：否则成绩造假/数据泄漏，W2 还会再见它）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p29</span><span class="tt">Lab E · 交付与评分</span><span class="te">Deliverables &amp; Rubric</span><span class="dur">5 min</span></div>
+    <p class="en">Segment E, five minutes, three deliverables — all due Monday, 23:59, pushed to GitHub. One: <code>environment.yml</code> — export it with <code>conda env export</code>; it proves your environment can be rebuilt. Two: your notebook, complete and runnable top to bottom. Three: the GitHub repository link, with at least two meaningful commits. Grading is a hundred points, transparent on the slide: environment 20, notebook runs cleanly 30, Git hygiene 20, the model-comparison experiment 20, and your written reflection 10. Check the checklist on the slide before you leave today — it takes two minutes now and saves you a panic email on Sunday night.</p>
+    <p class="zh">E 段，5 分钟，三项交付——下周一 23:59 前推到 GitHub。一：<code>environment.yml</code>——用 <code>conda env export</code> 导出，证明你的环境可重建；二：notebook，从头到尾完整可运行；三：GitHub 仓库链接，至少两次有意义的提交。评分 100 分，幻灯片上全透明：环境 20、notebook 干净跑通 30、Git 规范 20、模型对比实验 20、书面思考 10。今天离开前对照清单检查——现在花两分钟，省掉周日晚上的求救邮件。</p>
+  </div>
+</section>
+
+<!-- ============ QUIZ & WRAP ============ -->
+<section class="phase">
+  <div class="phase-head">
+    <div class="no">Q&amp;W</div>
+    <div class="t"><h2>随堂小测与小结 · Quiz &amp; Wrap-up</h2><div class="e">3 题举手投票 · 五要点回顾 · 下周预告</div></div>
+    <div class="time">15 min · p30–p32</div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p30</span><span class="tt">随堂小测 · Quick Quiz</span><span class="te">3 Questions · Lab 10%</span><span class="dur">10 min</span></div>
+    <p class="en">Last activity: a three-question quiz, sixty seconds each, hands up to vote — this counts toward ten percent of your lab grade. No notes. And being wrong is good — the knowledge you miss now is the knowledge you remember at the final project. <strong>Question one</strong>: "Deep learning is not part of machine learning — it's an independent technology." True or false? ... <em>False</em> — deep learning is a subset of ML; it's machine learning with multi-layer networks. <strong>Question two</strong>: grouping one hundred thousand customers into five segments by purchasing behavior, with no labels at all — which paradigm? ... <em>Unsupervised learning</em> — no labels, finding structure: clustering, K-Means, Week 3 hands-on. <strong>Question three</strong>: in a real AI project, roughly how much of an engineer's time goes to training the model itself — 80, 50, or 20 percent? ... <em>Twenty</em> — the other eighty goes to data and engineering. If you got all three, excellent. If not — better here than in your Capstone review.</p>
+    <p class="zh">最后一个活动：三道小测，每题 60 秒，举手投票——计入实验成绩 10%。不许翻笔记，答错是好事——现在错过的知识，期末项目时记得最牢。<strong>第一题</strong>："深度学习不属于机器学习，是独立技术路线。"对不对？……<em>错</em>——深度学习是 ML 的子集：用多层网络做机器学习。<strong>第二题</strong>：10 万用户按消费行为分 5 群、完全没有标签——哪种范式？……<em>无监督学习</em>——无标签、找结构：聚类、K-Means，第 3 周动手。<strong>第三题</strong>：真实 AI 项目里工程师花在"训练模型"本身的时间大约占多少——80%、50% 还是 20%？……<em>20%</em>——其余 80% 在数据与工程。三题全对，优秀；错了——在这里错比在 Capstone 评审时错好。</p>
+    <div class="cue"><span class="badge b-tip">提示 TIP</span><span style="color:#4A5568">每题先举手投票、再公布答案并回指对应课件页（p8 / p9 / p21）</span></div>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p31</span><span class="tt">小结与预告 · Summary &amp; Next</span><span class="te">5 Takeaways</span><span class="dur">~4 min</span></div>
+    <p class="en">Five things to take home. One: the hierarchy — AI contains ML contains deep learning contains generative AI; the three questions tell you which circle you're in. Two: three paradigms — supervised learns from answers, unsupervised finds structure, reinforcement learns from rewards. Three: the six-stage lifecycle, from problem definition to monitoring. Four: the eighty-percent rule — data and engineering dominate, and that's where this course — and your career — invests. Five: your environment works, and you've run your first model. Before next week: read textbook sections 1.4 to 1.8, and make sure your GitHub repo is pushed. Next week we start where eighty percent of the work lives: <strong>data — NumPy, Pandas, exploratory analysis, and the Titanic dataset</strong>. It's the week that separates people who "do AI" from people who actually do it.</p>
+    <p class="zh">带走五件事。一：层级关系——AI 包含 ML 包含深度学习包含生成式 AI，判断三连问告诉你自己在哪个圈。二：三大范式——监督从答案学、无监督找结构、强化从奖励学。三：六阶段生命周期，从问题定义到监控。四：80% 法则——数据与工程占大头，本课程与你的职业都投注在这里。五：你的环境能跑了，而且跑出了第一个模型。下周前：读教材 1.4–1.8 节，确认 GitHub 仓库已推送。下周我们从 80% 的工作量所在之处开始：<strong>数据——NumPy、Pandas、探索性分析，以及 Titanic 数据集</strong>。那一周会区分"嘴上做 AI"和"真做 AI"的人。</p>
+  </div>
+
+  <div class="slide-block">
+    <div class="slide-head"><span class="pn">p32</span><span class="tt">结束页 · Ending</span><span class="te">Closing Quote</span><span class="dur">~1 min</span></div>
+    <p class="en">I'll leave you with one sentence — it's on the slide, and it's the reason this course exists. <strong>"AI won't replace engineers. Engineers using AI will."</strong> See you all next week — same room, same time. Don't forget: push your repo. Thank you!</p>
+    <p class="zh">用一句话收尾——就在幻灯片上，也是这门课存在的理由。<strong>"AI 不会取代工程师，会用 AI 的工程师会。"</strong>下周见——同一间教室、同一时间。别忘了：推送你的仓库。谢谢大家！</p>
+  </div>
+</section>
+
+<footer class="doc">
+  AI Application Development · Lecture Script W1 · 配套：课件 32 页（AI应用开发-第1周-Lecture.pptx）· 教案 LP-W1-A/B · 教材 Chapter 1<br>
+  中英对照讲课稿 · 2026 秋季学期
+</footer>
+
+</div>
+</body>
+</html>

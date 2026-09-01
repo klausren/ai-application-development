@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1 — Introduction to AI Application Development | 第1章 AI应用开发导论与环境搭建</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header h1 .en { display: block; font-size: 21px; font-weight: 600; color: var(--text-sec); margin-top: 6px; letter-spacing: 0; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2 .en { font-size: 15px; font-weight: 500; color: var(--text-sec); }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  h3 .en { font-size: 13.5px; font-weight: 500; color: var(--text-sec); margin-left: 6px; }
+  p { margin-bottom: 10px; }
+  .en { color: var(--text-sec); }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term .en { font-size: 12.5px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Timeline */
+  .timeline { margin: 16px 0; border-left: 3px solid var(--accent-bright); padding-left: 20px; }
+  .timeline .item { position: relative; margin-bottom: 18px; }
+  .timeline .item::before { content: ""; position: absolute; left: -27px; top: 7px; width: 11px; height: 11px; border-radius: 50%; background: var(--accent-bright); border: 3px solid var(--accent-bg); }
+  .timeline .year { font-weight: 800; color: var(--accent-bright); font-size: 14px; }
+  .timeline .evt { font-size: 14.5px; margin-top: 2px; }
+  .timeline .evt .en { font-size: 13px; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+  .steps .step .body .en { font-size: 13px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+    .chapter-header h1 .en { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 01 · Module 1 · Week 1</div>
+  <h1>AI 应用开发导论与环境搭建<span class="en">Introduction to AI Application Development & Environment Setup</span></h1>
+  <p class="overview">本章是课程的起点。你将理解"AI 应用开发"到底在做什么：AI 的技术谱系（ML / DL / GenAI）与三大学习范式、三次浪潮与两次寒冬、典型的应用场景与职业方向、一个 AI 项目的完整生命周期（含案例走查）、AI 伦理与学术诚信，并亲手搭建开发环境、跑通第一个机器学习程序。<br>
+  <span class="en">This chapter is your starting point. You will understand what "AI application development" really is — the AI technology landscape (ML / DL / GenAI) and three learning paradigms, three waves and two AI winters, typical application domains and career paths, the complete AI project lifecycle (with a case walkthrough), AI ethics and academic integrity — and set up your development environment to run your first ML program.</span></p>
+</div>
+
+<!-- ========== 1.1 ========== -->
+<div class="section">
+  <h2>1.1 什么是人工智能？<span class="en">What is Artificial Intelligence?</span></h2>
+  <p>人工智能（AI）是让计算机系统执行通常需要人类智能才能完成的任务的科学与工程：视觉理解、语言交流、推理决策、学习与适应。它不是单一技术，而是一个不断演进的技术家族。</p>
+  <p class="en">Artificial Intelligence (AI) is the science and engineering of making computer systems perform tasks that typically require human intelligence: visual perception, language communication, reasoning and decision-making, learning and adaptation. It is not a single technology but an evolving family of technologies.</p>
+
+  <h3>1.1.1 核心定义辨析 <span class="en">Key Definitions</span></h3>
+  <div class="terms">
+    <div class="term">
+      <h4>人工智能 AI</h4>
+      <div class="en">Artificial Intelligence</div>
+      <p>让机器模拟人类智能行为的广泛领域，涵盖推理、知识表示、规划、学习、自然语言处理、感知等。</p>
+    </div>
+    <div class="term">
+      <h4>机器学习 ML</h4>
+      <div class="en">Machine Learning</div>
+      <p>AI 的子集：不显式编程规则，而是从数据中自动学习模式。核心三要素：数据、模型、目标函数。</p>
+    </div>
+    <div class="term">
+      <h4>深度学习 DL</h4>
+      <div class="en">Deep Learning</div>
+      <p>ML 的子集：使用多层神经网络自动学习特征表示，在图像、语音、文本等大规模任务上表现卓越。</p>
+    </div>
+    <div class="term">
+      <h4>生成式 AI GenAI</h4>
+      <div class="en">Generative AI</div>
+      <p>基于大模型（LLM / Diffusion）生成新内容（文本、图像、代码、音频）的技术。本课程 Module 3-4 的核心。</p>
+    </div>
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key Insight · 关系图</span>
+    <strong>AI ⊃ ML ⊃ DL ⊃ GenAI</strong> —— 每一层都是上一层的子集。判断一个系统属于哪一层，看它是否"从数据学习"（ML）、是否"用神经网络"（DL）、是否"生成新内容"（GenAI）。<br>
+    <span class="en">Each level is a subset of the level above. Ask: does it learn from data (ML)? Does it use neural networks (DL)? Does it generate new content (GenAI)?</span>
+  </div>
+
+  <h3>1.1.2 三大学习范式 <span class="en">Three Learning Paradigms</span></h3>
+  <p>机器学习按"数据里有没有标准答案、怎么获得反馈"分为三大范式。判断口诀：<strong>有没有标签？有没有奖励？</strong></p>
+  <table>
+    <tr><th>范式 / Paradigm</th><th>一句话定义 / In One Line</th><th>典型任务 / Typical Tasks</th><th>本课对应 / Where</th></tr>
+    <tr><td><strong>监督学习</strong><br><span class="en">Supervised</span></td><td>有标签：从"输入→标准答案"对中学习映射</td><td>分类（垃圾邮件识别）、回归（房价预测）</td><td>Week 3（KNN / 回归）</td></tr>
+    <tr><td><strong>无监督学习</strong><br><span class="en">Unsupervised</span></td><td>无标签：从数据自身结构中发现模式</td><td>聚类（用户分群）、降维（可视化）</td><td>Week 4（K-Means / PCA）</td></tr>
+    <tr><td><strong>强化学习</strong><br><span class="en">Reinforcement</span></td><td>试错 + 奖励：智能体与环境交互学习策略</td><td>游戏 AI（AlphaGo）、机器人控制、RLHF</td><td>概念介绍（Module 3 提及）</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">How to Tell · 快速判断</span>
+    "垃圾邮件过滤"有标准答案（是/否垃圾）→ 监督；"把 10 万用户分成 5 群"没有标签 → 无监督；"游戏 AI 打怪升级"靠胜负奖励 → 强化。<span class="en">Labeled answers → supervised; structure without labels → unsupervised; rewards from interaction → reinforcement.</span>
+  </div>
+
+  <h3>1.1.3 发展历程：三次浪潮与两次寒冬 <span class="en">A Brief History: Three Waves & Two Winters</span></h3>
+  <div class="timeline">
+    <div class="item">
+      <div class="year">1950s–1970s · 符号主义时代</div>
+      <div class="evt">图灵测试（1950）；达特茅斯会议提出"AI"一词（1956）；专家系统出现。受限于算力与数据，"AI 寒冬"到来。<span class="en">Turing Test (1950); Dartmouth Conference coins "AI" (1956); expert systems. Limited by compute and data → first AI winter.</span></div>
+    </div>
+    <div class="item">
+      <div class="year">1980s–2000s · 机器学习崛起</div>
+      <div class="evt">反向传播（1986）复兴神经网络；SVM、随机森林等统计方法成熟；大数据与互联网带来海量训练数据。<span class="en">Backpropagation revives neural networks (1986); SVM & random forests mature; the internet brings massive data.</span></div>
+    </div>
+    <div class="item">
+      <div class="year">2012–至今 · 深度学习与生成式 AI</div>
+      <div class="evt">AlexNet 赢得 ImageNet（2012）开启 DL 时代；Transformer 架构（2017）→ GPT 系列与 BERT；2022 起大语言模型与生成式 AI 爆发，AI 进入应用工程化阶段。<span class="en">AlexNet wins ImageNet (2012) → DL era; Transformer (2017) → GPT & BERT; since 2022 LLMs and generative AI drive the application engineering era.</span></div>
+    </div>
+  </div>
+  <div class="callout key">
+    <span class="label">Key Insight · 两次 AI 寒冬</span>
+    <strong>第一次寒冬（1974–1980）：</strong>符号主义承诺过高、算力与数据跟不上，经费被大幅削减。<strong>第二次寒冬（1987–1993）：</strong>专家系统维护成本高企、通用性差，行业再次退潮。<br>
+    启示：AI 的每次退潮都源于"承诺远超工程现实"；而每次复苏都由<strong>算力 + 数据 + 算法</strong>三要素的共同突破驱动——2012 年以来的深度学习浪潮正是三要素同时到位的结果。判断当前技术宣传时，同样先问"工程上能不能落地"。<span class="en">Both winters came from promises exceeding engineering reality; each revival was driven by compute + data + algorithm advancing together.</span>
+  </div>
+</div>
+
+<!-- ========== 1.2 ========== -->
+<div class="section">
+  <h2>1.2 为什么软件工程师要学 AI 应用开发？<span class="en">Why Should SE Students Learn AI Application Development?</span></h2>
+  <p>过去，AI 是研究者的专属领域；今天，AI 能力已通过框架（PyTorch）、API 与预训练模型被"商品化"，软件工程师的角色从"训练模型"转向"把模型变成产品"。这带来三个结构性变化：</p>
+  <p class="en">AI capabilities are now commoditized through frameworks, APIs, and pre-trained models. The software engineer's role has shifted from "training models" to "turning models into products."</p>
+  <ul>
+    <li><strong>从特征工程到数据工程：</strong>模型能力内置化后，价值重心前移到数据质量与数据流水线。<span class="en">With model capability built-in, value shifts to data quality and pipelines.</span></li>
+    <li><strong>从写规则到调系统：</strong>不再是"如果…那么…"的业务规则，而是"数据 + 模型 + 评估 + 迭代"的系统设计。<span class="en">Not "if-then" rules, but systems of data + model + evaluation + iteration.</span></li>
+    <li><strong>从单一应用到智能体生态：</strong>LLM 催生了 Agent、RAG、多模态等全新应用范式，每个范式都是新的工程问题。<span class="en">LLMs create new paradigms — agents, RAG, multimodal — each a fresh engineering challenge.</span></li>
+  </ul>
+  <p>本课程的定位正是"理论扎实 + 应用均衡"：你既要知道模型在做什么（能判断、能调参、能诊断问题），也要能把模型交付为可部署的软件系统。</p>
+</div>
+
+<!-- ========== 1.3 ========== -->
+<div class="section">
+  <h2>1.3 AI 应用领域与职业方向 <span class="en">Application Domains & Career Paths</span></h2>
+  <h3>1.3.1 典型应用领域 <span class="en">Typical Application Domains</span></h3>
+  <div class="terms">
+    <div class="term"><h4>计算机视觉 CV</h4><div class="en">Computer Vision</div><p>图像分类、目标检测、人脸识别、缺陷检测、自动驾驶感知。<span class="en">Classification, detection, recognition, inspection.</span></p></div>
+    <div class="term"><h4>自然语言处理 NLP</h4><div class="en">Natural Language Processing</div><p>机器翻译、情感分析、文本摘要、问答系统、智能客服。<span class="en">Translation, sentiment, summarization, QA.</span></p></div>
+    <div class="term"><h4>语音与多模态</h4><div class="en">Speech & Multimodal</div><p>语音识别/合成、文生图、视频理解、多模态助手。<span class="en">ASR/TTS, text-to-image, video understanding.</span></p></div>
+    <div class="term"><h4>推荐与决策</h4><div class="en">Recommendation & Decision</div><p>推荐系统、风控反欺诈、供应链预测、定价优化。<span class="en">Recommendation, risk control, forecasting, pricing.</span></p></div>
+  </div>
+
+  <h3>1.3.2 职业方向 <span class="en">Career Paths</span></h3>
+  <table>
+    <tr><th>方向 / Role</th><th>核心工作 / Core Work</th><th>对应课程模块 / Module</th></tr>
+    <tr><td>机器学习工程师 / ML Engineer</td><td>训练、评估、部署、监控模型，构建 ML 流水线</td><td>Module 1–2, 4</td></tr>
+    <tr><td>AI 应用工程师 / AI Application Engineer</td><td>基于 LLM/API 构建应用：RAG、Agent、产品集成</td><td>Module 3–4</td></tr>
+    <tr><td>数据科学家 / Data Scientist</td><td>业务问题建模、数据分析、实验设计与洞察</td><td>Module 1</td></tr>
+    <tr><td>MLOps / 平台工程师</td><td>CI/CD、模型服务、监控与可靠性工程</td><td>Module 4</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Career Note</span>
+    对软件工程背景的学生，最有杠杆的定位是 <strong>AI 应用工程师 / MLOps</strong>——这两类岗位既不需要成为算法研究员，又充分利用你的软件工程功底。<span class="en">For SE students, the highest-leverage roles are AI Application Engineer and MLOps — they leverage your engineering skills without requiring you to be an algorithm researcher.</span>
+  </div>
+</div>
+
+<!-- ========== 1.4 ========== -->
+<div class="section">
+  <h2>1.4 AI 项目生命周期 <span class="en">The AI Project Lifecycle</span></h2>
+  <p>AI 应用开发不是"写一个模型"就结束，而是一条从问题定义到持续运维的完整链路。本课程 Capstone 项目将带你走完全程。六个阶段如下：</p>
+  <p class="en">AI application development is a full pipeline from problem definition to ongoing operations — the path your Capstone project will follow.</p>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>问题定义</strong> — 明确业务目标、成功指标（metrics）、约束（数据合规、延迟、成本）。<span class="en">Define business goal, success metrics, constraints.</span></div></div>
+    <div class="step"><div class="body"><strong>数据获取与探索</strong> — 收集数据、EDA、评估数据质量与可行性。<span class="en">Collect data, do EDA, assess feasibility.</span></div></div>
+    <div class="step"><div class="body"><strong>数据处理与特征工程</strong> — 清洗、转换、特征构造，构建可复现的数据流水线。<span class="en">Clean, transform, engineer features; build reproducible pipelines.</span></div></div>
+    <div class="step"><div class="body"><strong>建模与评估</strong> — 选择基线 → 训练 → 评估 → 迭代（调参、正则化、误差分析）。<span class="en">Baseline → train → evaluate → iterate.</span></div></div>
+    <div class="step"><div class="body"><strong>部署与集成</strong> — 封装为 API 服务（FastAPI）、容器化（Docker）、接入产品。<span class="en">Serve via API (FastAPI), containerize (Docker), integrate.</span></div></div>
+    <div class="step"><div class="body"><strong>监控与迭代</strong> — 监控模型表现、检测数据漂移、持续再训练。<span class="en">Monitor performance, detect drift, retrain continuously.</span></div></div>
+  </div>
+  <div class="callout key">
+    <span class="label">Key Insight · 80% 法则</span>
+    真实工业界中，AI 项目约 80% 的时间花在数据与工程环节（阶段 2–3 与 5–6），只有约 20% 在"训练模型"。这就是为什么本课程把大量实验学时分配给数据处理与部署。<span class="en">In practice, ~80% of AI project time goes to data and engineering; only ~20% to training. That's why this course dedicates heavy lab time to data handling and deployment.</span>
+  </div>
+
+  <h3>1.4.1 案例走查：食堂排队预测 <span class="en">Case Walkthrough: Canteen Queue Prediction</span></h3>
+  <p>用一个你天天能观察到的场景，把六阶段串起来走一遍。<span class="en">Walk the six stages with a scenario you can observe every day.</span></p>
+  <table>
+    <tr><th style="width:120px;">阶段 / Stage</th><th>在这个案例里做什么 / What Happens Here</th></tr>
+    <tr><td>① 问题定义</td><td>预测每个窗口未来 15 分钟的排队时长，误差 ±5 分钟内。关键决策：做二分类（挤/不挤）还是回归（分钟数）？→ 回归。</td></tr>
+    <tr><td>② 数据获取与探索</td><td>食堂 POS 机流水（已匿名化）、排队长度的摄像头采样（需合规评估）。EDA 发现周五中午流量是平时的 1.8 倍。</td></tr>
+    <tr><td>③ 特征工程</td><td>时段、星期、天气、当日菜单热度、前后 15 分钟人流量。经验：常识特征往往打败花哨模型。</td></tr>
+    <tr><td>④ 建模与评估</td><td>基线用"上周同期均值"，再用梯度提升树对比；评估指标 MAE 必须优于基线才有上线价值。</td></tr>
+    <tr><td>⑤ 部署与集成</td><td>FastAPI 封装 REST 接口，小程序端每 5 分钟拉取预测。模型不是产品，接口 + 界面才是。</td></tr>
+    <tr><td>⑥ 监控与迭代</td><td>发现开学季流量分布漂移 → 加入"学期周次"特征 → 每周自动再训练。</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Takeaway</span>
+    注意案例里 ①②③⑤⑥ 加起来占了多少工作量——这正是 80% 法则的具象化。你的 Capstone 项目将走同一条链路。<span class="en">Notice how much work sits outside "training" — that is the 80% rule made concrete. Your Capstone follows the same path.</span>
+  </div>
+</div>
+
+<!-- ========== 1.5 ========== -->
+<div class="section">
+  <h2>1.5 开发环境搭建 <span class="en">Development Environment Setup</span></h2>
+  <p>本课程所有实验环境基于 <strong>Python 3.10+</strong>。你需要在第一周结束前完成本地环境搭建，并能在 Google Colab 中运行代码（Colab 作为备用 GPU 环境）。</p>
+
+  <h3>1.5.1 环境管理：conda / venv / pip <span class="en">Environment Management</span></h3>
+  <table>
+    <tr><th>工具 / Tool</th><th>用途 / Purpose</th><th>推荐场景 / When to Use</th></tr>
+    <tr><td>conda</td><td>包 + 环境管理，可管理 Python 版本</td><td>本课程推荐：跨平台、环境隔离干净</td></tr>
+    <tr><td>venv</td><td>Python 内置虚拟环境</td><td>轻量场景，Python 已装好时最快</td></tr>
+    <tr><td>pip</td><td>Python 包安装器</td><td>在任意环境内安装依赖</td></tr>
+  </table>
+
+  <h3>1.5.2 本课程标准环境清单 <span class="en">Course Standard Environment Stack</span></h3>
+  <pre><span class="cm"># Create and activate a conda environment</span>
+conda create -n ai-app python=3.11 -y
+conda activate ai-app
+
+<span class="cm"># Core scientific stack</span>
+pip install numpy pandas matplotlib seaborn scikit-learn
+
+<span class="cm"># Deep learning (CPU works for Weeks 1-6; GPU recommended later)</span>
+pip install torch torchvision
+
+<span class="cm"># Notebook & dev tooling</span>
+pip install jupyter ipykernel jupyterlab</pre>
+
+  <div class="callout warn">
+    <span class="label">Common Pitfall</span>
+    <strong>不要全局安装到 base 环境。</strong>每个项目独立环境是专业习惯——避免"在我机器上能跑"的依赖地狱。本周实验将要求你提交 <code class="inline">environment.yml</code> 或 <code class="inline">requirements.txt</code>。<span class="en">Never install into the global base env. Isolated environments per project prevent dependency hell — you'll submit environment.yml or requirements.txt this week.</span>
+  </div>
+
+  <h3>1.5.3 Jupyter Notebook 与 Google Colab <span class="en">Jupyter & Google Colab</span></h3>
+  <p><strong>Jupyter Notebook</strong> 是数据科学的事实标准工作台：代码单元格 + 富文本 + 可视化结果并存，适合探索性分析与教学。本课程作业统一以 .ipynb 交付。</p>
+  <p><strong>Google Colab</strong> 是免配置的云端 Jupyter：免费提供 GPU/TPU，无需本地安装，适合算力需求大的实验（Module 2 之后常用）。两者都支持 Git 集成。</p>
+
+  <h3>1.5.4 Git 项目初始化 <span class="en">Git Project Initialization</span></h3>
+  <pre><span class="cm"># Initialize a project repository</span>
+git init
+git add .
+git commit -m <span class="str">"init: course week 1 project skeleton"</span>
+
+<span class="cm"># Push to GitHub (create empty repo first on github.com)</span>
+git remote add origin https://github.com/&lt;you&gt;/ai-app-course.git
+git push -u origin main</pre>
+
+  <div class="callout tip">
+    <span class="label">Good Practice</span>
+    提交规范：每周实验一个分支（如 <code class="inline">week1-lab</code>）；每次提交信息用清晰动词开头（feat/fix/docs/refactor）。Git 习惯从第一周养起，Capstone 团队协作会直接受益。<span class="en">Use one branch per lab; write clear commit messages; build the Git habit now — it pays off in Capstone teamwork.</span>
+  </div>
+</div>
+
+<!-- ========== 1.6 ========== -->
+<div class="section">
+  <h2>1.6 第一个机器学习程序 <span class="en">Your First ML Program</span></h2>
+  <p>我们用经典 <strong>Iris 鸢尾花数据集</strong>跑通第一个完整的分类程序。这个例子虽小，却包含 ML 的全部核心步骤：加载数据 → 划分训练/测试 → 训练模型 → 评估。</p>
+  <pre><span class="cm"># first_ml.py — Iris classification with scikit-learn</span>
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_iris
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score, classification_report
+
+<span class="cm"># 1. Load data</span>
+iris = load_iris()
+X, y = iris.data, iris.target
+
+<span class="cm"># 2. Train / test split (stratified by class)</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y
+)
+
+<span class="cm"># 3. Train a model</span>
+model = RandomForestClassifier(n_estimators=<span class="num">100</span>, random_state=<span class="num">42</span>)
+model.fit(X_train, y_train)
+
+<span class="cm"># 4. Evaluate</span>
+y_pred = model.predict(X_test)
+print(<span class="str">f"Accuracy: {accuracy_score(y_test, y_pred):.3f}"</span>)
+print(classification_report(y_test, y_pred, target_names=iris.target_names))</pre>
+  <pre>Accuracy: 0.933
+              precision    recall  f1-score   support
+  setosa          1.00      1.00      1.00        10
+  versicolor      0.90      0.90      0.90        10
+  virginica       0.90      0.90      0.90        10</pre>
+  <p>这个程序将在第 3 周被完整拆解。现在你只需要理解宏观流程：<strong>fit → predict → evaluate</strong> 是 scikit-learn 的通用接口，本课程 Module 1 的所有模型都遵循这一模式。</p>
+  <p class="en">You'll deconstruct this program fully in Week 3. For now, just grasp the universal scikit-learn interface: <strong>fit → predict → evaluate</strong>.</p>
+</div>
+
+<!-- ========== 1.7 ========== -->
+<div class="section">
+  <h2>1.7 AI 伦理与负责任开发 <span class="en">AI Ethics & Responsible Development</span></h2>
+  <p>作为未来的 AI 工程师，你交付的每一个系统都会影响真实的人。伦理不是产品上线前的"合规检查项"，而是设计约束的一部分——就像延迟和成本一样，需要在问题定义阶段就纳入考量。<span class="en">Every system you ship affects real people. Ethics is a design constraint — like latency and cost — not a compliance checkbox.</span></p>
+
+  <h3>1.7.1 三类核心风险 <span class="en">Three Core Risks</span></h3>
+  <div class="terms">
+    <div class="term">
+      <h4>偏见 Bias</h4>
+      <div class="en">Skewed Data → Skewed Model</div>
+      <p>训练数据不能代表真实人群时，模型会系统性歧视部分用户。例：人脸识别在深肤色人群上错误率显著偏高；招聘模型因历史数据偏差压低女性简历评分。</p>
+    </div>
+    <div class="term">
+      <h4>隐私 Privacy</h4>
+      <div class="en">Over-collection & Leakage</div>
+      <p>采集超出必要范围的数据、或模型无意"记住"了训练样本，都可能泄露个人信息。原则：最小必要采集、匿名化、训练前做泄露检查。</p>
+    </div>
+    <div class="term">
+      <h4>滥用 Misuse</h4>
+      <div class="en">Right Tool, Wrong Purpose</div>
+      <p>技术上可行 ≠ 应该做。例：情绪识别用于客服质检是争议地带，用于员工监控则越界。工程师对交付物的用途负有注意义务。</p>
+    </div>
+  </div>
+  <div class="callout key">
+    <span class="label">Engineer's Duty · 工程师责任</span>
+    交付前问自己三个问题：数据里有谁被漏掉了？这个系统最坏会对谁造成伤害？如果这个决定上了新闻，我能否解释清楚？<span class="en">Before shipping, ask: who is missing from the data? Who could this hurt at worst? Could I defend this decision publicly?</span>
+  </div>
+
+  <h3>1.7.2 学术诚信与 AI 工具使用规范 <span class="en">Academic Integrity & AI Tool Policy</span></h3>
+  <ul>
+    <li><strong>作业协作边界：</strong>可以讨论思路，不可复制代码与报告文字；提交物必须是自己写的。<span class="en">Discuss ideas freely; never copy code or write-ups.</span></li>
+    <li><strong>AI 工具使用：</strong>本课程<em>允许</em>使用 GitHub Copilot / ChatGPT 等辅助编程，但必须：① 在提交物中声明使用了哪些工具、用在哪；② 能当场解释并修改自己提交的任何一行代码——无法解释即视为违规。<span class="en">AI coding tools are allowed with disclosure, and you must be able to explain every line you submit.</span></li>
+    <li><strong>数据合规：</strong>Capstone 数据集涉及个人信息时，须先做匿名化并向教师报备来源。</li>
+  </ul>
+</div>
+
+<!-- ========== 1.8 ========== -->
+<div class="section">
+  <h2>1.8 本章小结 <span class="en">Chapter Summary</span></h2>
+  <ul>
+    <li>AI ⊃ ML ⊃ DL ⊃ GenAI，判断技术层级看三个问题：是否学数据？是否用神经网络？是否生成新内容？</li>
+    <li>机器学习三大范式：有标签 → 监督；无标签找结构 → 无监督；试错奖励 → 强化。</li>
+    <li>AI 经历符号主义 → 统计学习 → 深度学习/生成式三次浪潮，其间两次寒冬皆因承诺超出工程现实；当前正处于应用工程化阶段，是软件工程师的入场窗口。</li>
+    <li>AI 项目的 80% 工作量在数据与工程环节，"训练模型"只是其中一小步——食堂排队案例走查就是这条链路的具象化。</li>
+    <li>偏见、隐私、滥用是 AI 开发的三类核心风险；伦理是设计约束，工程师交付前有检查责任；本课程允许使用 AI 工具但须声明且能解释。</li>
+    <li>开发环境 = Python + conda 环境 + Jupyter/Colab + Git，所有实验按"每项目一环境"执行。</li>
+    <li>scikit-learn 的 fit → predict → evaluate 是贯穿 Module 1 的通用工作流。</li>
+  </ul>
+</div>
+
+<!-- ========== EXERCISES ========== -->
+<div class="section">
+  <h2>本章练习 <span class="en">Exercises</span></h2>
+  <div class="exercise">
+    <h4>练习 1 · 环境搭建（必做）</h4>
+    <ol>
+      <li>创建名为 <code class="inline">ai-app</code> 的 conda 环境（Python 3.11），安装本课程标准依赖。</li>
+      <li>启动 Jupyter Notebook，新建 notebook 并验证 <code class="inline">import numpy, pandas, sklearn, torch</code> 全部成功。</li>
+      <li>在 Google Colab 中打开同一个 notebook，确认 GPU 可用：<code class="inline">torch.cuda.is_available()</code>。</li>
+      <li>将 notebook 提交到 GitHub 仓库 <code class="inline">ai-app-course/week1</code>。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 2 · 第一个模型（必做）</h4>
+    <ol>
+      <li>运行 1.6 节的 Iris 分类程序，记录准确率。</li>
+      <li>改用 <code class="inline">LogisticRegression</code> 与 <code class="inline">SVC</code> 各跑一次，对比三者准确率，观察哪种模型在此数据集上表现最好。</li>
+      <li>把 <code class="inline">random_state</code> 改为 0 和 123，观察结果是否变化，思考：这对实验结果的可复现性意味着什么？</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 3 · 思考题（讨论）</h4>
+    <ol>
+      <li>从你身边的软件产品中举出 3 个用到 AI 的例子，并判断它们分别属于 ML / DL / GenAI 哪一层。</li>
+      <li>为什么说"数据与工程"比"训练模型"更常成为 AI 项目的瓶颈？结合生命周期图说明。</li>
+      <li>搜索一个你感兴趣的 AI 应用（如智能客服、自动驾驶、AI 编程助手），画出它的问题定义与部署环节。</li>
+      <li>（伦理）假设你要给学校开发"食堂排队预测"系统：摄像头采样需要采集人脸画面。请从偏见、隐私、滥用三个角度各指出一个风险点，并给出对应的工程对策。</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 / AI Application Development — Chapter 1</p>
+  <p>64 课时 · 大三软件工程专业留学生 · Week 1 / 16</p>
+  <p style="margin-top:8px;">教材由 AI 辅助生成，任课教师可结合实际调整。 / Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>

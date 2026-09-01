@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 · Environment Setup Guide — AI Application Development</title>
+<style>
+  :root{
+    --ink:#1a2332; --muted:#5a6a7e; --accent:#0f62fe; --accent-bg:#eef4ff;
+    --ok:#0e8345; --ok-bg:#e8f7ef; --warn:#b45309; --warn-bg:#fef6e7;
+    --code-bg:#0f172a; --code-ink:#e2e8f0; --line:#dde3ec; --bg:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,"SF Pro Text","Segoe UI","PingFang SC",sans-serif;
+       color:var(--ink); background:#f5f7fa; line-height:1.65; font-size:15.5px;}
+  .page{max-width:860px; margin:0 auto; padding:32px 24px 80px;}
+  header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%); color:#fff;
+         border-radius:14px; padding:34px 36px; margin-bottom:28px;}
+  header h1{font-size:26px; letter-spacing:-.02em; margin-bottom:8px;}
+  header p{color:#b8c7da; font-size:15px;}
+  .pill{display:inline-block; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+        border-radius:999px; padding:2px 12px; font-size:13px; margin:10px 8px 0 0; color:#e5edf7;}
+  section{background:var(--bg); border:1px solid var(--line); border-radius:14px;
+          padding:26px 30px; margin-bottom:20px;}
+  h2{font-size:19px; margin-bottom:14px; display:flex; align-items:center; gap:10px;}
+  h2 .n{background:var(--accent); color:#fff; width:26px; height:26px; border-radius:8px;
+        display:inline-flex; align-items:center; justify-content:center; font-size:14px; flex:none;}
+  h3{font-size:16px; margin:18px 0 8px;}
+  p{margin-bottom:10px;}
+  ol,ul{margin:0 0 10px 22px;}
+  li{margin-bottom:6px;}
+  code{background:#eef1f6; border:1px solid var(--line); border-radius:5px;
+       padding:1px 6px; font-family:"SF Mono",Menlo,Consolas,monospace; font-size:13px;}
+  pre{background:var(--code-bg); color:var(--code-ink); border-radius:10px;
+      padding:16px 18px; overflow-x:auto; margin:10px 0 14px; font-size:13px; line-height:1.6;}
+  pre code{background:none; border:none; color:inherit; padding:0; font-size:13px;}
+  pre .c{color:#7d8ca3;} /* comment */
+  table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;}
+  th{background:#f2f5f9; text-align:left; padding:9px 12px; border:1px solid var(--line); font-size:13px;}
+  td{padding:9px 12px; border:1px solid var(--line); vertical-align:top;}
+  .note{border-left:4px solid var(--accent); background:var(--accent-bg); border-radius:0 8px 8px 0;
+        padding:10px 16px; margin:12px 0; font-size:14px;}
+  .warn{border-left:4px solid var(--warn); background:var(--warn-bg); border-radius:0 8px 8px 0;
+        padding:10px 16px; margin:12px 0; font-size:14px;}
+  .ok{color:var(--ok); font-weight:600;}
+  footer{text-align:center; color:var(--muted); font-size:13px; margin-top:28px;}
+  a{color:var(--accent); text-decoration:none; font-weight:500;}
+  a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>Week 1 · Environment Setup Guide</h1>
+  <p>AI Application Development · Software Engineering (Year 3)</p>
+  <span class="pill">⏱ 45–60 min</span><span class="pill">💻 Windows / macOS / Linux</span><span class="pill">☁️ Colab fallback included</span>
+</header>
+
+<section>
+  <h2><span class="n">0</span>What you will install</h2>
+  <table>
+    <tr><th>Tool</th><th>What it is</th><th>Used for</th></tr>
+    <tr><td><b>Miniconda</b></td><td>Python environment manager</td><td>Isolates this course's Python from everything else on your laptop</td></tr>
+    <tr><td><b>Python 3.11</b></td><td>The language (inside conda)</td><td>All 16 weeks</td></tr>
+    <tr><td><b>Core packages</b></td><td>numpy · pandas · matplotlib · seaborn · scikit-learn · torch · jupyter</td><td>Labs, homework, final project</td></tr>
+    <tr><td><b>VS Code</b></td><td>Editor + notebook support</td><td>Writing &amp; running <code>.ipynb</code> files</td></tr>
+    <tr><td><b>Git + GitHub account</b></td><td>Version control</td><td><b>All submissions go through GitHub</b></td></tr>
+  </table>
+  <div class="note">💡 <b>No laptop or install fails?</b> Skip to <a href="#colab">Section 5 — Google Colab</a>. You can complete the entire first month in the browser.</div>
+</section>
+
+<section>
+  <h2><span class="n">1</span>Install Miniconda</h2>
+  <p>Download the <b>Python 3.11</b> installer for your OS from <a href="https://www.anaconda.com/download">anaconda.com/download</a> (choose Miniconda, the small one ~80 MB).</p>
+  <ul>
+    <li><b>Windows</b>: run the <code>.exe</code>. Accept defaults, but <b>check "Add to PATH"</b> when offered. After install, use <b>Anaconda Prompt</b> (search it in the Start menu) — <u>not</u> the plain cmd.</li>
+    <li><b>macOS</b>: run the <code>.pkg</code>, accept defaults. Then open Terminal and run <code>conda init zsh</code>, and reopen Terminal.</li>
+    <li><b>Linux</b>: <code>bash Miniconda3-latest-Linux-x86_64.sh</code></li>
+  </ul>
+  <p>Verify — open a <u>new</u> terminal and run:</p>
+  <pre><code>conda --version
+<span class="c"># expect something like: conda 24.x.x</span></code></pre>
+</section>
+
+<section>
+  <h2><span class="n">2</span>Create the course environment</h2>
+  <p>Copy-paste these commands one block at a time:</p>
+  <pre><code><span class="c"># 1. create an isolated environment named "ai-app"</span>
+conda create -n ai-app python=3.11 -y
+
+<span class="c"># 2. activate it (do this EVERY lab session)</span>
+conda activate ai-app
+
+<span class="c"># 3. install the semester's toolkit (~5-10 min; torch is the big one)</span>
+pip install numpy pandas matplotlib seaborn scikit-learn torch jupyter
+
+<span class="c"># 4. prove it works — trains a tiny model in ~1 second</span>
+python env_check.py</code></pre>
+  <p>You should see a wall of <code>[ OK ]</code> lines and finish with:</p>
+  <pre><code>ALL CHECKS PASSED - see you in the lab!</code></pre>
+  <div class="note">✅ That's the environment done. If any line prints <code>[FAIL]</code>, jump to the <a href="#faq">FAQ</a> below before asking in the group.</div>
+</section>
+
+<section>
+  <h2><span class="n">3</span>Set up VS Code</h2>
+  <ol>
+    <li>Install VS Code: <a href="https://code.visualstudio.com">code.visualstudio.com</a></li>
+    <li>Open it → Extensions (<code>Ctrl/Cmd+Shift+X</code>) → install <b>Python</b> and <b>Jupyter</b> (both by Microsoft).</li>
+    <li>Open your lab folder: File → Open Folder → <code>week1-lab</code>.</li>
+    <li>Open <code>Week1-Lab-Starter.ipynb</code>. If asked "Do you trust this folder?" → Yes.</li>
+    <li><b>Key step</b>: click the kernel selector in the top-right → <b>Select Kernel → Python Environments → ai-app (Python 3.11)</b>.</li>
+  </ol>
+  <div class="warn">⚠️ The #1 Week-1 mistake: running with the wrong kernel (e.g. a system Python that lacks torch). If a cell says <code>ModuleNotFoundError</code>, check the top-right corner first.</div>
+</section>
+
+<section>
+  <h2><span class="n">4</span>Git &amp; GitHub</h2>
+  <ol>
+    <li>Create a GitHub account (use a professional username — it goes on your CV): <a href="https://github.com/signup">github.com/signup</a></li>
+    <li>Install Git: <a href="https://git-scm.com/downloads">git-scm.com/downloads</a> (macOS: also works via <code>xcode-select --install</code>)</li>
+    <li>Verify: <code>git --version</code></li>
+  </ol>
+  <p>The push commands themselves live in the Lab notebook (Part 4). Free reading if Git is new to you: <a href="https://git-scm.com/book/en/v2">Pro Git, chapters 1–3</a> (free e-book).</p>
+</section>
+
+<section id="colab">
+  <h2><span class="n">5</span>Fallback — Google Colab (zero install)</h2>
+  <p>No laptop? Install broke? Colab gives you a browser notebook with GPU, nothing to install:</p>
+  <ol>
+    <li>Go to <a href="https://colab.research.google.com">colab.research.google.com</a> (needs a Google account)</li>
+    <li>File → Upload notebook → choose <code>Week1-Lab-Starter.ipynb</code></li>
+    <li>Runtime → Change runtime type → <b>T4 GPU</b> → Save</li>
+    <li>Everything except the Git part works out of the box (torch/sklearn pre-installed)</li>
+  </ol>
+  <div class="warn">⚠️ Colab free tier has daily usage limits and sessions disconnect after ~90 min idle — save to GitHub before closing the tab. Colab is a backup, not the main workflow: exams and some later labs require your local setup.</div>
+</section>
+
+<section id="faq">
+  <h2><span class="n">6</span>FAQ — common errors &amp; fixes</h2>
+  <table>
+    <tr><th style="width:34%">Symptom</th><th>Fix</th></tr>
+    <tr>
+      <td><code>conda: command not found</code></td>
+      <td>Windows: use <b>Anaconda Prompt</b>, not cmd. macOS: run <code>conda init zsh</code> and reopen Terminal. Or reinstall with "Add to PATH" checked.</td>
+    </tr>
+    <tr>
+      <td><code>pip install</code> is extremely slow / times out</td>
+      <td>Use a mirror: <code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple &lt;package&gt;</code>. In China this is dramatically faster.</td>
+    </tr>
+    <tr>
+      <td><code>pip install torch</code> fails or is huge</td>
+      <td>CPU-only version (enough for this course, ~200 MB instead of 2+ GB):<br><code>pip install torch --index-url https://download.pytorch.org/whl/cpu</code></td>
+    </tr>
+    <tr>
+      <td><code>ModuleNotFoundError: No module named 'torch'</code></td>
+      <td>You forgot to activate the env (<code>conda activate ai-app</code>), or the notebook kernel is wrong — check top-right in VS Code. Not fixed? Re-run the pip install inside the activated env.</td>
+    </tr>
+    <tr>
+      <td><code>CondaHTTPError / SSL errors</code> during <code>conda create</code></td>
+      <td>Usually campus proxy. Try phone hotspot, or configure the Tsinghua conda mirror (search "conda 清华镜像").</td>
+    </tr>
+    <tr>
+      <td><code>git push</code> asks for a password and rejects it</td>
+      <td>GitHub no longer accepts account passwords. Use a <b>Personal Access Token</b> as the password: GitHub → Settings → Developer settings → Tokens → Generate (scope: <code>repo</code>). Or install <a href="https://desktop.github.com">GitHub Desktop</a>.</td>
+    </tr>
+    <tr>
+      <td>Colab: cannot connect / GPU unavailable</td>
+      <td>Region restriction — use the local setup route (Sections 1–3), or try again at off-peak hours.</td>
+    </tr>
+    <tr>
+      <td>Notebook runs cells out of order and errors</td>
+      <td>Always run top-to-bottom. Fix: <b>Kernel → Restart &amp; Run All</b> — this is also how submissions are graded, so test it before you submit.</td>
+    </tr>
+  </table>
+  <div class="note">📌 Still stuck after trying the FAQ? Post in the class group with: (1) your OS, (2) the <b>exact</b> command you ran, (3) the <b>full</b> error message — screenshot of the whole terminal, not just the last line. Questions like "it doesn't work" get slow answers; complete bug reports get fast ones. This is also good practice: bug reports are a professional skill.</div>
+</section>
+
+<footer>AI Application Development · Week 1 · Setup Guide v1.0 — bring questions to the lab session, that's what it's for.</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson Plan W1-B (Lab + Quiz, 90 min) — Environment Setup &amp; First ML Program</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+    --orange: #d97706;
+    --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  .header { border-bottom: 3px solid var(--green); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+
+  h2 {
+    font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--green); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--green); flex: 75; }
+  .timebar .quiz { background: var(--accent); flex: 25; }
+
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 1 · Part B (Lab 75 min + Quiz &amp; Wrap-up 15 min)</div>
+  <h1>Environment Setup &amp; First ML Program<span class="en">Second half of the weekly 180-minute session</span></h1>
+  <div class="meta">
+    <span>⏱ 90 min (Lab A–E 75 min + Quiz &amp; wrap-up 15 min)</span>
+    <span>📚 Textbook Chapter 1.5–1.8</span>
+    <span>🎯 Module 1 · AI &amp; ML Foundations</span>
+    <span>🧩 Plan ID LP-W1-B</span>
+    <span>🖥️ Slides p23–p32 (32-page deck)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<!-- ===== 1. Objectives ===== -->
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Understand why conda environment isolation matters and the basic commands</li>
+      <li>Understand the basic Git workflow (init → add → commit → push)</li>
+      <li>Master the scikit-learn fit → predict → evaluate workflow</li>
+      <li>Understand the role of random_state in reproducibility</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Create a conda environment independently and install the dependency list</li>
+      <li>Run notebooks in Jupyter/Colab and verify GPU availability</li>
+      <li>Initialize a project with Git and push to GitHub (with commit-message conventions)</li>
+      <li>Run the first Iris classifier and compare model results</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Build the professional habit of "one isolated environment per project"; experience troubleshooting (error diagnosis) as the daily skill of an AI engineer; complete the first versioned GitHub delivery and form the "commit when done" engineering habit.
+</div>
+
+<!-- ===== 2. Key points ===== -->
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The full environment-setup flow (conda → notebook → Git); the minimal train-evaluate code pattern with sklearn</td><td>Step-by-step instructor demo + students follow along; run the critical steps (import check, git push) together as a class before moving on</td></tr>
+  <tr><td>Difficulties</td><td>Diagnosing environment issues (version conflicts, path problems, network timeouts); wide variance in student machines</td><td>Provide an environment-check script and an F.A.Q. troubleshooting table; Google Colab as the unified fallback; a "troubleshooting clinic" activity trains diagnostic thinking; TAs circulate</td></tr>
+</table>
+
+<!-- ===== 3. Time allocation ===== -->
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lab">Lab · 75 min</div><div class="quiz">Quiz &amp; Wrap-up · 15 min</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:100px;">Slides</th><th style="width:110px;">Method</th></tr>
+  <tr><td>Lab A</td><td>20 min</td><td><strong>Environment setup</strong>: create the <code class="inline">ai-app</code> conda env (Python 3.11) → install dependencies → run the environment-check script to verify imports; raise your hand if stuck for 5+ minutes</td><td>p24–p25</td><td>Demo + follow-along</td></tr>
+  <tr><td>Lab B</td><td>15 min</td><td><strong>Jupyter &amp; Colab</strong>: start local Jupyter and run a first cell; upload the same notebook to Colab and verify <code class="inline">torch.cuda.is_available()</code></td><td>p26</td><td>Demo + follow-along</td></tr>
+  <tr><td>Lab C</td><td>15 min</td><td><strong>Git init</strong>: <code class="inline">git init</code> → add → commit → create GitHub repo → push; commit-message conventions and .gitignore (the five-minute starter method)</td><td>p27</td><td>Demo + follow-along</td></tr>
+  <tr><td>Lab D</td><td>20 min</td><td><strong>First ML program</strong>: run the full Iris classification (walked through slide by slide); compare models (LogisticRegression / SVC); vary random_state and observe result differences</td><td>p28</td><td>Practice + TA support</td></tr>
+  <tr><td>Lab E</td><td>5 min</td><td><strong>Deliverables &amp; rubric</strong>: checklist review (environment.yml + notebook + GitHub link); walk through the five rubric items one by one</td><td>p29</td><td>Checklist</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>End-of-class quiz</strong> (3 items, show-of-hands, 60 seconds each, counts 10% toward the Lab grade): ① the DL–ML relationship; ② which paradigm for unlabeled user segmentation; ③ how much project time "training the model" takes. Instant debrief</td><td>p30</td><td>Interactive quiz</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; preview</strong>: recap the five key takeaways of the week; preview next week — AI Data Processing Foundations (Pandas / EDA / data cleaning)</td><td>p31–p32</td><td>Recap + closing quote</td></tr>
+</table>
+
+<!-- ===== 4. Activities ===== -->
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Troubleshooting clinic (between Lab A/B)</h4>
+  <p style="font-size:13.5px;">Project 3 typical errors onto the screen: ① a version conflict (numpy 2.x vs. old code); ② running python before activating the conda env; ③ a pip network timeout. Students diagnose in pairs for 3 minutes first; the instructor then gives the standard troubleshooting path and encourages class-wide peer help.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Model-comparison challenge (Lab D)</h4>
+  <p style="font-size:13.5px;">After the Iris baseline, an extra challenge: train both LogisticRegression and SVC, record accuracies; then try 3 random_state values and observe the fluctuation. The fastest 3 students present their results table on stage — steering the discussion toward "model choice and randomness".</p>
+</div>
+
+<!-- ===== 5. Lab steps ===== -->
+<h2>5. Lab Steps &amp; Deliverables</h2>
+<ol>
+  <li><strong>Environment setup:</strong> create the <code class="inline">ai-app</code> conda env (Python 3.11), install <code class="inline">numpy pandas matplotlib seaborn scikit-learn torch jupyter</code>, and export <code class="inline">environment.yml</code>.</li>
+  <li><strong>Notebook verification:</strong> create a notebook, verify <code class="inline">import numpy, pandas, sklearn, torch</code> succeed; open the same file in Google Colab and run <code class="inline">torch.cuda.is_available()</code>.</li>
+  <li><strong>Git commit:</strong> local <code class="inline">git init</code> → add → commit → new GitHub repo → push. Commit-message convention: <code class="inline">feat: week1 lab environment setup</code>; configure <code class="inline">.gitignore</code> to exclude <code class="inline">__pycache__</code> and <code class="inline">.ipynb_checkpoints</code>.</li>
+  <li><strong>First model:</strong> run the Iris classifier; compare <code class="inline">LogisticRegression</code> vs. <code class="inline">SVC</code> accuracy; record results for 3 random_state values and write conclusions in the notebook.</li>
+  <li><strong>Reflection questions (append to the notebook):</strong> name 3 products around you and classify them as ML/DL/GenAI; explain what random_state means for reproducibility; state which lifecycle stage "training the model" belongs to and its time share.</li>
+</ol>
+
+<div class="callout tip">
+  <span class="label">Deliverable (counts toward Lab participation 20%)</span>
+  ① <code class="inline">environment.yml</code>; ② the completed notebook (with reflection questions); ③ the GitHub repo link.<br>
+  Deadline: next Monday 23:59. Late penalty: −10% per day.
+</div>
+
+<!-- ===== 6. Rubric ===== -->
+<h2>6. Rubric</h2>
+<table>
+  <tr><th style="width:200px;">Checkpoint</th><th style="width:80px;">Pts</th><th>Criterion</th></tr>
+  <tr><td>Valid environment.yml</td><td>20</td><td>The file can be imported by conda (<code class="inline">conda env create -f</code>)</td></tr>
+  <tr><td>Notebook runs end to end</td><td>30</td><td>Executes without errors; GPU verification shows real output</td></tr>
+  <tr><td>Proper Git repo</td><td>20</td><td>GitHub link accessible; ≥2 meaningful commits; messages follow the convention</td></tr>
+  <tr><td>Model comparison</td><td>20</td><td>Results for two models + 3 random_states fully recorded, with written conclusions</td></tr>
+  <tr><td>Reflection questions</td><td>10</td><td>All 3 answered substantively (not one-liners)</td></tr>
+</table>
+<div class="callout tip">
+  <span class="label">Quiz · End-of-class quiz (counts 10% toward the Lab grade)</span>
+  3 show-of-hands items at the end of class (the DL⊂ML relationship / which paradigm for unlabeled segmentation / the training time share), counted toward the Lab grade by participation and correctness — encouraging gaps to surface, with instant debriefing on wrong answers.
+</div>
+
+<div class="callout warn">
+  <span class="label">Teacher Note</span>
+  ① Prepare in advance: if the campus network needs a proxy to reach GitHub/Colab, test it before class; ② keep a backup demo machine with a fully installed environment for offline demos in case of network failure; ③ watch Colab's free-tier quota and remind students of same-day usage.
+</div>
+
+<!-- ===== 7. Preparation ===== -->
+<h2>7. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Confirm Miniconda is installed (assigned in the theory half / Plan A, done during the L5 break)</li>
+      <li>Register GitHub and Google accounts</li>
+      <li>Read Textbook Chapter 1.5 (environment setup) and 1.6 (first ML program)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Textbook Chapter 1</li>
+      <li>Slides: Week 1 Lecture <b>32-page deck, p23–p29</b> (Lab) and <b>p30–p32</b> (quiz &amp; wrap-up)</li>
+      <li>Environment-check script (distributed with Lab materials)</li>
+      <li>Troubleshooting F.A.Q. (common conda/pip/GPU/Git errors)</li>
+      <li>scikit-learn official Iris example</li>
+      <li>Pro Git, first 3 chapters (free e-book)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W1-B (Lab + Quiz, 90 min of a 180-min session)</p>
+  <p>Generated with AI assistance; instructor may adapt.</p>
+</div>
+
+</div>
+</body>
+</html>
