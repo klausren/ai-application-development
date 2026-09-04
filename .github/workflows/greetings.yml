@@ -1,0 +1,29 @@
+name: Greetings
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: |
+            👋 Thanks for opening your first issue here!
+
+            If this is a teaching question, you might get a faster (and richer) answer in [Discussions](https://github.com/klausren/ai-application-development/discussions) — but no pressure, the maintainer reads everything.
+
+            If you're a teacher using this courseware, we'd especially love to hear how it went: [Show & Tell](https://github.com/klausren/ai-application-development/discussions/categories/show-and-tell).
+          pr-message: |
+            🎉 Thanks for your first pull request!
+
+            A maintainer will review it soon. If it touches teaching materials, one thing that speeds up review: confirm the notebooks run top-to-bottom (`Restart & Run All`).
