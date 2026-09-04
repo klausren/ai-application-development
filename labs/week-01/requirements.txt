@@ -1,0 +1,23 @@
+# AI Application Development - Week 1 baseline
+# 人工智能应用开发 - 第 1 周基础依赖
+#
+# Install with (inside your activated environment):
+#   pip install -r requirements.txt
+# Slow in China? add:  -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+numpy>=1.26
+pandas>=2.1
+matplotlib>=3.8
+seaborn>=0.13
+scikit-learn>=1.4
+torch>=2.2
+jupyterlab>=4.0
+
+# ---------------------------------------------------------------------------
+# Later weeks - install ONLY when the week is announced.
+# Installing everything now makes a 6 GB environment for no reason.
+#
+#   Weeks 5-8   Deep Learning & CV ....... torchvision opencv-python pillow
+#   Weeks 9-12  NLP & LLMs ............... transformers datasets accelerate
+#   Weeks 13-16 AI App Engineering ....... fastapi uvicorn gradio
+# ---------------------------------------------------------------------------

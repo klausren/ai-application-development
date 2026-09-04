@@ -3,7 +3,7 @@
 AI Application Development / AI 应用开发
 
 Run me after installing everything:
-    python env_check.py
+    python env-check.py
 
 I will check every package we use this semester.
 All green = you are ready. Any RED line = see the Setup Guide FAQ.

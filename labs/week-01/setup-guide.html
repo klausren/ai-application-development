@@ -8,12 +8,13 @@
   :root{
     --ink:#1a2332; --muted:#5a6a7e; --accent:#0f62fe; --accent-bg:#eef4ff;
     --ok:#0e8345; --ok-bg:#e8f7ef; --warn:#b45309; --warn-bg:#fef6e7;
+    --danger:#b42318; --danger-bg:#fef3f2;
     --code-bg:#0f172a; --code-ink:#e2e8f0; --line:#dde3ec; --bg:#ffffff;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:-apple-system,"SF Pro Text","Segoe UI","PingFang SC",sans-serif;
        color:var(--ink); background:#f5f7fa; line-height:1.65; font-size:15.5px;}
-  .page{max-width:860px; margin:0 auto; padding:32px 24px 80px;}
+  .page{max-width:880px; margin:0 auto; padding:32px 24px 80px;}
   header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%); color:#fff;
          border-radius:14px; padding:34px 36px; margin-bottom:28px;}
   header h1{font-size:26px; letter-spacing:-.02em; margin-bottom:8px;}
@@ -25,7 +26,8 @@
   h2{font-size:19px; margin-bottom:14px; display:flex; align-items:center; gap:10px;}
   h2 .n{background:var(--accent); color:#fff; width:26px; height:26px; border-radius:8px;
         display:inline-flex; align-items:center; justify-content:center; font-size:14px; flex:none;}
-  h3{font-size:16px; margin:18px 0 8px;}
+  h3{font-size:16px; margin:20px 0 8px;}
+  h4{font-size:14.5px; margin:14px 0 6px; color:var(--muted);}
   p{margin-bottom:10px;}
   ol,ul{margin:0 0 10px 22px;}
   li{margin-bottom:6px;}
@@ -34,7 +36,7 @@
   pre{background:var(--code-bg); color:var(--code-ink); border-radius:10px;
       padding:16px 18px; overflow-x:auto; margin:10px 0 14px; font-size:13px; line-height:1.6;}
   pre code{background:none; border:none; color:inherit; padding:0; font-size:13px;}
-  pre .c{color:#7d8ca3;} /* comment */
+  pre .c{color:#7d8ca3;}
   table{width:100%; border-collapse:collapse; margin:10px 0; font-size:14px;}
   th{background:#f2f5f9; text-align:left; padding:9px 12px; border:1px solid var(--line); font-size:13px;}
   td{padding:9px 12px; border:1px solid var(--line); vertical-align:top;}
@@ -42,10 +44,28 @@
         padding:10px 16px; margin:12px 0; font-size:14px;}
   .warn{border-left:4px solid var(--warn); background:var(--warn-bg); border-radius:0 8px 8px 0;
         padding:10px 16px; margin:12px 0; font-size:14px;}
+  .danger{border-left:4px solid var(--danger); background:var(--danger-bg); border-radius:0 8px 8px 0;
+        padding:10px 16px; margin:12px 0; font-size:14px;}
   .ok{color:var(--ok); font-weight:600;}
+  .os{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.03em;
+      border-radius:5px; padding:2px 8px; margin-right:8px; vertical-align:2px;}
+  .os-win{background:#e8f0fe; color:#0f62fe;}
+  .os-mac{background:#f0eefb; color:#5b3fd6;}
+  .os-lin{background:#e8f7ef; color:#0e8345;}
+  .checklist{background:#fbfcfe; border:1px dashed #b9c6d8; border-radius:12px; padding:18px 22px;}
+  .checklist li{list-style:none; margin-bottom:9px; padding-left:28px; position:relative;}
+  .checklist li::before{content:"☐"; position:absolute; left:0; font-size:17px; color:var(--accent);}
+  .checklist ol,.checklist ul{margin-left:0;}
+  .ver{font-size:12.5px; color:var(--muted);}
   footer{text-align:center; color:var(--muted); font-size:13px; margin-top:28px;}
   a{color:var(--accent); text-decoration:none; font-weight:500;}
   a:hover{text-decoration:underline;}
+  hr{border:none; border-top:1px solid var(--line); margin:22px 0;}
+  @media print{
+    body{background:#fff; font-size:11.5pt;}
+    section{page-break-inside:avoid; border-color:#bbb;}
+    header{background:#1e3a5f !important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  }
 </style>
 </head>
 <body>
@@ -53,9 +73,11 @@
 
 <header>
   <h1>Week 1 · Environment Setup Guide</h1>
-  <p>AI Application Development · Software Engineering (Year 3)</p>
-  <span class="pill">⏱ 45–60 min</span><span class="pill">💻 Windows / macOS / Linux</span><span class="pill">☁️ Colab fallback included</span>
+  <p>AI Application Development · Software Engineering (Year 3) · <span class="ver">v2.0</span></p>
+  <span class="pill">⏱ 45–60 min</span><span class="pill">💻 Windows / macOS / Linux</span><span class="pill">☁️ Colab fallback</span><span class="pill">🇨🇳 China mirrors</span>
 </header>
+
+<div class="note">💡 <b>Before you start</b>: do this at least <b>one day before</b> the lab, not in the 10 minutes before class. Installations fail in ways that need time to fix. If your install breaks, the <a href="#colab">Colab fallback (Section 7)</a> lets you finish the lab in a browser — but it is a backup, not the main route.</div>
 
 <section>
   <h2><span class="n">0</span>What you will install</h2>
@@ -63,120 +85,256 @@
     <tr><th>Tool</th><th>What it is</th><th>Used for</th></tr>
     <tr><td><b>Miniconda</b></td><td>Python environment manager</td><td>Isolates this course's Python from everything else on your laptop</td></tr>
     <tr><td><b>Python 3.11</b></td><td>The language (inside conda)</td><td>All 16 weeks</td></tr>
-    <tr><td><b>Core packages</b></td><td>numpy · pandas · matplotlib · seaborn · scikit-learn · torch · jupyter</td><td>Labs, homework, final project</td></tr>
+    <tr><td><b>Core packages</b></td><td>numpy · pandas · matplotlib · seaborn · scikit-learn · torch · jupyterlab</td><td>Labs, homework, final project</td></tr>
     <tr><td><b>VS Code</b></td><td>Editor + notebook support</td><td>Writing &amp; running <code>.ipynb</code> files</td></tr>
     <tr><td><b>Git + GitHub account</b></td><td>Version control</td><td><b>All submissions go through GitHub</b></td></tr>
   </table>
-  <div class="note">💡 <b>No laptop or install fails?</b> Skip to <a href="#colab">Section 5 — Google Colab</a>. You can complete the entire first month in the browser.</div>
+  <div class="warn">⚠️ <b>Do NOT install everything for the whole semester now.</b> <code>requirements.txt</code> covers Week 1 only. Later packages (torchvision, transformers, fastapi, gradio) are installed when their week is announced. Installing them all at once creates a 6 GB environment that will break silently at some point.</div>
 </section>
 
 <section>
   <h2><span class="n">1</span>Install Miniconda</h2>
-  <p>Download the <b>Python 3.11</b> installer for your OS from <a href="https://www.anaconda.com/download">anaconda.com/download</a> (choose Miniconda, the small one ~80 MB).</p>
-  <ul>
-    <li><b>Windows</b>: run the <code>.exe</code>. Accept defaults, but <b>check "Add to PATH"</b> when offered. After install, use <b>Anaconda Prompt</b> (search it in the Start menu) — <u>not</u> the plain cmd.</li>
-    <li><b>macOS</b>: run the <code>.pkg</code>, accept defaults. Then open Terminal and run <code>conda init zsh</code>, and reopen Terminal.</li>
-    <li><b>Linux</b>: <code>bash Miniconda3-latest-Linux-x86_64.sh</code></li>
-  </ul>
-  <p>Verify — open a <u>new</u> terminal and run:</p>
+
+  <p>First, find out which chip you have — this decides which installer to download:</p>
+  <pre><code><span class="c"># macOS / Linux: run in Terminal</span>
+uname -m
+<span class="c">#   arm64 / aarch64  ->  ARM build</span>
+<span class="c">#   x86_64           ->  Intel build</span>
+
+<span class="c"># Windows: Settings -> System -> About -> "Processor",</span>
+<span class="c"># or run in PowerShell:</span>
+echo $env:PROCESSOR_ARCHITECTURE
+<span class="c">#   ARM64 -> ARM build ;  AMD64 -> Intel build</span></code></pre>
+
+  <p>Then download the <b>Python 3.11</b> Miniconda installer for your OS and chip from <a href="https://www.anaconda.com/download">anaconda.com/download</a> (pick <b>Miniconda</b>, the small one, ~80 MB — not the full Anaconda).</p>
+
+  <h3><span class="os os-win">WINDOWS</span></h3>
+  <ol>
+    <li>Run the <code>.exe</code>. Accept defaults, and <b>check "Add Miniconda3 to my PATH"</b> if offered.</li>
+    <li>From now on, use <b>Anaconda Prompt</b> (search it in the Start menu) — <u>not</u> the plain cmd or PowerShell.</li>
+    <li>If PowerShell refuses to run conda: open <b>Anaconda Prompt</b> and run
+      <code>conda init powershell</code>, then in PowerShell (as your own user, no admin needed):
+      <pre style="margin-top:6px"><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre>
+      Type <code>Y</code> and press Enter. Close and reopen PowerShell.</li>
+  </ol>
+
+  <h3><span class="os os-mac">MACOS</span></h3>
+  <ol>
+    <li>Run the <code>.pkg</code> that matches your chip: <b>arm64</b> for M1/M2/M3/M4/M5, <b>x86_64</b> for Intel.</li>
+    <li>Open Terminal and run <code>conda init zsh</code>, then <b>close and reopen Terminal</b>.</li>
+  </ol>
+  <div class="danger">🍎 <b>Apple Silicon trap</b>: installing the x86_64 build on an M-series Mac "works" but runs through Rosetta — torch will be slow, and some packages will not install at all. If <code>uname -m</code> says <code>arm64</code>, you need the arm64 installer. Check with <code>python -c "import platform; print(platform.machine())"</code> — it must print <code>arm64</code>, not <code>x86_64</code>.</div>
+
+  <h3><span class="os os-lin">LINUX</span></h3>
+  <pre><code>bash Miniconda3-latest-Linux-x86_64.sh   <span class="c"># or aarch64.sh on ARM</span>
+conda init bash
+<span class="c"># close and reopen your terminal</span></code></pre>
+
+  <p>Verify — in a <u>new</u> terminal window:</p>
   <pre><code>conda --version
-<span class="c"># expect something like: conda 24.x.x</span></code></pre>
+<span class="c"># expect: conda 24.x.x or newer</span></code></pre>
+
+  <div class="note">📌 Use the <b>conda-forge</b> channel (free for everyone, avoids Anaconda's commercial licence terms):
+    <pre style="margin-top:6px"><code>conda config --add channels conda-forge
+conda config --set channel_priority strict</code></pre></div>
 </section>
 
 <section>
   <h2><span class="n">2</span>Create the course environment</h2>
-  <p>Copy-paste these commands one block at a time:</p>
+  <p>Run these in <b>Anaconda Prompt</b> (Windows) or <b>Terminal</b> (macOS/Linux), one block at a time:</p>
   <pre><code><span class="c"># 1. create an isolated environment named "ai-app"</span>
 conda create -n ai-app python=3.11 -y
 
-<span class="c"># 2. activate it (do this EVERY lab session)</span>
+<span class="c"># 2. activate it — DO THIS EVERY SINGLE LAB SESSION</span>
 conda activate ai-app
 
-<span class="c"># 3. install the semester's toolkit (~5-10 min; torch is the big one)</span>
-pip install numpy pandas matplotlib seaborn scikit-learn torch jupyter
+<span class="c"># 3. confirm you are inside it (the prompt should start with "(ai-app)")</span>
+python -c "import sys; print(sys.executable)"
+<span class="c">#   the path must contain ".../envs/ai-app/..."</span>
 
-<span class="c"># 4. prove it works — trains a tiny model in ~1 second</span>
-python env_check.py</code></pre>
-  <p>You should see a wall of <code>[ OK ]</code> lines and finish with:</p>
-  <pre><code>ALL CHECKS PASSED - see you in the lab!</code></pre>
-  <div class="note">✅ That's the environment done. If any line prints <code>[FAIL]</code>, jump to the <a href="#faq">FAQ</a> below before asking in the group.</div>
+<span class="c"># 4. install the Week 1 toolkit from the provided file</span>
+pip install -r requirements.txt</code></pre>
+
+  <p>Everything is pinned in <code>requirements.txt</code> (shipped in this folder), so you do not have to type package names. If you prefer installing by hand:</p>
+  <pre><code>pip install numpy pandas matplotlib seaborn scikit-learn torch jupyterlab</code></pre>
+
+  <div class="warn">🐢 <b>Slow or timing out?</b> Use a mirror. In China this is often 10–50× faster:
+    <pre style="margin-top:6px"><code>pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
+    Other mirrors: Aliyun <code>https://mirrors.aliyun.com/pypi/simple/</code>, Tencent <code>https://mirrors.cloud.tencent.com/pypi/simple</code>.</div>
+
+  <div class="note">💾 <b>Low disk space, or torch download keeps failing?</b> Install the CPU-only build (~200 MB instead of 2+ GB). It is enough for every lab in this course:
+    <pre style="margin-top:6px"><code>pip install torch --index-url https://download.pytorch.org/whl/cpu</code></pre></div>
 </section>
 
 <section>
   <h2><span class="n">3</span>Set up VS Code</h2>
   <ol>
-    <li>Install VS Code: <a href="https://code.visualstudio.com">code.visualstudio.com</a></li>
-    <li>Open it → Extensions (<code>Ctrl/Cmd+Shift+X</code>) → install <b>Python</b> and <b>Jupyter</b> (both by Microsoft).</li>
-    <li>Open your lab folder: File → Open Folder → <code>week1-lab</code>.</li>
-    <li>Open <code>Week1-Lab-Starter.ipynb</code>. If asked "Do you trust this folder?" → Yes.</li>
-    <li><b>Key step</b>: click the kernel selector in the top-right → <b>Select Kernel → Python Environments → ai-app (Python 3.11)</b>.</li>
+    <li>Install VS Code from <a href="https://code.visualstudio.com">code.visualstudio.com</a>.</li>
+    <li>Open it → Extensions (<code>Ctrl/Cmd + Shift + X</code>) → install <b>Python</b> and <b>Jupyter</b> (both by Microsoft). Recommended extra: <b>GitLens</b>.</li>
+    <li>Open your lab folder: File → Open Folder → select the <code>labs/week-01</code> folder you cloned.</li>
+    <li>Open <code>starter-notebook.ipynb</code>. If asked "Do you trust the authors of this folder?" → Yes.</li>
+    <li><b>The critical step</b>: click the kernel selector in the <b>top-right corner</b> → <b>Select Kernel → Python Environments → ai-app (Python 3.11)</b>.</li>
   </ol>
-  <div class="warn">⚠️ The #1 Week-1 mistake: running with the wrong kernel (e.g. a system Python that lacks torch). If a cell says <code>ModuleNotFoundError</code>, check the top-right corner first.</div>
+  <div class="danger">🔥 <b>The #1 Week-1 mistake: the wrong kernel.</b> A <code>ModuleNotFoundError</code> almost never means the package is missing — it means the notebook is running a <i>different</i> Python. Look at the top-right corner <u>before</u> you reinstall anything. Reinstalling into the wrong environment fixes nothing and wastes 20 minutes.</div>
+  <div class="warn">🪟 Windows only: if typing <code>python</code> opens the Microsoft Store, disable it — Settings → Apps → Advanced app settings → App execution aliases → turn <b>off</b> both <code>python.exe</code> and <code>python3.exe</code>. Always use Anaconda Prompt.</div>
 </section>
 
 <section>
   <h2><span class="n">4</span>Git &amp; GitHub</h2>
   <ol>
-    <li>Create a GitHub account (use a professional username — it goes on your CV): <a href="https://github.com/signup">github.com/signup</a></li>
-    <li>Install Git: <a href="https://git-scm.com/downloads">git-scm.com/downloads</a> (macOS: also works via <code>xcode-select --install</code>)</li>
+    <li>Create a GitHub account using a <b>professional username</b> — it ends up on your CV: <a href="https://github.com/signup">github.com/signup</a></li>
+    <li>Install Git: <a href="https://git-scm.com/downloads">git-scm.com/downloads</a> (macOS: <code>xcode-select --install</code> also works)</li>
     <li>Verify: <code>git --version</code></li>
   </ol>
-  <p>The push commands themselves live in the Lab notebook (Part 4). Free reading if Git is new to you: <a href="https://git-scm.com/book/en/v2">Pro Git, chapters 1–3</a> (free e-book).</p>
+
+  <h3>Tell Git who you are (required — do this once)</h3>
+  <p>Every commit is signed with a name and email. Skip this and your first commit fails with <code>*** Please tell me who you are</code>:</p>
+  <pre><code>git config --global user.name  "Your Name"
+git config --global user.email "you@university.edu"   <span class="c"># use the SAME email as your GitHub account</span>
+git config --global init.defaultBranch main
+
+<span class="c"># confirm:</span>
+git config --global --list</code></pre>
+  <div class="note">🔑 Using the same email as your GitHub account is what makes your commits show up with your avatar and count toward your profile — worth the 30 seconds.</div>
+
+  <h3>Set up authentication (required to push)</h3>
+  <p>GitHub <b>no longer accepts your account password</b> in the terminal. Two options — pick one:</p>
+  <ul>
+    <li><b>Easiest</b>: install <a href="https://desktop.github.com">GitHub Desktop</a> and sign in. It handles credentials for you.</li>
+    <li><b>Or</b> create a Personal Access Token: GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate new token → tick <code>repo</code> → copy it once (you will not see it again). Paste it <b>as the password</b> when Git asks.</li>
+  </ul>
+  <p>Windows users should also run this once to avoid "filename too long" errors:</p>
+  <pre><code>git config --global core.longpaths true</code></pre>
+  <p>New to Git entirely? Free reading, chapters 1–3 only: <a href="https://git-scm.com/book/en/v2">Pro Git (free e-book)</a>. The push commands themselves are in the lab notebook.</p>
+</section>
+
+<section>
+  <h2><span class="n">5</span>Verify everything (do not skip)</h2>
+  <p>Inside your activated <code>ai-app</code> environment, from the <code>labs/week-01</code> folder:</p>
+  <pre><code>python env-check.py</code></pre>
+  <p>You should see a wall of <code>[ OK ]</code> lines and finish with:</p>
+  <pre><code>ALL CHECKS PASSED - see you in the lab!</code></pre>
+  <div class="warn">⚠️ The filename uses a <b>hyphen</b>: <code>env-check.py</code>. Older drafts of this guide said <code>env_check.py</code> (underscore) — if you get <code>can't open file 'env_check.py'</code>, you typed the old name.</div>
+  <div class="note">✅ Any <code>[FAIL]</code> line means: check the <a href="#faq">FAQ</a> first, then ask. The script also trains a tiny model as a smoke test, so a pass means your whole stack genuinely works.</div>
+</section>
+
+<section>
+  <h2><span class="n">6</span>Two-minute daily routine</h2>
+  <p>Every lab session, from now on:</p>
+  <pre><code>conda activate ai-app        <span class="c"># 1. activate — nothing works without this</span>
+cd path/to/course/labs/week-XX
+jupyter lab                  <span class="c"># or open the .ipynb in VS Code</span></code></pre>
+  <p>And in VS Code: <b>glance at the top-right corner</b> to confirm the kernel says <code>ai-app</code>.</p>
 </section>
 
 <section id="colab">
-  <h2><span class="n">5</span>Fallback — Google Colab (zero install)</h2>
-  <p>No laptop? Install broke? Colab gives you a browser notebook with GPU, nothing to install:</p>
+  <h2><span class="n">7</span>Fallback — Google Colab (zero install)</h2>
+  <p>No laptop, or the install is broken and the lab is in an hour? Colab runs notebooks in your browser with a free GPU:</p>
   <ol>
     <li>Go to <a href="https://colab.research.google.com">colab.research.google.com</a> (needs a Google account)</li>
-    <li>File → Upload notebook → choose <code>Week1-Lab-Starter.ipynb</code></li>
+    <li>File → Upload notebook → choose <code>starter-notebook.ipynb</code></li>
     <li>Runtime → Change runtime type → <b>T4 GPU</b> → Save</li>
-    <li>Everything except the Git part works out of the box (torch/sklearn pre-installed)</li>
+    <li>torch and scikit-learn are pre-installed; everything except the Git parts works out of the box</li>
   </ol>
-  <div class="warn">⚠️ Colab free tier has daily usage limits and sessions disconnect after ~90 min idle — save to GitHub before closing the tab. Colab is a backup, not the main workflow: exams and some later labs require your local setup.</div>
+  <div class="warn">⚠️ Colab is a <b>backup, not the main workflow</b>. Free tier has daily limits, sessions disconnect after ~90 minutes idle, and files vanish when the VM is recycled — always save your work to GitHub before closing the tab. Later labs (Week 13+: FastAPI servers, Docker) require a real local setup.</div>
 </section>
 
 <section id="faq">
-  <h2><span class="n">6</span>FAQ — common errors &amp; fixes</h2>
+  <h2><span class="n">8</span>FAQ — common errors &amp; fixes</h2>
   <table>
     <tr><th style="width:34%">Symptom</th><th>Fix</th></tr>
     <tr>
       <td><code>conda: command not found</code></td>
-      <td>Windows: use <b>Anaconda Prompt</b>, not cmd. macOS: run <code>conda init zsh</code> and reopen Terminal. Or reinstall with "Add to PATH" checked.</td>
+      <td>Windows: use <b>Anaconda Prompt</b>, not cmd. macOS: <code>conda init zsh</code> then <b>reopen Terminal</b>. Or reinstall with "Add to PATH" ticked.</td>
     </tr>
     <tr>
-      <td><code>pip install</code> is extremely slow / times out</td>
-      <td>Use a mirror: <code>pip install -i https://pypi.tuna.tsinghua.edu.cn/simple &lt;package&gt;</code>. In China this is dramatically faster.</td>
-    </tr>
-    <tr>
-      <td><code>pip install torch</code> fails or is huge</td>
-      <td>CPU-only version (enough for this course, ~200 MB instead of 2+ GB):<br><code>pip install torch --index-url https://download.pytorch.org/whl/cpu</code></td>
+      <td><code>can't open file 'env_check.py'</code></td>
+      <td>Filename is <code>env-check.py</code> (hyphen). Or you are in the wrong folder — <code>cd</code> into <code>labs/week-01</code> first.</td>
     </tr>
     <tr>
       <td><code>ModuleNotFoundError: No module named 'torch'</code></td>
-      <td>You forgot to activate the env (<code>conda activate ai-app</code>), or the notebook kernel is wrong — check top-right in VS Code. Not fixed? Re-run the pip install inside the activated env.</td>
+      <td>99% a wrong kernel or a forgotten <code>conda activate ai-app</code> — check the VS Code top-right and your prompt prefix <b>before</b> reinstalling.</td>
     </tr>
     <tr>
-      <td><code>CondaHTTPError / SSL errors</code> during <code>conda create</code></td>
-      <td>Usually campus proxy. Try phone hotspot, or configure the Tsinghua conda mirror (search "conda 清华镜像").</td>
+      <td><code>pip install</code> very slow / times out</td>
+      <td>Add a mirror: <code>-i https://pypi.tuna.tsinghua.edu.cn/simple</code>. In China this is dramatically faster.</td>
     </tr>
     <tr>
-      <td><code>git push</code> asks for a password and rejects it</td>
-      <td>GitHub no longer accepts account passwords. Use a <b>Personal Access Token</b> as the password: GitHub → Settings → Developer settings → Tokens → Generate (scope: <code>repo</code>). Or install <a href="https://desktop.github.com">GitHub Desktop</a>.</td>
+      <td>torch download is 2 GB / keeps failing</td>
+      <td>CPU-only build (~200 MB): <code>pip install torch --index-url https://download.pytorch.org/whl/cpu</code></td>
     </tr>
     <tr>
-      <td>Colab: cannot connect / GPU unavailable</td>
-      <td>Region restriction — use the local setup route (Sections 1–3), or try again at off-peak hours.</td>
+      <td><code>CondaHTTPError</code> / SSL errors during <code>conda create</code></td>
+      <td>Usually a campus proxy or VPN. Try a phone hotspot, or configure the Tsinghua conda mirror and retry.</td>
     </tr>
     <tr>
-      <td>Notebook runs cells out of order and errors</td>
-      <td>Always run top-to-bottom. Fix: <b>Kernel → Restart &amp; Run All</b> — this is also how submissions are graded, so test it before you submit.</td>
+      <td>macOS: torch is installed but very slow / no MPS</td>
+      <td>You likely installed the x86_64 Miniconda on an M-series Mac. Check <code>python -c "import platform; print(platform.machine())"</code>; if it prints <code>x86_64</code>, reinstall with the arm64 build.</td>
+    </tr>
+    <tr>
+      <td>PowerShell: "running scripts is disabled"</td>
+      <td>Run <code>conda init powershell</code>, then <code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code>, then reopen. Or just use Anaconda Prompt.</td>
+    </tr>
+    <tr>
+      <td>Windows: typing <code>python</code> opens the Store</td>
+      <td>Turn off App execution aliases for <code>python.exe</code> / <code>python3.exe</code>, and use Anaconda Prompt.</td>
+    </tr>
+    <tr>
+      <td><code>git push</code> rejects the password</td>
+      <td>GitHub no longer accepts account passwords. Use a Personal Access Token as the password, or install GitHub Desktop.</td>
+    </tr>
+    <tr>
+      <td><code>*** Please tell me who you are</code></td>
+      <td>Set your identity: <code>git config --global user.name "..."</code> and <code>git config --global user.email "..."</code></td>
+    </tr>
+    <tr>
+      <td>Windows: <code>Filename too long</code></td>
+      <td><code>git config --global core.longpaths true</code>, then clone again.</td>
+    </tr>
+    <tr>
+      <td>Notebook errors that make no sense</td>
+      <td>You ran cells out of order. <b>Kernel → Restart &amp; Run All</b>. This is also exactly how submissions are graded, so test it before submitting.</td>
+    </tr>
+    <tr>
+      <td>Colab: cannot connect / no GPU</td>
+      <td>Region restriction or quota. Use the local setup, or retry off-peak.</td>
     </tr>
   </table>
-  <div class="note">📌 Still stuck after trying the FAQ? Post in the class group with: (1) your OS, (2) the <b>exact</b> command you ran, (3) the <b>full</b> error message — screenshot of the whole terminal, not just the last line. Questions like "it doesn't work" get slow answers; complete bug reports get fast ones. This is also good practice: bug reports are a professional skill.</div>
+  <div class="note">📌 <b>Still stuck?</b> Post in the class group with all three of: (1) your OS and chip, (2) the <b>exact</b> command you ran, (3) the <b>full</b> error — a screenshot of the whole terminal, not just the last line. "It doesn't work" gets a slow answer; a complete bug report gets a fast one. Writing good bug reports is a professional skill you will use for the rest of your career.</div>
 </section>
 
-<footer>AI Application Development · Week 1 · Setup Guide v1.0 — bring questions to the lab session, that's what it's for.</footer>
+<section class="checklist">
+  <h2><span class="n">9</span>Pre-lab checklist — finish before class</h2>
+  <ul class="checklist">
+    <li><code>conda --version</code> prints a version number</li>
+    <li><code>conda activate ai-app</code> works and my prompt starts with <code>(ai-app)</code></li>
+    <li><code>pip install -r requirements.txt</code> completed with no red errors</li>
+    <li><code>python env-check.py</code> prints <b>ALL CHECKS PASSED</b></li>
+    <li>VS Code opens <code>starter-notebook.ipynb</code> and the top-right kernel says <b>ai-app</b></li>
+    <li><code>git --version</code> works, and <code>git config --global user.name</code> returns my name</li>
+    <li>I can log in to GitHub in a browser <b>and</b> I have chosen my push method (Desktop or token)</li>
+    <li>I ran the notebook top-to-bottom once (<b>Restart &amp; Run All</b>) and it finished without errors</li>
+  </ul>
+  <p style="margin-top:14px; font-size:14px; color:var(--muted)">Bring your laptop charged, with the charger. Bring the one error message you could not solve — that is what the lab session is for.</p>
+</section>
+
+<section>
+  <h2><span class="n">10</span>中文摘要 · 安装流程速查</h2>
+  <p>面向中文使用者与助教的精简版，详细英文说明见上文各节。</p>
+  <table>
+    <tr><th style="width:30%">步骤</th><th>操作</th></tr>
+    <tr><td>① 装 Miniconda</td><td>先 <code>uname -m</code> 确认芯片（arm64 装 ARM 版，x86_64 装 Intel 版），再到 <a href="https://www.anaconda.com/download">anaconda.com/download</a> 下载 Python 3.11 的 Miniconda（约 80MB，不要装完整版 Anaconda）。Windows 全程用 <b>Anaconda Prompt</b>，不要用 cmd。</td></tr>
+    <tr><td>② 建环境</td><td><code>conda create -n ai-app python=3.11 -y</code> → <code>conda activate ai-app</code>（<b>每次上机都要激活</b>）→ <code>pip install -r requirements.txt</code></td></tr>
+    <tr><td>③ 提速（国内必看）</td><td>pip 加镜像：<code>-i https://pypi.tuna.tsinghua.edu.cn/simple</code>；torch 太大就装 CPU 版：<code>--index-url https://download.pytorch.org/whl/cpu</code></td></tr>
+    <tr><td>④ 装 VS Code</td><td>装 <b>Python</b> + <b>Jupyter</b> 两个扩展；打开 notebook 后<b>务必在右上角把 kernel 切成 <code>ai-app</code></b> —— 90% 的报错都是这里选错</td></tr>
+    <tr><td>⑤ 配 Git</td><td><code>git config --global user.name "你的名字"</code>、<code>user.email "邮箱"</code>（与 GitHub 账号一致）。推送不用密码，改用 <b>Personal Access Token</b> 或装 GitHub Desktop</td></tr>
+    <tr><td>⑥ 自检</td><td><code>python env-check.py</code>（<b>连字符</b>，不是下划线）→ 全部 <code>[ OK ]</code> 并输出 <code>ALL CHECKS PASSED</code> 才算通过</td></tr>
+    <tr><td>⑦ 兜底方案</td><td>装不上就用 Google Colab 上传 notebook，选 T4 GPU；但 Colab 只是备份，第 13 周起必须本地环境</td></tr>
+  </table>
+  <div class="warn">🍎 <b>Apple Silicon 重点提醒</b>：M 系列 Mac 装错 x86_64 版本会走 Rosetta，torch 变慢且部分包装不上。用 <code>python -c "import platform; print(platform.machine())"</code> 验证，必须是 <code>arm64</code>。</div>
+</section>
+
+<footer>AI Application Development · Week 1 · Setup Guide v2.0 · 中文摘要见 Section 10<br>环境自检通过后再来上课，实验课是用来解决装不出来的问题的，不是用来装的。</footer>
 </div>
 </body>
 </html>
