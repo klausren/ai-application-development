@@ -134,16 +134,17 @@ conda init bash
   <pre><code>conda --version
 <span class="c"># expect: conda 24.x.x or newer</span></code></pre>
 
-  <div class="note">📌 Use the <b>conda-forge</b> channel (free for everyone, avoids Anaconda's commercial licence terms):
+  <div class="warn">📌 <b>One extra step that everybody now needs (added 2026-09):</b> recent conda versions refuse to install anything until you accept Anaconda's <b>commercial</b> Terms of Service for the built-in <code>defaults</code> channel. The clean way out is to use <b>conda-forge only</b> — it is community-run, free for everyone, and needs no licence:
     <pre style="margin-top:6px"><code>conda config --add channels conda-forge
-conda config --set channel_priority strict</code></pre></div>
+conda config --set channel_priority strict</code></pre>
+    Adding the channel to <code>.condarc</code> alone is <b>not</b> enough — the fallback to <code>defaults</code> is hard-wired. Every <code>conda create</code> in this course must therefore carry the override flag, as shown in Section 2.</div>
 </section>
 
 <section>
   <h2><span class="n">2</span>Create the course environment</h2>
   <p>Run these in <b>Anaconda Prompt</b> (Windows) or <b>Terminal</b> (macOS/Linux), one block at a time:</p>
   <pre><code><span class="c"># 1. create an isolated environment named "ai-app"</span>
-conda create -n ai-app python=3.11 -y
+conda create -n ai-app python=3.11 -c conda-forge --override-channels -y
 
 <span class="c"># 2. activate it — DO THIS EVERY SINGLE LAB SESSION</span>
 conda activate ai-app
@@ -264,6 +265,10 @@ jupyter lab                  <span class="c"># or open the .ipynb in VS Code</sp
       <td>CPU-only build (~200 MB): <code>pip install torch --index-url https://download.pytorch.org/whl/cpu</code></td>
     </tr>
     <tr>
+      <td><code>CondaToSNonInteractiveError</code> — Terms of Service not accepted</td>
+      <td>conda fell back to Anaconda's commercial <code>defaults</code> channel. Re-run with <code>-c conda-forge --override-channels</code> (see Section 2), or run <code>conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main</code> if you accept Anaconda's commercial terms.</td>
+    </tr>
+    <tr>
       <td><code>CondaHTTPError</code> / SSL errors during <code>conda create</code></td>
       <td>Usually a campus proxy or VPN. Try a phone hotspot, or configure the Tsinghua conda mirror and retry.</td>
     </tr>
@@ -324,7 +329,7 @@ jupyter lab                  <span class="c"># or open the .ipynb in VS Code</sp
   <table>
     <tr><th style="width:30%">步骤</th><th>操作</th></tr>
     <tr><td>① 装 Miniconda</td><td>先 <code>uname -m</code> 确认芯片（arm64 装 ARM 版，x86_64 装 Intel 版），再到 <a href="https://www.anaconda.com/download">anaconda.com/download</a> 下载 Python 3.11 的 Miniconda（约 80MB，不要装完整版 Anaconda）。Windows 全程用 <b>Anaconda Prompt</b>，不要用 cmd。</td></tr>
-    <tr><td>② 建环境</td><td><code>conda create -n ai-app python=3.11 -y</code> → <code>conda activate ai-app</code>（<b>每次上机都要激活</b>）→ <code>pip install -r requirements.txt</code></td></tr>
+    <tr><td>② 建环境</td><td><code>conda create -n ai-app python=3.11 -c conda-forge --override-channels -y</code>（<b>必须带 override 参数</b>，否则会撞 Anaconda 商业条款报错）→ <code>conda activate ai-app</code>（<b>每次上机都要激活</b>）→ <code>pip install -r requirements.txt</code></td></tr>
     <tr><td>③ 提速（国内必看）</td><td>pip 加镜像：<code>-i https://pypi.tuna.tsinghua.edu.cn/simple</code>；torch 太大就装 CPU 版：<code>--index-url https://download.pytorch.org/whl/cpu</code></td></tr>
     <tr><td>④ 装 VS Code</td><td>装 <b>Python</b> + <b>Jupyter</b> 两个扩展；打开 notebook 后<b>务必在右上角把 kernel 切成 <code>ai-app</code></b> —— 90% 的报错都是这里选错</td></tr>
     <tr><td>⑤ 配 Git</td><td><code>git config --global user.name "你的名字"</code>、<code>user.email "邮箱"</code>（与 GitHub 账号一致）。推送不用密码，改用 <b>Personal Access Token</b> 或装 GitHub Desktop</td></tr>

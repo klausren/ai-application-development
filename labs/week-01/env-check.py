@@ -26,7 +26,7 @@ checks = [
     ("seaborn",      "seaborn",     None),
     ("scikit-learn", "sklearn",     "1.3"),
     ("torch",        "torch",       "2.0"),
-    ("jupyter",      "notebook",    None),
+    ("jupyterlab",   "jupyterlab",  None),
 ]
 
 fail = 0
