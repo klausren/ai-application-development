@@ -106,7 +106,12 @@ ai-application-development/
 ├── lesson-plans/              ← original A/B lesson plans (90-min lecture + 75-min lab), EN + CN
 ├── textbook/                  ← original bilingual textbook chapters
 ├── lecture-scripts/           ← original word-for-word lecture scripts (EN speech + CN reference)
-├── labs/                      ← original student-facing lab materials (starter notebooks, checkers, guides)
+├── handouts/                  ← printable A4 class handouts (bilingual, with note space)
+├── labs/                      ← student-facing lab materials
+│   ├── README.md              ← lab index + handout template explained
+│   └── week-XX/
+│       ├── lab-handout.md     ← 16 weekly lab guides (tasks, checkpoints, rubric)
+│       ├── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
 ├── slides/
 │   └── mit-6s191/             ← 6 official MIT 6.S191 lecture PDFs (bundled, MIT license)
 ├── cs224n/                    ← Stanford CS224n slot: fetched on demand (not bundled)
@@ -138,6 +143,23 @@ Every week ships five assets, each in **English** and **Chinese** (or bilingual)
 
 **Currently published: Weeks 1–2** (all five asset types, both languages).
 
+### Lab Handouts 实验指导书 — `labs/week-XX/lab-handout.md`
+
+Every week's second half (课时 3–4, 75 min) is a hands-on lab. All **16** lab guides are published:
+
+| Module | Weeks | Labs |
+|---|:---:|---|
+| ML Foundations | 1–4 | environment & first model · EDA/cleaning · sklearn pipeline · evaluation & regularization |
+| Deep Learning & CV | 5–8 | NumPy→PyTorch MLP · training ablations · CNN & transfer learning · project lab |
+| NLP & LLMs | 9–12 | text vectors · embeddings & LSTM · Transformers · prompting & RAG |
+| AI Engineering | 13–16 | agents · FastAPI deployment · MLOps · demo day |
+
+Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks.
+
+### Class Handouts 课堂讲义 — `handouts/`
+
+Printable A4 handouts for in-class use: key concepts, code skeletons, vocabulary tables, the lab plan for the day and ruled note space. Bilingual, print-ready (`Cmd+P`). **Week 1** is available now.
+
 ### Bundled: MIT 6.S191 (2024) — included in `slides/mit-6s191/`
 
 | File | Lecture | Maps to |
@@ -166,10 +188,13 @@ This repo grows with the live semester — one week of courseware lands roughly 
 
 - [x] **Weeks 1–2** — course intro, environment setup, data handling (all 5 asset types, EN + CN)
 - [x] Curated slide pack: MIT 6.S191 (bundled) + CS224n downloader
+- [x] **All 16 lab handouts** — full lab curriculum published (see `labs/`)
+- [x] **Week 1 class handout** — printable A4, bilingual
 - [ ] **Weeks 3–4** — ML foundations, model evaluation *(in progress — teaching it right now)*
 - [ ] **Weeks 5–8** — deep learning & computer vision module
 - [ ] **Weeks 9–12** — NLP & LLM module (Transformers, RAG)
 - [ ] **Weeks 13–16** — deployment, MLOps, capstone templates
+- [ ] Starter notebooks for weeks 2–16 (week-01 shipped)
 - [ ] Micro-lesson video series (animated, 1080p)
 - [ ] Assignments ×3 with autograding notebooks
 

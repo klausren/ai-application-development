@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 1 Handout · Introduction &amp; Environment Setup</title>
+<style>
+  :root{
+    --ink:#111827; --ink2:#4b5563; --line:#d1d5db; --accent:#0d9488;
+    --accent-bg:#f0fdfa; --warn:#b45309; --warn-bg:#fffbeb;
+    --code-bg:#f8fafc; --box:#f9fafb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink); line-height:1.6; font-size:13.5px; background:#fff;
+  }
+  .page{max-width:820px;margin:0 auto;padding:32px 36px 60px}
+
+  /* header */
+  .hd{border-bottom:3px solid var(--accent);padding-bottom:14px;margin-bottom:18px}
+  .hd .kicker{font-size:10.5px;font-weight:800;letter-spacing:1.4px;color:var(--accent);text-transform:uppercase}
+  .hd h1{font-size:23px;font-weight:800;margin-top:3px;line-height:1.25}
+  .hd h1 .zh{display:block;font-size:15px;font-weight:600;color:var(--ink2);margin-top:3px}
+  .hd .meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:12px;color:var(--ink2)}
+  .fill{border-bottom:1px solid var(--ink);display:inline-block;min-width:150px}
+
+  h2{font-size:15px;font-weight:800;margin:22px 0 9px;padding-bottom:5px;border-bottom:2px solid var(--line);
+     display:flex;align-items:baseline;gap:8px}
+  h2::before{content:"";width:4px;height:15px;background:var(--accent);border-radius:2px;transform:translateY(1px);flex-shrink:0}
+  h2 .en{font-size:11px;font-weight:500;color:var(--ink2)}
+  h3{font-size:13px;font-weight:700;margin:13px 0 6px;color:var(--ink)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+  th{background:var(--box);padding:6px 9px;text-align:left;font-weight:700;border:1px solid var(--line);font-size:11.5px}
+  td{padding:6px 9px;border:1px solid var(--line);vertical-align:top}
+
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px;background:var(--code-bg);
+       padding:1px 4px;border-radius:3px;border:1px solid #e5e7eb}
+  pre{background:var(--code-bg);border:1px solid var(--line);border-left:3px solid var(--accent);
+      padding:10px 12px;border-radius:4px;overflow-x:auto;margin:8px 0;font-size:12px;line-height:1.65}
+  pre code{background:none;border:none;padding:0;font-size:12px}
+
+  .box{border:1px solid var(--line);background:var(--box);border-radius:5px;padding:10px 12px;margin:9px 0}
+  .box.accent{background:var(--accent-bg);border-color:#99f6e4}
+  .box.warn{background:var(--warn-bg);border-color:#fde68a}
+  .box.warn strong{color:var(--warn)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  ul,ol{margin:6px 0 6px 20px}
+  li{margin:3px 0}
+  .muted{color:var(--ink2);font-size:12px}
+  .kw{font-weight:700;color:var(--accent)}
+
+  /* fill-in-the-blank lines for handwriting */
+  .notes{border:1px dashed var(--line);border-radius:5px;padding:4px 0;margin:8px 0;background:#fffdf7}
+  .notes .l{height:26px;border-bottom:1px dotted #cbd5e1;margin:0 8px}
+  .notes .l:last-child{border-bottom:none}
+
+  .chk{list-style:none;margin-left:2px}
+  .chk li{margin:5px 0;padding-left:22px;position:relative}
+  .chk li::before{content:"☐";position:absolute;left:0;font-size:15px;color:var(--accent)}
+
+  .footer{margin-top:26px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink2);
+          display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  @media print{
+    body{font-size:11.5pt}
+    .page{padding:14mm 15mm}
+    h2{page-break-after:avoid}
+    .box,pre,table{page-break-inside:avoid}
+    .notes{min-height:60px}
+    @page{size:A4;margin:12mm}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hd">
+    <div class="kicker">AI Application Development · Week 1 · Class Handout</div>
+    <h1>Introduction &amp; Development Environment Setup
+      <span class="zh">导论与开发环境搭建 · 课堂讲义</span>
+    </h1>
+    <div class="meta">
+      <span>Name: <span class="fill"></span></span>
+      <span>Student ID: <span class="fill" style="min-width:110px"></span></span>
+      <span>Date: <span class="fill" style="min-width:70px"></span></span>
+      <span>180 min (90 Lecture + 75 Lab + 15 Quiz)</span>
+    </div>
+  </div>
+
+  <h2>1 · The Map: what this course is <span class="en">课程地图</span></h2>
+  <div class="grid2">
+    <div class="box">
+      <h3>Four modules · 16 weeks</h3>
+      <ol>
+        <li><b>W1–4</b> ML foundations <span class="muted">机器学习基础</span></li>
+        <li><b>W5–8</b> Deep learning &amp; CV <span class="muted">深度学习与视觉</span></li>
+        <li><b>W9–12</b> NLP &amp; LLMs <span class="muted">自然语言与大语言模型</span></li>
+        <li><b>W13–16</b> AI engineering <span class="muted">应用工程化与部署</span></li>
+      </ol>
+    </div>
+    <div class="box">
+      <h3>Assessment 考核</h3>
+      <ul>
+        <li>Assignments ×3 <b>30%</b></li>
+        <li>Midterm project <b>15%</b></li>
+        <li>Capstone project <b>35%</b></li>
+        <li>Labs &amp; quizzes <b>20%</b></li>
+      </ul>
+      <p class="muted" style="margin-top:5px">No closed-book final exam · 不设闭卷期末</p>
+    </div>
+  </div>
+
+  <div class="box accent">
+    <b>Course philosophy · 课程理念：</b> Theory that holds up, applications that ship.
+    <span class="muted">理论站得住，应用能上线。</span>
+  </div>
+
+  <h2>2 · AI, ML, DL, GenAI — the four words <span class="en">四个概念的分层</span></h2>
+  <table>
+    <tr><th style="width:22%">Term</th><th style="width:39%">Definition</th><th>Example you use daily</th></tr>
+    <tr><td><b>AI</b></td><td>Machines doing tasks that need human intelligence</td><td class="muted">Spam filter, recommendation</td></tr>
+    <tr><td><b>ML</b></td><td>Systems that <span class="kw">learn patterns from data</span> instead of following hand-written rules</td><td class="muted">Titanic survival prediction</td></tr>
+    <tr><td><b>DL</b></td><td>ML using multi-layer neural networks; learns features automatically</td><td class="muted">Face unlock, voice input</td></tr>
+    <tr><td><b>GenAI</b></td><td>Models that <span class="kw">generate</span> new content (text, image, code)</td><td class="muted">ChatGPT, Copilot</td></tr>
+  </table>
+  <div class="notes">
+    <div class="l"></div><div class="l"></div><div class="l"></div>
+  </div>
+  <p class="muted">↑ Your own three examples, classified as ML / DL / GenAI ↑</p>
+
+  <h2>3 · Where the time actually goes <span class="en">AI 项目生命周期</span></h2>
+  <table>
+    <tr><th style="width:26%">Stage</th><th style="width:14%">Share of time</th><th>What happens there</th></tr>
+    <tr><td>Problem framing <span class="muted">问题定义</span></td><td>10%</td><td>What is the metric? Is ML even needed?</td></tr>
+    <tr><td><b>Data work</b> <span class="muted">数据</span></td><td><b>~60%</b></td><td>Collect, clean, label, split — <span class="kw">the 80% rule lives here</span></td></tr>
+    <tr><td>Modelling <span class="muted">建模</span></td><td>~20%</td><td>Train, evaluate, tune</td></tr>
+    <tr><td>Deployment &amp; monitoring</td><td>~10%</td><td>API, drift, retraining</td></tr>
+  </table>
+  <div class="box warn">
+    <strong>Key insight · 要点：</strong> "Training the model" is only about <b>20%</b> of a real project.
+    Most of your career will be spent on data and on keeping things running in production.
+    <span class="muted">「训练模型」只占真实项目的约 20%，大部分时间花在数据和维护上。</span>
+  </div>
+
+  <h2>4 · Your environment: the four commands <span class="en">环境四件套</span></h2>
+  <pre><code>python --version                 # 3.11
+python -c "import numpy, pandas, sklearn, torch; print('ok')"
+
+# the semester's toolkit — all four must import without error
+import numpy as np          # numerical arrays
+import pandas as pd         # tables
+import sklearn              # classical ML
+import torch                # deep learning</code></pre>
+  <table>
+    <tr><th style="width:28%">Tool</th><th>What it is for</th><th style="width:26%">When you meet it</th></tr>
+    <tr><td><code>numpy</code></td><td>Arrays, vectorised maths</td><td>W2 onwards, always</td></tr>
+    <tr><td><code>pandas</code></td><td>Tabular data, cleaning</td><td>W2 (Titanic)</td></tr>
+    <tr><td><code>sklearn</code></td><td>Classical ML, evaluation</td><td>W1 (Iris), W3–4</td></tr>
+    <tr><td><code>torch</code></td><td>Neural networks</td><td>W5 onwards</td></tr>
+    <tr><td><code>git</code></td><td>Version control — <b>how you submit everything</b></td><td>W1, every week</td></tr>
+  </table>
+
+  <h2>5 · The three lines you will write all semester <span class="en">贯穿全学期的三行</span></h2>
+  <pre><code>from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+X, y = load_iris(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
+
+model = LogisticRegression(max_iter=200)
+model.fit(X_tr, y_tr)              # 1 · LEARN   from training data
+preds = model.predict(X_te)        # 2 · APPLY   to unseen data
+print(model.score(X_te, y_te))     # 3 · MEASURE on the test set</code></pre>
+  <div class="box accent">
+    <b>fit → predict → evaluate.</b> Every model you meet this semester — logistic regression, random forest,
+    a neural network, BERT — obeys exactly these three steps. Only the middle object changes.
+    <span class="muted">本学期所有模型都服从这三步，变的只是中间那个对象。</span>
+  </div>
+
+  <h2>6 · Vocabulary <span class="en">关键术语</span></h2>
+  <table>
+    <tr><th style="width:26%">English</th><th style="width:24%">中文</th><th>Meaning in one clause</th></tr>
+    <tr><td>feature</td><td>特征</td><td>an input column the model reads</td></tr>
+    <tr><td>label / target</td><td>标签</td><td>what you want to predict</td></tr>
+    <tr><td>training set</td><td>训练集</td><td>data the model learns from</td></tr>
+    <tr><td>test set</td><td>测试集</td><td>held-out data used to grade it</td></tr>
+    <tr><td>hyperparameter</td><td>超参数</td><td>a setting you choose, not learned</td></tr>
+    <tr><td>random_state</td><td>随机种子</td><td>fixes randomness → reproducibility</td></tr>
+    <tr><td>overfitting</td><td>过拟合</td><td>memorising training data, failing on new data</td></tr>
+    <tr><td>repository (repo)</td><td>代码仓库</td><td>your project folder tracked by git</td></tr>
+  </table>
+
+  <h2>7 · Lab today (75 min) <span class="en">今日实验</span></h2>
+  <table>
+    <tr><th style="width:12%">Part</th><th style="width:12%">Time</th><th>Task</th></tr>
+    <tr><td>A</td><td>10 min</td><td>Prove the environment works — print the version table</td></tr>
+    <tr><td>B</td><td>20 min</td><td>First model: <code>fit → predict → evaluate</code> on Iris (LogReg + SVC)</td></tr>
+    <tr><td>C</td><td>20 min</td><td>The <code>random_state</code> experiment — does the winner change?</td></tr>
+    <tr><td>D</td><td>20 min</td><td>Git: init → <code>.gitignore</code> → commit → push to GitHub</td></tr>
+    <tr><td>E</td><td>5 min</td><td>Export <code>environment.yml</code>, submit</td></tr>
+  </table>
+  <div class="box warn">
+    <strong>Due next Monday 23:59 · −10% per day late.</strong><br>
+    Deliverables: <code>lab-01.ipynb</code> · <code>environment.yml</code> · GitHub link with <b>≥2 commits</b>.
+    <span class="muted">提交时间戳以 git commit 为准，不以平台上传时间为准。</span>
+  </div>
+
+  <h2>8 · After class <span class="en">课后任务</span></h2>
+  <ul class="chk">
+    <li>Run <code>python env-check.py</code> — it must print <b>ALL PASS</b></li>
+    <li>Finish every TODO in the starter notebook and push it</li>
+    <li>Read Chapter 1 (course intro) + skim Chapter 2 (data handling)</li>
+    <li>Preview next week: we clean the Titanic dataset and do a full EDA</li>
+  </ul>
+
+  <h2>9 · Notes <span class="en">课堂笔记</span></h2>
+  <div class="notes">
+    <div class="l"></div><div class="l"></div><div class="l"></div><div class="l"></div>
+    <div class="l"></div><div class="l"></div><div class="l"></div><div class="l"></div>
+  </div>
+
+  <div class="footer">
+    <span>AI Application Development · Week 1 · 任老师 / Instructor: Ren Zheng</span>
+    <span>Materials: github.com/klausren/ai-application-development</span>
+  </div>
+
+</div>
+</body>
+</html>
