@@ -1,0 +1,34 @@
+name: Check links in markdown
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # every Monday 03:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Link Checker
+        id: lc
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --exclude 'star-history.com'
+            --exclude 'xiaohongshu.com'
+            --max-retries 2
+            './**/*.md'
+          fail: false
+      - name: Create issue when broken links found
+        if: steps.lc.outputs.exit_code != 0
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "🔗 Link checker found broken links"
+          content-filepath: ./lychee-out.md
+          labels: bug, automated
