@@ -228,6 +228,19 @@ Instructors: see [Attribution & License](#attribution--license) before reusing a
 
 ---
 
+## Repo Maintenance
+
+Two GitHub Actions keep this repo honest:
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| [`link-check.yml`](.github/workflows/link-check.yml) | Mondays 03:00 UTC, or manual | scans every `.md` for dead links; files an issue titled "🔗 Link checker found broken links" |
+| [`greetings.yml`](.github/workflows/greetings.yml) | first-time issue / PR | posts a welcome message pointing teachers to Discussions |
+
+Run the link check by hand: **Actions → Check links in markdown → Run workflow**.
+
+---
+
 ## Cite This Repo
 
 If you use these materials in teaching or research, please cite:
