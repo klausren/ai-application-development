@@ -1,5 +1,9 @@
 # AI Application Development — Course Hub
 
+<div align="center">
+  <img src="docs/banner.png" alt="AI Application Development — 16-week bilingual course hub" width="100%"/>
+</div>
+
 **A 16-week, 64-hour university course taking software engineering students from zero to shipping AI applications.**
 
 PyTorch-first · Lecture 90 min + Lab 75 min + Quiz 15 min every week · English-taught with Chinese support
@@ -9,6 +13,9 @@ PyTorch-first · Lecture 90 min + Lab 75 min + Quiz 15 min every week · English
 ![MIT 6.S191](https://img.shields.io/badge/Bundled-MIT_6.S191_Slides-red)
 ![CS224n](https://img.shields.io/badge/One--click-CS224n_Downloader-8CBF3F)
 ![License](https://img.shields.io/badge/License-CC_BY--NC--SA_4.0-lightgrey)
+[![GitHub Stars](https://img.shields.io/github/stars/klausren/ai-application-development?style=social)](https://github.com/klausren/ai-application-development/stargazers)
+
+> ⭐ **New courseware lands every week during the semester.** If this repo saves you prep time, a **Star** keeps you in the loop and motivates the author — **Fork** it and make it your own course.
 
 > 📕 **Follow the author on Xiaohongshu (RED)**: search **`改卷子的任老师`** — Xiaohongshu ID: **`63808230340`**
 > 计算机老师的教学日常：AI 课程、课设救援、期末救命干货 / A CS teacher sharing AI course notes & student-project survival tips.
@@ -21,7 +28,10 @@ PyTorch-first · Lecture 90 min + Lab 75 min + Quiz 15 min every week · English
 - [Curriculum (16 Weeks)](#curriculum-16-weeks)
 - [What's in This Repo](#whats-in-this-repo)
 - [Courseware Map](#courseware-map)
+- [Roadmap](#roadmap)
 - [Quick Start](#quick-start)
+- [Community](#community)
+- [Cite This Repo](#cite-this-repo)
 - [Attribution & License](#attribution--license)
 - [中文说明](#中文说明)
 
@@ -150,6 +160,23 @@ Every week ships five assets, each in **English** and **Chinese** (or bilingual)
 
 ---
 
+## Roadmap
+
+This repo grows with the live semester — one week of courseware lands roughly every 7 days:
+
+- [x] **Weeks 1–2** — course intro, environment setup, data handling (all 5 asset types, EN + CN)
+- [x] Curated slide pack: MIT 6.S191 (bundled) + CS224n downloader
+- [ ] **Weeks 3–4** — ML foundations, model evaluation *(in progress — teaching it right now)*
+- [ ] **Weeks 5–8** — deep learning & computer vision module
+- [ ] **Weeks 9–12** — NLP & LLM module (Transformers, RAG)
+- [ ] **Weeks 13–16** — deployment, MLOps, capstone templates
+- [ ] Micro-lesson video series (animated, 1080p)
+- [ ] Assignments ×3 with autograding notebooks
+
+💡 **Want a specific week sooner?** [Open a discussion](https://github.com/klausren/ai-application-development/discussions) — priorities go to what teachers actually ask for.
+
+---
+
 ## Quick Start
 
 ```bash
@@ -164,6 +191,33 @@ bash scripts/download_cs224n.sh
 MIT 6.S191 slides are already in the repo — open `slides/mit-6s191/` and start reading.
 
 Instructors: see [Attribution & License](#attribution--license) before reusing any slide in your own classroom.
+
+---
+
+## Community
+
+- 💬 **Questions & ideas** → [Discussions](https://github.com/klausren/ai-application-development/discussions) — teaching questions welcome, especially "how do you teach X?"
+- 🐛 **Found a typo / broken link / notebook error** → [open an issue](https://github.com/klausren/ai-application-development/issues/new?template=bug_report.md)
+- 🧑‍🏫 **Used this in your own classroom?** → tell us in [Show & Tell](https://github.com/klausren/ai-application-development/discussions/categories/show-and-tell) — real classroom feedback shapes the next weeks
+- 🤝 **Want to contribute?** → read [CONTRIBUTING.md](CONTRIBUTING.md) (PRs for Week 3+ materials are especially welcome)
+
+---
+
+## Cite This Repo
+
+If you use these materials in teaching or research, please cite:
+
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.RELEASE-blue)](https://github.com/klausren/ai-application-development/releases)
+
+```bibtex
+@misc{ren2026aiappdev,
+  author       = {Ren, Zheng},
+  title        = {AI Application Development: A 16-Week Bilingual Course Hub},
+  year         = {2026},
+  howpublished = {\url{https://github.com/klausren/ai-application-development}},
+  note         = {Course hub: syllabus, lecture decks, labs, curated MIT 6.S191 \& CS224n slides}
+}
+```
 
 ---
 
@@ -201,4 +255,20 @@ Full details in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 > **小红书号：`63808230340`**（App 内搜索即可关注）｜账号：**改卷子的任老师**
 
-如果这套课程设计对你有帮助，欢迎 Star ⭐ 支持一下。
+### 支持 ⭐
+
+如果这套课程设计对你有帮助：
+
+1. **点个 Star** ⭐ —— 每周更新课件，Star 是最好的追更方式
+2. **Fork 一份** —— 把它改造成你自己的课程，改完欢迎回来分享
+3. **告诉同行** —— 转给身边也在备 AI 课的老师，比 star 更珍贵
+
+<div align="center">
+  <a href="https://star-history.com/#klausren/ai-application-development&Date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=klausren/ai-application-development&type=Date&theme=dark" />
+      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=klausren/ai-application-development&type=Date" />
+      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=klausren/ai-application-development&type=Date" width="480"/>
+    </picture>
+  </a>
+</div>

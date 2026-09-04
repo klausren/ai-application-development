@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+title: AI Application Development: A 16-Week Bilingual Course Hub
+message: >-
+  If you use this software or courseware, please cite it using the
+  metadata from this file.
+type: dataset
+authors:
+  - given-names: Zheng
+    family-names: Ren
+version: 0.1.0
+date-released: "2026-09-04"
+license: CC-BY-NC-SA-4.0
+repository-code: "https://github.com/klausren/ai-application-development"
+keywords:
+  - deep-learning
+  - pytorch
+  - course-materials
+  - computer-science-education
+  - bilingual-education
+abstract: >-
+  A 16-week, 64-hour bilingual (English/Chinese) university course hub
+  for AI application development: syllabus, original lecture decks and
+  lesson plans, student lab notebooks, and curated redistribution of
+  MIT 6.S191 slides with a one-click Stanford CS224n downloader.

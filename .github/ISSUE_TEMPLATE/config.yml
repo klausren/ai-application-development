@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Questions & teaching discussions
+    url: https://github.com/klausren/ai-application-development/discussions
+    about: "How do you teach X?" / "Can I use this in my classroom?" — ask here, not in issues
+  - name: 📕 Author on Xiaohongshu (RED)
+    url: https://www.xiaohongshu.com
+    about: Search ID 63808230340 (改卷子的任老师) for teaching notes and course updates in Chinese
