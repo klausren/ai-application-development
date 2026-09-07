@@ -81,7 +81,7 @@ One page, individually:
 
 Confirm: repo public · README complete · licence stated · all members contributed commits · LMS link submitted.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-16.ipynb` (or source files) run / start without errors
 - [ ] Every **Checkpoint** executed, with evidence (output, screenshot or log)
@@ -89,7 +89,7 @@ Confirm: repo public · README complete · licence stated · all members contrib
 - [ ] Written interpretation present — code alone is not a deliverable
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -101,7 +101,7 @@ Confirm: repo public · README complete · licence stated · all members contrib
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add .
@@ -109,13 +109,13 @@ git commit -m "feat: complete lab 16"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. What would break first if real users hit your system tomorrow?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周没有新知识，只有一件事：**把做了 8 周的东西讲清楚、守得住**。
 

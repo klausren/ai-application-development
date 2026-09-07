@@ -96,7 +96,7 @@ Pick 5 documents, compute pairwise cosine similarity on TF-IDF vectors, and find
 
 One paragraph: what information does a bag of words throw away? Give one concrete example from your own results.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-09.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed, with its output visible
@@ -104,7 +104,7 @@ One paragraph: what information does a bag of words throw away? Give one concret
 - [ ] Markdown cells contain your own interpretation, not just code
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -116,7 +116,7 @@ One paragraph: what information does a bag of words throw away? Give one concret
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-09.ipynb
@@ -124,13 +124,13 @@ git commit -m "feat: complete lab 09"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. Where did your model fail, and what does that failure tell you about the representation it uses?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周把文本变成数字，并让你亲眼看到这种变换丢掉了什么。
 

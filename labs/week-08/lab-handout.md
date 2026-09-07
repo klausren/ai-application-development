@@ -77,7 +77,7 @@ Build 3 slides: **①** the problem & data **②** the approach & metric **③**
 
 Each team gives written feedback to one other team using: *"One thing that worked, one thing I'd question, one suggestion."*
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-08.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed, with its output visible
@@ -85,7 +85,7 @@ Each team gives written feedback to one other team using: *"One thing that worke
 - [ ] Markdown cells contain your own interpretation, not just code
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -97,7 +97,7 @@ Each team gives written feedback to one other team using: *"One thing that worke
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-08.ipynb
@@ -105,13 +105,13 @@ git commit -m "feat: complete lab 08"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. Which knob (hyperparameter) had the biggest effect, and how do you know it wasn't luck?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周从「跟着做」切换到「自己做」，是期中项目的第一个检查点。
 

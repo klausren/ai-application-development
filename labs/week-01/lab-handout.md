@@ -101,7 +101,7 @@ git push -u origin main
 
 Export your environment (`conda env export > environment.yml` or `pip freeze > requirements.txt`), commit it, and fill in the exit ticket.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-01.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed and its output visible in the submitted notebook
@@ -109,7 +109,7 @@ Export your environment (`conda env export > environment.yml` or `pip freeze > r
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits** (`feat: ...` style messages)
 - [ ] Repository is public (or the TA is added as collaborator) so it can be graded
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -121,7 +121,7 @@ Export your environment (`conda env export > environment.yml` or `pip freeze > r
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-01.ipynb
@@ -131,13 +131,13 @@ git push origin main
 
 Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
 
-## 8. Exit Ticket · 课后反思 (answer in the last Markdown cell)
+## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
 
 1. What was the single most surprising thing you observed today?
 2. Which step would you do differently next time, and why?
 3. One question you still have (the instructor reads these and answers the best ones next week).
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周目标只有一个：把环境跑通，并亲手训练出人生第一个模型。
 

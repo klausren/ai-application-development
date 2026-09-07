@@ -90,7 +90,7 @@ Fine-tune on 2 000 IMDB samples, evaluate on 500.
 
 One paragraph on the cost side: what do you pay (money, latency, carbon, maintainability) for the accuracy you gained?
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-11.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed, with its output visible
@@ -98,7 +98,7 @@ One paragraph on the cost side: what do you pay (money, latency, carbon, maintai
 - [ ] Markdown cells contain your own interpretation, not just code
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -110,7 +110,7 @@ One paragraph on the cost side: what do you pay (money, latency, carbon, maintai
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-11.ipynb
@@ -118,13 +118,13 @@ git commit -m "feat: complete lab 11"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. Where did your model fail, and what does that failure tell you about the representation it uses?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周用上工业级预训练模型，但重点是**判断它值不值得用**。
 

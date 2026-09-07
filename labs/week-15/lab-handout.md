@@ -98,7 +98,7 @@ Compute PSI for 3 features before and after injection.
 
 Write the 5-line monitoring plan you would hand to an on-call engineer.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-15.ipynb` (or source files) run / start without errors
 - [ ] Every **Checkpoint** executed, with evidence (output, screenshot or log)
@@ -106,7 +106,7 @@ Write the 5-line monitoring plan you would hand to an on-call engineer.
 - [ ] Written interpretation present — code alone is not a deliverable
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -118,7 +118,7 @@ Write the 5-line monitoring plan you would hand to an on-call engineer.
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add .
@@ -126,13 +126,13 @@ git commit -m "feat: complete lab 15"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. What would break first if real users hit your system tomorrow?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周解决一个工程现实问题：**模型上线之后怎么办**。
 

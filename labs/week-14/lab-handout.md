@@ -106,7 +106,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 > **Checkpoint E** — Dockerfile committed. If you could not run it, write one sentence on what blocked you.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-14.ipynb` (or source files) run / start without errors
 - [ ] Every **Checkpoint** executed, with evidence (output, screenshot or log)
@@ -114,7 +114,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 - [ ] Written interpretation present — code alone is not a deliverable
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -127,7 +127,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add .
@@ -135,13 +135,13 @@ git commit -m "feat: complete lab 14"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. What would break first if real users hit your system tomorrow?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周把模型变成服务，是「能跑」和「能用」的分界线。
 

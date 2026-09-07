@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 # downloaded third-party slides (never committed)
 cs224n/*.pdf
+~$*
+*.bak

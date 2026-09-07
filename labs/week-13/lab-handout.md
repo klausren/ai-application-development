@@ -96,7 +96,7 @@ Add: a textbox, a "show reasoning trace" checkbox, and example prompts.
 
 List three things a malicious user could make your agent do, and the guardrail for each.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-13.ipynb` (or source files) run / start without errors
 - [ ] Every **Checkpoint** executed, with evidence (output, screenshot or log)
@@ -104,7 +104,7 @@ List three things a malicious user could make your agent do, and the guardrail f
 - [ ] Written interpretation present — code alone is not a deliverable
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -116,7 +116,7 @@ List three things a malicious user could make your agent do, and the guardrail f
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add .
@@ -124,13 +124,13 @@ git commit -m "feat: complete lab 13"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. What would break first if real users hit your system tomorrow?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周把 LLM 从「聊天」变成「会干活」，核心是**工具调用 + 循环控制**。
 

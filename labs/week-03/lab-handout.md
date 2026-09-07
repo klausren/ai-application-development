@@ -84,7 +84,7 @@ Repeat fit → predict → evaluate, but score with `mean_absolute_error` and `r
 
 In one Markdown cell, write the three lines you would reuse in *any* future ML project (they should be model-agnostic).
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-03.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed and its output visible in the submitted notebook
@@ -92,7 +92,7 @@ In one Markdown cell, write the three lines you would reuse in *any* future ML p
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits** (`feat: ...` style messages)
 - [ ] Repository is public (or the TA is added as collaborator) so it can be graded
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -104,7 +104,7 @@ In one Markdown cell, write the three lines you would reuse in *any* future ML p
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-03.ipynb
@@ -114,13 +114,13 @@ git push origin main
 
 Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
 
-## 8. Exit Ticket · 课后反思 (answer in the last Markdown cell)
+## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
 
 1. What was the single most surprising thing you observed today?
 2. Which step would you do differently next time, and why?
 3. One question you still have (the instructor reads these and answers the best ones next week).
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周把第 1 周的三步工作流升级成「工程可用版」。
 

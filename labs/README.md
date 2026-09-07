@@ -18,19 +18,18 @@ labs/
 
 ## Lab Handout Template 指导书统一结构
 
-Every `lab-handout.md` follows the same nine sections, so students always know where to look:
+Every `lab-handout.md` follows the same eight sections, so students always know where to look:
 
 | § | Section | Purpose |
 |:---:|---|---|
 | 1 | Learning Objectives | Know / Do split — what you'll understand vs what you'll be able to build |
 | 2 | Before You Start | Environment & reading checklist, plus offline fallbacks for downloads |
 | 3 | Lab Tasks | Parts A–E, each with a **time budget**, a **Checkpoint**, and a **Pitfall** |
-| 4 | — | (interpretation is written inside the task cells) |
-| 5 | Deliverables Checklist | the exact things being graded |
-| 6 | Grading Rubric | 100 points, pre-announced |
-| 7 | Submission | git commands; commit hash = timestamp |
-| 8 | Exit Ticket | 3 reflection questions answered in the notebook |
-| 9 | 中文摘要 | Chinese summary of the week's key ideas |
+| 4 | Deliverables Checklist | the exact things being graded |
+| 5 | Grading Rubric | 100 points, pre-announced |
+| 6 | Submission | git commands; commit hash = timestamp |
+| 7 | Exit Ticket | 3 reflection questions answered in the notebook |
+| 8 | 中文摘要 | Chinese summary of the week's key ideas |
 
 Design rules applied throughout:
 

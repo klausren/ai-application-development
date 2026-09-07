@@ -23,7 +23,7 @@ By the end of this lab you will be able to:
 
 ## 2. Before You Start · 课前准备
 
-- [ ] Download `titanic.csv` from the course drive into this folder
+- [ ] Get `titanic.csv` (891 rows) into this folder — from the course drive, **or** use the no-download fallback in Part B
 - [ ] Read Chapter 2.5–2.6 (EDA five-step method, missing values)
 - [ ] `import pandas as pd` works
 
@@ -44,7 +44,11 @@ sub[0, 0] = 999      # now check m again — surprise?
 ### Part B — Data health check (25 min)
 
 ```python
-df = pd.read_csv("titanic.csv")
+try:
+    df = pd.read_csv("titanic.csv")
+except FileNotFoundError:
+    import seaborn as sns                    # offline fallback: ships with seaborn
+    df = sns.load_dataset("titanic")         # same 891 rows, same age/fare/embarked columns
 df.info(); df.describe(); df.isna().sum()
 ```
 
@@ -74,9 +78,10 @@ Under each chart, write 1–2 sentences of interpretation, then list **≥3 test
 For each step, write a **one-line justification before** the code:
 
 ```python
+# flag FIRST, fill SECOND — otherwise the flag is all zeros
+df["age_missing"] = df["age"].isna().astype(int)   # keep the signal that it was missing
 med = df["age"].median()
 df["age"] = df["age"].fillna(med)
-df["age_missing"] = df["age"].isna().astype(int)   # keep the signal that it was missing
 df["embarked"] = df["embarked"].fillna(df["embarked"].mode()[0])
 q1, q3 = df["fare"].quantile([.25, .75])
 df["fare"] = df["fare"].clip(q1 - 1.5*(q3-q1), q3 + 1.5*(q3-q1))
@@ -92,7 +97,7 @@ Then re-run `info()` and `describe()` and confirm nothing is missing.
 
 Commit and push; fill in the exit ticket.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-02.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed and its output visible in the submitted notebook
@@ -100,7 +105,7 @@ Commit and push; fill in the exit ticket.
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits** (`feat: ...` style messages)
 - [ ] Repository is public (or the TA is added as collaborator) so it can be graded
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -112,7 +117,7 @@ Commit and push; fill in the exit ticket.
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-02.ipynb
@@ -122,13 +127,13 @@ git push origin main
 
 Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
 
-## 8. Exit Ticket · 课后反思 (answer in the last Markdown cell)
+## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
 
 1. What was the single most surprising thing you observed today?
 2. Which step would you do differently next time, and why?
 3. One question you still have (the instructor reads these and answers the best ones next week).
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周把「先理解数据，再碰模型」这件事做成肌肉记忆。
 

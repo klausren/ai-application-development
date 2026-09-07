@@ -96,7 +96,7 @@ Retrain the moons net three times, changing only the hidden activation: `Sigmoid
 
 Fill the summary table (activation → final loss → epochs to converge) and answer the exit ticket.
 
-## 5. Deliverables Checklist · 交付清单
+## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-05.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
 - [ ] Every **Checkpoint** cell executed, with its output visible
@@ -104,7 +104,7 @@ Fill the summary table (activation → final loss → epochs to converge) and an
 - [ ] Markdown cells contain your own interpretation, not just code
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
-## 6. Grading Rubric · 评分标准 (100 pts)
+## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
@@ -116,7 +116,7 @@ Fill the summary table (activation → final loss → epochs to converge) and an
 
 Late policy: −10% per day, max 3 days, then 0.
 
-## 7. Submission · 提交方式
+## 6. Submission · 提交方式
 
 ```bash
 git add lab-05.ipynb
@@ -124,13 +124,13 @@ git commit -m "feat: complete lab 05"
 git push origin main
 ```
 
-## 8. Exit Ticket · 课后反思
+## 7. Exit Ticket · 课后反思
 
 1. What surprised you most today?
 2. Which knob (hyperparameter) had the biggest effect, and how do you know it wasn't luck?
 3. One question you still have.
 
-## 9. 中文摘要
+## 8. 中文摘要
 
 本周从「手算神经网络」开始，目的是让你知道 PyTorch 在帮你做什么。
 
