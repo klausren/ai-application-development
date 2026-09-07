@@ -84,6 +84,21 @@ Repeat fit → predict → evaluate, but score with `mean_absolute_error` and `r
 
 In one Markdown cell, write the three lines you would reuse in *any* future ML project (they should be model-agnostic).
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M3 · Repository & data pipeline** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** You just learned `Pipeline` — `fit` → `predict` → `evaluate`. Build the project the same way: cleaning belongs **inside** the pipeline, never as hand-edited CSVs.
+
+**Push to your project repo before the lab ends:**
+
+- Create `src/data/` (load, clean, split) and a `src/train.py` that runs end-to-end and prints something.
+- Split in code, with the strategy justified: stratified / grouped / **time-based** — a random split on time series is wrong.
+- No absolute paths; pin `requirements.txt`.
+
+> **Checkpoint F** — `python src/train.py` runs on a teammate's machine without edits.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-03.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -103,6 +118,8 @@ In one Markdown cell, write the three lines you would reuse in *any* future ML p
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -130,3 +147,4 @@ Then paste your repo URL into the LMS submission box. **A commit hash counts as 
 3. **换任务不换思路**：分类用 accuracy/F1，回归用 MAE/R²，`fit → predict → evaluate` 骨架完全一样。
 
 最常犯的错：把 `score()` 当成万能——回归任务里它返回 R²，不是准确率。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

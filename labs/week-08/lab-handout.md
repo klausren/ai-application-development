@@ -77,6 +77,20 @@ Build 3 slides: **①** the problem & data **②** the approach & metric **③**
 
 Each team gives written feedback to one other team using: *"One thing that worked, one thing I'd question, one suggestion."*
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M8 · Midterm checkpoint ★** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** Error analysis. Your three-slide deck has one slide about failures — that slide is the point.
+
+**Push to your project repo before the lab ends:**
+
+- Working prototype + `DATA.md` v1 + a 3-slide deck.
+- 3-minute demo: (1) what it does, **live**; (2) where you are versus your W4 target; (3) the three failure cases that worry you most.
+
+> **Checkpoint F** — **it runs.** A demo that fails to run scores 0 for this checkpoint no matter how good the slides are. Behind? You find out now, with eight weeks left.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-08.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -96,6 +110,8 @@ Each team gives written feedback to one other team using: *"One thing that worke
 | Peer feedback & teamwork (Part E) | 10 | written feedback given, all members committed |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -123,3 +139,4 @@ git push origin main
 5. **错误分析比调参更有价值**：找出 10 个最差预测，逐个写「为什么错」，你大概率会发现真正的瓶颈（标注噪声/样本不足/任务本身有歧义）。
 
 展示要求：3 页幻灯片，第 3 页必须是你最大的失败——敢讲失败的团队分数更高。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

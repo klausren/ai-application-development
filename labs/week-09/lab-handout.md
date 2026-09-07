@@ -96,6 +96,20 @@ Pick 5 documents, compute pairwise cosine similarity on TF-IDF vectors, and find
 
 One paragraph: what information does a bag of words throw away? Give one concrete example from your own results.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M9 · Representation upgrade** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** BoW vs TF-IDF (or the CV equivalent: augmentation, input resolution, colour space). Change how the input is represented and measure it.
+
+**Push to your project repo before the lab ends:**
+
+- One change to input representation, with the delta recorded against W7.
+- Isolate it — do not change the model in the same commit.
+
+> **Checkpoint F** — a measurable delta, one change isolated.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-09.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -115,6 +129,8 @@ One paragraph: what information does a bag of words throw away? Give one concret
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -142,3 +158,4 @@ git push origin main
 5. **看权重最高的特征**：如果某个类别靠专有名词（NASA）取胜，说明模型在「背词」而不是「理解」。
 
 最后记住：词袋丢掉的是**词序和语义**。「狗咬人」和「人咬狗」的 BoW 向量完全相同——这正是下周词向量和第 11 周 Transformer 要解决的问题。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

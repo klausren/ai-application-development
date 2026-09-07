@@ -101,6 +101,21 @@ git push -u origin main
 
 Export your environment (`conda env export > environment.yml` or `pip freeze > requirements.txt`), commit it, and fill in the exit ticket.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M1 · Team & three topic ideas** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** This week you set up Python and git. Use them for real: one repo per team, all three of you pushing today.
+
+**Push to your project repo before the lab ends:**
+
+- Form a team of **three** and create the project repo (all three have write access).
+- Write `TEAM_AGREEMENT.md`: meeting time, channel, what happens if someone misses a milestone, how you settle technical disagreements.
+- Write **three** topic proposals in `proposals/01.md` … `03.md` using the [charter template](../../projects/capstone/project-charter-template.md): the problem + a user, where data comes from, a dumb baseline to beat, the biggest risk.
+
+> **Checkpoint F** — repo exists with a commit from each member, and three genuine proposals (not one idea written three times).
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-01.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -120,6 +135,8 @@ Export your environment (`conda env export > environment.yml` or `pip freeze > r
 | Exit ticket | 10 | all three questions answered in own words |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -147,3 +164,4 @@ Then paste your repo URL into the LMS submission box. **A commit hash counts as 
 3. **Git 提交就是时间戳**——截止以 commit 为准，不是以平台上传时间为准。
 
 常见翻车点：kernel 选错（表现为 import 报错但包其实装了）；GitHub 推送用密码被拒（要 PAT）；`.gitignore` 在第一次 commit 之后才加（等于没加）。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

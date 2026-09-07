@@ -106,6 +106,20 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 
 > **Checkpoint E** — Dockerfile committed. If you could not run it, write one sentence on what blocked you.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M14 · Deployment** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** FastAPI, error contracts, load testing — ship it the way you just practised.
+
+**Push to your project repo before the lab ends:**
+
+- `Dockerfile` + a deployed URL (or, with no server available, a built image).
+- Bad input returns a clean error, not a traceback. Latency measured and reported.
+
+> **Checkpoint F** — `docker build` succeeds and the service answers a request.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-14.ipynb` (or source files) run / start without errors
@@ -126,6 +140,8 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -153,3 +169,4 @@ git push origin main
 5. **压测要并发**：串行循环测的是客户端不是服务端。报告 p50/p95 延迟，找出崩溃的并发数。
 
 本周交付物是一个能被别人 curl 的服务——这是 capstone 的技术底座。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

@@ -99,6 +99,20 @@ context = (out * scores.unsqueeze(-1)).sum(1)
 
 One paragraph: when is a TF-IDF + logistic regression baseline (Week 9) the *better* engineering choice?
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M10 · Sequence / augmentation / features (by track)** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** RNN vs LSTM with padding (NLP), transforms & augmentation (CV), feature selection (tabular).
+
+**Push to your project repo before the lab ends:**
+
+- Comparison table for your track's method.
+- End it with an honest *"was it worth it?"* line.
+
+> **Checkpoint F** — the honest verdict. If LSTM lost to TF-IDF, **say so** — a real negative result earns points in team-rubric section C.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-10.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -118,6 +132,8 @@ One paragraph: when is a TF-IDF + logistic regression baseline (Week 9) the *bet
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -145,3 +161,4 @@ git push origin main
 5. **注意力池化一行代码就能提点**——不再只依赖最后一步隐状态，而是加权看重所有时间步。它就是下周 Transformer 的思想雏形。
 
 工程判断：数据少、要求快、要可解释时，第 9 周的 TF-IDF + 逻辑回归往往比 LSTM 更合适。**先跑简单基线，再决定是否上复杂模型。**
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

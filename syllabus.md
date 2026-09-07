@@ -35,19 +35,36 @@ Lab guides live in [`labs/week-XX/lab-handout.md`](labs/README.md).
 | 15 | MLOps & Production Practices | MLOps 与生产实践 | MLflow tracking, data tests, drift detection |
 | 16 | Capstone Project Presentations | Capstone 项目展示 | Demo day: 5-min demo, peer review, retrospective |
 
+Every week's lab ends with **Part F**, a milestone that pushes the capstone forward.
+See [`projects/capstone/milestones.md`](projects/capstone/milestones.md).
+
 ## Assessment 考核方式
 
 | Item | Format | Weight |
 |---|---|:---:|
 | Assignments ×3 | Individual | 30% |
-| Midterm Project | Team (2–3) | 15% |
-| Capstone Project | Team (2–3) | 35% |
+| Midterm checkpoint (W8) | Team (3) | 15% |
+| **Capstone Project** | **Team 70% + Individual 30%** | **35%** |
 | Lab Participation & Quizzes | Individual | 20% |
 
 - Assignment 1: ML Pipeline Project (released W4, due W6)
 - Assignment 2: Computer Vision Project (released W7, due W9)
 - Assignment 3: NLP Project (released W10, due W12)
-- Midterm Project presentations in Week 8; Capstone released W13, presented W16.
+- **Midterm checkpoint (W8)**: the capstone prototype — working demo + `DATA.md` + 3 slides
+- **Capstone (W1–W16)**: 3-person team, topic agreed with the instructor in W2
+
+### Capstone breakdown 大作业构成
+
+| | | |
+|---|---|---|
+| **Team portion** (70%) | the artefact: problem, data, modelling, evaluation, engineering, deployment, demo | [`rubric-team.md`](projects/capstone/rubric-team.md) |
+| **Individual portion** (30%) | contribution trace, individual defence, peer evaluation, retrospective | [`rubric-individual.md`](projects/capstone/rubric-individual.md) |
+
+The individual portion is what prevents one member from coasting: two people in the
+same team can differ by more than 10 final points. Team members share the team score
+before the peer coefficient is applied.
+
+Full brief: [`projects/capstone/README.md`](projects/capstone/README.md)
 
 ## Textbooks 教材
 

@@ -100,6 +100,21 @@ tensorboard --logdir runs
 
 Consolidate all runs into one DataFrame: `optimizer | regularization | lr schedule | test acc | notes`.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M6 · Ablation table** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** Optimizer × regularisation × learning rate — you swept them today. Do exactly that on your project and write it down.
+
+**Push to your project repo before the lab ends:**
+
+- `experiments/ablation.md`: a table with ≥ 3 rows.
+- **One change per row.** Three changes at once tells you nothing about which one worked.
+- Each row: change | metric | Δ vs previous | keep?
+
+> **Checkpoint F** — the table isolates single changes. This is the strongest evidence in the whole project that you know *why* your model works.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-06.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -119,6 +134,8 @@ Consolidate all runs into one DataFrame: `optimizer | regularization | lr schedu
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -146,3 +163,4 @@ git push origin main
 5. **scheduler.step() 按 epoch 调**（除非你明确要按 batch），放错位置等于没有调度。
 
 工具习惯：从本周起，所有实验都记到 TensorBoard，期末写项目报告时直接截图。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

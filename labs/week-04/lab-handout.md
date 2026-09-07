@@ -81,6 +81,20 @@ from sklearn.model_selection import learning_curve
 
 Write the four-metric summary you would paste into a project README, then fill in the exit ticket.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M4 · Baseline locked** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** Metrics and overfitting. Choose the metric you will live with all semester **now**, before results can tempt you.
+
+**Push to your project repo before the lab ends:**
+
+- Record in `experiments/results.md`: a **dumb** baseline (majority class / random / heuristic), a **simple** model, your chosen primary metric with a one-paragraph justification.
+- Commit a **numeric success target** — a promise made before you see the numbers.
+
+> **Checkpoint F** — the target number is in git. Changing it later requires a commit message explaining why.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-04.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -100,6 +114,8 @@ Write the four-metric summary you would paste into a project README, then fill i
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -128,3 +144,4 @@ Then paste your repo URL into the LMS submission box. **A commit hash counts as 
 4. **过拟合诊断看两条曲线的缝**：训练误差低、验证误差高且缝大 = 过拟合；两条都高 = 欠拟合。正则化（Ridge/Lasso）就是给模型复杂度上税。
 
 最大的坑：在测试集上调参。调完得到的「好分数」已经不客观了。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

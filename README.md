@@ -110,8 +110,11 @@ ai-application-development/
 ├── labs/                      ← student-facing lab materials
 │   ├── README.md              ← lab index + handout template explained
 │   └── week-XX/
-│       ├── lab-handout.md     ← 16 weekly lab guides (tasks, checkpoints, rubric)
+│       ├── lab-handout.md     ← 16 weekly lab guides (tasks A–F, checkpoints, rubric)
 │       ├── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
+├── projects/
+│   └── capstone/              ← 3-person final project (35%): brief, team & individual
+│       │                         rubrics, 16 weekly milestones, DATA/MODEL_CARD templates
 ├── slides/
 │   └── mit-6s191/             ← 6 official MIT 6.S191 lecture PDFs (bundled, MIT license)
 ├── cs224n/                    ← Stanford CS224n slot: fetched on demand (not bundled)
@@ -154,7 +157,32 @@ Every week's second half (课时 3–4, 75 min) is a hands-on lab. All **16** la
 | NLP & LLMs | 9–12 | text vectors · embeddings & LSTM · Transformers · prompting & RAG |
 | AI Engineering | 13–16 | agents · FastAPI deployment · MLOps · demo day |
 
-Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks.
+Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → Part F capstone milestone → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks.
+
+**Part F is how the labs connect to the final project** — every lab ends by pushing one milestone to the team's capstone repo, so the project is built continuously instead of in a Week-15 panic.
+
+### Capstone Project 大作业 — `projects/capstone/`
+
+A 3-person team project worth **35%** of the final grade, with the topic agreed between
+the team and the instructor in Week 2. Full brief and rubrics:
+
+| File | What's in it |
+|---|---|
+| [`README.md`](projects/capstone/README.md) | brief, topic-selection process, roles, AI-usage policy, deliverables |
+| [`rubric-team.md`](projects/capstone/rubric-team.md) | team rubric — 7 dimensions, 100 pts → 70% |
+| [`rubric-individual.md`](projects/capstone/rubric-individual.md) | individual rubric — contribution, defence, peer review, retrospective → 30% |
+| [`milestones.md`](projects/capstone/milestones.md) | all 16 weekly milestones |
+| `templates/` | `DATA.md`, `MODEL_CARD.md`, `RETROSPECTIVE.md` |
+
+```
+Capstone (35 pts) = Team score (100) × 0.70 × 35%
+                  + Individual score (100) × 0.30 × 35%
+```
+
+The individual portion is what stops one member from coasting — two people in the same
+team can differ by **more than 10 final points**. A peer coefficient (×0.6 – 1.0) is
+applied when teammates' ratings show a real contribution gap, and every member defends
+their own work one-on-one in Week 16.
 
 ### Class Handouts 课堂讲义 — `handouts/`
 

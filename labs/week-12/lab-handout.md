@@ -94,6 +94,20 @@ Deliberately ask something **not** in the documents and see what happens.
 
 Report two numbers separately: **hit-rate@k** (retrieval) and **answer accuracy** (generation). Which one is your bottleneck?
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M12 · RAG (LLM track) / Threshold & error analysis (all)** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** Prompt matrix and RAG evaluation, or precision–recall tradeoffs.
+
+**Push to your project repo before the lab ends:**
+
+- **LLM track:** retrieval pipeline + ≥ 5 evaluation questions with scored answers.
+- **All tracks:** threshold tuning with a chosen operating point, plus ≥ 5 concrete failure cases grouped into categories with a hypothesis for each.
+
+> **Checkpoint F** — the error analysis exists and is specific — it feeds team-rubric section D directly.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-12.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -113,6 +127,8 @@ Report two numbers separately: **hit-rate@k** (retrieval) and **answer accuracy*
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -140,3 +156,4 @@ git push origin main
 5. **幻觉是必然的**：上下文为空时，模型也必须输出点什么。**加一句「不在上下文里就说不知道」，然后重测**——这是本周最实用的一行提示词。
 
 评估要拆成两个数：**检索命中率**和**生成准确率**。哪个低，就知道该优化哪一段。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

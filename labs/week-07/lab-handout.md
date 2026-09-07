@@ -92,6 +92,20 @@ Fine-tune the head on CIFAR-10 (or a 2-class subset if CIFAR is unavailable). Th
 
 Three sentences: when would you *not* use a CNN for an image task?
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M7 · Main model v1** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** CNNs and transfer learning. Adapt something pretrained to your data rather than training from scratch — unless you can argue otherwise.
+
+**Push to your project repo before the lab ends:**
+
+- `src/models/` with your main architecture and an evaluation script.
+- Record the pretrained weights you used and their licence.
+
+> **Checkpoint F** — `python src/evaluate.py` prints the metric.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-07.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -111,6 +125,8 @@ Three sentences: when would you *not* use a CNN for an image task?
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -138,3 +154,4 @@ git push origin main
 5. **改完 `requires_grad` 要重建优化器**，否则优化器还拿着旧的参数列表。
 
 特征图可视化是理解 CNN 最直观的方式：第一层检测边缘纹理，越往后越抽象。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

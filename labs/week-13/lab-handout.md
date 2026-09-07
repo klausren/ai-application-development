@@ -96,6 +96,20 @@ Add: a textbox, a "show reasoning trace" checkbox, and example prompts.
 
 List three things a malicious user could make your agent do, and the guardrail for each.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M13 · Application layer** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** ReAct agents and Gradio. Make it usable by someone who has never seen your code.
+
+**Push to your project repo before the lab ends:**
+
+- `src/app/` — an API, a Gradio UI, or an agent with tools.
+- A stranger can use it without reading the source.
+
+> **Checkpoint F** — the instructor can use it unaided.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-13.ipynb` (or source files) run / start without errors
@@ -115,6 +129,8 @@ List three things a malicious user could make your agent do, and the guardrail f
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -142,3 +158,4 @@ git push origin main
 5. **安全第一**：`eval()` 模型输出等于远程代码执行，必须沙箱化或用 `ast.literal_eval`。UI 里不能把异常直接抛给用户。
 
 思考题的参考答案方向：提示词注入（外部内容伪装成指令）、越权调用工具（工具白名单）、无限循环（步数上限）。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

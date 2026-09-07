@@ -98,6 +98,20 @@ Compute PSI for 3 features before and after injection.
 
 Write the 5-line monitoring plan you would hand to an on-call engineer.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M15 · MLOps & documentation freeze** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** MLflow tracking, data tests, drift detection. After this week: **documentation freeze** — W16 is for rehearsing.
+
+**Push to your project repo before the lab ends:**
+
+- Experiment tracking, `tests/test_data.py`, `MODEL_CARD.md`, complete `README.md`, `AI_USE.md`.
+- Clone into a fresh directory and follow your own README.
+
+> **Checkpoint F** — it works for you in a clean folder. If it doesn't, it certainly won't work for the grader.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-15.ipynb` (or source files) run / start without errors
@@ -117,6 +131,8 @@ Write the 5-line monitoring plan you would hand to an on-call engineer.
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -144,3 +160,4 @@ git push origin main
 5. **PSI 监控输入分布**：<0.1 稳定，0.1-0.2 观察，>0.2 要处理。**单个特征漂移可能完全不影响准确率**——监控输入的意义就是在指标掉之前发现问题。
 
 交付物是一份能交给运维的 5 行监控计划——这是从「学生作业」到「生产系统」的最后一步。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

@@ -96,6 +96,20 @@ Retrain the moons net three times, changing only the hidden activation: `Sigmoid
 
 Fill the summary table (activation → final loss → epochs to converge) and answer the exit ticket.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M5 · First improvement** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** You went from a NumPy perceptron to PyTorch. If your project needs a neural network, it starts this week.
+
+**Push to your project repo before the lab ends:**
+
+- Model v1 that beats the W4 simple baseline — or a written explanation of why it doesn't.
+- Same split, same metric, same seed as the baseline. One number, honestly computed.
+
+> **Checkpoint F** — a number comparing v1 against the W4 baseline. *"It didn't beat it, here's what I'll try instead"* is an acceptable submission; silence is not.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-05.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -115,6 +129,8 @@ Fill the summary table (activation → final loss → epochs to converge) and an
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -142,3 +158,4 @@ git push origin main
 5. **ReLU 取代 sigmoid 的原因**：正区间梯度恒为 1，深层网络不会梯度消失。
 
 判断学习率对不对：loss 卡在 0.25 不动，先怀疑梯度和学习率，不要急着改结构。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

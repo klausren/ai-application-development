@@ -97,6 +97,21 @@ Then re-run `info()` and `describe()` and confirm nothing is missing.
 
 Commit and push; fill in the exit ticket.
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M2 · Topic approved & dataset verified** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** `info()` / `describe()` / `isna().sum()` — run them on **your** dataset today. Most projects die here; dying in Week 2 costs one week, dying in Week 9 costs the course.
+
+**Push to your project repo before the lab ends:**
+
+- Meet the instructor (15 min) and leave with **one approved topic and a written scope**.
+- Write `DATA.md` v0: source URL, licence, row count, target distribution, missing values, suspected flaws, and the split strategy you intend to use **and why that kind**.
+- Commit a script (or README section) proving the data loads.
+
+> **Checkpoint F** — ≥ 1 000 samples actually loadable. If you cannot get the data this week, change topic now — the instructor will help you fall back to another proposal.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-02.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -116,6 +131,8 @@ Commit and push; fill in the exit ticket.
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -144,3 +161,4 @@ Then paste your repo URL into the LMS submission box. **A commit hash counts as 
 4. **检测 ≠ 删除**：IQR 只是标出异常值，删还是截断要你根据业务判断。
 
 关键纪律：每一步清洗前先写一行「为什么这么做」。说不出理由的清洗，就是把噪声当成数据。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

@@ -90,6 +90,20 @@ Fine-tune on 2 000 IMDB samples, evaluate on 500.
 
 One paragraph on the cost side: what do you pay (money, latency, carbon, maintainability) for the accuracy you gained?
 
+### Part F — Capstone milestone (10 min) · 大作业里程碑
+
+> **M11 · Pretrained model (by track)** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** DistilBERT fine-tuning and cost comparison (NLP) or backbone sweeping (CV).
+
+**Push to your project repo before the lab ends:**
+
+- Fine-tuned model vs your W10 model.
+- **Report training time and inference cost next to the metric.**
+
+> **Checkpoint F** — cost is reported. A +2 point gain that costs 40× inference time is a decision, not a win.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-11.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
@@ -109,6 +123,8 @@ One paragraph on the cost side: what do you pay (money, latency, carbon, maintai
 | Exit ticket | 10 | three questions answered |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -136,3 +152,4 @@ git push origin main
 5. **必须做三方对比**：TF-IDF（快、可解释）vs LSTM vs DistilBERT（准、贵）。给一家没 GPU、只有 5000 条标注数据的创业公司，你推荐哪个？**能回答这个问题，才算真的学会了这一周。**
 
 成本意识：准确率的每一点提升，都要用钱（GPU）、延迟、碳排放和维护复杂度去换。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

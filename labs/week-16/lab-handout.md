@@ -81,12 +81,27 @@ One page, individually:
 
 Confirm: repo public · README complete · licence stated · all members contributed commits · LMS link submitted.
 
+### Part F — Capstone milestone (5 min) · 大作业里程碑
+
+> **M16 · Individual defence** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+
+**Apply this week's skill:** The team demo is over; now it's you alone, five minutes, no teammates in the room.
+
+**Push to your project repo before the lab ends:**
+
+- Prepare 2 minutes on **your own** part: what you built, the key decision, what you'd do differently.
+- Expect **two questions deliberately outside your role** — a Data Lead must be able to reason about the model, a Product Lead about the data.
+- Re-read every line committed under your name. *"The AI wrote that"* scores zero on that question and triggers an integrity review.
+- Commit `RETROSPECTIVE.md` — yours alone, naming one real mistake and its cost.
+
+> **Checkpoint F** — you can explain your own commits and state the project's main metric and biggest failure mode from memory.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+
 ## 4. Deliverables Checklist · 交付清单
 
-- [ ] `lab-16.ipynb` (or source files) run / start without errors
+- [ ] Final repo tagged `v1.0`, installs and runs from a clean clone
 - [ ] Every **Checkpoint** executed, with evidence (output, screenshot or log)
-- [ ] Results collected into **one summary table**
-- [ ] Written interpretation present — code alone is not a deliverable
+- [ ] `RETROSPECTIVE.md` committed **individually** by each member
 - [ ] Pushed to GitHub with **≥ 2 meaningful commits**
 
 ## 5. Grading Rubric · 评分标准 (100 pts)
@@ -100,6 +115,8 @@ Confirm: repo public · README complete · licence stated · all members contrib
 | Final submission (Part E) | 10 | repo public, README complete, contributions documented |
 
 Late policy: −10% per day, max 3 days, then 0.
+
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
 
 ## 6. Submission · 提交方式
 
@@ -127,3 +144,4 @@ git push origin main
 5. **队友互评要具体**：「做得好」没用，「你们用 macro-F1 而不是 accuracy 处理不平衡数据，这个选择很对」才有用。
 
 最后一周的 RETROSPECTIVE.md 我会认真看——你们说哪周最有用，明年我就调整哪周。
+- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)
