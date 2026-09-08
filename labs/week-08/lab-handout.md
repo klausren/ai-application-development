@@ -7,7 +7,7 @@
 | **Duration** | 75 min lab + 15 min quiz & wrap-up |
 | **Module** | 2 · Deep Learning & Computer Vision |
 | **Stack** | PyTorch, torchvision, Gradio (optional) |
-| **Dataset** | Team's own choice (approved by instructor) |
+| **Dataset** | Your own choice (approved by the instructor in W2) |
 | **Deliverables** | midterm repo: dataset + model + 3-slide deck + demo notebook |
 | **Weight** | Lab participation & quizzes = 20% of final grade (this lab is 1/16 of that) |
 
@@ -18,21 +18,21 @@ By the end of this lab you will be able to:
 - **Do** curate and document a dataset you chose yourself (and justify the choice)
 - **Do** train a baseline model and evaluate it with a metric appropriate to *your* problem
 - **Do** perform error analysis: look at the worst predictions and explain them
-- **Do** present a 3-slide lightning demo to another team and give written peer feedback
+- **Do** present a 3-slide lightning demo to another student and give written feedback
 
-> This is a **project lab**, not a code-along. Your team works; the instructor circulates. The deliverable is a *working demo*, not a perfect model.
+> This is a **project lab**, not a code-along. You work; the instructor circulates. The deliverable is a *working demo*, not a perfect model.
 
 ## 2. Before You Start · 课前准备
 
-- [ ] Team of 2–3 formed, dataset idea approved by the instructor **before** this lab
-- [ ] Every member has pushed at least one commit to the team repo
+- [ ] Topic and dataset approved by the instructor in W2; `PROJECT_PLAN.md` and `DATA.md` v0 committed
+- [ ] You have pushed at least one substantive commit to the project repo this week
 - [ ] Week 7 lab committed individually
 
 ## 3. Lab Tasks · 实验任务
 
 ### Part A — Dataset curation & documentation (15 min)
 
-Create `DATA.md` in your team repo answering:
+Update `DATA.md` in your project repo answering:
 
 1. Where did the data come from, and what is the licence / usage term?
 2. How many samples per class? (paste the table — do not describe it)
@@ -69,13 +69,13 @@ For each, write one clause: *"this failed because …"* (label noise? ambiguity?
 
 ### Part D — Lightning demo draft (10 min)
 
-Build 3 slides: **①** the problem & data **②** the approach & metric **③** the result & the biggest failure. Rehearse in 90 seconds per team.
+Build 3 slides: **①** the problem & data **②** the approach & metric **③** the result & the biggest failure. Rehearse in 90 seconds.
 
 > **Checkpoint D** — 3 slides committed to the repo (`slides.pdf` or `slides.md`).
 
 ### Part E — Peer feedback (5 min)
 
-Each team gives written feedback to one other team using: *"One thing that worked, one thing I'd question, one suggestion."*
+Give written feedback to one other student using: *"One thing that worked, one thing I'd question, one suggestion."*
 
 ### Part F — Capstone milestone (10 min) · 大作业里程碑
 
@@ -89,7 +89,7 @@ Each team gives written feedback to one other team using: *"One thing that worke
 - 3-minute demo: (1) what it does, **live**; (2) where you are versus your W4 target; (3) the three failure cases that worry you most.
 
 > **Checkpoint F** — **it runs.** A demo that fails to run scores 0 for this checkpoint no matter how good the slides are. Behind? You find out now, with eight weeks left.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -107,11 +107,11 @@ Each team gives written feedback to one other team using: *"One thing that worke
 | Baseline + metric (Part B) | 30 | model trained, metric appropriate to problem, reproduce command included |
 | Error analysis (Part C) | 25 | 10 failures displayed and diagnosed, a cross-cutting pattern identified |
 | 3-slide demo (Part D) | 10 | slides committed, honest failure slide included |
-| Peer feedback & teamwork (Part E) | 10 | written feedback given, all members committed |
+| Peer-style feedback (Part E) | 10 | written feedback given to one other student; substantive commit |
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 
@@ -138,5 +138,5 @@ git push origin main
 4. **测试集只碰一次**：调完模型再回头测，那个分数就不客观了。要在报告里如实说明你测了几次。
 5. **错误分析比调参更有价值**：找出 10 个最差预测，逐个写「为什么错」，你大概率会发现真正的瓶颈（标注噪声/样本不足/任务本身有歧义）。
 
-展示要求：3 页幻灯片，第 3 页必须是你最大的失败——敢讲失败的团队分数更高。
+展示要求：3 页幻灯片，第 3 页必须是你最大的失败——敢讲失败的项目分数更高。
 - [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

@@ -103,18 +103,19 @@ Export your environment (`conda env export > environment.yml` or `pip freeze > r
 
 ### Part F — Capstone milestone (10 min) · 大作业里程碑
 
-> **M1 · Team & three topic ideas** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+> **M1 · Three topic ideas & project plan** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
 
-**Apply this week's skill:** This week you set up Python and git. Use them for real: one repo per team, all three of you pushing today.
+**Apply this week's skill:** This week you set up Python and git. Use them for real: one repo per student, with a first commit today.
 
 **Push to your project repo before the lab ends:**
 
-- Form a team of **three** and create the project repo (all three have write access).
-- Write `TEAM_AGREEMENT.md`: meeting time, channel, what happens if someone misses a milestone, how you settle technical disagreements.
+- Create the project repo (public, your GitHub handle as the sole owner and contributor).
+- Write `PROJECT_PLAN.md` using the [plan template](../../projects/capstone/project-plan-template.md): your weekly working slot, scope, MVP vs stretch, three risks, and a cut list.
 - Write **three** topic proposals in `proposals/01.md` … `03.md` using the [charter template](../../projects/capstone/project-charter-template.md): the problem + a user, where data comes from, a dumb baseline to beat, the biggest risk.
+- Add a stub `DEVLOG.md` from the [DEVLOG template](../../projects/capstone/templates/DEVLOG.md) — one entry per week from W1 onward. Start the habit while there is almost nothing to write.
 
-> **Checkpoint F** — repo exists with a commit from each member, and three genuine proposals (not one idea written three times).
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Checkpoint F** — repo exists with at least one commit, three genuine proposals (not one idea written three times), and a `PROJECT_PLAN.md` with a realistic weekly slot and a cut list.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -136,7 +137,7 @@ Export your environment (`conda env export > environment.yml` or `pip freeze > r
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

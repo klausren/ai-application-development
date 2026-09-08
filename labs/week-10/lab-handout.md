@@ -110,8 +110,8 @@ One paragraph: when is a TF-IDF + logistic regression baseline (Week 9) the *bet
 - Comparison table for your track's method.
 - End it with an honest *"was it worth it?"* line.
 
-> **Checkpoint F** — the honest verdict. If LSTM lost to TF-IDF, **say so** — a real negative result earns points in team-rubric section C.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Checkpoint F** — the honest verdict. If LSTM lost to TF-IDF, **say so** — a real negative result earns points in project rubric section C.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -133,7 +133,7 @@ One paragraph: when is a TF-IDF + logistic regression baseline (Week 9) the *bet
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

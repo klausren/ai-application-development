@@ -105,8 +105,8 @@ Report two numbers separately: **hit-rate@k** (retrieval) and **answer accuracy*
 - **LLM track:** retrieval pipeline + ≥ 5 evaluation questions with scored answers.
 - **All tracks:** threshold tuning with a chosen operating point, plus ≥ 5 concrete failure cases grouped into categories with a hypothesis for each.
 
-> **Checkpoint F** — the error analysis exists and is specific — it feeds team-rubric section D directly.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Checkpoint F** — the error analysis exists and is specific — it feeds project rubric section D directly.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -128,7 +128,7 @@ Report two numbers separately: **hit-rate@k** (retrieval) and **answer accuracy*
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

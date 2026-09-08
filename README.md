@@ -46,7 +46,7 @@ This repository hosts the teaching materials for **AI Application Development**,
 - **4 modules in 16 weeks** — ML foundations → deep learning & computer vision → NLP & LLMs → AI application engineering
 - **Every week is a 180-minute integrated session**: 90 min lecture + 75 min hands-on lab + 15 min quiz & wrap-up
 - **PyTorch-first stack**: `torch` → `scikit-learn` → `transformers` (Hugging Face) → `FastAPI` deployment
-- **Assessment built on building**: 3 assignments, a team midterm project, and a team capstone (35%) — no closed-book final exam grind
+- **Assessment built on building**: 3 assignments, a midterm checkpoint, and an individual capstone (35%) — no closed-book final exam grind
 
 | | |
 |---|---|
@@ -92,7 +92,7 @@ This repository hosts the teaching materials for **AI Application Development**,
 | 13 | Generative AI Applications & AI Agents — generative models in practice, agents, tool use |
 | 14 | Model Deployment & API Engineering — FastAPI serving, model serialization, containerization |
 | 15 | MLOps & Production Practices — experiment tracking, monitoring, CI for ML, cost & latency |
-| 16 | Capstone Project Presentations — teams demo end-to-end AI products |
+| 16 | Capstone Project Presentations — each student demos an end-to-end AI product |
 
 ---
 
@@ -113,8 +113,8 @@ ai-application-development/
 │       ├── lab-handout.md     ← 16 weekly lab guides (tasks A–F, checkpoints, rubric)
 │       ├── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
 ├── projects/
-│   └── capstone/              ← 3-person final project (35%): brief, team & individual
-│       │                         rubrics, 16 weekly milestones, DATA/MODEL_CARD templates
+│   └── capstone/              ← individual final project (35%): brief, project &
+│       │                         defence rubrics, 16 weekly milestones, DATA/MODEL_CARD/DEVLOG templates
 ├── slides/
 │   └── mit-6s191/             ← 6 official MIT 6.S191 lecture PDFs (bundled, MIT license)
 ├── cs224n/                    ← Stanford CS224n slot: fetched on demand (not bundled)
@@ -168,30 +168,29 @@ Every week's second half (课时 3–4, 75 min) is a hands-on lab. All **16** la
 
 Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → Part F capstone milestone → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks.
 
-**Part F is how the labs connect to the final project** — every lab ends by pushing one milestone to the team's capstone repo, so the project is built continuously instead of in a Week-15 panic.
+**Part F is how the labs connect to the final project** — every lab ends by pushing one milestone (and a `DEVLOG.md` entry) to your capstone repo, so the project is built continuously instead of in a Week-15 panic.
 
 ### Capstone Project 大作业 — `projects/capstone/`
 
-A 3-person team project worth **35%** of the final grade, with the topic agreed between
-the team and the instructor in Week 2. Full brief and rubrics:
+An individual project worth **35%** of the final grade, with the topic agreed with
+the instructor in Week 2 and the scope negotiated as MVP + stretch list. Full brief and rubrics:
 
 | File | What's in it |
 |---|---|
 | [`README.md`](projects/capstone/README.md) | brief, topic-selection process, roles, AI-usage policy, deliverables |
-| [`rubric-team.md`](projects/capstone/rubric-team.md) | team rubric — 7 dimensions, 100 pts → 70% |
-| [`rubric-individual.md`](projects/capstone/rubric-individual.md) | individual rubric — contribution, defence, peer review, retrospective → 30% |
+| [`rubric-project.md`](projects/capstone/rubric-project.md) | project rubric — 7 dimensions, 100 pts → 70% (the artefact) |
+| [`rubric-defence.md`](projects/capstone/rubric-defence.md) | defence & process rubric — defence, git trace + DEVLOG, retrospective, AI use → 30% |
 | [`milestones.md`](projects/capstone/milestones.md) | all 16 weekly milestones |
 | `templates/` | `DATA.md`, `MODEL_CARD.md`, `RETROSPECTIVE.md` |
 
 ```
-Capstone (35 pts) = Team score (100) × 0.70 × 35%
-                  + Individual score (100) × 0.30 × 35%
+Capstone (35 pts) = Project score (100) × 0.70 × 35%
+                  + Defence & process score (100) × 0.30 × 35%
 ```
 
-The individual portion is what stops one member from coasting — two people in the same
-team can differ by **more than 10 final points**. A peer coefficient (×0.6 – 1.0) is
-applied when teammates' ratings show a real contribution gap, and every member defends
-their own work one-on-one in Week 16.
+There is no peer-evaluation coefficient — the defence/process portion measures the
+**git history and weekly `DEVLOG.md`** directly, and every student defends their
+own work one-on-one in Week 16.
 
 ### Class Handouts 课堂讲义 — `handouts/`
 

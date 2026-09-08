@@ -1,16 +1,18 @@
 # Project Charter · 选题提案模板
 
-> Submit **three** of these in Week 1 (`proposals/01.md`, `02.md`, `03.md`).
+> Submit **three** of these in Week 1 (`proposals/01.md`, `02.md`, `03.md`). One per
+> candidate topic.
 > Each one is at most one page. If you cannot fill a box, that is the answer — the
 > proposal is not ready.
 >
-> W1 提交三份（三个文件）。每份最多一页。**填不出来的格子本身就是答案**：说明这个选题没想清楚。
+> W1 提交三份（三个文件，对应三个候选选题），每份最多一页。**填不出来的格子本身就是答案**：
+> 说明这个选题没想清楚。
 
 ---
 
 ## Proposal 02 · 提案二
 
-**Team name:**
+**Your name / repo name:**
 
 ### 1. The problem · 问题
 

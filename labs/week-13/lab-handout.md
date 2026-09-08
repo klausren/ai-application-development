@@ -108,7 +108,7 @@ List three things a malicious user could make your agent do, and the guardrail f
 - A stranger can use it without reading the source.
 
 > **Checkpoint F** — the instructor can use it unaided.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -130,7 +130,7 @@ List three things a malicious user could make your agent do, and the guardrail f
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

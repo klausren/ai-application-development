@@ -25,7 +25,7 @@ By the end of this lab you will be able to:
 
 - [ ] Repository is public and `README.md` explains how to run it in ≤5 commands
 - [ ] Demo works on the machine you will present from (test it, do not assume)
-- [ ] Every team member can explain the part they did not write
+- [ ] You can explain every line you committed (the whole system, not just your strongest part)
 
 ## 3. Lab Tasks · 实验任务
 
@@ -41,7 +41,7 @@ Run through this list; fix anything that fails **before** you present:
 > **Checkpoint A** — all four answered in writing, with the fixes you made.
 > **Pitfall**: "it worked yesterday" is not a demo plan. Rehearse on the actual machine, with the actual projector and network.
 
-### Part B — The 5-minute demo (30 min each team; you present + watch others)
+### Part B — The 5-minute demo (each student presents; everyone watches)
 
 Suggested structure:
 
@@ -54,12 +54,12 @@ Suggested structure:
 | 4:00–4:45 | **The biggest failure** and what you learned from it |
 | 4:45–5:00 | What you would build next |
 
-> **Checkpoint B** — you presented. Slides/demo files committed to the team repo.
-> **Grading note**: teams that honestly present a failure consistently score higher than teams that claim everything worked.
+> **Checkpoint B** — you presented. Slides/demo files committed to the project repo.
+> **Grading note**: students who honestly present a failure consistently score higher than those who claim everything worked.
 
 ### Part C — Peer review (10 min)
 
-For two other teams, write:
+For two other students, write:
 
 1. **One thing that genuinely worked** (be specific — what exactly?)
 2. **One thing you would question** (a metric choice? a data source? a claim?)
@@ -75,7 +75,7 @@ One page, individually:
 2. What would you do differently if you restarted today with what you now know?
 3. Which week's material turned out to be most useful in practice? (Be honest — the instructor uses this to tune next year's syllabus.)
 
-> **Checkpoint D** — `RETROSPECTIVE.md` committed to your personal fork of the team repo.
+> **Checkpoint D** — `RETROSPECTIVE.md` committed to your project repo.
 
 ### Part E — Final submission (5 min)
 
@@ -85,17 +85,17 @@ Confirm: repo public · README complete · licence stated · all members contrib
 
 > **M16 · Individual defence** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
 
-**Apply this week's skill:** The team demo is over; now it's you alone, five minutes, no teammates in the room.
+**Apply this week's skill:** The 5-min demo is over; now it's you, eight minutes, one-on-one with the instructor, no one else in the room.
 
 **Push to your project repo before the lab ends:**
 
 - Prepare 2 minutes on **your own** part: what you built, the key decision, what you'd do differently.
-- Expect **two questions deliberately outside your role** — a Data Lead must be able to reason about the model, a Product Lead about the data.
+- Expect **two questions deliberately outside your strongest area (data, model, interface, or engineering)** — a Data Lead must be able to reason about the model, a Product Lead about the data.
 - Re-read every line committed under your name. *"The AI wrote that"* scores zero on that question and triggers an integrity review.
 - Commit `RETROSPECTIVE.md` — yours alone, naming one real mistake and its cost.
 
 > **Checkpoint F** — you can explain your own commits and state the project's main metric and biggest failure mode from memory.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -116,7 +116,7 @@ Confirm: repo public · README complete · licence stated · all members contrib
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 
@@ -140,8 +140,8 @@ git push origin main
 1. **README 要在新目录里验证一遍**——`git clone` 到空文件夹，按自己的 README 走一遍，跑不通就现在改。
 2. **必须现场演示**，不能只放截图。断网怎么办、启动超过 60 秒怎么办，提前想好退路。
 3. **结构建议**：问题 → 现场演示 → 技术链路 → 指标 vs 基线 → **最大的失败**（必答）→ 下一步。
-4. **敢讲失败的团队分数更高**：能说清「哪里不行、为什么」说明你真的理解了系统。
-5. **队友互评要具体**：「做得好」没用，「你们用 macro-F1 而不是 accuracy 处理不平衡数据，这个选择很对」才有用。
+4. **敢讲失败的项目分数更高**：能说清「哪里不行、为什么」说明你真的理解了系统。
+5. **要举出具体的例子**：「做得好」没用；无论写给谁，「比如「你们用 macro-F1 而不是 accuracy 处理不平衡数据，这个选择很对」」才有用。
 
 最后一周的 RETROSPECTIVE.md 我会认真看——你们说哪周最有用，明年我就调整哪周。
 - [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)

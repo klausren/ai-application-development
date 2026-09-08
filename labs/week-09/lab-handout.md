@@ -108,7 +108,7 @@ One paragraph: what information does a bag of words throw away? Give one concret
 - Isolate it — do not change the model in the same commit.
 
 > **Checkpoint F** — a measurable delta, one change isolated.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -130,7 +130,7 @@ One paragraph: what information does a bag of words throw away? Give one concret
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

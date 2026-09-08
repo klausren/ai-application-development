@@ -110,7 +110,7 @@ Commit and push; fill in the exit ticket.
 - Commit a script (or README section) proving the data loads.
 
 > **Checkpoint F** — ≥ 1 000 samples actually loadable. If you cannot get the data this week, change topic now — the instructor will help you fall back to another proposal.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -132,7 +132,7 @@ Commit and push; fill in the exit ticket.
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

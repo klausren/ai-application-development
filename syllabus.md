@@ -43,26 +43,27 @@ See [`projects/capstone/milestones.md`](projects/capstone/milestones.md).
 | Item | Format | Weight |
 |---|---|:---:|
 | Assignments ×3 | Individual | 30% |
-| Midterm checkpoint (W8) | Team (3) | 15% |
-| **Capstone Project** | **Team 70% + Individual 30%** | **35%** |
+| Midterm checkpoint (W8) | Individual | 15% |
+| **Capstone Project** | **Project 70% + Defence & process 30%** | **35%** |
 | Lab Participation & Quizzes | Individual | 20% |
 
 - Assignment 1: ML Pipeline Project (released W4, due W6)
 - Assignment 2: Computer Vision Project (released W7, due W9)
 - Assignment 3: NLP Project (released W10, due W12)
 - **Midterm checkpoint (W8)**: the capstone prototype — working demo + `DATA.md` + 3 slides
-- **Capstone (W1–W16)**: 3-person team, topic agreed with the instructor in W2
+- **Capstone (W1–W16)**: **individual project**, topic agreed with the instructor in W2; scope negotiated as MVP + stretch list
 
 ### Capstone breakdown 大作业构成
 
 | | | |
 |---|---|---|
-| **Team portion** (70%) | the artefact: problem, data, modelling, evaluation, engineering, deployment, demo | [`rubric-team.md`](projects/capstone/rubric-team.md) |
-| **Individual portion** (30%) | contribution trace, individual defence, peer evaluation, retrospective | [`rubric-individual.md`](projects/capstone/rubric-individual.md) |
+| **Project portion** (70%) | the artefact: problem, data, modelling, evaluation, engineering, interface, demo | [`rubric-project.md`](projects/capstone/rubric-project.md) |
+| **Defence & process** (30%) | W16 defence, git trace + `DEVLOG.md`, retrospective, AI-use disclosure | [`rubric-defence.md`](projects/capstone/rubric-defence.md) |
 
-The individual portion is what prevents one member from coasting: two people in the
-same team can differ by more than 10 final points. Team members share the team score
-before the peer coefficient is applied.
+Because the project is individual, there is no peer-evaluation coefficient. The
+defence/process portion measures the **git history and weekly `DEVLOG.md`**
+directly — the same evidence that peer review used, but read against one person
+instead of three.
 
 Full brief: [`projects/capstone/README.md`](projects/capstone/README.md)
 

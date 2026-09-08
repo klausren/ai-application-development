@@ -1,38 +1,37 @@
 # RETROSPECTIVE.md · 个人复盘模板
 
-> **Written by you alone.** Do not copy the team retrospective, and do not generate it
-> with an AI — it is graded on specificity, and generic text is easy to spot
-> (individual rubric §4, 15 pts).
+> **Written by you alone.** Do not generate it with an AI, and do not back-fill it in
+> W16 — it is graded on specificity, and both generic text and last-minute writing are
+> easy to spot (individual rubric §3, 15 pts).
 >
-> **由你独立完成。** 不要复制团队复盘，也不要用 AI 生成 —— 这一节按「具体程度」给分，
-> 空话一眼就能看出来。
+> **由你独立完成。** 不要用 AI 生成，也不要在 W16 才回头补——本节按「具体程度」给分，
+> 空话和临时补写都一眼能看出来。
 
 ---
 
-**Name:** ______________  **Role:** ______________  **Date:** ______________
+**Name:** ______________  **Date:** ______________
 
 ## 1. What I owned · 我负责的部分
 
 | | |
 |---|---|
-| **My role** | |
-| **What I actually delivered** | *(name the files/PRs — I can check)* |
+| **What I actually delivered** | *(name the files/PRs — they can be checked)* |
 | **How it turned out** | ☐ better than planned ☐ as planned ☐ worse — explain |
-| **The one decision in my part I'm proud of** | |
+| **The one decision in the project I'm proud of** | |
 | **The one decision I'd reverse** | |
 
 ## 2. The biggest mistake · 最大的失误
 
-> Name **one** concrete mistake and what it cost. Not "we should have communicated
-> better" — something that happened, with a price tag.
+> Name **one** concrete mistake and what it cost. Not "I should have started earlier" —
+> something that happened, with a price tag.
 
 | | |
 |---|---|
 | **What happened** | |
 | **When** | *(week __)* |
-| **What it cost** | *(hours? a redo? a wrong number?)* |
+| **What it cost** | *(hours? a redo? a wrong number? a missed milestone?)* |
 | **Why it happened** | |
-| **What I now do differently** | *(a rule I actually follow)* |
+| **What I now do differently** | *(a rule I actually follow, not "be more disciplined")* |
 
 ## 3. Restarting at Week 1 · 如果重来
 
@@ -42,14 +41,18 @@
 2. **I would cut:** ______________ *(what turned out not to matter)*
 3. **I would do first:** ______________ *(what should have come before everything else)*
 
-## 4. What I learned from each teammate · 我从队友身上学到的
+## 4. What this project taught me about working alone · 这门课教会我的事
 
-> One **specific** thing per person. "They were helpful" scores zero.
-> "Mia showed me grouped splitting — I had never used it, and it changed how I split
-> every dataset since" scores full marks.
+> Solo projects fail in different ways than team ones. What did you learn about *you*,
+> specifically — your habits, your blind spots, your scope instincts?
 
-- **From ______________:** *(the specific thing, and why it stuck)*
-- **From ______________:**
+| | |
+|---|---|
+| **My biggest personal failure mode on this project was** | |
+| **The one habit I want to keep from the last 16 weeks** | |
+| **The one habit I want to leave behind** | |
+| **The single best moment of the semester was** | |
+| **The single worst moment, and what it taught me** | |
 
 ## 5. Honest self-assessment · 诚实的自评
 
@@ -57,8 +60,8 @@
 |---|---|
 | **Weeks in which I made a substantive contribution** | __ / 16 |
 | **The week I contributed least, and why** | |
-| **If my teammates rate my contribution low, they would probably say:** | |
-| **My response to that would be:** | |
+| **If a reviewer looks at my git history, they would say** | |
+| **My response to that would be** | |
 
 ## 6. For the instructor · 给老师
 

@@ -110,7 +110,7 @@ Write the 5-line monitoring plan you would hand to an on-call engineer.
 - Clone into a fresh directory and follow your own README.
 
 > **Checkpoint F** — it works for you in a clean folder. If it doesn't, it certainly won't work for the grader.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 team points, each time, up to −20.
+> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
 
@@ -132,7 +132,7 @@ Write the 5-line monitoring plan you would hand to an on-call engineer.
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 team points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 
