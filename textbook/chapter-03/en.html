@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 03 · Module 1 · Week 3</div>
+  <h1>Machine Learning Foundations</h1>
+  <p class="overview">Machine learning infers rules from examples instead of asking you to write them. This chapter builds the mental model that every later model reuses: what is being learned, how error is measured, how parameters are updated, and — most importantly — how to tell whether a score can be trusted. You will finish by turning the Week 1 three-step workflow into an engineering-grade scikit-learn <code class="inline">Pipeline</code>.</p>
+</div>
+
+<!-- ========== 3.1 ========== -->
+<div class="section">
+  <h2>3.1 What Machine Learning Actually Means</h2>
+  <p>Chapter 1 introduced the six-phase project lifecycle; Chapter 2 covered the data that fuels it. Now we arrive at the phase everyone thinks of first — and the one that matters least if the earlier phases failed: the model.</p>
+
+  <h3>3.1.1 The Definition</h3>
+  <p>Tom Mitchell's 1997 definition is still the cleanest one sentence in the field:</p>
+  <div class="callout key">
+    <span class="label">Definition</span>
+    A computer program is said to <strong>learn</strong> from experience <em>E</em> with respect to some task <em>T</em> and performance measure <em>P</em>, if its performance on <em>T</em>, as measured by <em>P</em>, improves with experience <em>E</em>.
+  </div>
+  <p>Three slots, always. Predicting house prices: <em>T</em> = predict the sale price, <em>P</em> = mean absolute error, <em>E</em> = 10,000 historical sales. If you cannot fill in all three, you do not yet have a machine learning problem — you have a vague wish.</p>
+
+  <h3>3.1.2 Traditional Programming vs Machine Learning</h3>
+  <table>
+    <tr><th></th><th>Traditional Programming</th><th>Machine Learning</th></tr>
+    <tr><td>Input</td><td>Rules + data</td><td>Data + answers</td></tr>
+    <tr><td>Output</td><td>Answers</td><td>Rules (a model)</td></tr>
+    <tr><td>Who writes the logic</td><td>The programmer</td><td>The learning algorithm</td></tr>
+    <tr><td>Fails when</td><td>Rules become too complex to write</td><td>Data is scarce, unrepresentative, or mislabelled</td></tr>
+  </table>
+  <p>Spam filtering is the classic illustration. Hand-written rules ("contains <em>free</em>", "sender is unknown") work until someone named Cash emails you about a contract. At that point you stop writing rules and start collecting examples.</p>
+
+  <h3>3.1.3 Three Paradigms</h3>
+  <div class="terms">
+    <div class="term"><h4>Supervised Learning</h4><p>Data arrives as (x, y) pairs with ground-truth answers. Tasks: classification (discrete label) and regression (continuous value). Examples: logistic regression, random forests, SVM. <strong>Weeks 1–6 focus here.</strong></p></div>
+    <div class="term"><h4>Unsupervised Learning</h4><p>Only x, no labels. The algorithm finds structure: clusters, low-dimensional structure, anomalies. Examples: KMeans, PCA, DBSCAN.</p></div>
+    <div class="term"><h4>Reinforcement Learning</h4><p>An agent acts in an environment and receives rewards. Data arrives as (state, action, reward) sequences. Examples: Q-learning, PPO, DQN. Used for control, games, and decision policies.</p></div>
+  </div>
+
+  <h3>3.1.4 Vocabulary You Will See Everywhere</h3>
+  <div class="terms">
+    <div class="term"><h4>Sample</h4><p>One row of the dataset — one house, one image, one customer.</p></div>
+    <div class="term"><h4>Feature (x)</h4><p>An attribute column describing the sample: area, pixel intensity, age. Collectively the feature matrix <code class="inline">X</code>.</p></div>
+    <div class="term"><h4>Label (y)</h4><p>The thing you want to predict. Present in supervised learning, absent in unsupervised.</p></div>
+    <div class="term"><h4>Training Set</h4><p>The portion of data the model is allowed to learn from.</p></div>
+    <div class="term"><h4>Inference</h4><p>Running a trained model on new samples to obtain predictions.</p></div>
+    <div class="term"><h4>Generalization</h4><p>Performing well on data the model has never seen — the only performance that counts.</p></div>
+  </div>
+</div>
+
+<!-- ========== 3.2 ========== -->
+<div class="section">
+  <h2>3.2 Models, Parameters and Capacity</h2>
+
+  <h3>3.2.1 A Model Is a Family of Functions</h3>
+  <p>Choosing a model means choosing a <strong>hypothesis space</strong> — the set of functions the model is able to represent. Every straight line <code class="inline">y = wx + b</code> is one such family. Training does not create a new family; it selects one member of it by picking specific values of <code class="inline">w</code> and <code class="inline">b</code>.</p>
+  <p>This framing explains most modelling mistakes. If the true relationship is curved and your hypothesis space contains only straight lines, no amount of training data will help — the answer is not in the space you chose.</p>
+
+  <h3>3.2.2 The Linear Model</h3>
+  <pre><span class="cm"># one feature</span>
+y_hat = w * x + b
+
+<span class="cm"># n features — the same idea, written once</span>
+y_hat = w1*x1 + w2*x2 + ... + wn*xn + b
+       = w · x + b</pre>
+  <p><code class="inline">w</code> (weight) says how much each feature matters; <code class="inline">b</code> (bias) shifts the whole prediction up or down. Both start at random values and are corrected during training.</p>
+
+  <h3>3.2.3 Capacity: Three Regimes</h3>
+  <div class="terms">
+    <div class="term"><h4>Too Little Capacity → Underfitting</h4><p>The model cannot even fit the training data. Symptom: train and validation scores are both poor. Fix: add features, use a more flexible model, weaken regularisation.</p></div>
+    <div class="term"><h4>Adequate Capacity → Healthy Fit</h4><p>Train and validation scores are both good and close to each other. This is the target.</p></div>
+    <div class="term"><h4>Too Much Capacity → Overfitting</h4><p>The model memorises noise. Symptom: excellent train score, clearly worse validation score. Fix: regularise, early-stop, gather more data, or reduce capacity.</p></div>
+  </div>
+
+  <h3>3.2.4 Parameters vs Hyperparameters</h3>
+  <p>This single distinction causes more confusion than any other in an introductory course.</p>
+  <table>
+    <tr><th></th><th>Parameter</th><th>Hyperparameter</th></tr>
+    <tr><td>Who decides</td><td>The learning algorithm, from data</td><td>You, before training starts</td></tr>
+    <tr><td>Examples</td><td><code class="inline">w</code>, <code class="inline">b</code>, tree split thresholds</td><td>learning rate, <code class="inline">C</code>, <code class="inline">max_depth</code>, <code class="inline">cv</code></td></tr>
+    <tr><td>How obtained</td><td>Updated automatically each step</td><td>Chosen on the validation set by grid or random search</td></tr>
+    <tr><td>In code</td><td><code class="inline">model.coef_</code>, <code class="inline">model.intercept_</code></td><td><code class="inline">clf__C</code> inside a Pipeline grid</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">One-liner</span>
+    Parameters are <strong>learned</strong>; hyperparameters are <strong>chosen</strong>. Everything a grid search returns is a hyperparameter — that is precisely why it cannot simply be read off the data.
+  </div>
+</div>
+
+<!-- ========== 3.3 ========== -->
+<div class="section">
+  <h2>3.3 Loss Functions: Defining What "Wrong" Means</h2>
+  <p>A loss function converts "this prediction is bad" into a single number the optimiser can minimise. Choosing it is choosing the objective — pick the wrong one and the model faithfully optimises the wrong thing.</p>
+
+  <table>
+    <tr><th>Loss</th><th>Formula</th><th>Used for</th><th>Property</th></tr>
+    <tr><td>MSE</td><td>mean((y − ŷ)²)</td><td>Regression (default)</td><td>Punishes large errors heavily; outlier-sensitive</td></tr>
+    <tr><td>MAE</td><td>mean(|y − ŷ|)</td><td>Regression with outliers</td><td>Same unit as the target; robust; kink at zero</td></tr>
+    <tr><td>Cross-Entropy</td><td>−Σ y·log(ŷ)</td><td>Classification</td><td>Punishes confident mistakes; well-calibrated probabilities</td></tr>
+    <tr><td>R² (a metric, not a loss)</td><td>1 − SS<sub>res</sub>/SS<sub>tot</sub></td><td>Reporting regression quality</td><td>1 is perfect, 0 equals guessing the mean, can be negative</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <span class="label">Trap of the Week</span>
+    For regressors, <code class="inline">model.score()</code> returns <strong>R²</strong>, not accuracy. Reading a regression R² as "percent correct" is the most common mistake in this lab.
+  </div>
+</div>
+
+<!-- ========== 3.4 ========== -->
+<div class="section">
+  <h2>3.4 Optimisation: Gradient Descent</h2>
+  <p>Once error is a number, improving the model becomes a search problem: which direction should the parameters move?</p>
+
+  <h3>3.4.1 The Blindfolded Hill</h3>
+  <div class="steps">
+    <div class="step"><h4>1 · Stand somewhere</h4><p>Parameters start at random values.</p></div>
+    <div class="step"><h4>2 · Feel the slope</h4><p>The gradient tells you which way is downhill and how steep.</p></div>
+    <div class="step"><h4>3 · Take a step</h4><p><code class="inline">w ← w − η · gradient</code>, where η is the learning rate.</p></div>
+    <div class="step"><h4>4 · Repeat</h4><p>Stop when the loss stops improving, or after a fixed budget of epochs.</p></div>
+  </div>
+  <p>Gradient descent guarantees a <em>nearby</em> minimum. For convex problems — linear regression, logistic regression — nearby is global. For neural networks it is not, which is one reason deep learning needs more machinery (better initialisation, adaptive optimisers, schedules).</p>
+
+  <h3>3.4.2 Choosing the Learning Rate</h3>
+  <table>
+    <tr><th>η</th><th>Behaviour</th><th>What the loss curve looks like</th></tr>
+    <tr><td>Too small</td><td>Crawls; may not converge before the time budget ends</td><td>Almost flat</td></tr>
+    <tr><td>About right</td><td>Fast early progress, smooth flattening</td><td>A slide that levels off</td></tr>
+    <tr><td>Too large</td><td>Overshoots and oscillates; can diverge to NaN</td><td>Jumps around or grows</td></tr>
+  </table>
+
+  <h3>3.4.3 Batch, Epoch, Step</h3>
+  <p>Three words that appear in every training log:</p>
+  <ul>
+    <li><strong>batch</strong> — the number of samples used for one parameter update;</li>
+    <li><strong>step (iteration)</strong> — one parameter update;</li>
+    <li><strong>epoch</strong> — one complete pass over the training set.</li>
+  </ul>
+  <p>You will rarely write the loop yourself. In practice it collapses into two lines:</p>
+  <pre><span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> Pipeline
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+
+pipe = Pipeline([
+    (<span class="str">'scale'</span>, StandardScaler()),
+    (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>)),
+])
+pipe.fit(X_train, y_train)   <span class="cm"># learn the parameters</span>
+pipe.score(X_test, y_test)   <span class="cm"># evaluate</span></pre>
+</div>
+
+<!-- ========== 3.5 ========== -->
+<div class="section">
+  <h2>3.5 Generalization: Train, Validation, Test</h2>
+  <p>A great training score proves nothing — a sufficiently flexible model can memorise the training set perfectly and fail on everything else. The only question that matters is performance on unseen data, so we simulate "unseen" by holding data back.</p>
+
+  <h3>3.5.1 The Three Splits</h3>
+  <table>
+    <tr><th>Split</th><th>Typical share</th><th>Job</th><th>How often you may use it</th></tr>
+    <tr><td>Training</td><td>60–80%</td><td>Fit parameters</td><td>Constantly</td></tr>
+    <tr><td>Validation</td><td>10–20%</td><td>Choose hyperparameters, early stopping</td><td>Repeatedly</td></tr>
+    <tr><td>Test</td><td>10–20%</td><td>Final estimate of real-world performance</td><td><strong>Once</strong></td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">Iron Rule</span>
+    Touch the test set once. The moment you tune against it, it has silently become a validation set and your reported number stops meaning anything.
+  </div>
+
+  <h3>3.5.2 k-Fold Cross-Validation</h3>
+  <p>When data is scarce, one validation split is noisy. k-fold cross-validation splits the training set into k parts, trains k times — each time holding out a different part — and averages the scores. It costs k× training time and buys a much more stable estimate. Use <code class="inline">StratifiedKFold</code> for classification so each fold preserves the class proportions.</p>
+
+  <h3>3.5.3 The Diagnostic Table</h3>
+  <table>
+    <tr><th>Train</th><th>Validation</th><th>Diagnosis</th><th>What to do</th></tr>
+    <tr><td>Low</td><td>Low</td><td>Underfitting</td><td>Add features, stronger model, weaker regularisation, train longer</td></tr>
+    <tr><td>High</td><td>Clearly lower</td><td>Overfitting</td><td>Regularise, early-stop, more data, reduce capacity</td></tr>
+    <tr><td>High</td><td>High and close</td><td>Healthy fit</td><td>Proceed to the test set, once</td></tr>
+    <tr><td>Low</td><td>High (suspicious)</td><td>Leakage or a bad split</td><td>Check pre-split imputation/scaling; check time-series splitting</td></tr>
+  </table>
+  <p>That fourth row is the dangerous one: the numbers look good and the protocol is broken.</p>
+</div>
+
+<!-- ========== 3.6 ========== -->
+<div class="section">
+  <h2>3.6 The scikit-learn Workflow, Engineering Grade</h2>
+
+  <h3>3.6.1 Why Pipeline Exists</h3>
+  <p>Consider standardising features. If you call <code class="inline">scaler.fit(X)</code> on all rows before splitting, information from the test rows (their mean and variance) has entered your preprocessing — that is <strong>data leakage</strong>, and it inflates your score.</p>
+  <pre><span class="cm"># WRONG — the scaler saw the test rows</span>
+X_scaled = StandardScaler().fit_transform(X)
+X_tr, X_te, y_tr, y_te = train_test_split(X_scaled, y, test_size=<span class="num">0.2</span>)
+
+<span class="cm"># RIGHT — preprocessing is part of the model, fitted per fold</span>
+pipe = Pipeline([(<span class="str">'scale'</span>, StandardScaler()),
+                 (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>))])
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="num">0.2</span>,
+                                          random_state=<span class="num">42</span>)
+pipe.fit(X_tr, y_tr)</pre>
+  <p>A <code class="inline">Pipeline</code> is not about saving keystrokes. It makes the correct protocol the default: every transformer is fitted only on the training portion of each fold.</p>
+
+  <h3>3.6.2 Tuning with GridSearchCV</h3>
+  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+
+grid = {<span class="str">'clf__C'</span>: [<span class="num">0.01</span>, <span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>]}
+search = GridSearchCV(pipe, grid, cv=<span class="num">5</span>, n_jobs=-<span class="num">1</span>)
+search.fit(X_tr, y_tr)
+
+print(search.best_params_)        <span class="cm"># the CHOSEN hyperparameter</span>
+print(search.best_score_)         <span class="cm"># mean CV score</span>
+print(search.score(X_te, y_te))   <span class="cm"># held-out test score</span></pre>
+  <p>Note the naming convention: <code class="inline">clf__C</code> means "parameter <code class="inline">C</code> of the step named <code class="inline">clf</code>" — two underscores. Inspect <code class="inline">cv_results_</code> to see every candidate, and watch the standard deviation: when two means are within one standard deviation, prefer the simpler model rather than agonising.</p>
+  <div class="callout tip">
+    <span class="label">Why CV &lt; test is normal</span>
+    Each fold trains on only (k−1)/k of the training data, so it usually scores slightly below a model trained on all of it. A small gap is expected; a large one (more than ~5 points) means the protocol deserves a second look.
+  </div>
+
+  <h3>3.6.3 The Same Skeleton for Regression</h3>
+  <pre><span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_diabetes
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestRegressor
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_absolute_error, r2_score
+
+X, y = load_diabetes(return_X_y=<span class="kw">True</span>)
+reg = RandomForestRegressor(random_state=<span class="num">42</span>).fit(X_tr, y_tr)
+pred = reg.predict(X_te)
+print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
+  <p><code class="inline">fit → predict → evaluate</code> never changes. Only the model and the metric do.</p>
+</div>
+
+<!-- ========== 3.7 ========== -->
+<div class="section">
+  <h2>3.7 Pitfalls and a Debugging Checklist</h2>
+  <div class="callout warn">
+    <span class="label">Checklist</span>
+    <ul>
+      <li><strong>Split first, fit preprocessing after.</strong> Imputers and scalers go inside the Pipeline.</li>
+      <li><strong>Parameters ≠ hyperparameters.</strong> <code class="inline">coef_</code> is learned; <code class="inline">C</code> is chosen.</li>
+      <li><strong>Pick the metric for the task.</strong> Accuracy/F1 for classification; MAE/R² for regression.</li>
+      <li><strong>Fix your seeds.</strong> <code class="inline">random_state</code> on both the split and the model, or nothing reproduces.</li>
+      <li><strong>Read warnings before fixing them.</strong> A ConvergenceWarning is telling you to scale features or raise <code class="inline">max_iter</code>.</li>
+      <li><strong>Justify the split strategy.</strong> Stratified for classification, grouped for repeated entities, time-based for time series.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 3.8 ========== -->
+<div class="section">
+  <h2>3.8 Summary and Exercises</h2>
+  <div class="callout key">
+    <span class="label">Five Takeaways</span>
+    <ol>
+      <li>Machine learning infers rules from examples; supervised, unsupervised and reinforcement learning are the three paradigms.</li>
+      <li>Parameters are learned from data; hyperparameters are chosen by you and searched on the validation set.</li>
+      <li>The loss defines what "wrong" means; gradient descent decides where to move; the learning rate sets the step size.</li>
+      <li>Train / validation / test — and the test set is touched once. Use k-fold cross-validation when data is scarce.</li>
+      <li>A <code class="inline">Pipeline</code> is a leakage guard: preprocessing is fitted only on training folds.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · Paradigms and Vocabulary (Required)</h4>
+    <ol>
+      <li>Classify each task as supervised, unsupervised, or reinforcement: (a) predicting tomorrow's temperature, (b) grouping customers by behaviour, (c) training a robot to walk, (d) detecting defective chips from images labelled OK/defective.</li>
+      <li>For one of them, fill in Mitchell's three slots: task <em>T</em>, performance measure <em>P</em>, experience <em>E</em>.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 2 · Parameters vs Hyperparameters (Required)</h4>
+    <ol>
+      <li>Sort into two columns: <code class="inline">w</code>, learning rate, a tree's split threshold, <code class="inline">max_depth</code>, <code class="inline">coef_</code>, <code class="inline">cv</code>, <code class="inline">C</code>, <code class="inline">intercept_</code>.</li>
+      <li>Train a <code class="inline">LogisticRegression</code> on <code class="inline">load_digits</code> and print both <code class="inline">coef_.shape</code> and <code class="inline">best_params_</code> from a grid search. Explain in two sentences why only one of them came from the data.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 3 · The Leakage Experiment (Required)</h4>
+    <ol>
+      <li>Reproduce both versions of Section 3.6.1 on <code class="inline">load_digits</code> and record both accuracies.</li>
+      <li>Add a deliberately useless feature column of random noise, refit, and observe what happens to train vs validation score.</li>
+      <li>Write five sentences: what leaked, why the number looked better, and how a Pipeline prevents it.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 4 · Diagnose the Scoreboard (Required)</h4>
+    <p>For each pair, name the diagnosis and the next action; justify the last row in three sentences.</p>
+    <ol>
+      <li>train 62%, validation 60%</li>
+      <li>train 98%, validation 72%</li>
+      <li>train 95%, validation 93%</li>
+      <li>train 58%, validation 91%</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 5 · Mini-Project (Optional, +5 bonus)</h4>
+    <p>Pick a dataset of your own (UCI, Kaggle, or your capstone). Run the full protocol: stratified split, a Pipeline with at least two steps, a <code class="inline">GridSearchCV</code> sweep, and a single final test evaluation. Submit a notebook plus a 150-word report stating the metric you chose and why.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Chapter 3 · Machine Learning Foundations</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

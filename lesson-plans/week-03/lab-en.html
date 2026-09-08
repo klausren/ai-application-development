@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 3 · Lab Part (Lab 75 min + Quiz &amp; Summary 15 min)</div>
+  <h1>The scikit-learn Workflow Lab: fit → predict → evaluate</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the Lab Part 75 min + Quiz &amp; Summary 15 min</span>
+    <span>📚 Chapter 3.6–3.7</span>
+    <span>🔧 Hands-on Lab</span>
+    <span>🧩 Lesson Plan ID: LP-W3-B</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Explain why a <code class="inline">Pipeline</code> exists and what it prevents (leakage in cross-validation)</li>
+      <li>State the difference between a parameter and a hyperparameter, and name what <code class="inline">best_params_</code> holds</li>
+      <li>Explain why the CV score is usually a little lower than the test score</li>
+      <li>State which metrics belong to classification and which to regression</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Build a <code class="inline">Pipeline</code> with preprocessing + model and use it like a single estimator</li>
+      <li>Run a hyperparameter sweep with <code class="inline">GridSearchCV</code> and read the results table</li>
+      <li>Switch the same workflow from classification to regression without changing the mental model</li>
+      <li>Push the M3 capstone milestone (repository + <code class="inline">src/train.py</code>) before the lab ends</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Treat reproducibility as part of the deliverable: if <code class="inline">python src/train.py</code> does not run on a
+  teammate's machine, the work is not finished. Document decisions, do not hand-edit CSVs.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>Pipeline as the leakage guard; the <code class="inline">step__param</code> naming rule; reading <code class="inline">cv_results_</code>; metric choice per task</td><td>Instructor demos each part (3–5 min), then students reproduce; every part ends with a checkpoint that must be written down before moving on</td></tr>
+  <tr><td>Difficulties</td><td>Why CV &lt; test is normal; <code class="inline">score()</code> meaning R² on regressors; convergence warnings on unscaled digits</td><td>CV-vs-test: "each fold trains on 4/5"; regressor score: show <code class="inline">mean_absolute_error</code> and <code class="inline">r2_score</code> side by side; warnings: read the message aloud, then fix with scaling</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min (second half of the weekly 180-min integrated session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Baseline, no Pipeline</strong>: load digits, split 80/20 with <code class="inline">random_state=42</code>, fit <code class="inline">LogisticRegression(max_iter=1000)</code>, record accuracy. If a ConvergenceWarning appears, write what it is telling you</td><td>p25</td><td>Follow-along + patrol</td></tr>
+  <tr><td>Lab B</td><td>15 min</td><td><strong>Same Model, Inside a Pipeline</strong>: rebuild with <code class="inline">StandardScaler</code> + classifier; compare accuracy; answer why scaling matters here but not for a tree; instructor draws the leakage arrow</td><td>p25</td><td>Demo → follow-along</td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>Hyperparameter Sweep</strong>: <code class="inline">GridSearchCV(pipe, {'clf__C': [0.01, 0.1, 1, 10]}, cv=5)</code>; report <code class="inline">best_params_</code>, CV score, test score; inspect <code class="inline">cv_results_</code> and comment on the standard deviation</td><td>p26</td><td>Self practice + patrol</td></tr>
+  <tr><td>Lab D</td><td>20 min</td><td><strong>From Classification to Regression</strong>: repeat fit → predict → evaluate on <code class="inline">load_diabetes</code> with <code class="inline">RandomForestRegressor</code>; report MAE and R²; explain R² = 0.45 to a stakeholder in one sentence</td><td>p27</td><td>Self practice + Q&amp;A</td></tr>
+  <tr><td>Lab E</td><td>10 min</td><td><strong>Wrap-up &amp; Capstone Push (Part F)</strong>: write the three model-agnostic lines you will reuse forever; create <code class="inline">src/data/</code> + <code class="inline">src/train.py</code> in the project repo, justify the split strategy, pin <code class="inline">requirements.txt</code>, push</td><td>p28–p29</td><td>Checklist</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 6 items (5 choice / true-false + 1 short answer) on the board; hand-vote, then debrief; correct students explain their reasoning</td><td>p30</td><td>Vote + debrief</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO; preview Week 4 (metrics, thresholds, overfitting and Ridge)</td><td>p31–p32</td><td>Recap + preview</td></tr>
+</table>
+
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Read the Warning Aloud (Lab A, p25)</h4>
+  <p style="font-size:13.5px;">Nobody may fix the ConvergenceWarning for the first two minutes — they must first write down what it says. This builds the reflex of reading diagnostics before reaching for a fix, and sets up Lab B where scaling resolves it.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Two Models, One Leak (Lab B, p25)</h4>
+  <p style="font-size:13.5px;">Instructor shows two versions side by side: scaler fitted on all data (leaks) vs scaler inside the Pipeline (safe). Students predict which score is "too optimistic" before running either. The reveal: the leaking version reports a better number that nobody can trust.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Guess C Before Running (Lab C, p26)</h4>
+  <p style="font-size:13.5px;">Students write down which <code class="inline">C</code> they expect to win and why, <em>before</em> running the sweep. Comparing predictions with <code class="inline">best_params_</code> turns a mechanical exercise into a calibration exercise — and the "C too large overfits" story becomes personal.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · Explain R² to a Stranger (Lab D, p27)</h4>
+  <p style="font-size:13.5px;">Each student writes one sentence explaining R² = 0.45 to a non-technical stakeholder, then reads it to a neighbour. Most first attempts say "45% accurate"; the correction — "we explain 45% of the variation, versus simply guessing the average" — is the point.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · Teammate Machine Test (Lab E, p29)</h4>
+  <p style="font-size:13.5px;">Swap laptops with a neighbour and run <code class="inline">python src/train.py</code> on their repository. Absolute paths, missing requirements and hardcoded filenames surface instantly — far more convincingly than any checklist.</p>
+</div>
+
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
+  <tr><td>Deliverable</td><td><code class="inline">lab-03.ipynb</code>: Restart &amp; Run All clean, every checkpoint answered in the student's own words, ≥ 2 meaningful commits, pushed to a public repo</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Baseline vs Pipeline (A–B) 25 · GridSearchCV (C) 30 · Regression branch (D) 25 · reusable three-lines summary (E) 10 · exit ticket 10</td><td>Lab 20% of course</td></tr>
+  <tr><td>Quiz</td><td>6 items at the end of the lab; counted as 10% of the Lab grade (see slide p30)</td><td>Lab 10%</td></tr>
+  <tr><td>Capstone M3</td><td>Part F (repository + data pipeline) is graded under the Capstone (35%), not here; missing it costs −2 team points; late: −2 each time, up to −20</td><td>Capstone 35%</td></tr>
+  <tr><td>Late policy</td><td>Lab deliverable: −10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Before Students Leave</span>
+  Confirm three things for every student: the notebook runs top-to-bottom, the repo has ≥ 2 commits pushed, and
+  <code class="inline">src/train.py</code> exists in the capstone repo. A milestone pushed next week is a milestone not done.
+</div>
+
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Week 2 lab committed (Titanic cleaning works)</li>
+      <li>Textbook Chapter 3 skimmed</li>
+      <li>Capstone repository created and shared with teammates</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Lab handout: <code class="inline">labs/week-03/lab-handout.md</code></li>
+      <li>Slides p23–p32</li>
+      <li>Textbook Chapter 3.6–3.7</li>
+      <li>Datasets ship with scikit-learn — no download needed</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W3-B (Lab Part · 75 min + Quiz &amp; Summary 15 min)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

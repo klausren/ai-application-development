@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 03 章 · 模块 1 · 第 3 周</div>
+  <h1>机器学习基础</h1>
+  <p class="overview">机器学习从样例中反推规则，而不是让人去写规则。本章建立后续所有模型都会复用的心智模型：到底在学什么、误差怎么度量、参数如何更新——以及最重要的，一个分数到底能不能信。最后你会把第 1 周的三步工作流升级成工程可用的 scikit-learn <code class="inline">Pipeline</code>。</p>
+</div>
+
+<!-- ========== 3.1 ========== -->
+<div class="section">
+  <h2>3.1 机器学习到底在说什么</h2>
+  <p>第 1 章讲了项目的六个阶段，第 2 章讲了驱动它的数据。现在我们来到人人都以为最重要、但在前面几步失败时最不重要的阶段：模型。</p>
+
+  <h3>3.1.1 定义</h3>
+  <p>Tom Mitchell 1997 年的定义至今仍是这个领域最干净的一句话：</p>
+  <div class="callout key">
+    <span class="label">定义</span>
+    对于某类任务 <em>T</em> 和性能度量 <em>P</em>，如果一个程序在 <em>T</em> 上的性能（由 <em>P</em> 度量）随着经验 <em>E</em> 而提升，就说它从经验 <em>E</em> 中<strong>学习</strong>了。
+  </div>
+  <p>永远是三个空。预测房价：<em>T</em> = 预测成交价，<em>P</em> = 平均绝对误差，<em>E</em> = 一万条历史成交记录。三个空填不满，你就还没有一个机器学习问题——你只有一个模糊的愿望。</p>
+
+  <h3>3.1.2 传统编程 vs 机器学习</h3>
+  <table>
+    <tr><th></th><th>传统编程</th><th>机器学习</th></tr>
+    <tr><td>输入</td><td>规则 + 数据</td><td>数据 + 答案</td></tr>
+    <tr><td>输出</td><td>答案</td><td>规则（模型）</td></tr>
+    <tr><td>逻辑谁写</td><td>程序员</td><td>学习算法</td></tr>
+    <tr><td>何时失效</td><td>规则复杂到写不出来</td><td>数据太少、不具代表性或标注错误</td></tr>
+  </table>
+  <p>垃圾邮件过滤是最经典的例子。手写规则（「含 free」「发件人陌生」）一直有效，直到某位叫 Cash 的客户给你发合同——这时你会停止写规则，开始收集样例。</p>
+
+  <h3>3.1.3 三类范式</h3>
+  <div class="terms">
+    <div class="term"><h4>监督学习</h4><p>数据是带标准答案的 (x, y) 对。任务：分类（离散标签）与回归（连续值）。例子：逻辑回归、随机森林、SVM。<strong>第 1–6 周聚焦于此。</strong></p></div>
+    <div class="term"><h4>无监督学习</h4><p>只有 x，没有标签，算法自己找结构：聚类、低维结构、异常。例子：KMeans、PCA、DBSCAN。</p></div>
+    <div class="term"><h4>强化学习</h4><p>智能体在环境中行动并获得奖励，数据形如（状态, 动作, 奖励）序列。例子：Q-learning、PPO、DQN，多用于控制、博弈与决策策略。</p></div>
+  </div>
+
+  <h3>3.1.4 到处都会出现的术语</h3>
+  <div class="terms">
+    <div class="term"><h4>样本 Sample</h4><p>数据集中的一行——一套房、一张图、一个客户。</p></div>
+    <div class="term"><h4>特征 Feature (x)</h4><p>描述样本的属性列：面积、像素强度、年龄。合起来是特征矩阵 <code class="inline">X</code>。</p></div>
+    <div class="term"><h4>标签 Label (y)</h4><p>你要预测的东西。监督学习有，无监督学习没有。</p></div>
+    <div class="term"><h4>训练集 Training Set</h4><p>允许模型学习的那部分数据。</p></div>
+    <div class="term"><h4>推理 Inference</h4><p>用训练好的模型对新样本做预测。</p></div>
+    <div class="term"><h4>泛化 Generalization</h4><p>在没见过的数据上依然表现好——唯一算数的性能。</p></div>
+  </div>
+</div>
+
+<!-- ========== 3.2 ========== -->
+<div class="section">
+  <h2>3.2 模型、参数与容量</h2>
+
+  <h3>3.2.1 模型是一族函数</h3>
+  <p>选模型就是选<strong>假设空间</strong>——模型有能力表示的所有函数的集合。所有直线 <code class="inline">y = wx + b</code> 就是一族。训练不会创造新的族，它只是在族里挑一个成员，也就是确定 <code class="inline">w</code> 和 <code class="inline">b</code> 的具体数值。</p>
+  <p>这个视角能解释大多数建模失误：如果真实关系是弯的，而你的假设空间里只有直线，那么再多数据也没用——答案不在你选的空间里。</p>
+
+  <h3>3.2.2 线性模型</h3>
+  <pre><span class="cm"># 单个特征</span>
+y_hat = w * x + b
+
+<span class="cm"># n 个特征——同一个思路，写一次</span>
+y_hat = w1*x1 + w2*x2 + ... + wn*xn + b
+       = w · x + b</pre>
+  <p><code class="inline">w</code>（权重）表示每个特征有多重要，<code class="inline">b</code>（偏置）把整体预测上下平移。两者都从随机值出发，在训练中被不断修正。</p>
+
+  <h3>3.2.3 容量三档</h3>
+  <div class="terms">
+    <div class="term"><h4>容量太小 → 欠拟合</h4><p>连训练集都拟合不好。表现：训练分和验证分都低。对策：加特征、换更灵活的模型、减弱正则化。</p></div>
+    <div class="term"><h4>容量合适 → 拟合良好</h4><p>训练分与验证分都不错且互相接近。这就是目标。</p></div>
+    <div class="term"><h4>容量太大 → 过拟合</h4><p>模型把噪声背了下来。表现：训练分极好，验证分明显更低。对策：正则化、早停、增加数据、降低容量。</p></div>
+  </div>
+
+  <h3>3.2.4 参数 vs 超参数</h3>
+  <p>这一组区别造成的困惑，比入门课上的任何其它概念都多。</p>
+  <table>
+    <tr><th></th><th>参数 Parameter</th><th>超参数 Hyperparameter</th></tr>
+    <tr><td>谁决定</td><td>学习算法，从数据中学出</td><td>你，在训练开始前设定</td></tr>
+    <tr><td>例子</td><td><code class="inline">w</code>、<code class="inline">b</code>、树的划分阈值</td><td>学习率、<code class="inline">C</code>、<code class="inline">max_depth</code>、<code class="inline">cv</code></td></tr>
+    <tr><td>怎么获得</td><td>每一步自动更新</td><td>在验证集上用网格/随机搜索挑选</td></tr>
+    <tr><td>代码里</td><td><code class="inline">model.coef_</code>、<code class="inline">model.intercept_</code></td><td>Pipeline 网格里的 <code class="inline">clf__C</code></td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">一句话</span>
+    参数是<strong>学</strong>出来的，超参数是<strong>选</strong>出来的。网格搜索返回的每一个值都是超参数——正因为如此，它不可能直接从数据里读出来。
+  </div>
+</div>
+
+<!-- ========== 3.3 ========== -->
+<div class="section">
+  <h2>3.3 损失函数：把「错了」变成一个数字</h2>
+  <p>损失函数把「这个预测很差」转换成一个可以被优化的数字。选损失函数就是在选目标——选错了，模型就会忠实地优化错的东西。</p>
+
+  <table>
+    <tr><th>损失</th><th>公式</th><th>用在哪</th><th>特点</th></tr>
+    <tr><td>MSE</td><td>mean((y − ŷ)²)</td><td>回归（默认）</td><td>对大误差惩罚重，对异常值敏感</td></tr>
+    <tr><td>MAE</td><td>mean(|y − ŷ|)</td><td>有异常值的回归</td><td>与目标同量纲，稳健，零点有折点</td></tr>
+    <tr><td>交叉熵</td><td>−Σ y·log(ŷ)</td><td>分类</td><td>惩罚「错且自信」，概率校准好</td></tr>
+    <tr><td>R²（是指标不是损失）</td><td>1 − SS<sub>res</sub>/SS<sub>tot</sub></td><td>汇报回归质量</td><td>1 完美，0 等于猜均值，可以为负</td></tr>
+  </table>
+
+  <div class="callout warn">
+    <span class="label">本周的坑</span>
+    回归模型上调用 <code class="inline">model.score()</code> 返回的是 <strong>R²</strong>，不是准确率。把 R² 当成「正确率百分之多少」是本次实验最常见的错误。
+  </div>
+</div>
+
+<!-- ========== 3.4 ========== -->
+<div class="section">
+  <h2>3.4 优化：梯度下降</h2>
+  <p>误差一旦变成数字，改进模型就成了搜索问题：参数该往哪个方向走？</p>
+
+  <h3>3.4.1 蒙眼下山</h3>
+  <div class="steps">
+    <div class="step"><h4>1 · 先站个位置</h4><p>参数从随机值出发。</p></div>
+    <div class="step"><h4>2 · 摸坡度</h4><p>梯度告诉你哪边是下坡、有多陡。</p></div>
+    <div class="step"><h4>3 · 迈一步</h4><p><code class="inline">w ← w − η · 梯度</code>，η 就是学习率。</p></div>
+    <div class="step"><h4>4 · 重复</h4><p>损失不再下降，或达到设定的 epoch 上限时停止。</p></div>
+  </div>
+  <p>梯度下降只保证找到<em>附近</em>的最低点。凸问题（线性回归、逻辑回归）里附近就是全局；神经网络不是，这也是深度学习需要更多机制（更好的初始化、自适应优化器、学习率调度）的原因之一。</p>
+
+  <h3>3.4.2 学习率怎么选</h3>
+  <table>
+    <tr><th>η</th><th>行为</th><th>损失曲线长什么样</th></tr>
+    <tr><td>太小</td><td>慢得离谱，时间花完了还没收敛</td><td>几乎是平的</td></tr>
+    <tr><td>合适</td><td>先快后慢，平滑走平</td><td>像滑梯，末端走平</td></tr>
+    <tr><td>太大</td><td>跨过谷底来回震荡，甚至发散成 NaN</td><td>上下跳动甚至变大</td></tr>
+  </table>
+
+  <h3>3.4.3 batch、epoch、step</h3>
+  <p>训练日志里必然出现的三个词：</p>
+  <ul>
+    <li><strong>batch</strong>——一次参数更新所用的样本数；</li>
+    <li><strong>step（迭代）</strong>——一次参数更新；</li>
+    <li><strong>epoch</strong>——把训练集完整过一遍。</li>
+  </ul>
+  <p>实际工作中你几乎不会手写这个循环，它会被压缩成两行：</p>
+  <pre><span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> Pipeline
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+
+pipe = Pipeline([
+    (<span class="str">'scale'</span>, StandardScaler()),
+    (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>)),
+])
+pipe.fit(X_train, y_train)   <span class="cm"># 学参数</span>
+pipe.score(X_test, y_test)   <span class="cm"># 评估</span></pre>
+</div>
+
+<!-- ========== 3.5 ========== -->
+<div class="section">
+  <h2>3.5 泛化：训练、验证、测试</h2>
+  <p>训练集上的高分证明不了任何事——足够灵活的模型可以把训练集背得滚瓜烂熟，然后在新数据上一塌糊涂。唯一重要的问题是在没见过的数据上行不行，所以我们留出一部分数据来模拟「没见过」。</p>
+
+  <h3>3.5.1 三分数据</h3>
+  <table>
+    <tr><th>集合</th><th>常见比例</th><th>职责</th><th>能用多少次</th></tr>
+    <tr><td>训练集</td><td>60–80%</td><td>拟合参数</td><td>反复用</td></tr>
+    <tr><td>验证集</td><td>10–20%</td><td>挑超参数、早停</td><td>多次用</td></tr>
+    <tr><td>测试集</td><td>10–20%</td><td>对真实性能做最终估计</td><td><strong>一次</strong></td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">铁律</span>
+    测试集只碰一次。一旦你拿它反复调参，它就悄悄变成了验证集，你报出去的数字也就不再有意义。
+  </div>
+
+  <h3>3.5.2 k 折交叉验证</h3>
+  <p>数据少的时候，单次划分的验证分噪声很大。k 折交叉验证把训练集切成 k 份，训 k 次（每次留不同的那一份），取平均分。代价是 k 倍训练时间，换来的是稳定得多的估计。分类任务请用 <code class="inline">StratifiedKFold</code>，保证每折里各类比例一致。</p>
+
+  <h3>3.5.3 诊断表</h3>
+  <table>
+    <tr><th>训练集</th><th>验证集</th><th>结论</th><th>该干什么</th></tr>
+    <tr><td>低</td><td>低</td><td>欠拟合</td><td>加特征、换更强模型、减弱正则化、训练更久</td></tr>
+    <tr><td>高</td><td>明显更低</td><td>过拟合</td><td>加正则化、早停、增加数据、降低容量</td></tr>
+    <tr><td>高</td><td>高且接近</td><td>拟合良好</td><td>进入测试集做最终评估，一次</td></tr>
+    <tr><td>低</td><td>高（反常）</td><td>数据泄漏或划分错误</td><td>检查是否在划分前做了填充/标准化；检查时间序列的切分方式</td></tr>
+  </table>
+  <p>第四行最危险：数字好看，流程却坏了。</p>
+</div>
+
+<!-- ========== 3.6 ========== -->
+<div class="section">
+  <h2>3.6 工程可用的 scikit-learn 工作流</h2>
+
+  <h3>3.6.1 Pipeline 为什么存在</h3>
+  <p>以标准化为例。如果在划分之前对全量数据调用 <code class="inline">scaler.fit(X)</code>，测试行的信息（它们的均值和方差）就进入了你的预处理——这就是<strong>数据泄漏</strong>，它会把分数抬高。</p>
+  <pre><span class="cm"># 错：缩放器看过测试行</span>
+X_scaled = StandardScaler().fit_transform(X)
+X_tr, X_te, y_tr, y_te = train_test_split(X_scaled, y, test_size=<span class="num">0.2</span>)
+
+<span class="cm"># 对：预处理是模型的一部分，每个折内单独拟合</span>
+pipe = Pipeline([(<span class="str">'scale'</span>, StandardScaler()),
+                 (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>))])
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="num">0.2</span>,
+                                          random_state=<span class="num">42</span>)
+pipe.fit(X_tr, y_tr)</pre>
+  <p><code class="inline">Pipeline</code> 的价值不在少敲几行代码，而在于它让正确的流程成为默认：每个转换器只在每个训练折内拟合。</p>
+
+  <h3>3.6.2 用 GridSearchCV 调参</h3>
+  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+
+grid = {<span class="str">'clf__C'</span>: [<span class="num">0.01</span>, <span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>]}
+search = GridSearchCV(pipe, grid, cv=<span class="num">5</span>, n_jobs=-<span class="num">1</span>)
+search.fit(X_tr, y_tr)
+
+print(search.best_params_)        <span class="cm"># 选出来的超参数</span>
+print(search.best_score_)         <span class="cm"># 交叉验证平均分</span>
+print(search.score(X_te, y_te))   <span class="cm"># 留出测试集分</span></pre>
+  <p>注意命名规则：<code class="inline">clf__C</code> 表示「Pipeline 里叫 <code class="inline">clf</code> 那一步的 <code class="inline">C</code>」，两个下划线。用 <code class="inline">cv_results_</code> 查看每个候选的表现，同时看标准差：两个均值差距不到一个标准差时，选更简单的那个，别纠结。</p>
+  <div class="callout tip">
+    <span class="label">为什么 CV 分通常低于测试分</span>
+    每一折只用训练数据的 (k−1)/k 来训练，所以分数通常略低于用全量训练的模型。小差距是正常的；差距过大（约 5 个点以上）才需要回头检查流程。
+  </div>
+
+  <h3>3.6.3 换成回归，骨架不变</h3>
+  <pre><span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_diabetes
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestRegressor
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_absolute_error, r2_score
+
+X, y = load_diabetes(return_X_y=<span class="kw">True</span>)
+reg = RandomForestRegressor(random_state=<span class="num">42</span>).fit(X_tr, y_tr)
+pred = reg.predict(X_te)
+print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
+  <p><code class="inline">fit → predict → evaluate</code> 永远不变，变的只是模型和指标。</p>
+</div>
+
+<!-- ========== 3.7 ========== -->
+<div class="section">
+  <h2>3.7 常见坑与排查清单</h2>
+  <div class="callout warn">
+    <span class="label">清单</span>
+    <ul>
+      <li><strong>先划分，后拟合预处理。</strong>填充器和缩放器都放进 Pipeline。</li>
+      <li><strong>参数 ≠ 超参数。</strong><code class="inline">coef_</code> 是学出来的，<code class="inline">C</code> 是选出来的。</li>
+      <li><strong>按任务选指标。</strong>分类看 accuracy/F1，回归看 MAE/R²。</li>
+      <li><strong>固定随机种子。</strong>划分和模型都设 <code class="inline">random_state</code>，否则复现不了。</li>
+      <li><strong>先读警告再动手修。</strong>收敛警告是在提示你做标准化或提高 <code class="inline">max_iter</code>。</li>
+      <li><strong>说明划分策略。</strong>分类用分层，重复实体用分组，时间序列按时间切。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 3.8 ========== -->
+<div class="section">
+  <h2>3.8 小结与练习</h2>
+  <div class="callout key">
+    <span class="label">五条要点</span>
+    <ol>
+      <li>机器学习从样例中反推规则；监督、无监督、强化学习是三类范式。</li>
+      <li>参数从数据中学出来；超参数由你设定，并在验证集上搜索。</li>
+      <li>损失函数定义什么算「错」；梯度下降决定往哪走；学习率决定步长。</li>
+      <li>训练 / 验证 / 测试三分，测试集只碰一次；数据少时用 k 折交叉验证。</li>
+      <li><code class="inline">Pipeline</code> 是防泄漏装置：预处理只在训练折内拟合。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 范式与术语（必做）</h4>
+    <ol>
+      <li>判断下列任务属于监督、无监督还是强化学习：(a) 预测明天气温；(b) 按行为给客户分组；(c) 训练机器人走路；(d) 根据标注为合格/缺陷的芯片图片做检测。</li>
+      <li>任选其一，填出 Mitchell 的三个空：任务 <em>T</em>、性能度量 <em>P</em>、经验 <em>E</em>。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 2 · 参数 vs 超参数（必做）</h4>
+    <ol>
+      <li>把下列词分成两列：<code class="inline">w</code>、学习率、树的划分阈值、<code class="inline">max_depth</code>、<code class="inline">coef_</code>、<code class="inline">cv</code>、<code class="inline">C</code>、<code class="inline">intercept_</code>。</li>
+      <li>在 <code class="inline">load_digits</code> 上训练 <code class="inline">LogisticRegression</code>，分别打印 <code class="inline">coef_.shape</code> 与网格搜索得到的 <code class="inline">best_params_</code>。用两句话解释为什么只有其中一个来自数据。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 3 · 泄漏实验（必做）</h4>
+    <ol>
+      <li>在 <code class="inline">load_digits</code> 上复现 3.6.1 的两版写法，记录两个准确率。</li>
+      <li>增加一列纯随机噪声特征，重新拟合，观察训练分与验证分的变化。</li>
+      <li>写五句话：泄漏了什么、为什么数字变好看了、Pipeline 如何阻止它。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 4 · 读分数牌（必做）</h4>
+    <p>对每组分数给出结论与下一步动作，并用三句话解释最后一行。</p>
+    <ol>
+      <li>训练 62%，验证 60%</li>
+      <li>训练 98%，验证 72%</li>
+      <li>训练 95%，验证 93%</li>
+      <li>训练 58%，验证 91%</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 5 · 小项目（选做，+5 加分）</h4>
+    <p>自选一个数据集（UCI、Kaggle 或你的大作业数据），跑完整流程：分层划分、至少两步的 Pipeline、一次 <code class="inline">GridSearchCV</code> 扫描、最后只做一次测试集评估。提交 notebook 与 150 字报告，说明你选了什么指标、为什么。</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 — 第 3 章 · 机器学习基础</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

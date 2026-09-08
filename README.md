@@ -144,7 +144,16 @@ Every week ships five assets, each in **English** and **Chinese** (or bilingual)
 | `lecture-scripts/` | word-for-word English delivery script with Chinese reference (ASK/TIP/TIME cues) | `week-XX-bilingual.html` |
 | `labs/` | student-facing starter notebook, environment checker, setup guide with FAQ | `starter-notebook.ipynb`, `env-check.py`, `setup-guide.html` |
 
-**Currently published: Weeks 1–2** (all five asset types, both languages).
+**Currently published:**
+
+| Week | Deck (EN+CN) | Lesson plans | Textbook | Lecture script | Starter notebook |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 2 | ✅ | ✅ | ✅ | ✅ | — |
+| 3 | ✅ | ✅ | ✅ | — | — |
+| 4–16 | lab handout only | — | — | — | — |
+
+Decks are built by `scripts/build_deck.py` from a language-neutral spec (`scripts/deck_specs/week-XX.py`) — every visual is a native PowerPoint shape, table or chart, so no image ever fails to display.
 
 ### Lab Handouts 实验指导书 — `labs/week-XX/lab-handout.md`
 
@@ -218,7 +227,8 @@ This repo grows with the live semester — one week of courseware lands roughly 
 - [x] Curated slide pack: MIT 6.S191 (bundled) + CS224n downloader
 - [x] **All 16 lab handouts** — full lab curriculum published (see `labs/`)
 - [x] **Week 1 class handout** — printable A4, bilingual
-- [ ] **Weeks 3–4** — ML foundations, model evaluation *(in progress — teaching it right now)*
+- [x] **Week 3** — ML foundations: paradigms, loss & optimisation, cross-validation, sklearn Pipeline *(deck + lesson plans + textbook chapter)*
+- [ ] **Week 4** — model evaluation: metrics, thresholds, overfitting, Ridge *(next)*
 - [ ] **Weeks 5–8** — deep learning & computer vision module
 - [ ] **Weeks 9–12** — NLP & LLM module (Transformers, RAG)
 - [ ] **Weeks 13–16** — deployment, MLOps, capstone templates

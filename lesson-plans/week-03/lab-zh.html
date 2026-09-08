@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 3 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
+  <h1>scikit-learn 工作流实验：fit → predict → evaluate</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 min + 小测与小结 15 min</span>
+    <span>📚 教材 3.6–3.7</span>
+    <span>🔧 动手实验</span>
+    <span>🧩 教案编号：LP-W3-B</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>说明 <code class="inline">Pipeline</code> 存在的理由：防止交叉验证中的数据泄漏</li>
+      <li>区分参数与超参数，说清 <code class="inline">best_params_</code> 里装的是什么</li>
+      <li>解释为什么 CV 分通常略低于测试分</li>
+      <li>说清分类与回归各自该看哪些指标</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>搭出「预处理 + 模型」的 <code class="inline">Pipeline</code>，并像单个估计器一样使用</li>
+      <li>用 <code class="inline">GridSearchCV</code> 做超参数扫描并读懂结果表</li>
+      <li>把同一套工作流从分类切到回归，思路不变</li>
+      <li>下课前推送 M3 大作业里程碑（仓库 + <code class="inline">src/train.py</code>）</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标</span>
+  把「可复现」当作交付物的一部分：<code class="inline">python src/train.py</code> 在队友机器上跑不起来，就等于没做完。
+  决策要写下来，不要手工改 CSV。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>Pipeline 防泄漏；<code class="inline">步骤__参数</code> 命名规则；读懂 <code class="inline">cv_results_</code>；按任务选指标</td><td>教师先演示每段（3–5 分钟），学生复现；每段以 Checkpoint 收口，写完才能往下走</td></tr>
+  <tr><td>难点</td><td>CV 分低于测试分属正常；回归里 <code class="inline">score()</code> 是 R²；未标准化的 digits 会报收敛警告</td><td>CV vs 测试：「每折只用 4/5 数据训练」；回归指标：把 <code class="inline">mean_absolute_error</code> 与 <code class="inline">r2_score</code> 并排演示；警告：先念一遍提示信息，再用缩放解决</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>无 Pipeline 的基线</strong>：载入 digits，<code class="inline">random_state=42</code> 按 8:2 划分，拟合 <code class="inline">LogisticRegression(max_iter=1000)</code>，记录准确率；若出现收敛警告，写出它在说什么</td><td>p25</td><td>跟做 + 巡场</td></tr>
+  <tr><td>Lab B</td><td>15 min</td><td><strong>同一个模型，装进 Pipeline</strong>：用 <code class="inline">StandardScaler</code> + 分类器重建，比较准确率；回答为什么缩放对它重要、对树不重要；教师画泄漏箭头</td><td>p25</td><td>演示 → 跟做</td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>超参数扫描</strong>：<code class="inline">GridSearchCV(pipe, {'clf__C': [0.01, 0.1, 1, 10]}, cv=5)</code>；报告 <code class="inline">best_params_</code>、CV 分、测试分；查看 <code class="inline">cv_results_</code> 并对标准差发表一句评论</td><td>p26</td><td>自主练习 + 巡场</td></tr>
+  <tr><td>Lab D</td><td>20 min</td><td><strong>从分类到回归</strong>：对 <code class="inline">load_diabetes</code> 用 <code class="inline">RandomForestRegressor</code> 重跑 fit → predict → evaluate；报告 MAE 与 R²；用一句话向外行解释 R² = 0.45</td><td>p27</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>Lab E</td><td>10 min</td><td><strong>收尾与大作业推送（Part F）</strong>：写下三条任何项目都能复用的代码行；在项目仓库建 <code class="inline">src/data/</code> 与 <code class="inline">src/train.py</code>；说明划分策略；固定 <code class="inline">requirements.txt</code>；推送</td><td>p28–p29</td><td>清单核对</td></tr>
+  <tr><td>小测</td><td>10 min</td><td><strong>课堂小测</strong>：6 题（5 道选择/判断 + 1 道简答）投屏；先举手投票，再讲评；答对的同学讲思路</td><td>p30</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>5 min</td><td><strong>总结与预告</strong>：五条要点；课后待办；预告第 4 周（指标与阈值、过拟合诊断、Ridge 正则化）</td><td>p31–p32</td><td>回顾 + 预告</td></tr>
+</table>
+
+<h2>4. 关键活动设计</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 先把警告念一遍（Lab A，p25）</h4>
+  <p style="font-size:13.5px;">前两分钟不许动手修 ConvergenceWarning，必须先写下它在说什么。培养「先读诊断再动手」的条件反射，也为 Lab B 用标准化解决它埋下伏笔。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 两个模型，一处泄漏（Lab B，p25）</h4>
+  <p style="font-size:13.5px;">教师并排演示两版：缩放器在全量数据上拟合（泄漏）vs 放进 Pipeline（安全）。先让学生猜哪个分数「过于乐观」，再运行。结论：泄漏的版本分更高，但这个分数没人敢信。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 跑之前先猜 C（Lab C，p26）</h4>
+  <p style="font-size:13.5px;">运行扫描前，学生先写下自己猜哪个 <code class="inline">C</code> 会赢、为什么。把预测与 <code class="inline">best_params_</code> 对照，机械操作就变成了校准训练——「C 太大就过拟合」也就成了自己的经验。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 向外行解释 R²（Lab D，p27）</h4>
+  <p style="font-size:13.5px;">每人写一句话向非技术干系人解释 R² = 0.45，读给同桌听。多数第一版会说「45% 准确」，纠正后的版本才是重点：「我们解释了 45% 的波动，相对于直接猜平均值」。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 换台电脑跑一遍（Lab E，p29）</h4>
+  <p style="font-size:13.5px;">与邻座互换电脑，在对方仓库里运行 <code class="inline">python src/train.py</code>。绝对路径、缺失依赖、硬编码文件名会立刻暴露——比任何清单都管用。</p>
+</div>
+
+<h2>5. 作业与考核</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:90px;">权重</th></tr>
+  <tr><td>交付物</td><td><code class="inline">lab-03.ipynb</code>：Restart &amp; Run All 无报错、每个 Checkpoint 用自己的话回答、≥ 2 次有意义的 commit、推送到公开仓库</td><td>100 分</td></tr>
+  <tr><td>评分标准</td><td>基线 vs Pipeline（A–B）25 分 · GridSearchCV（C）30 分 · 回归分支（D）25 分 · 三行可复用总结（E）10 分 · 课后反思 10 分</td><td>实验占课程 20%</td></tr>
+  <tr><td>课堂小测</td><td>实验结束前 6 题，计入实验成绩 10%（见课件 p30）</td><td>实验 10%</td></tr>
+  <tr><td>大作业 M3</td><td>Part F（仓库 + 数据管线）计入大作业（35%），不计入本次实验；缺失 −2 团队分；迟交每次 −2，上限 −20</td><td>大作业 35%</td></tr>
+  <tr><td>迟交规则</td><td>实验交付物：每天 −10%，最多 3 天，之后 0 分。以 commit 哈希为时间戳，不是平台上传时间</td><td>—</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">学生离开前确认三件事</span>
+  notebook 能从头跑到尾；仓库至少 2 次 commit 已推送；大作业仓库里已有 <code class="inline">src/train.py</code>。
+  下周才补的里程碑，等于没做。
+</div>
+
+<h2>6. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前</h4>
+    <ul>
+      <li>第 2 周实验已提交（Titanic 清洗可运行）</li>
+      <li>教材第 3 章已浏览</li>
+      <li>大作业仓库已创建并邀请队友</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>资源</h4>
+    <ul>
+      <li>实验指导书：<code class="inline">labs/week-03/lab-handout.md</code></li>
+      <li>课件 p23–p32</li>
+      <li>教材 3.6–3.7</li>
+      <li>数据集随 scikit-learn 自带，无需下载</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 — 教案 LP-W3-B（实验部分 · 75 min + 小测与小结 15 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>
