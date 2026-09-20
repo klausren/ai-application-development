@@ -165,7 +165,7 @@ Decks are built by `scripts/build_deck.py` from a language-neutral spec (`script
 
 ### Lab Handouts 实验指导书 — `labs/week-XX/lab-handout.md`
 
-Every week's second half (课时 3–4, **80 min**) is a hands-on lab. Lab numbering follows the
+Every week's second half (**80 min lab + 10 min wrap-up**) is a hands-on lab. Lab numbering follows the
 official calendar — **实验 0–13 across Week 1–14**; Week 15 is the ethics seminar and Week 16 is
 capstone acceptance, so neither carries a lab number.
 

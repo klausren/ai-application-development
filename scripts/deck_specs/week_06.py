@@ -67,8 +67,8 @@ SPEC = {
          "count_label": {"zh": "本周结构", "en": "Part"},
          "tagline": {"zh": "训练集上的分数从来不是你的成绩单。\n本周回答三个问题：\n该看哪个数字、这个数字可不可信、怎么让它变可信。",
                      "en": "The score on your training set was never your report card.\nThis week answers three questions: which number to read, whether it can be trusted, and how to make it trustworthy."},
-         "timing": {"zh": "理论约 90 min · Lab 约 75 min · 小测与小结 15 min",
-                    "en": "Theory ~90 min · Lab ~75 min · Quiz & Summary 15 min"},
+         "timing": {"zh": "理论约 90 min · Lab 80 min · 小测与小结 10 min",
+                    "en": "Theory ~90 min · Lab 80 min · Quiz & Summary 10 min"},
          "parts": [
              {"title": {"zh": "评估指标：选对那个数字", "en": "Metrics: Choosing the Right Number"},
               "title_en": {"zh": "Metrics", "en": "Metrics"},

@@ -35,8 +35,8 @@ SPEC = {
          "count_label": {"zh": "本周结构", "en": "Part"},
          "tagline": {"zh": "损失函数决定模型在优化什么，\n优化器决定它怎么走，\n学习率决定它一步走多大。",
                      "en": "The loss names what you optimise, the optimizer decides how you walk, the learning rate decides how big a step you take."},
-         "timing": {"zh": "理论约 90 min · Lab 约 75 min · 小测与小结 15 min",
-                    "en": "Theory ~90 min · Lab ~75 min · Quiz & Summary 15 min"},
+         "timing": {"zh": "理论约 90 min · Lab 80 min · 小测与小结 10 min",
+                    "en": "Theory ~90 min · Lab 80 min · Quiz & Summary 10 min"},
          "parts": [
              {"title": {"zh": "损失函数：我们在优化什么", "en": "The Loss: What We Optimise"},
               "title_en": {"zh": "Loss", "en": "Loss"},
@@ -627,8 +627,8 @@ SPEC = {
          "title": {"zh": "Lab · 实验 4 优化器 × 学习率", "en": "Lab · Optimizers × Learning Rates"},
          "title_en": {"zh": "Hands-on: a 3 x 3 controlled experiment",
                      "en": "Hands-on: a 3 x 3 controlled experiment"},
-         "lead": {"zh": "75 分钟，亲手做一次真正的对照实验：3 种优化器 × 3 组学习率 = 9 次运行，\n然后回答一个必须用数据支撑的问题——哪一个组合最好，为什么。",
-                  "en": "75 minutes for a real controlled experiment: 3 optimizers x 3 learning rates = 9 runs,\nthen answer a question that must be backed by data — which combination wins, and why."},
+         "lead": {"zh": "80 分钟，亲手做一次真正的对照实验：3 种优化器 × 3 组学习率 = 9 次运行，\n然后回答一个必须用数据支撑的问题——哪一个组合最好，为什么。",
+                  "en": "80 minutes for a real controlled experiment: 3 optimizers x 3 learning rates = 9 runs,\nthen answer a question that must be backed by data — which combination wins, and why."},
          "pillars": [
              {"title": {"zh": "9 次运行", "en": "9 Runs"},
               "sub": {"zh": "一次只改一个变量", "en": "One variable at a time"}},

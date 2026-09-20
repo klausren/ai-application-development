@@ -1,11 +1,11 @@
 # Lab 01 · Linear Regression with Tensors and Autograd
-> **AI Application Development** · Week 2 Lab (75 min, 课时 3–4) · English with Chinese summary at the end · 中文摘要见文末
+> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 2 Lab (80 min) · English with Chinese summary at the end · 中文摘要见文末
 
 | | |
 |---|---|
 | **Week / 周次** | 2 |
 | **CU** | CU(2) · Module 1 (W1–4) |
-| **Duration** | 75 min lab + 15 min quiz & wrap-up |
+| **Duration** | 80 min lab + 10 min quiz & wrap-up |
 | **Module** | 1 · AI Application Development Foundations |
 | **Stack** | Python 3.11, PyTorch, matplotlib |
 | **Dataset** | Synthetic — generated in the script with a fixed seed |

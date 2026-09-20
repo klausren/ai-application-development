@@ -1,5 +1,5 @@
 # Lab 05 · Model Evaluation, Overfitting and Regularization — six arms, one honest verdict
-> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 6 Lab (80 min, 课时 3–4) · English with Chinese summary at the end · 中文摘要见文末
+> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 6 Lab (80 min) · English with Chinese summary at the end · 中文摘要见文末
 >
 > Official lab number: **实验 5** (this is the Week 6 lab). Module 2, week 2 of 4.
 > Supporting practical component: **SP(2) 视觉与文本模型训练实验** — single experiment, design type, 5.0 学时.

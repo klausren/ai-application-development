@@ -30,8 +30,8 @@ SPEC = {
          "count_label": {"zh": "本周结构", "en": "Part"},
          "tagline": {"zh": "先弄清「非线性从哪里来」，\n再学会把网络写规范，\n最后用对照实验决定它该有多大、多深。\nAsk why it bends, then how to build it, then how big it must be.",
                      "en": "First: where does non-linearity come from? Then: how do we build a network properly? Finally: how big and how deep should it be - decided by controlled experiments."},
-         "timing": {"zh": "理论约 90 min · Lab 约 75 min · 小测与小结 15 min",
-                    "en": "Theory ~90 min · Lab ~75 min · Quiz & Summary 15 min"},
+         "timing": {"zh": "理论约 90 min · Lab 80 min · 小测与小结 10 min",
+                    "en": "Theory ~90 min · Lab 80 min · Quiz & Summary 10 min"},
          "parts": [
              {"title": {"zh": "从感知机到多层感知机", "en": "From a Perceptron to an MLP"},
               "title_en": "Perceptron to MLP",
@@ -652,8 +652,8 @@ SPEC = {
         {"type": "section", "num": "05",
          "title": {"zh": "实验 3 与模块一里程碑", "en": "Experiment 3 and the Module 1 Milestone"},
          "title_en": {"zh": "Lab 3 and the Milestone", "en": "Lab 3 and the Milestone"},
-         "lead": {"zh": "75 分钟：用一个 nn.Module 搭出 MLP，做两组对照实验（有/无激活、不同宽度与深度），把结果写成一张表。\n这也是模块一的收官：问题定义单 + 数据管道 + 模型，三件事今天要凑齐。",
-                  "en": "75 minutes: build an MLP with nn.Module, run two controlled experiments (with/without activation; different widths and depths), and write the results as one table.\nIt is also the close of Module 1: problem sheet + data pipeline + model - all three due today."},
+         "lead": {"zh": "80 分钟：用一个 nn.Module 搭出 MLP，做两组对照实验（有/无激活、不同宽度与深度），把结果写成一张表。\n这也是模块一的收官：问题定义单 + 数据管道 + 模型，三件事今天要凑齐。",
+                  "en": "80 minutes: build an MLP with nn.Module, run two controlled experiments (with/without activation; different widths and depths), and write the results as one table.\nIt is also the close of Module 1: problem sheet + data pipeline + model - all three due today."},
          "pillars": [
              {"title": {"zh": "搭得规范", "en": "Build It Right"},
               "sub": {"zh": "nn.Module，层在 __init__", "en": "nn.Module, layers in __init__"}},

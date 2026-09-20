@@ -1,12 +1,12 @@
 # Lab 04 · Training Loop, Loss and Optimizer — the 3 × 3 controlled experiment
-> **AI Application Development** · Week 5 Lab (75 min, 课时 3–4) · English with Chinese summary at the end · 中文摘要见文末
+> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 5 Lab (80 min) · English with Chinese summary at the end · 中文摘要见文末
 >
 > Official lab number: **实验 4** (this is the Week 5 lab). Module 2 opens here.
 
 | | |
 |---|---|
 | **Week / 周次** | 5 |
-| **Duration** | 75 min lab + 15 min quiz & wrap-up |
+| **Duration** | 80 min lab + 10 min quiz & wrap-up |
 | **Module** | 2 · Core Deep Learning: Techniques and Model Training (Week 5–8) — first week |
 | **Stack** | Python 3.11, PyTorch 2.x, scikit-learn (`load_digits`), matplotlib |
 | **Dataset** | `sklearn.datasets.load_digits` — 1,797 samples × 64 raw pixel features, 10 classes (ships with scikit-learn, no download) |

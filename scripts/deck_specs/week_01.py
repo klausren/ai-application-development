@@ -29,8 +29,8 @@ SPEC = {
          "count_label": {"zh": "本周结构", "en": "Part"},
          "tagline": {"zh": "先看清这门课要造什么、需要什么能力，\n再把你的工作台搭建到「可复现」。\nKnow the destination before you start walking.",
                      "en": "Know what you will build and what it takes, then set up a workbench that is reproducible."},
-         "timing": {"zh": "理论约 90 min · Lab 约 75 min · 小测与小结 15 min",
-                    "en": "Theory ~90 min · Lab ~75 min · Quiz & Summary 15 min"},
+         "timing": {"zh": "理论约 90 min · Lab 80 min · 小测与小结 10 min",
+                    "en": "Theory ~90 min · Lab 80 min · Quiz & Summary 10 min"},
          "parts": [
              {"title": {"zh": "AI 应用开发是什么", "en": "What Is AI Application Development"},
               "title_en": "What It Is",

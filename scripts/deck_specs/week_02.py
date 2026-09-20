@@ -31,8 +31,8 @@ SPEC = {
          "count_label": {"zh": "本周结构", "en": "Part"},
          "tagline": {"zh": "张量是这门课唯一的数据容器，autograd 是唯一要理解的引擎。\n今天用这两样东西，把一条直线学出来。\nA tensor is the container; autograd is the engine.",
                      "en": "A tensor is the only data container this course uses; autograd is the only engine you must understand.\nToday you will learn a straight line using nothing but those two."},
-         "timing": {"zh": "理论约 90 min · Lab 约 75 min · 小测与小结 15 min",
-                    "en": "Theory ~90 min · Lab ~75 min · Quiz & Summary 15 min"},
+         "timing": {"zh": "理论约 90 min · Lab 80 min · 小测与小结 10 min",
+                    "en": "Theory ~90 min · Lab 80 min · Quiz & Summary 10 min"},
          "parts": [
              {"title": {"zh": "张量：深度学习的通用容器", "en": "Tensors as the Universal Container"},
               "title_en": "The Container",

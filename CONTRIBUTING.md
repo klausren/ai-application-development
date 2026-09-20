@@ -17,7 +17,7 @@ First of all — thank you. This repo exists because open courseware helped its 
 1. **License compatibility** — by contributing, you agree your work is released under this repo's [CC BY-NC-SA 4.0](LICENSE). Don't submit material you can't license that way.
 2. **Respect third-party copyright** — don't commit slides/PDFs from courses without an open license (that's why CS224n PDFs live behind a downloader script, not in git). If in doubt, link instead of bundle. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 3. **Bilingual by default** — new teaching materials should ship in English (the language of instruction); Chinese versions are welcome but optional per file.
-4. **Keep the weekly structure** — 90 min lecture + 75 min lab + 15 min quiz. Deviations are fine but document why in the PR.
+4. **Keep the weekly structure** — 90 min lecture + 80 min lab + 10 min wrap-up. Deviations are fine but document why in the PR.
 
 ## 🔧 Mechanics
 

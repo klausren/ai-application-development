@@ -1,10 +1,10 @@
 # Lab 03 · Modelling with nn.Module and Controlled Ablations
-> **AI Application Development** · Week 4 Lab (75 min, 课时 7–8) · English with Chinese summary at the end · 中文摘要见文末
+> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 4 Lab (80 min) · English with Chinese summary at the end · 中文摘要见文末
 
 | | |
 |---|---|
 | **Week / 周次** | 4 · CU(4) · Module 1 closing week |
-| **Duration** | 75 min lab + 15 min quiz & wrap-up |
+| **Duration** | 80 min lab + 10 min quiz & wrap-up |
 | **Module** | 1 · AI Application Development Foundations and PyTorch (W1–4) |
 | **Stack** | Python 3.11, PyTorch 2.x, NumPy, scikit-learn (dataset generation only), matplotlib, Git |
 | **Dataset** | `make_moons` + `make_circles` (1,000 samples each, 2 features, 2 classes) — generated in code, no download |
