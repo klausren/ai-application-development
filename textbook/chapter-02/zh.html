@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapter 2 — Data Handling Fundamentals for AI | 第2章 AI数据处理基础</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -22,25 +21,33 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.8; font-size: 15px; -webkit-font-smoothing: antialiased;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
   }
   .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
 
+  /* Chapter header */
   .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
   .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
   .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
-  .chapter-header h1 .en { display: block; font-size: 21px; font-weight: 600; color: var(--text-sec); margin-top: 6px; letter-spacing: 0; }
-  .chapter-header .overview { margin-top: 16px; font-size: 14px; color: var(--text-sec); }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
 
+  /* Section */
   .section { margin-bottom: 36px; }
-  h2 { font-size: 21px; font-weight: 800; color: var(--text); padding: 12px 0 8px; margin: 32px 0 14px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
-  h2 .en { font-size: 15px; font-weight: 500; color: var(--text-sec); }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
   h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
   h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
-  h3 .en { font-size: 13.5px; font-weight: 500; color: var(--text-sec); margin-left: 6px; }
   p { margin-bottom: 10px; }
-  .en { color: var(--text-sec); }
 
+  /* Callout boxes */
   .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
   .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
   .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
@@ -49,41 +56,64 @@
   .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
   .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
 
-  pre { background: var(--code-bg); color: var(--code-text); border-radius: 10px; padding: 16px 20px; margin: 12px 0; font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; }
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
   pre .cm { color: #64748b; }
   pre .kw { color: #93c5fd; }
   pre .fn { color: #fbbf24; }
   pre .str { color: #6ee7b7; }
   pre .num { color: #f9a8d4; }
-  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
 
+  /* Tables */
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
   th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
   td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
   td:first-child { font-weight: 600; }
 
+  /* Lists */
   ul, ol { padding-left: 22px; margin-bottom: 10px; }
   li { margin-bottom: 5px; }
 
+  /* Terminology grid */
   .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
   .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
   .term h4 { font-size: 15px; margin-bottom: 4px; }
-  .term .en { font-size: 12.5px; }
   .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
 
+  /* Steps */
   .steps { counter-reset: step; margin: 14px 0; }
   .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
-  .steps .step::before { content: counter(step); flex-shrink: 0; width: 28px; height: 28px; background: var(--accent); color: #fff; border-radius: 8px; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
   .steps .step .body { font-size: 14.5px; }
-  .steps .step .body .en { font-size: 13px; }
 
+  /* Exercise */
   .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
   .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
   .exercise ol { font-size: 14px; }
 
+  /* Footer */
   .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
 
-  @media (max-width: 640px) { .container { padding: 24px 16px 48px; } .terms { grid-template-columns: 1fr; } .chapter-header h1 { font-size: 24px; } .chapter-header h1 .en { font-size: 17px; } }
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
 </style>
 </head>
 <body>
@@ -91,394 +121,363 @@
 
 <!-- ========== CHAPTER HEADER ========== -->
 <div class="chapter-header">
-  <div class="chapter-no">Chapter 02 · Module 1 · Week 2</div>
-  <h1>AI 数据处理基础<span class="en">Data Handling Fundamentals for AI</span></h1>
-  <p class="overview">数据是 AI 的燃料。本章从"数据在 AI 中的角色"出发，系统讲授 NumPy 向量化运算、Pandas 数据操作、Matplotlib/Seaborn 可视化、探索性数据分析（EDA）与数据清洗实战。你将完成一个真实数据集的端到端数据处理流程，为第 3-4 周的机器学习建模打好数据基础。<br>
-  <span class="en">Data is the fuel of AI. This chapter systematically covers NumPy vectorized computing, Pandas data manipulation, Matplotlib/Seaborn visualization, exploratory data analysis (EDA), and hands-on data cleaning. You will complete an end-to-end data pipeline on a real dataset, preparing the data foundation for ML modeling in Weeks 3-4.</span></p>
+  <div class="chapter-no">第 02 章 · 模块 1 · 第 2 周</div>
+  <h1>PyTorch 基础：张量与自动求导</h1>
+  <p class="overview">在 PyTorch 里，数据、参数、梯度、损失全都是张量——一个容器，一个引擎。本章先讲容器（形状、类型、设备、是否求导、梯度），再讲引擎（计算图与反向传播），然后只用这两样东西，用梯度下降把一条直线学出来。本章还会重点覆盖本课程最在意的一类 bug：不报错、但答案是错的形状错误。</p>
 </div>
 
 <!-- ========== 2.1 ========== -->
 <div class="section">
-  <h2>2.1 数据在 AI 中的角色<span class="en">The Role of Data in AI</span></h2>
-  <p>在第 1 章的项目生命周期中，"数据获取与探索"和"数据处理与特征工程"占了约 80% 的工作量。这一节回答一个根本问题：什么样的数据，才能训练出好模型？</p>
-  <p class="en">In the project lifecycle from Chapter 1, data acquisition and feature engineering account for ~80% of effort. This section answers: what makes data "good enough" to train a model?</p>
+  <h2>2.1 张量：深度学习的通用容器</h2>
+  <p>第 1 章讲了流水线，本章打开工具箱。你在流水线各阶段之间传递的一切——一批输入、一个权重矩阵、一个损失、一份梯度——都是张量。</p>
 
-  <h3>2.1.1 数据类型<span class="en">Data Types</span></h3>
+  <h3>2.1.1 张量是什么</h3>
+  <p>张量是 n 维数组，外加三种能力：它知道自己是什么形状和什么类型，它能住在 GPU 上，它能被求导。</p>
   <div class="terms">
-    <div class="term"><h4>结构化数据</h4><div class="en">Structured Data</div><p>行列表格形式，有明确字段类型。如 CSV/Excel、数据库表。Pandas 的主战场。<span class="en">Tabular format with defined schema; Pandas territory.</span></p></div>
-    <div class="term"><h4>非结构化数据</h4><div class="en">Unstructured Data</div><p>图像、文本、音频、视频。需先做特征提取或嵌入才能喂给模型。Module 2-3 重点。<span class="en">Images, text, audio — require feature extraction or embeddings first.</span></p></div>
-    <div class="term"><h4>半结构化数据</h4><div class="en">Semi-structured</div><p>JSON、XML、HTML。有层级结构但无固定 schema，需解析后转为结构化表。<span class="en">JSON, XML — hierarchical but schemaless; needs parsing.</span></p></div>
-    <div class="term"><h4>时间序列数据</h4><div class="en">Time Series</div><p>按时间排序的观测值。如股票价格、传感器读数。需处理时间索引与周期性。<span class="en">Ordered observations — stock prices, sensor logs; needs temporal indexing.</span></p></div>
+    <div class="term"><h4>0 维——标量</h4><p>一个数，例如一个损失值。由 <code class="inline">.mean()</code> 或 <code class="inline">.sum()</code> 产生。你在它上面调用 <code class="inline">.backward()</code>。</p></div>
+    <div class="term"><h4>1 维——向量</h4><p>一个样本的特征，或一个偏置向量，形状 <code class="inline">(n,)</code>。本章一半的坑都来自这个形状。</p></div>
+    <div class="term"><h4>2 维——矩阵</h4><p>一批样本，<code class="inline">(样本数, 特征数)</code>。所有表格类模型与线性模型的主力形状。</p></div>
+    <div class="term"><h4>3 维及以上</h4><p>图像 <code class="inline">(batch, channels, height, width)</code>、序列 <code class="inline">(batch, time, features)</code>。规则一样，只是出错的地方更多。</p></div>
   </div>
 
-  <h3>2.1.2 数据来源<span class="en">Data Sources</span></h3>
+  <h3>2.1.2 为什么不用 Python list</h3>
   <table>
-    <tr><th>来源 / Source</th><th>示例 / Examples</th><th>特点 / Characteristics</th></tr>
-    <tr><td>公开数据集</td><td>UCI ML Repository, Kaggle Datasets, Hugging Face Datasets, sklearn.datasets</td><td>免费、已标注、适合教学；需注意许可协议</td></tr>
-    <tr><td>企业内部数据</td><td>用户行为日志、交易记录、IoT 传感器流</td><td>真实场景价值高；涉及隐私合规、数据治理</td></tr>
-    <tr><td>API / 爬虫</td><td>REST API、Web Scraping、公开政府数据</td><td>实时获取；需处理速率限制、反爬、数据质量波动</td></tr>
-    <tr><td>合成数据</td><td>数据增强、GAN 生成、LLM 生成</td><td>补充稀缺标签；需验证与真实分布的一致性</td></tr>
+    <tr><th></th><th>Python list</th><th>torch.Tensor</th></tr>
+    <tr><td>速度</td><td>循环由解释器逐元素执行</td><td>向量化内核（C++/CUDA），快一到两个数量级</td></tr>
+    <tr><td>形状</td><td>嵌套列表没有形状概念，长度没人替你检查</td><td>一个 <code class="inline">torch.Size</code>，每个运算都会校验</td></tr>
+    <tr><td>广播</td><td>不存在，循环得自己写</td><td>内建，且有明确规则（也有它自己的失效方式）</td></tr>
+    <tr><td>设备</td><td>只能 CPU</td><td><code class="inline">.to("cuda")</code> 搬进显存</td></tr>
+    <tr><td>梯度</td><td>不支持</td><td>autograd 自动记录运算</td></tr>
   </table>
 
-  <h3>2.1.3 数据质量维度<span class="en">Data Quality Dimensions</span></h3>
-  <div class="callout key">
-    <span class="label">Key Insight · 数据质量 = 模型上限</span>
-    模型再好，也救不了垃圾数据。工业界有一个共识：<strong>"Garbage In, Garbage Out"（GIGO）</strong>。数据质量的六个维度决定了模型性能的上限。<br>
-    <span class="en">No model can save bad data. "Garbage In, Garbage Out" — six quality dimensions cap model performance.</span>
+  <h3>2.1.3 与 NumPy 的关系</h3>
+  <pre>x = np.ones(<span class="num">3</span>)
+t = torch.from_numpy(x)     <span class="cm"># 共享内存，不是副本</span>
+t[<span class="num">0</span>] = <span class="num">9.0</span>
+<span class="fn">print</span>(x[<span class="num">0</span>])              <span class="cm"># 9.0 —— 数组也跟着变了</span>
+
+t2 = torch.tensor(x)        <span class="cm"># 这个是复制</span>
+arr = t2.numpy()            <span class="cm"># 交回给 NumPy，例如给 matplotlib 画图</span></pre>
+  <div class="callout tip">
+    <span class="label">一句话</span>
+    张量就是 NumPy 数组加两件事：能上 GPU、能求导。<code class="inline">from_numpy</code> 的共享内存行为值得记住，恰恰因为它不出声。
   </div>
-  <table>
-    <tr><th>维度 / Dimension</th><th>含义 / Meaning</th><th>典型问题 / Common Issues</th></tr>
-    <tr><td>完整性 Completeness</td><td>数据是否有缺失</td><td>空值、NaN、缺失行</td></tr>
-    <tr><td>准确性 Accuracy</td><td>数据是否反映真实值</td><td>录入错误、传感器噪声</td></tr>
-    <tr><td>一致性 Consistency</td><td>不同来源数据是否矛盾</td><td>单位不统一、重复记录冲突</td></tr>
-    <tr><td>时效性 Timeliness</td><td>数据是否反映当前状态</td><td>过时数据、更新延迟</td></tr>
-    <tr><td>唯一性 Uniqueness</td><td>有无重复记录</td><td>重复采集、合并冲突</td></tr>
-    <tr><td>合理性 Validity</td><td>值是否符合业务约束</td><td>年龄为负数、概率超出 [0,1]</td></tr>
-  </table>
+
+  <h3>2.1.4 GPU 张量</h3>
+  <pre>device = <span class="str">"cuda"</span> <span class="kw">if</span> torch.cuda.is_available() <span class="kw">else</span> <span class="str">"cpu"</span>
+X = torch.randn(<span class="num">100</span>, <span class="num">1</span>).to(device)
+w = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, requires_grad=<span class="kw">True</span>, device=device)
+
+<span class="cm"># 把数据和参数一起搬过去，是你自己的责任</span>
+<span class="fn">print</span>((X @ w).device)     <span class="cm"># cuda:0 —— 结果留在了 GPU 上</span></pre>
+  <p>两个张量必须在同一设备上才能参与运算。CPU 与 GPU 混算会立刻抛 <code class="inline">RuntimeError</code>——这是本章为数不多「会主动帮你」的报错。只用 CPU 完全没问题；有问题的是不知道自己在用什么设备。</p>
 </div>
 
 <!-- ========== 2.2 ========== -->
 <div class="section">
-  <h2>2.2 NumPy 数组与向量化运算<span class="en">NumPy Arrays & Vectorized Computing</span></h2>
-  <p>NumPy 是 Python 科学计算的基石。几乎所有上层库（Pandas、PyTorch、scikit-learn）底层都依赖 NumPy 的 <code class="inline">ndarray</code>。掌握 NumPy 的核心是理解<strong>向量化</strong>：用数组运算替代循环，性能可提升 10-100 倍。</p>
-  <p class="en">NumPy is the cornerstone of Python scientific computing. Nearly all higher-level libraries build on ndarray. The key insight is vectorization: array operations replace loops, yielding 10-100x speedup.</p>
+  <h2>2.2 张量的五个属性</h2>
+  <p>这五个属性里任何一个错了，程序都不会崩。它会跑完，损失会打印一个数，而这个数没有意义。这就是为什么下面这条习惯比本章任何技巧都值钱。</p>
 
-  <h3>2.2.1 创建数组<span class="en">Creating Arrays</span></h3>
-  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
-
-<span class="cm"># From Python lists</span>
-a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
-b = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
-
-<span class="cm"># Built-in generators</span>
-zeros = np.zeros((<span class="num">3</span>, <span class="num">4</span>))       <span class="cm"># 3×4 zero matrix</span>
-ones = np.ones(<span class="num">5</span>)              <span class="cm"># [1,1,1,1,1]</span>
-arange = np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)     <span class="cm"># [0,2,4,6,8]</span>
-linspace = np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>) <span class="cm"># [0, 0.25, 0.5, 0.75, 1.0]</span>
-rand = np.random.randn(<span class="num">3</span>, <span class="num">3</span>)   <span class="cm"># 3×3 standard normal</span>
-
-print(a.shape, b.shape)  <span class="cm"># (5,) (2,3)</span>
-print(a.dtype)           <span class="cm"># int64</span></pre>
-
-  <h3>2.2.2 向量化与广播<span class="en">Vectorization & Broadcasting</span></h3>
-  <pre><span class="cm"># Vectorized arithmetic — NO loops needed</span>
-a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
-print(a * <span class="num">2</span>)          <span class="cm"># [2 4 6 8]  — element-wise</span>
-print(a ** <span class="num">2</span>)         <span class="cm"># [1 4 9 16]</span>
-print(np.sqrt(a))      <span class="cm"># [1. 1.41 1.73 2.]</span>
-print(a.sum(), a.mean(), a.std())  <span class="cm"># 10 2.5 1.12</span>
-
-<span class="cm"># Broadcasting: shapes auto-expand for compatibility</span>
-matrix = np.ones((<span class="num">3</span>, <span class="num">4</span>))
-row = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
-result = matrix + row   <span class="cm"># row broadcasts to 3 rows</span>
-<span class="cm"># [[2,3,4,5], [2,3,4,5], [2,3,4,5]]</span></pre>
-  <div class="callout tip">
-    <span class="label">Performance Tip</span>
-    向量化比 Python 循环快 10-100 倍。规则：<strong>永远优先用 NumPy 内置函数而非 for 循环</strong>。处理百万级数据时差距是秒 vs 分钟。<span class="en">Vectorized ops are 10-100x faster than loops. Rule: always prefer NumPy built-in functions over for-loops.</span>
+  <h3>2.2.1 怎么读一个张量</h3>
+  <table>
+    <tr><th>属性</th><th>在看什么</th><th>典型值</th><th>什么时候会咬你</th></tr>
+    <tr><td>shape</td><td>每一维的大小</td><td><code class="inline">torch.Size([100, 1])</code></td><td>形状错了不报错，广播会替你「猜」一个结果</td></tr>
+    <tr><td>dtype</td><td>元素类型与精度</td><td><code class="inline">float32</code>、<code class="inline">int64</code></td><td><code class="inline">int64</code> 不能设 requires_grad，整数除法还会取整</td></tr>
+    <tr><td>device</td><td>数据物理上在哪</td><td><code class="inline">cpu</code>、<code class="inline">cuda:0</code></td><td>CPU 与 CUDA 混算直接 RuntimeError</td></tr>
+    <tr><td>requires_grad</td><td>这个张量要不要参与求导</td><td><code class="inline">True</code> / <code class="inline">False</code></td><td>参数忘了设，<code class="inline">.grad</code> 永远是 <code class="inline">None</code>，训练静默失败</td></tr>
+    <tr><td>grad</td><td>累计起来的梯度</td><td>与自身形状相同的张量</td><td>它是累加的：不看零，你读到的是一串错数</td></tr>
+  </table>
+  <div class="callout key">
+    <span class="label">那个习惯</span>
+    任何一次形状报错，或者结果看着不对，先打印：
+    <code class="inline">print(x.shape, x.dtype, x.device)</code>。
+    九成的张量 bug 在这一行里就现形了。这不是调试，这是默认动作。
   </div>
 
-  <h3>2.2.3 索引与切片<span class="en">Indexing & Slicing</span></h3>
-  <pre>a = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]])
+  <h3>2.2.2 创建张量</h3>
+  <pre><span class="kw">import</span> torch
 
-<span class="cm"># Basic indexing</span>
-print(a[<span class="num">0</span>, <span class="num">1</span>])       <span class="cm"># 2  (row 0, col 1)</span>
-print(a[:, <span class="num">0</span>])       <span class="cm"># [1 4 7]  (all rows, col 0)</span>
+t = torch.tensor([[<span class="num">1.</span>, <span class="num">2.</span>], [<span class="num">3.</span>, <span class="num">4.</span>]])   <span class="cm"># 从 Python 数据构造</span>
+z = torch.zeros(<span class="num">2</span>, <span class="num">3</span>)                    <span class="cm"># 全 0</span>
+o = torch.ones(<span class="num">2</span>, <span class="num">3</span>)                     <span class="cm"># 全 1</span>
+r = torch.randn(<span class="num">2</span>, <span class="num">3</span>)                    <span class="cm"># 标准正态随机</span>
+a = torch.arange(<span class="num">0</span>, <span class="num">6</span>)                   <span class="cm"># 0..5，默认 int64</span>
+l = torch.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)              <span class="cm"># [0,1] 上等距 5 点</span>
 
-<span class="cm"># Boolean masking — filter by condition</span>
-mask = a > <span class="num">5</span>
-print(a[mask])        <span class="cm"># [6 7 8 9]</span>
+<span class="fn">print</span>(t.shape, t.dtype, t.device)
+<span class="cm"># torch.Size([2, 2]) torch.float32 cpu</span>
 
-<span class="cm"># Fancy indexing — select by index array</span>
-print(a[[<span class="num">0</span>, <span class="num">2</span>]])    <span class="cm"># rows 0 and 2</span>
-
-<span class="cm"># Where: conditional assignment</span>
-np.where(a > <span class="num">5</span>, <span class="str">"big"</span>, <span class="str">"small"</span>)</pre>
+<span class="fn">print</span>(a.dtype)                            <span class="cm"># torch.int64</span>
+<span class="fn">print</span>(torch.arange(<span class="num">6.</span>).dtype)             <span class="cm"># torch.float32 —— 一个点号</span>
+<span class="fn">print</span>(round(r.mean().item(), <span class="num">2</span>))          <span class="cm"># 约 0.00</span>
+<span class="fn">print</span>(round(r.std().item(), <span class="num">2</span>))           <span class="cm"># 约 1.00</span></pre>
+  <div class="callout warn">
+    <span class="label">坑</span>
+    <code class="inline">torch.arange(0, 6)</code> 是 <code class="inline">int64</code>，在它上面设 <code class="inline">requires_grad=True</code> 会直接报错。训练代码里写 <code class="inline">torch.arange(6.)</code>：一个小数点就把它变成 <code class="inline">float32</code>。同一个坑还有另一种形式——<code class="inline">y = 3.0 * X + 2.0</code>，那个 <code class="inline">2.0</code> 就是为了让结果保持浮点。
+  </div>
 </div>
 
 <!-- ========== 2.3 ========== -->
 <div class="section">
-  <h2>2.3 Pandas 数据操作<span class="en">Pandas Data Manipulation</span></h2>
-  <p>Pandas 是结构化数据处理的事实标准。<code class="inline">Series</code> 是一维带标签数组，<code class="inline">DataFrame</code> 是二维表格——你可以把它理解为"带行列标签的 Excel + SQL 查询能力"。</p>
+  <h2>2.3 形状变换与广播</h2>
+  <p>本节包含本章唯一一类「完全不报错」的失败。它应该得到最多注意力，而不是最少。</p>
 
-  <h3>2.3.1 加载与概览<span class="en">Loading & Overview</span></h3>
-  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+  <h3>2.3.1 形状变换的三组动作</h3>
+  <table>
+    <tr><th>动作</th><th>操作</th><th>要知道什么</th></tr>
+    <tr><td>改形状</td><td><code class="inline">view</code>、<code class="inline">reshape</code>、<code class="inline">-1</code></td><td><code class="inline">view</code> 共享内存且要求连续；<code class="inline">reshape</code> 必要时会复制——日常首选。<code class="inline">-1</code> 表示「这一维你来算」，其余维必须能整除。</td></tr>
+    <tr><td>增维与删维</td><td><code class="inline">unsqueeze</code>、<code class="inline">squeeze</code></td><td><code class="inline">unsqueeze(1)</code> 把 <code class="inline">(n,)</code> 变成 <code class="inline">(n,1)</code>，是本课程最常用的救场；<code class="inline">squeeze</code> 只能删大小为 1 的维。</td></tr>
+    <tr><td>换轴</td><td><code class="inline">transpose</code>、<code class="inline">permute</code></td><td>换轴之后通常不连续，<code class="inline">view</code> 会失败。改用 <code class="inline">.contiguous().view(...)</code> 或 <code class="inline">reshape</code>。</td></tr>
+  </table>
+  <pre>x = torch.arange(<span class="num">6.</span>)           <span class="cm"># (6,)</span>
+a = x.view(<span class="num">2</span>, <span class="num">3</span>)               <span class="cm"># (2,3) —— 与 x 共享内存</span>
+x[<span class="num">0</span>] = <span class="num">99.</span>
+<span class="fn">print</span>(a[<span class="num">0</span>, <span class="num">0</span>])                 <span class="cm"># 99.0 -&gt; 视图不是副本</span>
 
-<span class="cm"># Load from CSV</span>
-df = pd.read_csv(<span class="str">"titanic.csv"</span>)
+t = a.t()                      <span class="cm"># (3,2)，转置后不连续</span>
+<span class="cm"># t.view(6)                    # RuntimeError: view size is not compatible</span>
+<span class="fn">print</span>(t.reshape(<span class="num">6</span>).shape)         <span class="cm"># (6,) —— reshape 会复制，所以能用</span>
 
-<span class="cm"># Quick overview — the first 3 commands you always run</span>
-df.head()          <span class="cm"># first 5 rows</span>
-df.info()          <span class="cm"># dtypes, non-null counts, memory</span>
-df.describe()      <span class="cm"># statistical summary of numeric columns</span>
-df.shape           <span class="cm"># (rows, cols)</span>
-df.columns         <span class="cm"># column names</span>
-df.dtypes          <span class="cm"># data types per column</span></pre>
+<span class="fn">print</span>(x.reshape(<span class="num">2</span>, -<span class="num">1</span>).shape)       <span class="cm"># (2, 3)</span>
+<span class="fn">print</span>(x.unsqueeze(<span class="num">1</span>).shape)         <span class="cm"># (6, 1) —— 正好对上 MSE 的广播</span></pre>
 
-  <h3>2.3.2 索引、筛选与赋值<span class="en">Indexing, Filtering & Assignment</span></h3>
-  <pre><span class="cm"># Column selection</span>
-df[<span class="str">"Age"</span>]                    <span class="cm"># single column → Series</span>
-df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Survived"</span>]]  <span class="cm"># multiple → DataFrame</span>
+  <h3>2.3.2 广播规则</h3>
+  <div class="steps">
+    <div class="step"><h4>从最右一维开始对齐</h4><p class="body">从两个形状的最右边一维开始比较，逐维向左。</p></div>
+    <div class="step"><h4>两维相等直接对齐</h4><p class="body">大小相同的维度直接配对。</p></div>
+    <div class="step"><h4>其中一维是 1 就复制</h4><p class="body">如果两者中有一个是 1，就沿这一维复制扩展到另一边的长度。</p></div>
+    <div class="step"><h4>都不是 1 且不相等就报错</h4><p class="body">这是好错误。它在你算出一个没有意义的东西之前把你拦住了。</p></div>
+  </div>
+  <pre>w = torch.randn(<span class="num">3</span>)         <span class="cm"># (3,)</span>
+X = torch.randn(<span class="num">4</span>, <span class="num">3</span>)      <span class="cm"># (4,3)</span>
+<span class="fn">print</span>((X + w).shape)       <span class="cm"># (4,3) —— w 被复制到每一行：符合直觉</span>
 
-<span class="cm"># .loc = label-based, .iloc = position-based</span>
-df.loc[<span class="num">0</span>:<span class="num">4</span>, [<span class="str">"Name"</span>, <span class="str">"Age"</span>]]    <span class="cm"># rows 0-4, specific cols</span>
-df.iloc[<span class="num">0</span>:<span class="num">5</span>, <span class="num">0</span>:<span class="num">3</span>]              <span class="cm"># first 5 rows, first 3 cols</span>
+v = torch.randn(<span class="num">3</span>, <span class="num">1</span>)      <span class="cm"># (3,1)</span>
+<span class="fn">print</span>((v + w).shape)       <span class="cm"># (3,3) —— 静默变大。这就是那个 bug。</span>
 
-<span class="cm"># Boolean filtering — the most common pattern</span>
-survived = df[df[<span class="str">"Survived"</span>] == <span class="num">1</span>]
-women_first = df[(df[<span class="str">"Sex"</span>] == <span class="str">"female"</span>) & (df[<span class="str">"Pclass"</span>] == <span class="num">1</span>)]
+<span class="fn">print</span>(torch.broadcast_shapes((<span class="num">3</span>, <span class="num">1</span>), (<span class="num">3</span>,)))
+<span class="cm"># -&gt; (3, 3)：规则说合法，但不是你要的</span>
 
-<span class="cm"># Column creation from existing columns</span>
-df[<span class="str">"FamilySize"</span>] = df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] + <span class="num">1</span>
-df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"FamilySize"</span>] == <span class="num">1</span>).astype(int)</pre>
+w2 = w.reshape(-<span class="num">1</span>, <span class="num">1</span>)            <span class="cm"># 把意图写进形状</span>
+<span class="fn">print</span>((v + w2).shape)      <span class="cm"># (3,1) —— 这才是你想要的</span></pre>
+  <div class="callout key">
+    <span class="label">规则背后的规则</span>
+    广播保证的是<em>合法</em>，不是<em>符合意图</em>。引擎会很乐意产出一个你从没想要的形状，且不给你任何警告。写 <code class="inline">reshape(-1, 1)</code> 一半是为了正确，一大半是为了让代码自己解释自己。
+  </div>
 
-  <h3>2.3.3 分组聚合<span class="en">GroupBy & Aggregation</span></h3>
-  <pre><span class="cm"># Group by one column, aggregate multiple ways</span>
-df.groupby(<span class="str">"Pclass"</span>)[<span class="str">"Fare"</span>].agg([<span class="str">"mean"</span>, <span class="str">"median"</span>, <span class="str">"count"</span>])
+  <h3>2.3.3 静默错 vs 报错</h3>
+  <p>把你遇到的失败分进这两列；注意力要花在左边那一列上。</p>
+  <table>
+    <tr><th>写法</th><th>结果</th><th>报错吗</th><th>为什么</th></tr>
+    <tr><td><code class="inline">X (4,3) + w (3,)</code></td><td><code class="inline">(4,3)</code></td><td>不报</td><td>从最右对齐，<code class="inline">w</code> 被复制到每一行——符合直觉</td></tr>
+    <tr><td><code class="inline">v (3,1) + w (3,)</code></td><td><code class="inline">(3,3)</code></td><td>不报 —— <strong>静默错</strong></td><td><code class="inline">(3,1)</code> 沿列复制、<code class="inline">(3,)</code> 沿行复制，结果凭空多出一维</td></tr>
+    <tr><td><code class="inline">v + w.reshape(-1,1)</code></td><td><code class="inline">(3,1)</code></td><td>不报</td><td>把意图写进了形状里</td></tr>
+    <tr><td><code class="inline">X (100,1) @ w (1,1)</code></td><td><code class="inline">(100,1)</code></td><td>不报</td><td>矩阵乘法不广播，内维必须严格相等</td></tr>
+    <tr><td><code class="inline">X (100,1) @ w (3,)</code></td><td>—</td><td><strong>报错</strong></td><td>内维 1 与 3 不相等：<em>mat1 and mat2 shapes cannot be multiplied</em></td></tr>
+    <tr><td><code class="inline">a (2,3).t().view(6)</code></td><td>—</td><td><strong>报错</strong></td><td>转置后内存不连续：<em>view size is not compatible...</em></td></tr>
+    <tr><td><code class="inline">x (4,6).reshape(-1,3)</code></td><td><code class="inline">(8,3)</code></td><td>不报</td><td><code class="inline">-1</code> 自动推断；其余维必须能整除</td></tr>
+  </table>
 
-<span class="cm"># Group by multiple columns</span>
-df.groupby([<span class="str">"Sex"</span>, <span class="str">"Pclass"</span>])[<span class="str">"Survived"</span>].mean()
-<span class="cm"># → survival rate by gender × class</span>
-
-<span class="cm"># Custom aggregation</span>
-df.groupby(<span class="str">"Pclass"</span>).agg({
-    <span class="str">"Age"</span>: [<span class="str">"mean"</span>, <span class="str">"median"</span>],
-    <span class="str">"Fare"</span>: [<span class="str">"sum"</span>, <span class="str">"max"</span>],
-    <span class="str">"Survived"</span>: <span class="str">"mean"</span>
-})
-
-<span class="cm"># Pivot table — spreadsheet-style cross-tab</span>
-pd.pivot_table(df, values=<span class="str">"Survived"</span>, index=<span class="str">"Sex"</span>,
-               columns=<span class="str">"Pclass"</span>, aggfunc=<span class="str">"mean"</span>)</pre>
-
-  <h3>2.3.4 合并与连接<span class="en">Merge & Join</span></h3>
-  <pre><span class="cm"># Two DataFrames with a shared key</span>
-passengers = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>], <span class="str">"name"</span>: [<span class="str">"Alice"</span>,<span class="str">"Bob"</span>,<span class="str">"Carol"</span>]})
-tickets = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>], <span class="str">"fare"</span>: [<span class="num">50</span>,<span class="num">80</span>,<span class="num">120</span>]})
-
-<span class="cm"># Four join types — same as SQL</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"inner"</span>)  <span class="cm"># only matches</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"left"</span>)   <span class="cm"># keep all passengers</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"outer"</span>)  <span class="cm"># keep all rows</span>
-pd.concat([df1, df2], axis=<span class="num">0</span>)  <span class="cm"># vertical stacking (more rows)</span></pre>
-  <div class="callout warn">
-    <span class="label">Common Pitfall</span>
-    <code class="inline">merge</code> 后行数变了？检查 <code class="inline">how</code> 参数和 key 的唯一性。<code class="inline">left</code> 保留左表全部行、缺失填 NaN；<code class="inline">inner</code> 只取交集。忘了检查会导致数据泄漏或静默丢行。<span class="en">Row count changed after merge? Check the how= parameter and key uniqueness.</span>
+  <h3>2.3.4 四个高频错误与五条自查</h3>
+  <div class="terms">
+    <div class="term"><h4>错误 1</h4><p>把 <code class="inline">(n,)</code> 与 <code class="inline">(n,1)</code> 混用，静默得到 <code class="inline">(n,n)</code>。在回归损失里，这会把 MSE 的量级整个改掉。</p></div>
+    <div class="term"><h4>错误 2</h4><p>该做外积的地方忘了补维，结果变成了逐元素相乘。</p></div>
+    <div class="term"><h4>错误 3</h4><p>对转置后的张量用 <code class="inline">view</code>——非连续，直接报错。</p></div>
+    <div class="term"><h4>错误 4</h4><p>更新参数时形状不一致，广播把 <code class="inline">w</code> 从 <code class="inline">(n,)</code> 悄悄变成 <code class="inline">(n,n)</code>。</p></div>
+    <div class="term"><h4>自查 1–3</h4><p>写形状相关代码前，先把每行的预期形状写进注释；加断言 <code class="inline">assert y_hat.shape == y.shape</code>；把目标统一成 <code class="inline">reshape(-1, 1)</code>，别让 <code class="inline">(n,)</code> 参战。</p></div>
+    <div class="term"><h4>自查 4–5</h4><p>非连续张量用 <code class="inline">reshape</code> 或 <code class="inline">.contiguous().view(...)</code>；训练开始前，把数据与每个参数的形状各打印一次。</p></div>
   </div>
 </div>
 
 <!-- ========== 2.4 ========== -->
 <div class="section">
-  <h2>2.4 数据可视化<span class="en">Data Visualization with Matplotlib & Seaborn</span></h2>
-  <p>可视化是 EDA 的核心武器：一张图比一千行 <code class="inline">describe()</code> 更能暴露数据问题。Matplotlib 是底层引擎，Seaborn 在其上封装了统计图表，用更少的代码画出更专业的图。</p>
+  <h2>2.4 计算图与自动求导</h2>
+  <p>autograd 只做一件事：把前向的每一步记下来，反向时按链式法则逐段求导。你不需要自己推导，但你必须知道谁在图上。</p>
 
-  <h3>2.4.1 Matplotlib 基础<span class="en">Matplotlib Basics</span></h3>
-  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+  <h3>2.4.1 计算图是前向的副产品</h3>
+  <p>任何涉及 <code class="inline">requires_grad=True</code> 张量的运算都会记下自己是怎么算出结果的。整张图是一张有向无环图，叶子就是你的参数。<code class="inline">backward()</code> 之后图默认被释放；需要再次遍历就传 <code class="inline">retain_graph=True</code>。</p>
 
-fig, axes = plt.subplots(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+  <h3>2.4.2 requires_grad：开关</h3>
+  <ul>
+    <li>只有浮点张量能设 <code class="inline">requires_grad=True</code>，<code class="inline">int64</code> 张量会报错。</li>
+    <li>数据（<code class="inline">X</code>、<code class="inline">y</code>）不需要；参数（<code class="inline">w</code>、<code class="inline">b</code>）必须有。</li>
+    <li>凡是从这种张量算出来的结果都自动带上这个标记——图就是这样长出来的。</li>
+  </ul>
 
-<span class="cm"># Histogram — distribution of a numeric variable</span>
-axes[<span class="num">0</span>].hist(df[<span class="str">"Age"</span>].dropna(), bins=<span class="num">30</span>, edgecolor=<span class="str">"white"</span>)
-axes[<span class="num">0</span>].set_title(<span class="str">"Age Distribution"</span>)
+  <h3>2.4.3 backward、grad 与累加</h3>
+  <pre>x = torch.tensor(<span class="num">3.0</span>, requires_grad=<span class="kw">True</span>)   <span class="cm"># 叶子张量</span>
+y = x ** <span class="num">2</span> + <span class="num">2</span> * x + <span class="num">1</span>                      <span class="cm"># 前向 + 建图</span>
+<span class="fn">print</span>(y.requires_grad, y.grad_fn)
+<span class="cm"># True &lt;AddBackward0&gt; —— 非叶子记录了它是怎么算出来的</span>
 
-<span class="cm"># Scatter plot — relationship between two variables</span>
-axes[<span class="num">1</span>].scatter(df[<span class="str">"Age"</span>], df[<span class="str">"Fare"</span>], alpha=<span class="num">0.5</span>, s=<span class="num">10</span>)
-axes[<span class="num">1</span>].set_xlabel(<span class="str">"Age"</span>); axes[<span class="num">1</span>].set_ylabel(<span class="str">"Fare"</span>)
-axes[<span class="num">1</span>].set_title(<span class="str">"Age vs Fare"</span>)
+y.backward()                                <span class="cm"># 反向：沿图回传</span>
+<span class="fn">print</span>(x.grad)                               <span class="cm"># 8.0 = 2*3 + 2</span>
 
-plt.tight_layout(); plt.show()</pre>
+x.grad = <span class="kw">None</span>                               <span class="cm"># 梯度默认累加，先清零</span>
+z = (x ** <span class="num">2</span>).sum()
+z.backward()
+<span class="fn">print</span>(x.grad)                               <span class="cm"># 6.0 = 2*3</span>
 
-  <h3>2.4.2 Seaborn 统计图表<span class="en">Seaborn Statistical Plots</span></h3>
-  <pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
-sns.set_style(<span class="str">"whitegrid"</span>)
+<span class="kw">with</span> torch.no_grad():                       <span class="cm"># 推理：不建图</span>
+    <span class="fn">print</span>((x * <span class="num">2</span>).requires_grad)            <span class="cm"># False</span>
+<span class="fn">print</span>((x * <span class="num">3</span>).detach().requires_grad)       <span class="cm"># False —— 从图上摘下</span></pre>
+  <div class="callout warn">
+    <span class="label">梯度累加的全部真相</span>
+    把 <code class="inline">x.grad = None</code> 那一行注释掉再跑一次：梯度变成 <code class="inline">8 + 6 = 14</code>。它不报错。在训练循环里，这就是损失曲线来回震荡而不下降的直接原因。
+  </div>
 
-<span class="cm"># Count plot — categorical frequency</span>
-sns.countplot(data=df, x=<span class="str">"Pclass"</span>, hue=<span class="str">"Survived"</span>)
-
-<span class="cm"># Box plot — detect outliers by group</span>
-sns.boxplot(data=df, x=<span class="str">"Pclass"</span>, y=<span class="str">"Age"</span>)
-
-<span class="cm"># Violin plot — distribution shape by category</span>
-sns.violinplot(data=df, x=<span class="str">"Sex"</span>, y=<span class="str">"Age"</span>, split=<span class="kw">True</span>)
-
-<span class="cm"># Correlation heatmap — the EDA power move</span>
-corr = df.select_dtypes(include=[<span class="str">"number"</span>]).corr()
-sns.heatmap(corr, annot=<span class="kw">True</span>, cmap=<span class="str">"coolwarm"</span>, center=<span class="num">0</span>)
-
-<span class="cm"># Pair plot — pairwise relationships at a glance</span>
-sns.pairplot(df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Pclass"</span>, <span class="str">"Survived"</span>]], hue=<span class="str">"Survived"</span>)</pre>
-  <div class="callout key">
-    <span class="label">Key Insight · 图表选择口诀</span>
-    <strong>看分布用直方图/密度图；看关系用散点图；看比较用箱线图/小提琴图；看相关用热力图。</strong>记住这四类，覆盖 90% 的 EDA 需求。<span class="en">Distribution → histogram/KDE; Relationship → scatter; Comparison → box/violin; Correlation → heatmap. These four cover 90% of EDA.</span>
+  <h3>2.4.4 一次参数更新的五个动作</h3>
+  <div class="steps">
+    <div class="step"><h4>前向</h4><p class="body">用当前参数算出预测：<code class="inline">y_hat = X @ w + b</code>。</p></div>
+    <div class="step"><h4>建图</h4><p class="body">因为参数需要梯度，这一步自动发生。</p></div>
+    <div class="step"><h4>求损失</h4><p class="body">把误差压成一个标量：<code class="inline">loss = ((y_hat - y) ** 2).mean()</code>。</p></div>
+    <div class="step"><h4>反向</h4><p class="body"><code class="inline">loss.backward()</code> 沿图回传，填满每个叶子的 <code class="inline">.grad</code>。</p></div>
+    <div class="step"><h4>更新与清零</h4><p class="body">在 <code class="inline">with torch.no_grad():</code> 里手改参数，然后立刻清零梯度。顺序固定，<code class="inline">no_grad</code> 这层包装不是可选项。</p></div>
   </div>
 </div>
 
 <!-- ========== 2.5 ========== -->
 <div class="section">
-  <h2>2.5 探索性数据分析（EDA）<span class="en">Exploratory Data Analysis</span></h2>
-  <p>EDA 不是"画画"，而是<strong>用数据回答问题的系统性方法</strong>。目标是：理解数据分布 → 发现异常 → 检验假设 → 为特征工程做准备。一个标准的 EDA 流程如下：</p>
-  <p class="en">EDA is not "making plots" — it's a systematic method of answering questions with data: understand distributions → find anomalies → test hypotheses → prepare for feature engineering.</p>
+  <h2>2.5 用张量实现梯度下降</h2>
+  <p>把前三节拼起来：张量装数据、形状对齐、autograd 给梯度，而下降那一步由你自己写。</p>
 
-  <div class="steps">
-    <div class="step"><div class="body"><strong>概览全局</strong> — <code class="inline">df.shape</code>, <code class="inline">df.info()</code>, <code class="inline">df.describe()</code>。回答：有多少行多少列？哪些是数值/类别/时间？有没有缺失？<span class="en">Overview: shape, info, describe.</span></div></div>
-    <div class="step"><div class="body"><strong>单变量分析</strong> — 数值变量画直方图，类别变量用 <code class="inline">value_counts</code>。回答：每个变量自己的分布长什么样？偏不偏？有没有离群值？<span class="en">Univariate analysis: each variable on its own.</span></div></div>
-    <div class="step"><div class="body"><strong>双变量分析</strong> — 散点图、分组聚合、交叉表；多变量时加相关系数矩阵 + 热力图。回答：哪些特征与目标变量相关？特征之间有没有共线性？<span class="en">Bivariate analysis: scatter, groupby, correlation matrix.</span></div></div>
-    <div class="step"><div class="body"><strong>异常与缺失</strong> — 极端值、缺失模式（<code class="inline">isnull().sum()</code> + 缺失热力图）。回答：是录入错误还是真实现象？缺失是随机的还是有规律的？<span class="en">Anomalies and missingness: error or reality?</span></div></div>
-    <div class="step"><div class="body"><strong>形成假设</strong> — 基于以上观察写下猜想（如"女性存活率更高"），用分组统计验证。回答：哪些特征可能有预测力？需要什么变换？<span class="en">Hypotheses: write them down, then verify.</span></div></div>
-  </div>
+  <h3>2.5.1 手写的训练循环</h3>
+  <pre><span class="kw">import</span> torch
+torch.manual_seed(<span class="num">42</span>)                  <span class="cm"># 固定种子：结果可复现</span>
 
-  <h3>2.5.1 Titanic 走查：五步法完整示例<span class="en">A Full Walkthrough on Titanic</span></h3>
-  <p>下面用 <code class="inline">sns.load_dataset("titanic")</code> 把五步法完整走一遍（与课件 p16–p17 对应）。注意：每一步都产出<strong>一条写进 notebook 的发现</strong>，而不是一张看完就关的图。</p>
-  <p class="en">Below, the five steps applied end-to-end to the Titanic dataset (mirrors slides p16–p17). Every step must yield a finding written into the notebook — not a chart you glance at and close.</p>
-  <pre><span class="cm"># Step 1 · 概览全局</span>
-df = sns.load_dataset(<span class="str">"titanic"</span>)
-df.shape          <span class="cm"># (891, 12)</span>
-df.info()         <span class="cm"># age 缺 177，deck 缺 688，embarked 缺 2</span>
+X = torch.randn(<span class="num">100</span>, <span class="num">1</span>)                <span class="cm"># (100, 1)</span>
+y = <span class="num">3.0</span> * X + <span class="num">2.0</span> + <span class="num">0.1</span> * torch.randn(<span class="num">100</span>, <span class="num">1</span>)
+w = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, requires_grad=<span class="kw">True</span>)
+b = torch.zeros(<span class="num">1</span>, requires_grad=<span class="kw">True</span>)
+lr, history = <span class="num">0.1</span>, []
 
-<span class="cm"># Step 2 · 单变量</span>
-df[<span class="str">"age"</span>].plot.hist()      <span class="cm"># 年龄右偏，集中在 20–40；fare 严重长尾（最高 512）</span>
+<span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(<span class="num">200</span>):
+    y_hat = X @ w + b                  <span class="cm"># 前向：(100,1)</span>
+    loss = ((y_hat - y) ** <span class="num">2</span>).mean()   <span class="cm"># MSE</span>
+    loss.backward()                    <span class="cm"># 反向：填 w.grad</span>
+    <span class="kw">with</span> torch.no_grad():              <span class="cm"># 更新不能建图</span>
+        w -= lr * w.grad
+        b -= lr * b.grad
+    w.grad.zero_(); b.grad.zero_()     <span class="cm"># 不清零 -&gt; 梯度累加</span>
+    history.append(loss.item())
 
-<span class="cm"># Step 3 · 双变量</span>
-df.groupby(<span class="str">"sex"</span>)[<span class="str">"survived"</span>].mean()
-<span class="cm"># female 0.74 vs male 0.19 —— 性别是强特征</span>
+<span class="fn">print</span>(round(w.item(), <span class="num">3</span>), round(b.item(), <span class="num">3</span>))   <span class="cm"># 2.987 2.013</span></pre>
+  <p>循环里有三件事必须发生，而且它们不能互换位置：<code class="inline">loss.backward()</code>、装在 <code class="inline">with torch.no_grad():</code> 里的更新、以及 <code class="inline">w.grad.zero_()</code>。少任何一件，训练都不会按你预期收敛。</p>
 
-<span class="cm"># Step 4 · 异常与缺失</span>
-df[<span class="str">"fare"</span>].describe()    <span class="cm"># 票价 0 元的票有 15 张——员工票还是录入错误？</span>
-
-<span class="cm"># Step 5 · 形成假设（写在 Markdown 里）</span>
-<span class="cm"># 假设1：sex + class + age 组合可预测生还</span>
-<span class="cm"># 假设2：deck 缺失超过 75%，应考虑删列</span>
-<span class="cm"># 假设3：fare=0 的记录需要单独核查</span></pre>
+  <h3>2.5.2 学习率三档</h3>
+  <table>
+    <tr><th>η</th><th>损失曲线长什么样</th><th>实际发生了什么</th></tr>
+    <tr><td>太小 0.001</td><td>几乎是平线，看不出下降</td><td>每步都极小，200 步远没走到谷底——很容易被误判成「模型不行」</td></tr>
+    <tr><td>合适 0.1</td><td>先明显下降，然后进入平台</td><td>本次实验的默认值，也是所有对比的基准</td></tr>
+    <tr><td>太大 1.0</td><td>整体上升、来回震荡，最终 nan</td><td>每一步都跨过谷底，落到对面更远的地方</td></tr>
+  </table>
   <div class="callout tip">
-    <span class="label">Takeaway · 五步即可行动</span>
-    同一份数据，五步就能得出可行动的结论——还没建模，特征清单已经成形。你的发现不必和示例一样：数据一样，视角可以不同。<span class="en">Five steps yield actionable conclusions — the feature shortlist takes shape before any modeling. Your findings don't have to match the example.</span>
+    <span class="label">排查顺序</span>
+    损失曲线不对劲时，按这个顺序问两个问题：它到底有没有下降趋势？每一步的梯度清零了吗？学习率是第三个问题，不是第一个。
   </div>
+
+  <h3>2.5.3 「收敛」是对着谁说的：三个数，不是一个</h3>
+  <p>线性回归是少数几个你<em>在训练之前</em>就知道答案的模型。用它把这个好处兑现：第一次训练就从「盼着它能行」变成「检查它对不对」。</p>
+  <table>
+    <tr><th>参数</th><th>数据生成真值</th><th>闭式最小二乘解</th><th>梯度下降 200 步</th><th>相对误差</th></tr>
+    <tr><td>w（斜率）</td><td>3.000</td><td>2.991</td><td>2.987</td><td>0.13%</td></tr>
+    <tr><td>b（截距）</td><td>2.000</td><td>2.014</td><td>2.013</td><td>0.05%</td></tr>
+    <tr><td>训练集 MSE</td><td>0.0100（噪声方差）</td><td>0.0098</td><td>0.0099</td><td>不在同一量纲</td></tr>
+  </table>
+  <p>三个数各有各的含义：真值是你造数据时用的；闭式解是<em>在这批样本上</em>最优的；训练解是 200 步之后你拿到的。报告里必须写清你是在跟哪一个比，否则「误差」这个词不携带任何信息。</p>
+  <pre><span class="cm"># 在同一批样本上求闭式最小二乘解</span>
+X1 = torch.cat([X, torch.ones_like(X)], dim=<span class="num">1</span>)   <span class="cm"># (100, 2)</span>
+theta = torch.linalg.lstsq(X1, y).solution
+<span class="fn">print</span>(theta.flatten().tolist())                    <span class="cm"># [w_ols, b_ols]</span></pre>
 </div>
 
 <!-- ========== 2.6 ========== -->
 <div class="section">
-  <h2>2.6 数据清洗实战<span class="en">Hands-On Data Cleaning</span></h2>
-  <p>真实数据集永远不干净。本节以 Titanic 数据集为例，演示最常见的四类清洗操作。</p>
-
-  <h3>2.6.1 缺失值处理<span class="en">Handling Missing Values</span></h3>
-  <pre><span class="cm"># Step 1: Find them</span>
-df.isnull().sum()
-<span class="cm"># Age            177  ← lots of missing
-# Cabin         687  ← mostly missing → consider dropping
-# Embarked        2  ← trivial → fill with mode</span>
-
-<span class="cm"># Step 2: Strategy per column</span>
-<span class="cm"># Option A: Drop columns with too many missing</span>
-df = df.drop(columns=[<span class="str">"Cabin"</span>])
-
-<span class="cm"># Option B: Fill numeric with median (robust to outliers)</span>
-df[<span class="str">"Age"</span>] = df[<span class="str">"Age"</span>].fillna(df[<span class="str">"Age"</span>].median())
-
-<span class="cm"># Option C: Fill categorical with mode</span>
-df[<span class="str">"Embarked"</span>] = df[<span class="str">"Embarked"</span>].fillna(df[<span class="str">"Embarked"</span>].mode()[<span class="num">0</span>])</pre>
-  <div class="callout warn">
-    <span class="label">Warning · 数据泄漏</span>
-    如果用整个数据集的统计量（如全局中位数）来填缺失值，再做 train/test split，测试集信息会泄漏到训练集。正确做法：<strong>先 split，再用训练集统计量填充</strong>。这在 scikit-learn 中由 <code class="inline">SimpleImputer</code> + <code class="inline">Pipeline</code> 保证。<span class="en">Filling missing values with global stats before splitting causes data leakage. Always split first, then impute with training statistics.</span>
+  <h2>2.6 常见误区与排查清单</h2>
+  <div class="callout key">
+    <span class="label">严谨求实：为什么必须固定随机种子</span>
+    随机性是训练的一部分——初始化、噪声、打乱顺序都是随机的——所以它必须被固定下来。不固定种子，你的实验就无法被任何人复核，包括三天后的你自己。
+    一次跑出来的好结果不是结论，能被重复出来的才是。本学期你写的每一份报告都要带三样东西：种子、环境版本、一行可运行的命令。
+    同时，把错误留在记录里：形状报错和调试过程是能力证据，不是需要藏起来的扣分项。不编造输出，不美化曲线；换设备出现微小差异很正常，如实写明，而不是悄悄只留最好那一次。
   </div>
-
-  <h3>2.6.2 异常值检测<span class="en">Outlier Detection</span></h3>
-  <pre><span class="cm"># IQR method — robust to extreme values</span>
-Q1 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.25</span>)
-Q3 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.75</span>)
-IQR = Q3 - Q1
-lower = Q1 - <span class="num">1.5</span> * IQR
-upper = Q3 + <span class="num">1.5</span> * IQR
-
-outliers = df[(df[<span class="str">"Fare"</span>] < lower) | (df[<span class="str">"Fare"</span>] > upper)]
-print(<span class="str">f"Found {len(outliers)} outliers in Fare"</span>)
-
-<span class="cm"># Z-score method — assumes normal distribution</span>
-from scipy <span class="kw">import</span> stats
-z = np.abs(stats.zscore(df[<span class="str">"Age"</span>].dropna()))
-print(<span class="str">f"Z-score outliers (>3): {(z > 3).sum()}"</span>)</pre>
-
-  <h3>2.6.3 重复值与类型转换<span class="en">Duplicates & Type Conversion</span></h3>
-  <pre><span class="cm"># Remove exact duplicates</span>
-df = df.drop_duplicates()
-print(<span class="str">f"After dedup: {df.shape}"</span>)
-
-<span class="cm"># Type conversion — save memory, enable operations</span>
-df[<span class="str">"Pclass"</span>] = df[<span class="str">"Pclass"</span>].astype(<span class="str">"category"</span>)  <span class="cm"># saves ~90% memory</span>
-df[<span class="str">"Sex"</span>] = df[<span class="str">"Sex"</span>].map({<span class="str">"male"</span>: <span class="num">0</span>, <span class="str">"female"</span>: <span class="num">1</span>})  <span class="cm"># label encoding</span></pre>
-
-  <h3>2.6.4 特征工程初探<span class="en">Feature Engineering Preview</span></h3>
-  <pre><span class="cm"># Extract title from name — a proxy for social status</span>
-df[<span class="str">"Title"</span>] = df[<span class="str">"Name"</span>].str.extract(<span class="str">r' ([A-Za-z]+)\.'</span>)
-df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace([<span class="str">"Mlle"</span>, <span class="str">"Ms"</span>], <span class="str">"Miss"</span>)
-df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace(<span class="str">"Mme"</span>, <span class="str">"Mrs"</span>)
-
-<span class="cm"># Bin age into groups — converts continuous to ordinal</span>
-df[<span class="str">"AgeBin"</span>] = pd.cut(df[<span class="str">"Age"</span>], bins=[<span class="num">0</span>, <span class="num">12</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">60</span>, <span class="num">100</span>],
-                     labels=[<span class="str">"Child"</span>, <span class="str">"Teen"</span>, <span class="str">"Young"</span>, <span class="str">"Adult"</span>, <span class="str">"Senior"</span>])
-
-<span class="cm"># Family size → alone flag (feature compression)</span>
-df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] == <span class="num">0</span>).astype(int)</pre>
-  <div class="callout tip">
-    <span class="label">Pro Tip</span>
-    特征工程是"用领域知识把数据变信息"的过程。Titanic 的经典例子：<strong>从 Name 提取 Title</strong>（Mr/Mrs/Master/Dr），比单纯用 Sex 多了一层社会地位信息——历史上"Women and children first"中，Master（男孩）的存活率显著高于 Mr。<span class="en">Feature engineering turns domain knowledge into signal. The Titanic "Title" extraction captures social status beyond mere gender.</span>
+  <div class="callout warn">
+    <span class="label">检查清单</span>
+    <ul>
+      <li><strong>先印形状，再做别的。</strong> 第一次见到任何张量，先 <code class="inline">print(x.shape, x.dtype, x.device)</code>。</li>
+      <li><strong>运行前先预测形状。</strong> 把它写进注释；如果打印结果不一致，停下来想清楚。</li>
+      <li><strong>把契约写成断言。</strong> <code class="inline">assert y_hat.shape == y.shape</code> 只花一行，却能挡住那个静默 bug。</li>
+      <li><strong>优先用 <code class="inline">reshape</code>。</strong> 只有在确定张量连续时才用 <code class="inline">view</code>。</li>
+      <li><strong>统一目标的形状。</strong> 全都保持 <code class="inline">(n, 1)</code>，不让 <code class="inline">(n,)</code> 参与。</li>
+      <li><strong>每次更新后清零梯度。</strong> 不是更新前，也不是有时候。</li>
+      <li><strong>把更新包进 <code class="inline">no_grad</code>。</strong> 否则更新自己进了计算图，越训越慢。</li>
+      <li><strong>固定种子。</strong> 否则三条学习率曲线根本无法对比。</li>
+      <li><strong>数一下 import。</strong> 本次实验里，文件里出现一个 <code class="inline">nn.</code> 或 <code class="inline">optim.</code> 就是违规。</li>
+      <li><strong>把报错念出来。</strong> PyTorch 的报错信息里直接写着涉及的两个形状，那通常就是诊断结论。</li>
+    </ul>
   </div>
 </div>
 
 <!-- ========== 2.7 ========== -->
 <div class="section">
-  <h2>2.7 本章小结<span class="en">Chapter Summary</span></h2>
-  <ul>
-    <li>数据质量六维度（完整性/准确性/一致性/时效性/唯一性/合理性）决定模型上限，GIGO 是铁律。</li>
-    <li>NumPy 向量化运算比循环快 10-100 倍，广播机制让不同形状数组自动对齐运算。</li>
-    <li>Pandas 四大操作：加载概览（<code class="inline">read_csv</code> + <code class="inline">info</code> + <code class="inline">describe</code>）→ 筛选（<code class="inline">loc/iloc</code> + 布尔）→ 聚合（<code class="inline">groupby</code>）→ 合并（<code class="inline">merge</code>）。</li>
-    <li>可视化四件套：直方图看分布、散点图看关系、箱线图看比较、热力图看相关。</li>
-    <li>EDA 五步法：概览全局 → 单变量 → 双变量 → 异常与缺失 → 形成假设（详见 2.5.1 Titanic 走查）。</li>
-    <li>数据清洗核心：缺失值按列策略处理（删除/填充/插值）、异常值用 IQR 检测、先 split 再填充防止数据泄漏。</li>
-  </ul>
-</div>
+  <h2>2.7 小结与练习</h2>
+  <div class="callout key">
+    <span class="label">五条要点</span>
+    <ol>
+      <li>张量是本课程唯一的数据容器。拿到它先报四件事：shape、dtype、device、requires_grad。</li>
+      <li>形状变换优先 <code class="inline">reshape</code>；补维用 <code class="inline">unsqueeze(1)</code>；<code class="inline">view</code> 只在连续张量上安全。</li>
+      <li>广播从最右一维对齐、遇 1 就复制——它保证合法，不保证符合意图。<code class="inline">(3,)</code> 与 <code class="inline">(3,1)</code> 相加会静默得到 <code class="inline">(3,3)</code>。</li>
+      <li>autograd 只有两条规则：只有叶子张量的 <code class="inline">.grad</code> 被填充，而且 <code class="inline">.grad</code> 是累加的。</li>
+      <li>一次更新是四个动作的固定顺序：backward → 在 <code class="inline">no_grad</code> 里更新 → 清零梯度 → 记录损失。</li>
+    </ol>
+  </div>
 
-<!-- ========== EXERCISES ========== -->
-<div class="section">
-  <h2>本章练习<span class="en">Exercises</span></h2>
   <div class="exercise">
-    <h4>练习 1 · NumPy 向量化（必做）</h4>
+    <h4>练习 1 · 读一个张量（必做）</h4>
     <ol>
-      <li>创建一个 1000×1000 的随机矩阵 <code class="inline">A</code>，分别用 <code class="inline">for</code> 循环和 NumPy 向量化计算每列的均值，用 <code class="inline">%timeit</code> 对比两者耗时。</li>
-      <li>用布尔掩码筛选矩阵中所有大于 0.5 的元素，替换为 1.0，其余替换为 0.0。</li>
-      <li>用 <code class="inline">np.where</code> 实现分段函数：x &lt; 0 → -1，x == 0 → 0，x &gt; 0 → 1。</li>
+      <li>对下面每一个，<em>先写下来</em>再运行：<code class="inline">torch.tensor(3.0)</code>、<code class="inline">torch.arange(5)</code>、<code class="inline">torch.linspace(0, 1, 7)</code>、<code class="inline">torch.randn(2, 3).t()</code>、<code class="inline">torch.zeros(4).unsqueeze(0)</code> 的 shape、dtype 与 device。</li>
+      <li>运行后对比。你猜错了哪一个？这说明 dtype 的默认规则是什么？</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>练习 2 · Pandas EDA（必做）</h4>
+    <h4>练习 2 · 故意制造广播错误（必做）</h4>
     <ol>
-      <li>从 <code class="inline">seaborn</code> 加载 Titanic 数据集：<code class="inline">df = sns.load_dataset("titanic")</code>。</li>
-      <li>完成本章 2.5 节的 EDA 五步法，每步至少产出一个图或一张表，并写下一条发现。</li>
-      <li>提出至少 3 个假设并验证（如"三等舱存活率最低"），用 <code class="inline">groupby</code> + 可视化支撑结论。</li>
-      <li>输出一份 3-5 行的 EDA 报告（Markdown），记录关键发现。</li>
+      <li>有意用 <code class="inline">(3,1)</code> 与 <code class="inline">(3,)</code> 造出一个 <code class="inline">(3,3)</code> 的结果，并用一句话解释引擎为什么允许它。</li>
+      <li>再造一个会报错的形状问题，把完整报错信息贴出来。</li>
+      <li>写出同样两行、但不可能被误读的版本，并说明你加了什么。</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>练习 3 · 数据清洗实战（必做）</h4>
+    <h4>练习 3 · 量化梯度累加（必做）</h4>
     <ol>
-      <li>加载练习 2 的数据集，处理所有缺失值（至少 3 列），记录每列的处理策略和理由。</li>
-      <li>用 IQR 方法检测 <code class="inline">"fare"</code> 列的异常值，对比去除异常值前后分布的变化。</li>
-      <li>从 <code class="inline">"who"</code> 或 <code class="inline">"class"</code> 列做 Label Encoding，新增 <code class="inline">"_alone"</code> 布尔列。</li>
+      <li>跑 2.4.3 的最小 autograd 示例，记下 <code class="inline">x.grad</code>。</li>
+      <li>把清零那一行注释掉再跑一次，记下新值并解释这个算术。</li>
+      <li>把 2.5.1 的循环改成永不清零梯度，跑 200 步，用一句话描述损失曲线，并与正确清零的曲线画在同一张图上对比。</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>练习 4 · 思考题（讨论）</h4>
+    <h4>练习 4 · 只用张量做线性回归，并且可复现（必做）</h4>
     <ol>
-      <li>为什么"先 split 再填缺失值"是正确的？如果你先填再 split，具体会发生什么？画一个数据流图说明。</li>
-      <li>你有 100 万行数据、50 列，其中 5 列有 30% 缺失。你会全部删除还是填充？决策依据是什么？</li>
-      <li>从 Titanic 的 <code class="inline">"deck"</code> 列（缺失率 > 70%），你能想到什么方式让它仍有信息价值？</li>
+      <li>只用张量和 autograd 实现——不许出现 <code class="inline">nn.Module</code>、不许出现 <code class="inline">torch.optim</code>。用 <code class="inline">grep -nE "nn\.|optim\."</code> 自查文件是否干净。</li>
+      <li>记录 <code class="inline">w = b = 0</code> 时的基线 MSE 和训练结束时的 MSE。</li>
+      <li>把训练得到的参数与真值、闭式最小二乘解分别对比，给出相对误差，并明确写出你用的对照对象是哪一个。</li>
+      <li>固定种子，确认重跑脚本能把参数复现到小数点后三位。</li>
+      <li>用三个不同的种子各跑一遍这 200 步，把三条损失曲线画在一起。在这个凸问题上，最终参数之间应该只差千分之几。报告这个离散程度，再用五句话解释：为什么在这里——而在从零训练的神经网络上不行——种子对轨迹的影响远大于对终点的影响。</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>练习 5 · 审计 AI 生成的代码（必做）</h4>
+    <ol>
+      <li>让一个 AI 工具生成「用张量和 autograd 做 PyTorch 线性回归，不要 nn，不要优化器」。</li>
+      <li>逐行读，重点找四个缺陷：没有清零梯度、目标用 <code class="inline">(n,)</code> 而不是 <code class="inline">(n, 1)</code>、更新写在 <code class="inline">no_grad</code> 外面、没有固定种子。</li>
+      <li>每找到一个缺陷就：引用那句错误写法、说明它会造成什么现象、给出你修正后的版本。</li>
+      <li>把结果写成 <code class="inline">AI_USE.md</code> 里的一条记录。记住分数来自缺陷本身和你怎么发现的，不是来自「我用了 AI」。</li>
     </ol>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 / AI Application Development — Chapter 2</p>
-  <p>64 课时 · 大三软件工程专业留学生 · Week 2 / 16</p>
-  <p style="margin-top:8px;">教材由 AI 辅助生成，任课教师可结合实际调整。 / Generated with AI assistance; instructor may adapt.</p>
+  <p>AI 应用开发 — 第 2 章 · PyTorch 基础：张量与自动求导</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 
 </div>

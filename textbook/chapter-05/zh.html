@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 05 章 · 模块 2 · 第 5 周</div>
+  <h1>训练循环、损失函数与优化器</h1>
+  <p class="overview">第 4 周结束时，你在白板上留下了一个数字：你的基线。从这一周开始，每一个改进都必须由你自己写、并且真正读懂的训练循环产生。训练循环只有三个活动部件——<strong>优化什么</strong>（损失函数）、<strong>怎么走</strong>（优化器）、<strong>一步走多大</strong>（学习率），外面套着五行不可交换顺序的代码。本章把这套东西搭起来，加上日志让它留下证据，最后落到全课程最有用的一个职业习惯上：当损失看起来不对时，知道先查什么、再查什么。</p>
+</div>
+
+<!-- ========== 5.1 ========== -->
+<div class="section">
+  <h2>5.1 训练循环到底在做什么</h2>
+  <p>「训练模型」这个说法听起来像是某种模糊的「让它变好」的过程。它不是。它是一个反复把某一个数字压下去的循环。其余的一切——架构、数据、算力——存在的意义，都只是让这个数字能当好「你真正在乎的东西」的替身。</p>
+
+  <div class="callout key">
+    <span class="label">三个问题</span>
+    <strong>什么</strong>在变小？这是损失函数。<strong>怎么</strong>移动？这是优化器。<strong>走多远</strong>？这是学习率。你以后遇到的每一个训练 bug，都是这三者之一的缺陷。
+  </div>
+
+  <h3>5.1.1 三个部件，以及为什么它们可以分开讨论</h3>
+  <div class="terms">
+    <div class="term"><h4>损失 · 我们在优化什么</h4><p>把预测与目标压成一个标量的函数。由<em>任务</em>决定：多分类、二分类、多标签还是回归。选错了，模型会非常忠实地去优化一件你并不在乎的事。</p></div>
+    <div class="term"><h4>优化器 · 我们怎么走</h4><p>把梯度变成一次参数更新的规则。SGD 只用当前梯度，Momentum 累积出一个方向，Adam 按参数重新缩放。<strong>同一模型、同一数据，换个优化器，收敛速度可以差一个数量级。</strong></p></div>
+    <div class="term"><h4>学习率 · 一步走多远</h4><p>乘在更新量上的一个标量。过大会震荡或爆炸，过小会几乎不动。它是第一个要调的超参数，也是损失异常时的第一嫌疑人。</p></div>
+    <div class="term"><h4>循环 · 什么时候走</h4><p>每个批次重复的五次调用：梯度清零、前向、计算损失、反向传播、更新参数。顺序是固定的，而第 1 步是最常被漏掉的那一步。</p></div>
+  </div>
+
+  <h3>5.1.2 批次、步、轮次</h3>
+  <p>每个日志里都会出现这三个词，混起来日志就读不懂了：</p>
+  <ul>
+    <li><strong>批次（batch）</strong>——一次参数更新所使用的样本数。1 437 条训练样本、<code class="inline">batch_size=64</code>，则每个 epoch 有 23 个批次。</li>
+    <li><strong>步（step / iteration）</strong>——一次参数更新，也就是走一遍五步循环。</li>
+    <li><strong>轮次（epoch）</strong>——把训练集完整过一遍，即每个批次都被看过一次。</li>
+  </ul>
+  <p>学习率是「每一步」的，不是「每一轮」的。这就是为什么改批大小会悄悄改变每个 epoch 的训练量——5.6 节会回到这一点。</p>
+
+  <h3>5.1.3 本章的实验底座</h3>
+  <p>本章所有代码都跑在 scikit-learn 自带的 8×8 手写数字数据集上：不用下载，整套 3×3 网格（见 5.5.3）在笔记本 CPU 上跑完不到一分钟。</p>
+  <pre><span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_data</span>():
+    <span class="str">"""1797 个手写数字，每个 64 个像素特征，共 10 类。"""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)
+    Xtr, Xva, ytr, yva = train_test_split(
+        X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y)
+    as_t = <span class="kw">lambda</span> a, dt: torch.tensor(a, dtype=dt)
+    <span class="kw">return</span> (as_t(Xtr, torch.float32), as_t(ytr, torch.long),
+            as_t(Xva, torch.float32), as_t(yva, torch.long))
+
+
+<span class="kw">class</span> <span class="fn">Net</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n_in=<span class="num">64</span>, n_hidden=<span class="num">64</span>, n_out=<span class="num">10</span>):
+        <span class="fn">super</span>().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(n_in, n_hidden), nn.ReLU(),
+            nn.Linear(n_hidden, n_out))      <span class="cm"># 输出原始 logits</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x)               <span class="cm"># 这里不加 softmax，原因见 5.2.3</span></pre>
+  <p>有两个细节后面会用到。模型返回的是<strong>原始 logits</strong>，不是概率——原因在 5.2.3 讲。另外，留出的那 20% 是当验证集用的，因为接下来我们要在这上面挑一组超参数；在真实项目里应当再切出一份独立的测试集，并且只碰一次。</p>
+</div>
+
+<!-- ========== 5.2 ========== -->
+<div class="section">
+  <h2>5.2 损失函数：选择我们优化的对象</h2>
+  <p>损失函数把「这个预测很差」变成一个有方向、可最小化的数。选它不是口味问题：任务类型决定它。</p>
+
+  <h3>5.2.1 三类任务，三种损失</h3>
+  <table>
+    <tr><th>任务</th><th>损失函数</th><th>喂什么</th><th>输出层</th><th>注意</th></tr>
+    <tr><td>多分类</td><td><code class="inline">nn.CrossEntropyLoss</code></td><td>原始 logits，形状 (N, C)</td><td>无——softmax 已内置</td><td>再手动 softmax 就是做了两次</td></tr>
+    <tr><td>二分类</td><td><code class="inline">nn.BCEWithLogitsLoss</code></td><td>原始 logits，形状 (N, 1)</td><td>无——sigmoid 已内置</td><td>标签必须是 <em>float</em></td></tr>
+    <tr><td>多标签</td><td><code class="inline">nn.BCEWithLogitsLoss</code></td><td>原始 logits，形状 (N, C)</td><td>无</td><td>各类相互独立，可以同时为正</td></tr>
+    <tr><td>回归</td><td><code class="inline">nn.MSELoss</code></td><td>连续预测值</td><td>无</td><td>对离群点极敏感；更稳用 L1</td></tr>
+    <tr><td>不平衡</td><td><code class="inline">CrossEntropyLoss(weight=…)</code></td><td>logits + 类别权重</td><td>无</td><td>权重按类频率的倒数设</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <span class="label">一句话记法</span>
+    分类用交叉熵、回归用均方误差；名字里带 <em>WithLogits</em> 的损失已经把激活函数包在里面了——这正是为什么你不要自己再加一层。
+  </div>
+
+  <h3>5.2.2 标签类型不是装饰</h3>
+  <p>交叉熵期望整数类别下标（<code class="inline">torch.long</code>），它会用这个下标去索引 logits。BCE 期望 [0, 1] 之间的浮点数（<code class="inline">torch.float32</code>）。传错 dtype 会直接报错——这是好结果。坏结果是形状刚好能广播，你训练二十分钟才发现模型什么都没学到。</p>
+  <pre><span class="cm"># 多分类：标签是下标，dtype 为 long</span>
+criterion = nn.CrossEntropyLoss()
+loss = criterion(logits, y_long)                    <span class="cm"># y_long.shape == (N,)</span>
+
+<span class="cm"># 二分类 / 多标签：标签是 0.0 / 1.0，dtype 为 float</span>
+criterion = nn.BCEWithLogitsLoss()
+loss = criterion(logits, y_float)                   <span class="cm"># y_float.shape == (N, 1) 或 (N, C)</span>
+
+<span class="cm"># 回归：预测值与目标都是连续值</span>
+criterion = nn.MSELoss()
+loss = criterion(pred, y_float)</pre>
+
+  <h3>5.2.3 误区：「先 softmax，再交叉熵」</h3>
+  <p>这是本课程里最常见的静默 bug，值得亲手复现一次，而不是只读一遍：</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+
+logits = <span class="fn">model</span>(x)
+p = torch.softmax(logits, dim=<span class="num">1</span>)
+
+<span class="fn">print</span>(<span class="str">"CE(logits)          ="</span>, nn.CrossEntropyLoss()(logits, y).item())
+<span class="fn">print</span>(<span class="str">"CE(softmax(logits)) ="</span>, nn.CrossEntropyLoss()(p,      y).item())
+
+<span class="cm"># CE(logits)          = 2.2865     <- 正确</span>
+<span class="cm"># CE(softmax(logits)) = 2.3002     <- 错误，且静默变差</span></pre>
+  <div class="callout warn">
+    <span class="label">为什么「静默」比「崩溃」更可怕</span>
+    <code class="inline">CrossEntropyLoss</code> 内部会先做 <code class="inline">log_softmax</code>。如果你传进去的是概率，这些值会被再归一化一次，分布被压向均匀、梯度变小。<strong>不会抛异常。</strong>唯一的症状是损失下降变慢、准确率停在一个总差一点的水平上——而你会因为「代码看起来没问题」，把几个小时花在错误的地方：改架构、查数据、调学习率。
+  </div>
+  <p>通用规则：<strong>只要损失函数名字里有 <code class="inline">WithLogits</code>，或者它就是 <code class="inline">CrossEntropyLoss</code>，就传模型的原始输出。</strong></p>
+
+  <h3>5.2.4 类别不平衡</h3>
+  <p>正样本只占 4% 时，一个把所有样本都判为负的模型能拿到 96% 准确率，同时毫无用处。准确率此时已经不是有效指标，而损失本身可以被重新加权，让稀有类上的错误代价更高：</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np, torch
+
+counts = np.bincount(y_train)                       <span class="cm"># 每类样本数</span>
+w = torch.tensor(<span class="num">1.0</span> / counts, dtype=torch.float32)
+w = w / w.sum() * <span class="fn">len</span>(counts)                      <span class="cm"># 让均值保持在 1 附近</span>
+
+criterion = nn.CrossEntropyLoss(weight=w)</pre>
+  <p>加权是训练侧的修法。评测侧对应的动作是停止报告准确率，改报各类召回率或 F1——那是第 6 周的内容。</p>
+</div>
+
+<!-- ========== 5.3 ========== -->
+<div class="section">
+  <h2>5.3 优化器：我们怎么更新</h2>
+  <p>损失告诉你「错了多少」，优化器决定「往哪走、走多远」。下面三种优化器消费的是同一批梯度，区别在于它们在更新<em>之前</em>对梯度做了什么。</p>
+
+  <div class="steps">
+    <div class="step"><h4>SGD · 用刚算出来的梯度</h4><p><code class="inline">w ← w − lr · g</code>。只有一个超参数，不存任何状态，对学习率极其敏感。纯 SGD 常用区间大致是 <code class="inline">1e-2</code> 到 <code class="inline">1e-1</code>。</p></div>
+    <div class="step"><h4>SGD + Momentum · 加上惯性</h4><p>维护历史梯度的滑动平均，并沿它迈步。方向一致的维度被放大，进展因此加速；小鞍点与噪声梯度被抹平。惯例是 <code class="inline">momentum=0.9</code>。代价是：纯 SGD 能撑住的学习率，它可能直接发散。</p></div>
+    <div class="step"><h4>Adam · 逐参数自适应</h4><p>同时维护梯度的一阶与二阶矩的滑动估计，并用二阶矩的平方根去除。每个参数拥有各自的有效步长，因而不再需要把「一个全局学习率」调到恰好合适——<code class="inline">1e-3</code> 通常就能跑。代价是每个参数多存两份状态。</p></div>
+    <div class="step"><h4>AdamW · 解耦权重衰减</h4><p>与 Adam 相同，只是权重衰减直接作用在权重上，而不是折进梯度里。这是 Transformer 类模型、以及任何「希望正则化名副其实」的场景的标配。</p></div>
+  </div>
+
+  <table>
+    <tr><th>优化器</th><th>更新规则（直觉）</th><th>关键超参数</th><th>收敛速度</th><th>典型场景</th></tr>
+    <tr><td>SGD</td><td>沿当前梯度走一步</td><td><code class="inline">lr</code></td><td>慢</td><td>可精细调参的经典基线</td></tr>
+    <tr><td>SGD + Momentum</td><td>累积过去梯度形成惯性</td><td><code class="inline">lr</code>, <code class="inline">momentum=0.9</code></td><td>中</td><td>计算机视觉的常用默认</td></tr>
+    <tr><td>Adam</td><td>每参数自适应步长 + 动量</td><td><code class="inline">lr</code>, <code class="inline">betas</code>, <code class="inline">eps</code></td><td>快</td><td>默认首选、快速原型、稀疏梯度</td></tr>
+    <tr><td>AdamW</td><td>同 Adam，权重衰减解耦</td><td><code class="inline">lr</code>, <code class="inline">weight_decay</code></td><td>快</td><td>Transformer 类模型的标配</td></tr>
+  </table>
+
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch <span class="kw">import</span> nn
+
+model = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">64</span>), nn.ReLU(), nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+params = model.parameters()
+
+opt_sgd  = torch.optim.SGD(params, lr=<span class="num">1e-1</span>)
+opt_mom  = torch.optim.SGD(params, lr=<span class="num">1e-1</span>, momentum=<span class="num">0.9</span>)
+opt_adam = torch.optim.Adam(params, lr=<span class="num">1e-3</span>)</pre>
+
+  <div class="callout warn">
+    <span class="label">误区：「Adam 就是更好」</span>
+    Adam 只是<em>更快到达一个可用的结果</em>，所以是原型的默认选择。它并非全面更优：优化器状态大约是 SGD 的两倍显存；在某些视觉任务上，调好的 SGD + Momentum 泛化还会略好一点。更重要的是，「哪个更好」问的是<strong>你的</strong>数据、<strong>你的</strong>指标和<strong>你的</strong>算力预算——因此只能由一次对照实验来回答，这正是实验 4 要做的事。
+  </div>
+
+  <div class="callout warn">
+    <span class="label">误区：「优化器不记东西」</span>
+    Momentum 和 Adam 都会在步与步之间保存状态。这些状态<strong>不会</strong>被 <code class="inline">zero_grad()</code> 清掉——那个调用只清 <code class="inline">.grad</code>。在训练中途新建优化器、或把同一个优化器用在两个不同模型上，都会静默改变行为。正确做法是：新模型配新优化器——下面的网格就是这么写的。
+  </div>
+</div>
+
+<!-- ========== 5.4 ========== -->
+<div class="section">
+  <h2>5.4 学习率：最重要的超参数</h2>
+  <p>学习率决定每一步走多远。它是唯一一个值得「什么都还没查就先查它」的超参数，因为它的两种失败模式看起来像两个完全不同的问题。</p>
+
+  <table>
+    <tr><th>日志里的症状</th><th>诊断</th><th>第一步动作</th></tr>
+    <tr><td>损失上下震荡，始终不下降</td><td>学习率过大——步子跨过了谷底</td><td>除以 10 再跑一次</td></tr>
+    <tr><td>一两个 epoch 内损失变成 <code class="inline">nan</code> 或 <code class="inline">inf</code></td><td>学习率远大于合理范围</td><td>再除以 10；同时检查输入尺度</td></tr>
+    <tr><td>损失先降后停在较高位置，准确率贴近随机</td><td>对这个优化器来说学习率过大（常见于 Momentum 与 Adam）</td><td>除以 10；优化器先不动</td></tr>
+    <tr><td>十个 epoch 里损失变化不到 0.05</td><td>学习率过小——看起来在训练，其实几乎没动</td><td>乘 10 跑一次，把两条曲线对比</td></tr>
+    <tr><td>训练损失稳定下降，验证损失上升</td><td>不是学习率问题，这是过拟合（第 6 周）</td><td>不要动学习率</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">读曲线</span>
+    健康的运行是一条平滑、单调、末端变缓的下降曲线。如果你能把三种典型形状——一条锯齿状始终不降、一条平滑滑动、一条几乎水平——画出来，你就能凭一张截图诊断一次运行。这正是实验 4 要你亲手产出、而不是照抄的诊断能力。
+  </div>
+
+  <h3>5.4.1 「过大」是依赖优化器的</h3>
+  <p>下面这个结果最让同学意外，也正是实验为什么要用析因设计而不是一次只扫一个变量。同一份数据、同一套架构、同一个随机种子：</p>
+  <table>
+    <tr><th>优化器</th><th><code class="inline">lr=1e-1</code></th><th><code class="inline">lr=1e-3</code></th><th><code class="inline">lr=1e-5</code></th></tr>
+    <tr><td>SGD</td><td>能收敛（准确率 0.944）</td><td>在收敛，但慢（0.906）</td><td>几乎不动（0.153）</td></tr>
+    <tr><td>SGD + Momentum</td><td><strong>发散</strong>——训练损失从 2.13 升到 2.31</td><td>收敛良好（0.972）</td><td>几乎不动（0.364）</td></tr>
+    <tr><td>Adam</td><td><strong>不稳定</strong>——首个损失 7.35，准确率 0.361</td><td><strong>最优（0.983）</strong></td><td>几乎不动（0.239）</td></tr>
+  </table>
+  <p>三个结论从这一张表里同时掉出来，而且都不是「一次只扫一个变量」的实验能看到的：</p>
+  <ul>
+    <li><strong>「过大」不是常数。</strong>纯 SGD 能撑住 <code class="inline">1e-1</code>，Momentum 在同一个值上发散。阈值是优化器、数据尺度与损失曲面共同决定的属性。</li>
+    <li><strong>动量会放大。</strong>它在 <code class="inline">1e-3</code> 帮忙（0.972 对 SGD 的 0.906），在 <code class="inline">1e-1</code> 致命。累积出的方向等价于把步长乘大了。</li>
+    <li><strong>自适应优于全局。</strong>Adam 在 <code class="inline">1e-3</code> 上两项指标都最优，因为逐参数重缩放让「一个全局步长」不必同时适配 64 个方差不同的特征。</li>
+  </ul>
+
+  <h3>5.4.2 调度策略</h3>
+  <p>一个恒定学习率很少能对整个训练过程都最优：前期要大（好推进），后期要小（好落定）。PyTorch 用 <code class="inline">lr_scheduler</code> 实现，而且调度器必须<strong>每个 epoch 步进一次</strong>，不是每个批次。</p>
+  <pre><span class="kw">from</span> torch.optim.lr_scheduler <span class="kw">import</span> StepLR, CosineAnnealingLR
+
+opt = torch.optim.SGD(model.parameters(), lr=<span class="num">1e-2</span>, momentum=<span class="num">0.9</span>)
+sched = StepLR(opt, step_size=<span class="num">10</span>, gamma=<span class="num">0.1</span>)   <span class="cm"># 每 10 轮乘 0.1</span>
+
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+    train_one_epoch(...)
+    sched.step()                                  <span class="cm"># 每个 epoch 一步</span>
+    <span class="fn">print</span>(f<span class="str">"epoch {epoch}  lr = {opt.param_groups[0]['lr']:.2e}"</span>)</pre>
+  <div class="callout warn">
+    <span class="label">误区：「多加点 epoch 就行」</span>
+    损失不动的时候，加轮次是最贵的「什么都没学到」。学习率过小的时候，跑 10 轮和跑 100 轮在前 10 轮看起来完全一样——后一次白跑 90 轮。<strong>先把速率修对，再决定需要多少轮。</strong>
+  </div>
+</div>
+
+<!-- ========== 5.5 ========== -->
+<div class="section">
+  <h2>5.5 训练循环五步法</h2>
+  <p>不管一份训练脚本看起来多复杂，它的内核就是五次调用。背下来，你就能读懂任何 PyTorch 代码；顺序错了，再好的架构也救不了。</p>
+
+  <div class="steps">
+    <div class="step"><h4>zero_grad() · 清掉上一批的梯度</h4><p>PyTorch 默认往 <code class="inline">.grad</code> 里<em>累加</em>。没有这一步，第 2 批的梯度会加上第 1 批的，有效步长随批次不断变大。</p></div>
+    <div class="step"><h4>前向传播 · 拿到预测</h4><p><code class="inline">logits = model(xb)</code>。注意变量名：拿回来的是 logits，不是概率。</p></div>
+    <div class="step"><h4>计算损失 · 给预测打分</h4><p><code class="inline">loss = criterion(logits, yb)</code>，损失函数按 5.2 的规则选择。</p></div>
+    <div class="step"><h4>backward() · 求梯度</h4><p>自动求导沿着前向建立的计算图回溯，把每个参数的 <code class="inline">.grad</code> 填好。</p></div>
+    <div class="step"><h4>step() · 更新参数</h4><p>优化器读取 <code class="inline">.grad</code>，套用它自己的规则——SGD、动量或 Adam。</p></div>
+  </div>
+
+  <h3>5.5.1 为什么第 1 步必须在前</h3>
+  <p>连续做三次更新、中途不清零，看梯度绝对值之和怎么爬：</p>
+  <pre>net  = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">64</span>), nn.ReLU(), nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+opt  = torch.optim.SGD(net.parameters(), lr=<span class="num">1e-2</span>)
+crit = nn.CrossEntropyLoss()
+
+<span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    loss = crit(net(Xtr[:<span class="num">64</span>]), ytr[:<span class="num">64</span>])
+    loss.backward()                          <span class="cm"># 全程没有 zero_grad()</span>
+    total = <span class="fn">sum</span>(p.grad.<span class="fn">abs</span>().<span class="fn">sum</span>().item() <span class="kw">for</span> p <span class="kw">in</span> net.parameters())
+    <span class="fn">print</span>(f<span class="str">"step {step}: |grad| = {total:.2f}"</span>)
+    opt.step()
+
+<span class="cm"># step 0: |grad| = 11.78</span>
+<span class="cm"># step 1: |grad| = 23.58</span>
+<span class="cm"># step 2: |grad| = 35.39</span></pre>
+  <p>这三个数之所以是一条向上的直线，是因为梯度从来没有被清掉。走过 <em>n</em> 个批次之后，优化器拿到的是一个大约大了 <em>n</em> 倍的梯度——也就是有效学习率随训练一路变大。日志上的症状是：损失曲线看起来毫无规律，而不是单调下降。</p>
+
+  <h3>5.5.2 带日志的完整循环</h3>
+  <pre><span class="kw">def</span> <span class="fn">train</span>(model, opt, crit, Xtr, ytr, Xva, yva, epochs=<span class="num">30</span>, bs=<span class="num">64</span>):
+    <span class="str">"""每个批次走五步；每个 epoch 记一行日志。"""</span>
+    hist = {<span class="str">"train_loss"</span>: [], <span class="str">"val_loss"</span>: [], <span class="str">"val_acc"</span>: []}
+    <span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+        model.<span class="fn">train</span>()                        <span class="cm"># 训练模式：启用 dropout / BN 更新</span>
+        running, seen = <span class="num">0.0</span>, <span class="num">0</span>
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, Xtr.shape[<span class="num">0</span>], bs):
+            xb, yb = Xtr[i:i + bs], ytr[i:i + bs]
+            opt.<span class="fn">zero_grad</span>()                 <span class="cm"># 1</span>
+            logits = <span class="fn">model</span>(xb)             <span class="cm"># 2</span>
+            loss = <span class="fn">crit</span>(logits, yb)        <span class="cm"># 3</span>
+            loss.<span class="fn">backward</span>()                 <span class="cm"># 4</span>
+            opt.<span class="fn">step</span>()                     <span class="cm"># 5</span>
+            running += loss.<span class="fn">item</span>() * xb.size(<span class="num">0</span>)
+            seen += xb.size(<span class="num">0</span>)
+        hist[<span class="str">"train_loss"</span>].<span class="fn">append</span>(running / seen)
+
+        model.<span class="fn">eval</span>()                         <span class="cm"># 评估模式：不更新 dropout / BN</span>
+        <span class="kw">with</span> torch.<span class="fn">no_grad</span>():                <span class="cm"># 评估不需要计算图</span>
+            v = <span class="fn">model</span>(Xva)
+            hist[<span class="str">"val_loss"</span>].<span class="fn">append</span>(<span class="fn">crit</span>(v, yva).item())
+            hist[<span class="str">"val_acc"</span>].<span class="fn">append</span>((v.<span class="fn">argmax</span>(<span class="num">1</span>) == yva).<span class="fn">float</span>().<span class="fn">mean</span>().item())
+    <span class="kw">return</span> hist</pre>
+
+  <p>注意循环外围那三个容易被漏掉的调用：训练前的 <code class="inline">model.train()</code>，评估前的 <code class="inline">model.eval()</code> 与 <code class="inline">torch.no_grad()</code>。对本周这个既没有 dropout 也没有 BN 的模型，它们什么都不做——但到第 6、7 周它们极其重要，所以习惯从现在开始养。</p>
+
+  <h3>5.5.3 一次对照实验</h3>
+  <p>实验 4 要的网格就是一层嵌套循环。只有两个变量在变；其余一切——数据、划分、架构、批大小、轮数与初始权重——全部固定：</p>
+  <pre><span class="kw">import</span> json
+
+crit = nn.CrossEntropyLoss()
+results = []
+
+<span class="kw">for</span> name <span class="kw">in</span> [<span class="str">"sgd"</span>, <span class="str">"momentum"</span>, <span class="str">"adam"</span>]:
+    <span class="kw">for</span> lr <span class="kw">in</span> [<span class="num">1e-1</span>, <span class="num">1e-3</span>, <span class="num">1e-5</span>]:
+        torch.<span class="fn">manual_seed</span>(<span class="num">42</span>)             <span class="cm"># 每次运行的初始权重完全相同</span>
+        model = <span class="fn">Net</span>()
+        opt = <span class="fn">make_optimizer</span>(name, model, lr)
+        hist = <span class="fn">train</span>(model, opt, crit, Xtr, ytr, Xva, yva, epochs=<span class="num">30</span>)
+
+        results.<span class="fn">append</span>({
+            <span class="str">"optimizer"</span>: name,
+            <span class="str">"lr"</span>: lr,
+            <span class="str">"min_val_loss"</span>: <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"max_val_acc"</span>: <span class="fn">max</span>(hist[<span class="str">"val_acc"</span>]),
+        })
+        r = results[-<span class="num">1</span>]
+        <span class="fn">print</span>(f<span class="str">"{name:9s} lr={lr:&lt;6g} min_val_loss={r['min_val_loss']:.3f} "</span>
+              f<span class="str">"max_val_acc={r['max_val_acc']:.3f}"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"grid_results.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:   <span class="cm"># 留下证据，而不是截图</span>
+    json.<span class="fn">dump</span>(results, f, indent=<span class="num">2</span>)</pre>
+  <div class="callout warn">
+    <span class="label">误区：「可以复用训好的模型」</span>
+    看 <code class="inline">torch.manual_seed(42)</code> 和 <code class="inline">Net()</code> 的位置：它们在内层循环<em>里面</em>。把它们移到外面，第 2 组就会从第 1 组已经训练过的权重出发——第 2 组测的就成了「第 1 组继续训练」，而不是「换一个优化器」。整个对照会静默失效，而输出里没有任何迹象能提示你。<strong>重新设种子、重新建模型，是让这张网格成立的前提。</strong>
+  </div>
+</div>
+
+<!-- ========== 5.6 ========== -->
+<div class="section">
+  <h2>5.6 批大小、显存、日志与可视化</h2>
+
+  <h3>5.6.1 批大小与显存</h3>
+  <table>
+    <tr><th>批大小</th><th>显存</th><th>梯度</th><th>取舍</th></tr>
+    <tr><td>8 – 32</td><td>低</td><td>噪声大，偶尔有益于泛化</td><td>显存或数据集小；通常要配更小的学习率</td></tr>
+    <tr><td>64 – 256</td><td>中</td><td>较稳定</td><td>最常用的默认区间，先从这里开始</td></tr>
+    <tr><td>512 以上</td><td>高</td><td>很稳定，泛化可能变差</td><td>需配合更大的学习率与 warmup</td></tr>
+    <tr><td>1（单样本）</td><td>最低，但极慢</td><td>噪声极大</td><td>教学演示，或显存极限</td></tr>
+  </table>
+  <p>一条有用的估算式，也解释了 Adam 为什么比 SGD 贵：</p>
+  <pre><span class="cm"># 显存 ≈ 中间激活（随批大小线性增长）</span>
+<span class="cm">#       + 模型参数</span>
+<span class="cm">#       + 优化器状态</span>
+<span class="cm">#</span>
+<span class="cm">#   SGD   ：不额外存状态</span>
+<span class="cm">#   Adam  ：每个参数约 2 份状态</span>
+<span class="cm">#   AdamW ：每个参数约 2 份状态（衰减解耦）</span></pre>
+  <p>由此得到两条规则。<strong>批大小翻倍时，学习率通常要同步放大</strong>——同样大小的步子，现在是对两倍样本取平均，相对位移更小。以及，<strong>遇到「CUDA out of memory」，第一个旋钮是批大小，不是模型规模。</strong></p>
+
+  <h3>5.6.2 为什么日志本身就是交付物</h3>
+  <p>每个 epoch 一行、四列，不例外：</p>
+  <pre><span class="cm"># epoch  train_loss  val_loss  val_acc</span>
+<span class="cm">#     0      2.0264    1.2740   0.6306</span>
+<span class="cm">#     5      0.1822    0.1785   0.9583</span>
+<span class="cm">#    10      0.1142    0.1244   0.9722</span>
+<span class="cm">#    20      0.0455    0.0864   0.9778</span>
+<span class="cm">#    29      0.0224    0.0762   0.9778</span></pre>
+  <p>没有 train 和 val 两列，你就无法区分下面四种情况——而它们的修法完全不同：</p>
+  <ul>
+    <li><strong>训练降、验证也降、差距小</strong>——健康。继续加轮次大概率有用。</li>
+    <li><strong>训练降、验证升</strong>——过拟合。要用正则化解决，不是动学习率（第 6 周）。</li>
+    <li><strong>两条都平</strong>——学习率太小，或者某些层被冻住了。加轮次没有意义。</li>
+    <li><strong>两条都锯齿状、没有趋势</strong>——常见原因正是 5.5.1 那个漏掉的 <code class="inline">zero_grad()</code>。</li>
+  </ul>
+
+  <h3>5.6.3 画图：用小多图</h3>
+  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+fig, axes = plt.<span class="fn">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">13</span>, <span class="num">4.5</span>))
+<span class="kw">for</span> r <span class="kw">in</span> results:
+    label = f<span class="str">"{r['optimizer']} lr={r['lr']:g}"</span>
+    axes[<span class="num">0</span>].<span class="fn">plot</span>(r[<span class="str">"val_loss"</span>], label=label)
+    axes[<span class="num">1</span>].<span class="fn">plot</span>(r[<span class="str">"val_acc"</span>],  label=label)
+axes[<span class="num">0</span>].<span class="fn">set</span>(xlabel=<span class="str">"epoch"</span>, ylabel=<span class="str">"val loss"</span>)
+axes[<span class="num">1</span>].<span class="fn">set</span>(xlabel=<span class="str">"epoch"</span>, ylabel=<span class="str">"val accuracy"</span>)
+<span class="kw">for</span> ax <span class="kw">in</span> axes:
+    ax.<span class="fn">legend</span>(fontsize=<span class="num">8</span>); ax.<span class="fn">grid</span>(alpha=<span class="num">0.3</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">savefig</span>(<span class="str">"curves.png"</span>, dpi=<span class="num">150</span>)</pre>
+  <p>九条曲线塞在一张图里是看不清的，而没人看得清的图不是证据。所以要再加一组<strong>小多图</strong>：每个优化器一个面板，面板内画三条学习率。这张图能把「学习率效应」（同一面板内）与「优化器效应」（跨面板）分开——而这正是析因实验的全部意义。</p>
+</div>
+
+<!-- ========== 5.7 ========== -->
+<div class="section">
+  <h2>5.7 常见误区与排查清单</h2>
+  <div class="callout warn">
+    <span class="label">清单 · 损失看起来不对时，按这个顺序查</span>
+    <ul>
+      <li><strong>先查学习率。</strong><code class="inline">nan</code> 或震荡 → 除以 10；几乎不动 → 乘 10。只花一次运行，能解决大部分情况。</li>
+      <li><strong>再查优化器。</strong>纯 SGD 撑得住的同一个学习率，配上 Momentum 或 Adam 可能直接发散（见 5.4.1）。</li>
+      <li><strong>再查损失调用那一行。</strong>上面是不是多了一句 softmax？是不是把概率喂给了 <em>WithLogits</em> 系列损失？</li>
+      <li><strong>再查标签的 dtype 与形状。</strong>交叉熵要 <code class="inline">long</code>，BCE 要 <code class="inline">float</code>。打印 <code class="inline">y.shape</code> 与 <code class="inline">y.dtype</code>，不要凭想当然。</li>
+      <li><strong>再查循环顺序。</strong><code class="inline">zero_grad()</code> 是不是第一行？<code class="inline">backward()</code> 是不是在 <code class="inline">step()</code> 之前？</li>
+      <li><strong>再查数据。</strong>类别分布、特征尺度、划分是否泄漏。标签映射的 bug 看起来和学习率的 bug 一模一样。</li>
+      <li><strong>最后才动架构。</strong>它是最诱人的改动，也是最不可能是根因的改动。</li>
+    </ul>
+  </div>
+  <p>两个静默 bug 值得成对记住，因为它们都不会抛异常：</p>
+  <table>
+    <tr><th>Bug</th><th>你看到的现象</th><th>一行修法</th></tr>
+    <tr><td>softmax 做了两次</td><td>损失下降变慢，准确率停在略低于预期的位置</td><td>删掉那句 <code class="inline">softmax</code>，直接传原始 logits</td></tr>
+    <tr><td>漏写 <code class="inline">zero_grad()</code></td><td>梯度逐批次爬升，损失曲线看起来毫无规律</td><td>把它放到批次循环的第一行</td></tr>
+  </table>
+</div>
+
+<!-- ========== 5.8 ========== -->
+<div class="section">
+  <h2>5.8 小结与练习</h2>
+  <div class="callout key">
+    <span class="label">五条要点</span>
+    <ol>
+      <li>训练就是把一个数字压下去。<strong>损失</strong>决定压哪个数字，<strong>优化器</strong>决定怎么走，<strong>学习率</strong>决定一步走多大。</li>
+      <li>损失按任务选——分类用交叉熵、回归用均方误差——并且任何 <em>WithLogits</em> 损失与 <code class="inline">CrossEntropyLoss</code> 都要喂原始 logits。</li>
+      <li>SGD 用当前梯度，Momentum 累积方向，Adam 逐参数自适应。Adam 收敛更快、显存更贵；在你的数据上谁赢，是一次实验，不是一个事实。</li>
+      <li>五步法是<strong>清零 → 前向 → 计算损失 → 反向 → 更新</strong>。顺序固定，而第 1 步最常被漏掉。</li>
+      <li>每个 epoch 记一行、同时记训练与验证损失；一次只改一个变量。没有对照实验的结论只是个人意见。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 选择损失函数（必做）</h4>
+    <ol>
+      <li>为下列任务各写出损失函数与输出层激活：(a) 10 类图像分类；(b) 一张胸片同时打上 5 个征象中的任意若干标签；(c) 预测明天的气温；(d) 垃圾邮件 / 非垃圾邮件。</li>
+      <li>针对 (b)，写出 logits 的期望形状，以及标签的 dtype 与形状。</li>
+      <li>针对 (d)，若垃圾邮件只占 3%，写出构造类别加权损失的那两行代码。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 2 · 复现两个静默 bug（必做）</h4>
+    <ol>
+      <li>用 5.1.3 的 <code class="inline">Net</code>，在 Adam <code class="inline">1e-3</code> 上训练 30 轮，记录训练损失、验证损失与验证准确率，写下最后那三个数。</li>
+      <li>只改一处：先算 <code class="inline">torch.softmax(logits, dim=1)</code> 再喂给 <code class="inline">CrossEntropyLoss</code>。重跑，记录同样三个数。把两条准确率曲线画在同一张图上，用三句话说明变了什么、为什么。</li>
+      <li>删掉 <code class="inline">opt.zero_grad()</code>。重跑，记录同样三个数，并用一句话描述损失曲线的形状。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 3 · 3 × 3 网格（必做）</h4>
+    <ol>
+      <li>把 {SGD, SGD + Momentum 0.9, Adam} × {1e-1, 1e-3, 1e-5} 共 9 组各训 30 轮，每次都在固定种子下重建模型。</li>
+      <li>列表记录：优化器、学习率、最低验证损失、最高验证准确率、是否收敛（是 / 太慢 / 发散）。</li>
+      <li>写出最优组合，并用「数字 + 对照 + 机理」三件套为它辩护。</li>
+      <li>指出发散的那一组，并从更新规则出发解释：为什么同一个学习率对它致命，对纯 SGD 却没事。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 4 · 只看日志做诊断（必做）</h4>
+    <p>对下面每一段日志，写出诊断与下一步动作（只写一个动作）。最后一条请用三句话说明理由。</p>
+    <ol>
+      <li>epoch 0 损失 2.29 → epoch 29 损失 2.24，验证准确率 0.11</li>
+      <li>epoch 0 损失 7.31 → epoch 29 损失 1.79，验证准确率 0.36</li>
+      <li>epoch 0 损失 2.31 → epoch 29 损失 2.60，验证准确率 0.10</li>
+      <li>epoch 29 时训练损失 0.02、验证损失 0.74、验证准确率 0.94</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 5 · 小实验（选做，加分 +5）</h4>
+    <p>取练习 3 中的最优组合，再<strong>只改一处</strong>：(a) 批大小 64 → 256；或 (b) 加入 <code class="inline">StepLR(step_size=10, gamma=0.1)</code>；或 (c) 把 Adam 换成 AdamW 且 <code class="inline">weight_decay=1e-2</code>。报告相对于基线的指标变化，并用 150 字说明这次改动是否值得——如果训练时间有变化，要一并写出来。</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 —— 第 5 章 · 训练循环、损失函数与优化器</p>
+  <p>本章借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

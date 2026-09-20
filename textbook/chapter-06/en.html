@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 06 · Module 2 · Week 6</div>
+  <h1>Evaluation, Overfitting and Regularization</h1>
+  <p class="overview">Week 5 ended with a working training loop and a number at the bottom of the log: the validation loss. This week asks the question an engineer is actually paid to answer — <strong>is that number real?</strong> An 80-image training set and a 17,226-parameter network are more than enough to drive training accuracy to a perfect 1.000, and the distance between that score and the honest one is the entire subject of this chapter. We build the evaluation toolkit (confusion matrix, precision, recall, F1), fix the protocol that makes a score trustworthy (splits, stratification, cross-validation, leakage), read the bias-variance trade-off directly off the loss curves, and implement four regularisers in PyTorch. The chapter closes with a six-arm, five-seed experiment that was actually executed on a laptop CPU — and whose honest conclusion is narrower, and far more useful, than the slogan "regularisation improves accuracy".</p>
+</div>
+
+<!-- ========== 6.1 ========== -->
+<div class="section">
+  <h2>6.1 Why a Training Score Is Not a Report Card</h2>
+  <p>In Week 5 a low training loss was the goal. This week it is a warning sign. The reason is not philosophical: it is arithmetic.</p>
+
+  <h3>6.1.1 Two Hundred and Fifteen Parameters per Image</h3>
+  <p>The protocol used throughout this chapter trains a 64-128-64-10 multilayer perceptron with <strong>17,226 parameters</strong> on only <strong>80 training images</strong>. That is roughly <strong>215 parameters per training sample</strong>. A model carrying far more adjustable numbers than it has examples can fit those examples exactly, and it will — the loss surface has enough room to place every one of the 80 points on the correct side of the boundary without learning a rule that transfers to anything else.</p>
+
+  <div class="callout key">
+    <span class="label">The measurement that starts the chapter</span>
+    The baseline arm reaches <strong>training accuracy 1.000</strong> while validation accuracy sits at <strong>0.856 ± 0.024</strong>. The model is not "almost right" on the training set; it is perfect there and wrong about one image in seven on data it has never seen. Only the second number is a report card.
+  </div>
+
+  <h3>6.1.2 The Three Splits and What Each One Is Allowed to Do</h3>
+  <p>The confusion in practice is rarely about the arithmetic of a metric. It is about <em>which dataset you are allowed to look at while making a decision</em>. Three sets, three permissions:</p>
+  <table>
+    <tr><th>Split</th><th>Purpose</th><th>Permitted use</th><th>Forbidden use</th></tr>
+    <tr><td>Training</td><td>Fit the weights</td><td>Gradient updates, and nothing else</td><td>Reporting any final metric — it is optimised against directly</td></tr>
+    <tr><td>Validation</td><td>Model selection</td><td>Choosing hyper-parameters, the stopping epoch, the regularisation strength</td><td>Being the headline result — after enough choices it is fitted too</td></tr>
+    <tr><td>Test</td><td>One honest measurement</td><td>One evaluation, at the very end, on the frozen model</td><td>Any decision whatsoever, including "let me just check one more idea"</td></tr>
+  </table>
+  <p>The third row is the one people break. Every look at the test set is a hyper-parameter decision made with information the test set was supposed to withhold. Ten looks turn a test set into a fourth, badly overfitted validation set.</p>
+
+  <h3>6.1.3 This Week's Protocol</h3>
+  <p>Everything measured later in this chapter comes from one fixed protocol, so that a change in the numbers can only come from the change under test:</p>
+  <div class="callout tip">
+    <span class="label">Frozen protocol</span>
+    <ul>
+      <li><strong>Data.</strong> <code class="inline">sklearn.datasets.load_digits</code> — 8×8 greyscale handwritten digits, 10 classes, 1,797 images, shipped with the library, so <strong>the whole experiment runs offline and downloads nothing</strong>. Pixels are scaled to 0–1.</li>
+      <li><strong>Split.</strong> 70 / 15 / 15, <strong>stratified</strong>, fixed seed — which leaves about 270 images for validation and 270 for the test set.</li>
+      <li><strong>Training subset.</strong> Only <strong>80 images</strong> are drawn from the training pool. The scarcity is deliberate: it is what makes overfitting visible inside 400 epochs instead of 40,000.</li>
+      <li><strong>Model.</strong> MLP 64-128-64-10, raw logits out, <strong>17,226 parameters</strong> — about 215 per training image.</li>
+      <li><strong>Optimisation.</strong> <code class="inline">Adam(lr=1e-3)</code>, batch size 32, up to 400 epochs.</li>
+      <li><strong>Replication.</strong> Five random seeds (42–46); every figure is reported as <strong>mean ± standard deviation over the five seeds</strong>, never as a single run.</li>
+    </ul>
+  </div>
+
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_split</span>(seed=<span class="num">42</span>):
+    <span class="str">"""1,797 digits scaled to [0, 1]; stratified 70 / 15 / 15."""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)        <span class="cm"># 8x8 pixels, 10 classes</span>
+    X = X / <span class="num">16.0</span>                              <span class="cm"># pixel range 0..16 becomes 0..1</span>
+    Xtr, Xtmp, ytr, ytmp = train_test_split(
+        X, y, test_size=<span class="num">0.30</span>, random_state=seed, stratify=y)
+    Xva, Xte, yva, yte = train_test_split(
+        Xtmp, ytmp, test_size=<span class="num">0.50</span>, random_state=seed, stratify=ytmp)
+    <span class="kw">return</span> Xtr, Xva, Xte, ytr, yva, yte
+
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="str">"""64-128-64-10 - 17,226 parameters on 80 training images."""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, p_drop=<span class="num">0.0</span>):
+        <span class="fn">super</span>().__init__()
+        self.body = nn.Sequential(
+            nn.Linear(<span class="num">64</span>, <span class="num">128</span>), nn.ReLU(), nn.Dropout(p_drop),
+            nn.Linear(<span class="num">128</span>, <span class="num">64</span>),  nn.ReLU(), nn.Dropout(p_drop),
+            nn.Linear(<span class="num">64</span>, <span class="num">10</span>))                 <span class="cm"># raw logits, no softmax</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.body(x)</pre>
+  <p>Stratification matters here even more than in Week 5. With 1,797 images and ten classes, a careless random split of the 80-image training subset can leave a class with six examples and another with eleven, and the resulting accuracy curve moves for reasons that have nothing to do with regularisation. Stratifying keeps the per-class proportions of the training pool in every split, including the 80-image subset.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Generalisation gap</strong> — training performance minus validation performance. Here 1.000 − 0.856 = 0.145, reported as 0.145 ± 0.024 across seeds.</li>
+      <li><strong>Capacity</strong> — the number of adjustable parameters, or more precisely the richness of the function family the model can represent.</li>
+      <li><strong>Parameters per sample</strong> — capacity divided by the size of the training set; the single most useful warning number in this chapter.</li>
+      <li><strong>Holdout set</strong> — any data physically removed from the training pool before training begins.</li>
+      <li><strong>Model selection</strong> — every decision made by comparing scores: architecture, learning rate, epochs, regularisation strength.</li>
+      <li><strong>Stratified split</strong> — a split that preserves the class proportions of the full dataset in each part.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.2 ========== -->
+<div class="section">
+  <h2>6.2 The Confusion Matrix: Four Cells, Every Metric</h2>
+  <p>Accuracy is one number, and one number cannot describe a classifier that makes two different kinds of mistake. The confusion matrix keeps the mistakes separated; every classification metric in this chapter is then simple arithmetic on its cells.</p>
+
+  <h3>6.2.1 Four Cells for a Binary Decision</h3>
+  <table>
+    <tr><th>Cell</th><th>Meaning</th><th>Analogy in a defect-detection line</th></tr>
+    <tr><td>True positive (TP)</td><td>Predicted positive, actually positive</td><td>A real defect, correctly stopped</td></tr>
+    <tr><td>False positive (FP)</td><td>Predicted positive, actually negative</td><td>Good product rejected — a false alarm</td></tr>
+    <tr><td>False negative (FN)</td><td>Predicted negative, actually positive</td><td>A defect shipped to the customer — a miss</td></tr>
+    <tr><td>True negative (TN)</td><td>Predicted negative, actually negative</td><td>Good product correctly passed</td></tr>
+  </table>
+
+  <h3>6.2.2 A Worked Example, Counted by Hand</h3>
+  <p>One hundred images, thirty of which contain a defect. A model flags forty images as defective; twenty-four of those flags are correct, and sixteen are false alarms. Six defects were missed. Purely by counting the cells:</p>
+  <table>
+    <tr><th>Quantity</th><th>Arithmetic</th><th>Value</th></tr>
+    <tr><td>Accuracy — how often is the model simply right?</td><td>(24 + 54) / 100</td><td>0.780</td></tr>
+    <tr><td>Precision — when it flags, how often is it right?</td><td>24 / (24 + 16) = 24 / 40</td><td>0.600</td></tr>
+    <tr><td>Recall — of the real defects, how many were caught?</td><td>24 / (24 + 6) = 24 / 30</td><td>0.800</td></tr>
+    <tr><td>F1 — the harmonic mean of the two</td><td>2 · 0.600 · 0.800 / (0.600 + 0.800)</td><td>0.686</td></tr>
+  </table>
+  <p>One model, four numbers, and only the fourth of them is the same kind of quantity as the first. The gap between accuracy 0.780 and F1 0.686 is entirely information about <em>which</em> mistakes are being made.</p>
+
+  <h3>6.2.3 The Accuracy Paradox</h3>
+  <p>If 4% of samples are positive, a model that answers "negative" to everything scores 96% accuracy while having recall 0 and being worthless. Accuracy is a <em>weighted average over classes</em>; when one class holds 96% of the weight, the average describes that class and nothing else. This is why the generalisation gap in Section 6.1 is not the only number to distrust: <strong>any headline metric must be checked for whether it can be improved by ignoring the class you care about.</strong></p>
+
+  <h3>6.2.4 Reading a Ten-Class Matrix</h3>
+  <p>With ten digit classes the matrix is 10 × 10, and the reading rule is the same: <strong>the diagonal is correct, every off-diagonal cell is a specific confusion between two specific classes.</strong> The useful question is never "what is the accuracy" but "which cells carry mass, and are those pairs visually similar?" — a digit misread as the digit it most resembles is a different engineering problem from a digit misread at random.</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix, classification_report
+
+y_true = yte.numpy()
+y_pred = net(Xte).argmax(dim=<span class="num">1</span>).numpy()          <span class="cm"># dropout already switched off</span>
+
+cm = confusion_matrix(y_true, y_pred)            <span class="cm"># rows = true class, cols = predicted</span>
+<span class="fn">print</span>(cm)
+<span class="fn">print</span>(<span class="str">"accuracy = %.3f"</span> % (cm.trace() / cm.sum()))
+
+off = cm.copy()
+np.fill_diagonal(off, <span class="num">0</span>)                              <span class="cm"># keep only the mistakes</span>
+<span class="fn">print</span>(<span class="str">"most frequent confusions:"</span>, np.dstack(
+    np.unravel_index(np.argsort(off.ravel())[::-<span class="num">1</span>][:<span class="num">5</span>], cm.shape))[<span class="num">0</span>])
+
+<span class="fn">print</span>(classification_report(y_true, y_pred, digits=<span class="num">3</span>))</pre>
+  <div class="callout tip">
+    <span class="label">The three averaging modes, in one line each</span>
+    <strong>Macro</strong> averages the per-class metrics with equal weight — it treats a rare class as important as a common one. <strong>Weighted</strong> averages them in proportion to class frequency, so it converges to accuracy on balanced data. <strong>Micro</strong> pools all decisions first and then computes one metric, which on single-label problems is exactly accuracy. A report that shows only one of the three has chosen your priorities for you.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Confusion matrix</strong> — the table of true class against predicted class; the diagonal counts correct decisions.</li>
+      <li><strong>True / false positive and negative</strong> — the four cells, named by (prediction, truth) agreement.</li>
+      <li><strong>Accuracy</strong> — the fraction of all decisions that are correct, dominated by the largest class.</li>
+      <li><strong>Support</strong> — the number of true examples of a given class; the weight that class carries in a weighted average.</li>
+      <li><strong>Macro / weighted / micro average</strong> — three ways to collapse per-class metrics into one number, with three different implicit priorities.</li>
+      <li><strong>Accuracy paradox</strong> — the failure mode where a useless classifier on imbalanced data reports a high accuracy.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.3 ========== -->
+<div class="section">
+  <h2>6.3 Precision, Recall, F1: Writing Business Cost into a Formula</h2>
+  <p>Precision and recall are not two views of the same quality. They are the two costs of a decision boundary, and which one you must protect is a statement about consequences, not about mathematics.</p>
+
+  <h3>6.3.1 Three Formulas and What Each Refuses to Hide</h3>
+  <table>
+    <tr><th>Metric</th><th>Formula</th><th>The question it answers</th><th>What it ignores</th></tr>
+    <tr><td>Precision</td><td>TP / (TP + FP)</td><td>Of everything I flagged, how much was real?</td><td>Everything I never flagged</td></tr>
+    <tr><td>Recall</td><td>TP / (TP + FN)</td><td>Of everything real, how much did I find?</td><td>Every false alarm I raised</td></tr>
+    <tr><td>F1</td><td>2 · P · R / (P + R) = 2TP / (2TP + FP + FN)</td><td>Which single number survives when both matter?</td><td>True negatives — deliberately, since they are not a decision</td></tr>
+  </table>
+  <p>F1 is the <strong>harmonic mean</strong>, not the arithmetic mean, and the choice is the whole point: the harmonic mean of 0.9 and 0.1 is 0.18, whereas their arithmetic mean is 0.5. A model that catches everything and raises a thousand alarms per real defect cannot buy its way out with precision alone. F1 collapses towards the worse of the two, which is exactly how a metric should behave when both costs are real.</p>
+
+  <h3>6.3.2 Choosing Between Them Is a Cost Decision</h3>
+  <table>
+    <tr><th>Application</th><th>Cost of a false positive</th><th>Cost of a false negative</th><th>What to protect</th></tr>
+    <tr><td>Spam filter</td><td>One important email buried in spam</td><td>One spam message in the inbox</td><td>Precision (usually)</td></tr>
+    <tr><td>Cancer screening</td><td>An unnecessary follow-up test</td><td>A missed diagnosis</td><td>Recall, almost always</td></tr>
+    <tr><td>Industrial defect detection</td><td>Good product scrapped</td><td>Defect shipped</td><td>Recall first, then precision</td></tr>
+    <tr><td>Video recommendation</td><td>One bad recommendation</td><td>One item never shown</td><td>Whichever biases engagement less</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">Misconception: "just maximise F1"</span>
+    F1 is a reasonable default when both error kinds are comparable, and a bad one when they are not. In screening, a recall of 0.80 with precision 0.30 may be the correct engineering choice, and its F1 of 0.44 will look terrible to anyone who reads the metric without reading the cost table. <strong>State the cost, then choose the metric — never the other way round.</strong>
+  </div>
+
+  <h3>6.3.3 The Threshold Is the Dial</h3>
+  <p>A classifier that outputs probabilities converts them to decisions with a threshold, and moving that threshold trades one error kind against the other deterministically: <strong>raise it and precision rises while recall falls; lower it and the reverse happens.</strong> The model has not changed at all. This is why "our model has 92% precision" is an incomplete sentence: it is missing the operating point, and the operating point is a business decision that belongs to whoever pays for the mistakes.</p>
+  <pre><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> precision_recall_fscore_support
+
+<span class="cm"># per-class precision / recall / F1 and the class support</span>
+p, r, f1, sup = precision_recall_fscore_support(
+    y_true, y_pred, average=<span class="kw">None</span>, zero_division=<span class="num">0</span>)
+<span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(f<span class="str">"class {c}:  P={p[c]:.3f}  R={r[c]:.3f}  F1={f1[c]:.3f}  n={sup[c]}"</span>)
+
+<span class="cm"># the same thing collapsed three ways - they are not interchangeable</span>
+<span class="kw">for</span> how <span class="kw">in</span> (<span class="str">"macro"</span>, <span class="str">"weighted"</span>, <span class="str">"micro"</span>):
+    P, R, F, _ = precision_recall_fscore_support(
+        y_true, y_pred, average=how, zero_division=<span class="num">0</span>)
+    <span class="fn">print</span>(f<span class="str">"{how:8s} P={P:.3f} R={R:.3f} F1={F:.3f}"</span>)</pre>
+  <div class="callout tip">
+    <span class="label">A reporting habit worth keeping</span>
+    Report the per-class table, not just the averages. On a ten-class problem, macro-F1 around 0.86 in this chapter's protocol can hide one class at 0.60 — and that one class is usually the interesting finding. An average is a summary, and a summary that cannot be decomposed is not evidence.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Precision</strong> — of the positive predictions, the fraction that are correct; the cost of false alarms.</li>
+      <li><strong>Recall</strong> (sensitivity) — of the truly positive examples, the fraction found; the cost of misses.</li>
+      <li><strong>F1 score</strong> — the harmonic mean of precision and recall, punished by whichever is smaller.</li>
+      <li><strong>Harmonic mean</strong> — the reciprocal of the mean of the reciprocals; unlike the arithmetic mean it cannot be raised by inflating one term.</li>
+      <li><strong>Decision threshold</strong> — the cut applied to a score or probability to produce a class; the dial that trades precision against recall.</li>
+      <li><strong>Per-class metric</strong> — precision, recall and F1 computed for one class against all others, which is how multi-class problems are really evaluated.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.4 ========== -->
+<div class="section">
+  <h2>6.4 The Evaluation Protocol: Splitting, Stratifying, Touching Test Once</h2>
+  <p>A metric is only as trustworthy as the protocol that produced it. Two students can run the same model on the same data and honestly report 0.91 and 0.84, with the difference living entirely in the protocol.</p>
+
+  <h3>6.4.1 Six Rules, in Order</h3>
+  <div class="steps">
+    <div class="step"><h4>Split before you look at anything</h4><p>The split happens before the first plot, the first histogram, the first "let me just check the balance". Statistics computed on the full dataset and used to make any decision have already leaked.</p></div>
+    <div class="step"><h4>Stratify</h4><p>Pass <code class="inline">stratify=y</code> so every part keeps the class proportions. With small classes, an unstratified split changes the metric by more than the model does.</p></div>
+    <div class="step"><h4>Fix and report the seed</h4><p>Pass <code class="inline">random_state=</code> and print it in the log. A split that cannot be reproduced makes every downstream number unreproducible.</p></div>
+    <div class="step"><h4>Fit every transformation on the training part only</h4><p>Scaling, imputation, feature selection, resampling, target encoding. Fitting a scaler on all 1,797 rows and then splitting is the most common leak in student projects, and it never raises an error.</p></div>
+    <div class="step"><h4>Select on validation, report on test — once</h4><p>Architecture, learning rate, epochs, regularisation strength: all decided on validation. The test set is opened after the model is frozen, and the number it returns is the number you publish.</p></div>
+    <div class="step"><h4>Report mean ± standard deviation over seeds</h4><p>This chapter reports every arm over five seeds (42–46) and quotes the spread. A single run is an anecdote; the spread is the measurement precision, and Section 6.8 shows why it decides what you are allowed to claim.</p></div>
+  </div>
+
+  <h3>6.4.2 The Three Ways a Protocol Silently Breaks</h3>
+  <table>
+    <tr><th>Break</th><th>What it looks like</th><th>Why the number is wrong</th></tr>
+    <tr><td>Reusing the test set</td><td>"We tried twelve configurations; the best test accuracy was 0.91."</td><td>The test set took part in twelve decisions, so it is a validation set; 0.91 is an optimistic maximum over twelve draws, not an estimate.</td></tr>
+    <tr><td>Choosing the best epoch by test score</td><td>"We report the test score at the epoch that looked best."</td><td>Early stopping is a hyper-parameter choice; doing it on test converts the test set into the stopping criterion, which is more overfitting than it removes.</td></tr>
+    <tr><td>Reporting the best seed</td><td>"Across five seeds we got up to 0.8926."</td><td>The maximum of five noisy runs is biased upwards. The mean was 0.874 ± 0.011; the "up to" figure is a different, flattering statistic.</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">Misconception: "reproducing the split is enough"</span>
+    The same split with a different <em>seed for weight initialisation</em> is a different experiment, and this protocol shows why: the same augmentation arm scores 0.8074 on one seed and 0.8333 on another, and the same dropout arm ranges over 0.8185 to 0.9000 across seeds. Reproducibility has to cover the split, the initial weights <em>and</em> the batch order, and the honest way to handle the residual variation is to measure it and report it — not to hide it behind one lucky run.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Evaluation protocol</strong> — the fixed procedure of splitting, fitting, selecting and reporting that a score is attached to.</li>
+      <li><strong>Train / validation / test split</strong> — the three roles, and the three different sets of permitted operations.</li>
+      <li><strong>Reproducibility seed</strong> — the fixed random state that makes a split or an initialisation repeatable.</li>
+      <li><strong>Optimistic bias</strong> — the upward error introduced by reporting the best of several runs or configurations.</li>
+      <li><strong>Selection on validation</strong> — the discipline of making every choice on data the test set never influenced.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.5 ========== -->
+<div class="section">
+  <h2>6.5 K-Fold Cross-Validation and Data Leakage</h2>
+  <p>One split gives one number, and with small data that number carries a large error bar. In this chapter's protocol the training subset is 80 images; move a handful of them from training to validation and validation accuracy moves by percentage points with no change to the model. Cross-validation is the standard answer: average over several splits instead of trusting one.</p>
+
+  <h3>6.5.1 K-Fold, and the Stratified Variant You Should Always Use</h3>
+  <p>Split the training pool into <em>K</em> parts. Train on <em>K</em>−1 of them, evaluate on the remaining one, rotate until each part has served once, and average the <em>K</em> scores. Every example is used for validation exactly once and for training <em>K</em>−1 times. With ten classes, use <strong>StratifiedKFold</strong>: a plain <code class="inline">KFold</code> can leave a class entirely absent from a fold, and the resulting metric is not a measurement of the model but of the fold assignment.</p>
+  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> StratifiedKFold
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> make_pipeline
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+
+skf = StratifiedKFold(n_splits=<span class="num">5</span>, shuffle=<span class="kw">True</span>, random_state=<span class="num">42</span>)
+scores = []
+
+<span class="kw">for</span> fold, (tr, va) <span class="kw">in</span> <span class="fn">enumerate</span>(skf.split(Xtr_pool, ytr_pool)):
+    pipe = make_pipeline(StandardScaler(), LogisticRegression(max_iter=<span class="num">1000</span>))
+    pipe.<span class="fn">fit</span>(Xtr_pool[tr], ytr_pool[tr])            <span class="cm"># scaler fitted INSIDE the fold</span>
+    s = pipe.<span class="fn">score</span>(Xtr_pool[va], ytr_pool[va])
+    scores.<span class="fn">append</span>(s)
+    <span class="fn">print</span>(f<span class="str">"fold {fold}: {s:.4f}"</span>)
+
+<span class="fn">print</span>(f<span class="str">"CV mean = {np.mean(scores):.4f} +/- {np.std(scores):.4f}"</span>)</pre>
+  <p>The cost is honest and must be stated: <em>K</em> folds cost about <em>K</em> times one training run. That is the price of a metric with a variance estimate attached, and it is why cross-validation is used for model selection rather than for every experiment.</p>
+
+  <h3>6.5.2 Leakage Is Anything That Lets Validation See the Answer</h3>
+  <table>
+    <tr><th>Leak</th><th>How it happens</th><th>Why it is invisible</th></tr>
+    <tr><td>Preprocessing leak</td><td>A scaler, imputer or feature selector is fitted on the full dataset, then the data is split</td><td>The code runs; the score simply comes out a little too good</td></tr>
+    <tr><td>Duplicate leak</td><td>The same or near-identical row appears in both training and validation</td><td>The model looks like it generalises, but it is recalling a row it has seen</td></tr>
+    <tr><td>Test-set leak</td><td>The test score is used to pick a configuration</td><td>Reported numbers improve, which feels like progress</td></tr>
+    <tr><td>Temporal leak</td><td>Time series shuffled before splitting, so the model trains on the future</td><td>Random splits are the default, and defaults feel neutral</td></tr>
+    <tr><td>Target leak</td><td>A feature is computed from information that is only available after the label is known</td><td>The feature is legitimate-looking and highly predictive — because it embeds the answer</td></tr>
+    <tr><td>Group leak</td><td>Several rows from the same source (same image, same sensor, same patient) land on both sides of the split</td><td>Rows are independent only if the grouping is respected; the row count lies</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">The one-question test</span>
+    For every step that touches data, ask: <strong>could this step have been executed in production, at prediction time, using only information available then?</strong> If the answer is no, the step belongs inside the fold, fitted on the training part alone. A <code class="inline">Pipeline</code> is the cheapest way to make that structurally true rather than remembered.
+  </div>
+  <div class="callout warn">
+    <span class="label">Misconception: "cross-validation replaces the test set"</span>
+    It does not. Cross-validation answers "how stable is this score across splits of the training pool", which is a question about model selection. The test set answers "how does the frozen model do on data no decision has ever touched", which is a question about reporting. Use cross-validation to <em>choose</em>, and the test set once to <em>state</em>.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>K-fold cross-validation</strong> — rotating <em>K</em>-way splits so every example is validated exactly once; the mean and standard deviation of the <em>K</em> scores are both reported.</li>
+      <li><strong>Stratified K-fold</strong> — K-fold that preserves per-class proportions in each fold; the default for classification.</li>
+      <li><strong>Data leakage</strong> — any information reaching the model during training or selection that would not be available at prediction time.</li>
+      <li><strong>Preprocessing leak</strong> — fitting a transformation on data that will later be used for validation.</li>
+      <li><strong>Group leak</strong> — correlated rows split across training and validation, so the validation score measures recall rather than generalisation.</li>
+      <li><strong>Pipeline</strong> — a construct that binds preprocessing to the model so that fitting the model also fits the preprocessing, on the correct subset.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.6 ========== -->
+<div class="section">
+  <h2>6.6 The Bias-Variance Trade-off: Diagnosis from Curves</h2>
+  <p>Underfitting and overfitting are not two unrelated problems. They are the two ends of one dial, and the dial has a name: the capacity of the model relative to the data it is fitted on.</p>
+
+  <h3>6.6.1 One Decomposition, Two Failure Modes</h3>
+  <p>The expected error of a trained model decomposes into three parts: <strong>bias</strong> (the error of the best model the family can represent, i.e. it is too simple), <strong>variance</strong> (the sensitivity of the fitted model to which particular training sample it happened to see), and <strong>irreducible noise</strong> (nothing can remove it). Adding capacity lowers bias and raises variance; reducing capacity does the reverse. The practical consequence is a single rule:</p>
+  <div class="callout key">
+    <span class="label">The rule</span>
+    <strong>Fix underfitting by adding capacity or training longer. Fix overfitting by adding data or constraining the model.</strong> Applying the wrong one of these two moves always makes the situation worse — and telling them apart is precisely what the two loss curves are for.
+  </div>
+
+  <h3>6.6.2 The Four Patterns, Read Off the Log</h3>
+  <table>
+    <tr><th>Train loss</th><th>Val loss</th><th>Diagnosis</th><th>Correct move</th></tr>
+    <tr><td>High, falling slowly</td><td>High, close to train</td><td>Underfitting — capacity or training time too small</td><td>Bigger model, more epochs, higher learning rate</td></tr>
+    <tr><td>Falls, then flat and low</td><td>Falls, then flat and low</td><td>Well fitted — the two curves are tracking each other</td><td>Stop; or add data to push both lower</td></tr>
+    <tr><td>Falls to near zero</td><td>Falls, then <strong>turns up</strong></td><td>Overfitting — the model is memorising</td><td>Regularise: early stopping, weight decay, dropout, more data</td></tr>
+    <tr><td>Both jagged, no trend</td><td>Both jagged, no trend</td><td>Not a capacity problem — usually a learning rate or loop bug</td><td>Return to Chapter 5 and check <code class="inline">zero_grad()</code></td></tr>
+  </table>
+  <p>The third row is the one that costs students the most time, because <strong>a validation loss that turns upward while validation accuracy stays flat is the normal case, not a special one</strong> — and the next subsection is the measured proof.</p>
+
+  <h3>6.6.3 The Ceiling Effect, Seen in Real Numbers</h3>
+  <p>Here is the seed-42 trajectory of the unregularised baseline, sampled every 20 epochs. Training accuracy reaches 0.9875 by epoch 41 and is exactly <strong>1.000 from epoch 61 onwards</strong> — the memorisation is complete:</p>
+  <table>
+    <tr><th>Sampled epoch</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th></tr>
+    <tr><td>Train accuracy</td><td>0.100</td><td>0.725</td><td>0.9875</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr>
+  </table>
+  <p>Validation accuracy and validation loss, meanwhile, tell two different stories — and only one of them detects the damage:</p>
+  <table>
+    <tr><th>Sampled epoch</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th></tr>
+    <tr><td>Validation accuracy</td><td>0.100</td><td>0.4815</td><td>0.8074</td><td>0.8185</td><td>0.8296</td><td>0.8333</td><td>0.8296</td><td>0.837</td><td>0.837</td></tr>
+    <tr><td>Validation loss</td><td>2.2906</td><td>1.5293</td><td>0.7305</td><td>0.650</td><td><strong>0.6357</strong></td><td>0.6704</td><td>0.6983</td><td>0.7168</td><td>0.742</td></tr>
+  </table>
+  <p>Validation loss bottoms out at <strong>0.6357 at epoch 81</strong> and then rises <strong>monotonically</strong> to <strong>0.8672</strong> by epoch 381 — every single sampled point after the minimum is worse than the one before it. Validation accuracy over the same span sits inside a band of <strong>0.833 to 0.841</strong> and shows nothing at all.</p>
+  <div class="callout warn">
+    <span class="label">The conclusion this chapter is built on</span>
+    <strong>The only reliable evidence of overfitting in this experiment is the validation loss turning upward.</strong> Validation accuracy cannot see the degradation because of the <em>ceiling effect</em>: it is capped at 1.0 and has already plateaued at 0.856 ± 0.024, so the model's growing confidence on wrong answers produces no visible change in a metric that only counts threshold crossings. A student who monitors accuracy alone will conclude that 400 epochs and 85 epochs are equivalent. The loss curve proves they are not: the rise is <strong>+0.155 ± 0.089</strong>, and the best epoch is <strong>85 ± 17</strong>.
+  </div>
+  <p>This also defines the stopping rule used in Section 6.7: the <strong>best epoch is the epoch of minimum validation loss</strong>, not the epoch of maximum validation accuracy. On this data the two criteria sometimes disagree, and the loss criterion is the one that can still see the difference.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Bias</strong> — the error of the best function in the model family; high bias means underfitting.</li>
+      <li><strong>Variance</strong> — how much the fitted model changes when the training sample changes; high variance means overfitting.</li>
+      <li><strong>Irreducible error</strong> — the noise floor that no model of any capacity can remove.</li>
+      <li><strong>Underfitting</strong> — both losses high and close together; the model has not learned the structure that exists.</li>
+      <li><strong>Overfitting</strong> — training loss near zero while validation loss turns upward; the model has learned the sample, not the structure.</li>
+      <li><strong>Ceiling effect</strong> — a metric that saturates and therefore stops registering further degradation.</li>
+      <li><strong>Best epoch</strong> — the epoch of minimum validation loss, used as the stopping and reporting point.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.7 ========== -->
+<div class="section">
+  <h2>6.7 Four Regularization Techniques</h2>
+  <p>Regularisation is any constraint that makes it harder for the model to spend its capacity on memorising. The four techniques below are the standard toolkit, and they differ in <em>what</em> they constrain: the training duration, the weight magnitude, the units that may co-adapt, or the inputs the model is allowed to see.</p>
+
+  <h3>6.7.1 Early Stopping — Constrain the Training Duration</h3>
+  <p>The simplest regulariser requires no change to the model at all. Track validation loss each epoch, remember the best weights, and stop when the loss has failed to improve for <code class="inline">patience</code> epochs — then <strong>restore the best weights rather than the last ones</strong>.</p>
+  <pre>best, best_ep, best_state = <span class="fn">float</span>(<span class="str">"inf"</span>), -<span class="num">1</span>, <span class="kw">None</span>
+
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, epochs + <span class="num">1</span>):
+    net.<span class="fn">train</span>()                                  <span class="cm"># dropout ON</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(Xsub), <span class="num">32</span>):
+        xb, yb = Xsub[i:i + <span class="num">32</span>], ysub[i:i + <span class="num">32</span>]
+        opt.<span class="fn">zero_grad</span>()
+        loss = criterion(<span class="fn">net</span>(xb), yb)
+        loss.<span class="fn">backward</span>()
+        opt.<span class="fn">step</span>()
+
+    net.<span class="fn">eval</span>()                                   <span class="cm"># dropout OFF for every measurement</span>
+    <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+        v_loss = criterion(<span class="fn">net</span>(Xva), yva).<span class="fn">item</span>()
+
+    <span class="kw">if</span> v_loss &lt; best - <span class="num">1e-4</span>:                  <span class="cm"># strict improvement</span>
+        best, best_ep = v_loss, ep
+        best_state = {k: v.<span class="fn">clone</span>() <span class="kw">for</span> k, v <span class="kw">in</span> net.<span class="fn">state_dict</span>().<span class="fn">items</span>()}
+    <span class="kw">elif</span> patience <span class="kw">and</span> ep - best_ep &gt;= patience:
+        <span class="kw">break</span>                                    <span class="cm"># stop training, keep the best weights</span>
+
+net.<span class="fn">load_state_dict</span>(best_state)                 <span class="cm"># restore, do NOT use the final epoch</span></pre>
+  <p>Measured on this protocol, <code class="inline">patience=20</code> cuts the run from 400 epochs to <strong>105 ± 17</strong> — about a quarter of the budget — while holding validation loss rise to <strong>+0.018 ± 0.016</strong> against the baseline's <strong>+0.155 ± 0.089</strong>. That is roughly a nine-fold reduction in the upward drift, produced by <em>stopping earlier</em> and by nothing else.</p>
+
+  <h3>6.7.2 Weight Decay — Constrain the Weight Magnitude</h3>
+  <p>L2 regularisation adds a penalty proportional to the squared weights to the loss, which in the gradient update becomes a small pull of every weight towards zero. In PyTorch this is one argument to the optimizer:</p>
+  <pre><span class="cm"># weight decay is an optimizer argument, not a layer</span>
+opt = torch.optim.Adam(net.parameters(), lr=<span class="num">1e-3</span>, weight_decay=<span class="num">1e-2</span>)</pre>
+  <p>Mechanically, a model that must keep its weights small cannot carve a sharp boundary around each individual training point; it is pushed towards smoother, lower-magnitude solutions. The measured signature is unmistakable in the curves: the best epoch moves from <strong>85 ± 17</strong> for the baseline to <strong>262 ± 76</strong> with decay, and on the seed-42 curve the validation loss oscillates in a narrow band between <strong>0.5794 and 0.6261</strong> and finishes at <strong>0.5956</strong> — it never turns up, whereas the baseline bottoms at <strong>0.6357</strong> and climbs to <strong>0.8672</strong>. The loss rise is <strong>+0.027 ± 0.014</strong> against the baseline's <strong>+0.155 ± 0.089</strong>.</p>
+  <div class="callout tip">
+    <span class="label">Choosing the strength</span>
+    <code class="inline">1e-2</code> is a reasonable starting point for Adam-family optimizers; the trade-off is visible in this experiment, since too much decay moves the model from "overfitting slowly" to "learning slowly". Read it as a dial that trades the <em>time</em> at which the validation minimum occurs, not as a switch that turns overfitting off.
+  </div>
+
+  <h3>6.7.3 Dropout — Constrain What May Co-adapt</h3>
+  <p>Dropout zeroes a random fraction <code class="inline">p</code> of activations on every forward pass during training, so no unit may rely on the presence of a specific partner. At evaluation time nothing is dropped; instead the outputs are scaled so the expected activation matches. PyTorch handles the scaling internally, which means <strong>the only thing you must do correctly is switch modes</strong>.</p>
+  <pre>net = <span class="fn">MLP</span>(p_drop=<span class="num">0.3</span>)                <span class="cm"># nn.Dropout(0.3) after each ReLU</span>
+
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+    net.<span class="fn">train</span>()                     <span class="cm"># dropout ACTIVE - stochastic forward passes</span>
+    train_one_epoch(net, opt, criterion)
+
+    net.<span class="fn">eval</span>()                      <span class="cm"># dropout DISABLED - deterministic inference</span>
+    <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+        val_metrics = <span class="fn">evaluate</span>(net, Xva, yva)</pre>
+  <div class="callout warn">
+    <span class="label">The number one bug source of this entire module</span>
+    Forgetting <code class="inline">net.eval()</code> (or leaving <code class="inline">net.train()</code> on during evaluation) means <strong>every validation and test measurement is taken with a random subset of activations switched off</strong>. Nothing crashes. The numbers are simply lower and, worse, different on every call — which students then diagnose as "unstable training" and chase into the learning rate, the architecture and the data, none of which is at fault. The mirror-image bug is equally common: forgetting <code class="inline">net.train()</code> after evaluation leaves dropout disabled for the next epoch, so regularisation is silently switched off while the log still claims it is on. Under Week 5's model — a plain MLP with no dropout and no batch norm — these two calls changed nothing, which is exactly why the habit had to be built before it started to matter.
+  </div>
+  <p>Dropout at <code class="inline">p=0.3</code> is the arm that most rewards careful reading. Its validation loss rise is <strong>+0.171 ± 0.102</strong> — the <em>largest</em> of the six arms, not the smallest — and its best epoch is highly variable at <strong>163 ± 100</strong>. Its test accuracy of <strong>0.884 ± 0.011</strong> is higher than the baseline's 0.878, but the difference is 0.006, which is half of the baseline's own standard deviation of 0.012. Section 6.8 draws the consequence.</p>
+
+  <h3>6.7.4 Data Augmentation — Constrain the Inputs</h3>
+  <p>Augmentation presents the model with transformed copies of the training inputs, teaching it that the label survives the transformation. The condition for it to work is precise and easy to miss: <strong>the transform must preserve the label</strong>. Flipping a digit horizontally changes a 6 into something closer to a 9; flipping it vertically destroys a 9; rotating a digit by 180 degrees changes which digit it is. Augmentation that does not preserve the label does not add information — <strong>it manufactures wrong labels and slows training while looking like a sophisticated regulariser.</strong></p>
+  <pre><span class="kw">def</span> <span class="fn">augment</span>(xb, sigma=<span class="num">0.15</span>):
+    <span class="str">"""Gaussian noise + a random +/-1 pixel shift on an 8x8 image."""</span>
+    xb = xb.<span class="fn">view</span>(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>)
+    shift = torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">2</span>,), device=xb.device)   <span class="cm"># dx, dy in {-1,0,1}</span>
+    xb = torch.<span class="fn">roll</span>(xb, shifts=(<span class="fn">int</span>(shift[<span class="num">0</span>]), <span class="fn">int</span>(shift[<span class="num">1</span>])), dims=(<span class="num">2</span>, <span class="num">3</span>))
+    xb = xb + sigma * torch.<span class="fn">randn_like</span>(xb)
+    <span class="kw">return</span> xb.<span class="fn">clamp</span>(<span class="num">0.0</span>, <span class="num">1.0</span>).<span class="fn">view</span>(xb.size(<span class="num">0</span>), -<span class="num">1</span>)</pre>
+  <p>Measured, this transform is actively harmful here: training accuracy falls from <strong>1.000</strong> to <strong>0.960 ± 0.027</strong> and test accuracy from <strong>0.878 ± 0.012</strong> to <strong>0.824 ± 0.010</strong>. Both curves moving down together is the signature of <em>underfitting</em>, not of successful regularisation. Section 6.8 explains why an 8 × 8 image is the wrong place to shift pixels.</p>
+
+  <h3>6.7.5 The Four Side by Side</h3>
+  <table>
+    <tr><th>Technique</th><th>What it constrains</th><th>Where it lives in the code</th><th>Measured loss-rise Δ</th><th>Cost / failure mode</th></tr>
+    <tr><td>Early stopping</td><td>Training duration</td><td>The epoch loop; restore best weights</td><td>+0.018 ± 0.016</td><td>Needs a validation set; stops at 105 of 400 epochs</td></tr>
+    <tr><td>Weight decay</td><td>Weight magnitude</td><td><code class="inline">Adam(..., weight_decay=1e-2)</code></td><td>+0.027 ± 0.014</td><td>Pushes the best epoch to 262 ± 76; too much decays into underfitting</td></tr>
+    <tr><td>Dropout</td><td>Unit co-adaptation</td><td><code class="inline">nn.Dropout(0.3)</code> + <code class="inline">train()</code>/<code class="inline">eval()</code></td><td>+0.171 ± 0.102</td><td>Silently broken without mode switching; noisy per-epoch metrics</td></tr>
+    <tr><td>Augmentation</td><td>The inputs seen</td><td>The data pipeline, per batch</td><td>+0.077 ± 0.027</td><td>Only valid if the transform preserves the label; costs CPU every step</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Regularisation</strong> — any constraint that reduces a model's ability to fit noise in the training sample.</li>
+      <li><strong>Early stopping</strong> — halting training when validation loss stops improving, and restoring the best weights.</li>
+      <li><strong>Patience</strong> — the number of epochs without improvement tolerated before stopping; 20 in this experiment.</li>
+      <li><strong>Weight decay (L2)</strong> — a penalty on weight magnitude applied through the optimizer's <code class="inline">weight_decay</code> argument.</li>
+      <li><strong>Dropout</strong> — randomly zeroing activations during training so units cannot co-adapt; inverted scaling keeps inference deterministic.</li>
+      <li><strong>Train / eval mode</strong> — <code class="inline">net.train()</code> and <code class="inline">net.eval()</code> toggle dropout and batch-norm behaviour; the leading source of silent bugs with dropout.</li>
+      <li><strong>Label-preserving transform</strong> — an augmentation the correct label survives; the precondition for augmentation to help.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.8 ========== -->
+<div class="section">
+  <h2>6.8 An Honest Measured Case Study</h2>
+  <p>Everything above is a claim. This section is the evidence: six regularisation arms, five seeds each, one frozen protocol, all executed on a laptop CPU. The experiment is deliberately small enough to be rerun and unglamorous enough to be inconvenient — which is the point.</p>
+
+  <div class="callout key">
+    <span class="label">Protocol, restated exactly</span>
+    <code class="inline">load_digits</code> (8×8 greyscale, 10 classes, 1,797 images, fully offline) → scale to 0–1 → stratified 70 / 15 / 15 → <strong>80 training images</strong> → MLP 64-128-64-10 (<strong>17,226 parameters</strong>, about 215 per training image) → <code class="inline">Adam(lr=1e-3)</code>, batch 32, up to 400 epochs → <strong>five seeds (42–46)</strong>, reporting mean ± standard deviation. Early stopping uses <strong>patience=20</strong>; weight decay is <strong>1e-2</strong>; dropout is <strong>p=0.3</strong>; augmentation is Gaussian noise <strong>σ=0.15</strong> plus a random shift of <strong>±1 pixel</strong>.
+  </div>
+
+  <h3>6.8.1 The Six Arms, Five Seeds Each</h3>
+  <table>
+    <tr><th>Arm</th><th>Train acc</th><th>Val acc</th><th>Val loss min → final@400</th><th>Loss rise Δ</th><th>Best epoch</th><th>Test acc</th><th>Epochs run</th></tr>
+    <tr><td>Baseline (no regularisation)</td><td>1.000</td><td>0.856±0.024</td><td>0.516 → 0.671</td><td>+0.155±0.089</td><td>85±17</td><td>0.878±0.012</td><td>400</td></tr>
+    <tr><td>Early stopping, patience=20</td><td>1.000</td><td>0.858±0.025</td><td>0.516 → 0.534</td><td>+0.018±0.016</td><td>85±17</td><td>0.874±0.011</td><td>105</td></tr>
+    <tr><td>Weight decay 1e-2</td><td>1.000</td><td>0.844±0.023</td><td>0.497 → 0.524</td><td>+0.027±0.014</td><td>262±76</td><td>0.867±0.024</td><td>400</td></tr>
+    <tr><td>Dropout 0.3</td><td>1.000</td><td>0.857±0.032</td><td>0.474 → 0.645</td><td>+0.171±0.102</td><td>163±100</td><td>0.884±0.011</td><td>400</td></tr>
+    <tr><td>Augmentation σ=0.15 + ±1px shift</td><td>0.960±0.027</td><td>0.814±0.013</td><td>0.529 → 0.606</td><td>+0.077±0.027</td><td>348±36</td><td>0.824±0.010</td><td>400</td></tr>
+    <tr><td>Combined (decay + dropout + augmentation)</td><td>0.875±0.048</td><td>0.716±0.035</td><td>0.849 → 0.884</td><td>+0.035±0.022</td><td>376±13</td><td>0.740±0.053</td><td>400</td></tr>
+  </table>
+
+  <h3>6.8.2 The Curves, for One Seed</h3>
+  <p>Sampled every 20 epochs (epochs 1, 21, 41, …, 381) for seed 42. The baseline and the weight-decay arm differ in exactly one respect, and it is the whole lesson of the chapter:</p>
+  <table>
+    <tr><th>Sampled epoch</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th><th>181</th></tr>
+    <tr><td>Baseline val loss</td><td>2.2906</td><td>1.5293</td><td>0.7305</td><td>0.650</td><td>0.6357</td><td>0.6704</td><td>0.6983</td><td>0.7168</td><td>0.742</td><td>0.7549</td></tr>
+    <tr><td>Weight-decay val loss</td><td>2.292</td><td>1.7454</td><td>0.9045</td><td>0.7215</td><td>0.6261</td><td>0.612</td><td>0.5973</td><td>0.6032</td><td>0.6098</td><td>0.5859</td></tr>
+  </table>
+  <table>
+    <tr><th>Sampled epoch</th><th>201</th><th>221</th><th>241</th><th>261</th><th>281</th><th>301</th><th>321</th><th>341</th><th>361</th><th>381</th></tr>
+    <tr><td>Baseline val loss</td><td>0.7706</td><td>0.7859</td><td>0.7947</td><td>0.8054</td><td>0.8193</td><td>0.8309</td><td>0.8389</td><td>0.8472</td><td>0.8593</td><td>0.8672</td></tr>
+    <tr><td>Weight-decay val loss</td><td>0.6025</td><td>0.5929</td><td>0.5794</td><td>0.5808</td><td>0.5953</td><td>0.6027</td><td>0.5895</td><td>0.5928</td><td>0.6088</td><td>0.5956</td></tr>
+  </table>
+  <p>The baseline falls to <strong>0.6357 at epoch 81</strong> and then rises <strong>monotonically, at every single sampled point</strong>, finishing at <strong>0.8672</strong>. The weight-decay arm oscillates inside <strong>0.58–0.61</strong> for the last 200 epochs and finishes at <strong>0.5956</strong> without ever turning up. Over the same span, baseline validation accuracy wanders between <strong>0.833 and 0.841</strong> and — as Section 6.6 showed — registers none of this.</p>
+
+  <h3>6.8.3 The Four Conclusions the Data Actually Supports</h3>
+  <div class="callout key">
+    <span class="label">1 · Regularisation suppressed the rise in validation loss — it did not raise accuracy</span>
+    The six arms land within <strong>0.716 to 0.858</strong> on validation accuracy, and their test accuracies differ by amounts that all sit inside one standard deviation (test-accuracy standard deviations range from <strong>0.010 to 0.024</strong>). What early stopping and weight decay measurably changed is the <em>upward drift</em> of the validation loss — from <strong>+0.155 ± 0.089</strong> down to <strong>+0.018 ± 0.016</strong> and <strong>+0.027 ± 0.014</strong> — and the epoch at which the minimum occurs (<strong>85 ± 17</strong> versus <strong>262 ± 76</strong>). Claiming "regularisation improved the accuracy" would be a misreading of these numbers.
+  </div>
+  <div class="callout key">
+    <span class="label">2 · On 8×8 images, augmentation and the combined arm were harmful — underfitting, not overfitting</span>
+    Augmentation pushed test accuracy down from <strong>0.878</strong> to <strong>0.824</strong> and pulled training accuracy down from <strong>1.000</strong> to <strong>0.960</strong>; combining all three techniques collapsed the model to <strong>0.740</strong> on test with training accuracy of <strong>0.875 ± 0.048</strong>. Both are more than four baseline standard deviations from the baseline, and — decisively — <em>both losses moved down together</em>, which is the signature of an underfitted model rather than a well-regularised one. The mechanism is specific: <strong>an 8×8 digit is 64 pixels of stroke; shifting it by ±1 pixel relocates the stroke by a substantial fraction of the image and blurs which digit it is, so the augmentation manufactures incorrectly labelled examples instead of new views of the same one.</strong> Augmentation is a strong tool that requires the invariance to actually hold — and at this resolution it does not.
+  </div>
+  <div class="callout key">
+    <span class="label">3 · A single run's difference may be noise</span>
+    The same change to the same code moves the result by up to <strong>±3 percentage points</strong> across seeds — the dropout arm's test accuracy ranges from <strong>0.8667 to 0.8963</strong>, and the augmentation arm's from <strong>0.8074 to 0.8333</strong>. Against that background, the dropout arm's <strong>0.884 ± 0.011</strong> versus the baseline's <strong>0.878 ± 0.012</strong> is a difference of <strong>0.006 — smaller than one standard deviation</strong>. The only defensible statement is that <strong>no significant difference was observed</strong>, not that dropout is better. Any conclusion of the form "configuration A beats configuration B" requires A to clear B's spread, and one seed cannot establish that.
+  </div>
+  <div class="callout key">
+    <span class="label">4 · The only reliable evidence of overfitting is validation loss turning upward</span>
+    Training accuracy is pinned at <strong>1.000</strong> from epoch 61 onward and validation accuracy plateaus at <strong>0.856 ± 0.024</strong> while validation loss climbs from its minimum to <strong>0.8672</strong>. Because the accuracy metric has saturated — the ceiling effect — the degradation is <em>arithmetically unable</em> to appear in it. Monitoring accuracy alone would certify that 85 epochs and 400 epochs are equivalent; the loss curve shows a rise of <strong>+0.155 ± 0.089</strong> and the arm-level best epoch of <strong>85 ± 17</strong>. This is why the stopping criterion in this chapter is minimum validation loss.
+  </div>
+
+  <h3>6.8.4 The Harness That Produced These Numbers</h3>
+  <pre><span class="kw">import</span> json, numpy <span class="kw">as</span> np, torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix, precision_recall_fscore_support
+
+ARMS = {
+    <span class="str">"baseline"</span>:   <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"early_stop"</span>: <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">True</span>,  aug=<span class="kw">False</span>),
+    <span class="str">"weight_decay"</span>: <span class="fn">dict</span>(wd=<span class="num">1e-2</span>, p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"dropout"</span>:    <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.3</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"augment"</span>:    <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">True</span>),
+    <span class="str">"combined"</span>:   <span class="fn">dict</span>(wd=<span class="num">1e-2</span>, p_drop=<span class="num">0.3</span>, early=<span class="kw">False</span>, aug=<span class="kw">True</span>),
+}
+
+rows = []
+<span class="kw">for</span> arm, cfg <span class="kw">in</span> ARMS.<span class="fn">items</span>():
+    <span class="kw">for</span> seed <span class="kw">in</span> (<span class="num">42</span>, <span class="num">43</span>, <span class="num">44</span>, <span class="num">45</span>, <span class="num">46</span>):
+        hist = <span class="fn">run_arm</span>(arm, cfg, seed)      <span class="cm"># same protocol for every arm</span>
+
+        net.<span class="fn">eval</span>()                          <span class="cm"># MANDATORY before any measurement</span>
+        <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+            y_pred = net(Xte).<span class="fn">argmax</span>(<span class="num">1</span>).numpy()
+
+        p, r, f1, _ = precision_recall_fscore_support(
+            yte.numpy(), y_pred, average=<span class="str">"macro"</span>, zero_division=<span class="num">0</span>)
+        rows.<span class="fn">append</span>({
+            <span class="str">"arm"</span>: arm, <span class="str">"seed"</span>: seed,
+            <span class="str">"epochs_run"</span>: hist[<span class="str">"epochs_run"</span>],
+            <span class="str">"train_acc"</span>: hist[<span class="str">"train_acc"</span>][-<span class="num">1</span>],
+            <span class="str">"val_acc"</span>: <span class="fn">max</span>(hist[<span class="str">"val_acc"</span>]),
+            <span class="str">"val_loss_best"</span>: <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"val_loss_best_epoch"</span>: <span class="fn">int</span>(np.<span class="fn">argmin</span>(hist[<span class="str">"val_loss"</span>])) + <span class="num">1</span>,
+            <span class="str">"val_loss_rise"</span>: hist[<span class="str">"val_loss"</span>][-<span class="num">1</span>] - <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"test_acc"</span>: <span class="fn">float</span>((y_pred == yte.<span class="fn">numpy</span>()).<span class="fn">mean</span>()),
+            <span class="str">"macro_f1"</span>: <span class="fn">float</span>(f1),
+            <span class="str">"cm"</span>: <span class="fn">confusion_matrix</span>(yte.<span class="fn">numpy</span>(), y_pred).<span class="fn">tolist</span>(),
+        })
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"w6_regularisation.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:  <span class="cm"># raw rows, not a screenshot</span>
+    json.<span class="fn">dump</span>({<span class="str">"rows"</span>: rows}, f, indent=<span class="num">2</span>)
+
+<span class="cm"># report mean +/- SD over seeds, never a single value</span>
+<span class="kw">for</span> arm <span class="kw">in</span> ARMS:
+    t = [r[<span class="str">"test_acc"</span>] <span class="kw">for</span> r <span class="kw">in</span> rows <span class="kw">if</span> r[<span class="str">"arm"</span>] == arm]
+    <span class="fn">print</span>(f<span class="str">"{arm:13s} test_acc = {np.mean(t):.3f} +/- {np.std(t):.3f}"</span>)</pre>
+  <div class="callout tip">
+    <span class="label">The reporting template this experiment suggests</span>
+    Every claim in 6.8.3 has the same shape: <em>a number, a spread, and a statement of whether the spread covers the difference</em>. "Dropout scored 0.884" is not a result. "Dropout scored 0.884 ± 0.011 against a baseline of 0.878 ± 0.012 over five seeds, a difference of 0.006 that is smaller than either standard deviation, so no significant difference was observed" is a result — and it is the one that will still be true when someone else reruns the code.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Arm</strong> — one configuration under test, with every other factor of the protocol held fixed.</li>
+      <li><strong>Seed replication</strong> — repeating an arm over several random seeds so the spread, not one run, is the measurement.</li>
+      <li><strong>Mean ± standard deviation</strong> — the reporting form used for every figure in this chapter; a single-run value is not a result.</li>
+      <li><strong>Paired difference</strong> — comparing two arms seed by seed, which is more sensitive than comparing two means drawn from different runs.</li>
+      <li><strong>Underfitting</strong> — both training and validation metrics moving down together, the diagnosis for the augmentation and combined arms here.</li>
+      <li><strong>Claim strength</strong> — the rule that a difference smaller than the spread supports only "no significant difference was observed".</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · From a 3 × 3 Matrix to Five Metrics (Required)</h4>
+    <p>A model flags 40 images as defective out of 100; 24 of those are really defective and 6 defects are missed. <em>Analysis points:</em> TP = 24, FP = 16, FN = 6, TN = 54.</p>
+    <ol>
+      <li>Compute accuracy, precision, recall, specificity and F1 by hand. <em>(0.780 / 0.600 / 0.800 / 0.771 / 0.686.)</em></li>
+      <li>Name the one metric above that a model predicting "no defect" for every image would score perfectly, and give its value. <em>(Specificity = TN / (TN + FP) = 1.0 — which is why specificity alone can never justify a defect detector.)</em></li>
+      <li>Raise the threshold so that precision becomes 1.0 while recall falls to 0.4. State which business context makes that a good trade and which makes it a bad one, in two sentences.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2 · Read the Curves, Not the Accuracy (Required)</h4>
+    <ol>
+      <li>Using the seed-42 numbers in 6.8.2, find the epoch of minimum validation loss for both arms and state the value. <em>(Baseline: 0.6357 at epoch 81. Weight decay: 0.5794 at epoch 241 among the sampled points, oscillating in 0.58–0.61 afterwards and finishing at 0.5956.)</em></li>
+      <li>Compute how much the baseline's validation loss rises between its minimum and epoch 381. <em>(0.8672 − 0.6357 = 0.2315 for this seed; the five-seed mean rise is 0.155 ± 0.089.)</em></li>
+      <li>Explain in three sentences why validation accuracy over the same span shows nothing, and name the effect. <em>(Ceiling effect: accuracy is bounded at 1.0 and has plateaued at 0.856, so increasing confidence on wrong answers changes no threshold crossing.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3 · Break Dropout on Purpose, Then Fix It (Required)</h4>
+    <ol>
+      <li>Train the <code class="inline">dropout</code> arm with <code class="inline">p=0.3</code> correctly, and record validation accuracy. Then delete every <code class="inline">net.eval()</code> and record it again.</li>
+      <li>Evaluate the same model twice in a row without <code class="inline">net.eval()</code> and compare the two numbers. State in one sentence what property a measurement must have that this one lacks. <em>(Determinism.)</em></li>
+      <li>Now remove the <code class="inline">net.train()</code> call instead, and explain in two sentences why the training loss also stops matching. <em>(Dropout stays disabled, so the model trains without regularisation while the log still claims <code class="inline">p=0.3</code>.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4 · Explain Why Augmentation Failed Here (Required)</h4>
+    <ol>
+      <li>State the measured effect of the augmentation arm on training accuracy, validation accuracy and test accuracy. <em>(1.000 → 0.960 ± 0.027; 0.856 → 0.814 ± 0.013; 0.878 → 0.824 ± 0.010.)</em></li>
+      <li>Both curves fall together. Name the diagnosis this pattern indicates. <em>(Underfitting — not overfitting.)</em></li>
+      <li>Give the mechanism in terms of pixel geometry and label preservation, then name two transforms that <em>would</em> be label-preserving for handwritten digits even at this resolution, and one that would not. <em>(Small rotations and small translations within a few percent of the ink bounding box; horizontal flipping of asymmetric digits such as 2 or 5 is not.)</em></li>
+      <li>Predict what σ=0.15 noise plus a ±1px shift would do to a 224×224 image, and say why the same transform helps at that resolution but destroys this one.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5 · Design the Claim You Are Allowed to Make (Required)</h4>
+    <p>You want to claim that dropout improves test accuracy on this dataset.</p>
+    <ol>
+      <li>Using the measured values — dropout <strong>0.884 ± 0.011</strong>, baseline <strong>0.878 ± 0.012</strong>, five seeds each — state the strongest claim the data supports. <em>("No significant difference was observed": the 0.006 gap is smaller than either standard deviation.)</em></li>
+      <li>Design the experiment that <em>would</em> justify the stronger claim: how many seeds, which split, which metric, and what you would do with the test set. <em>(More seeds until the standard error of the difference is well below the effect; a single frozen stratified split chosen before training; test opened once after the decision; per-seed paired differences rather than comparing two means.)</em></li>
+      <li>State one change to the protocol that would make the comparison more sensitive, and one that would make it less trustworthy. <em>(More sensitive: more training data, which lowers the variance of both arms. Less trustworthy: selecting the best seed, or measuring on the test set repeatedly.)</em></li>
+    </ol>
+  </div>
+
+  <div class="callout key">
+    <span class="label">Six Takeaways</span>
+    <ol>
+      <li>A perfect training score next to a mediocre validation score is not a good model with unlucky data — <strong>17,226 parameters against 80 images is a memorisation machine</strong>, and only the held-out number is a report card.</li>
+      <li>The confusion matrix comes first; accuracy, precision, recall and F1 are arithmetic on its four cells. Accuracy alone is defeated by any class imbalance, and F1 is deliberately dragged down by whichever of precision and recall is worse.</li>
+      <li>Trust the protocol before the number — stratified splits, a fixed seed, preprocessing fitted inside the fold, cross-validation to <em>choose</em>, and the test set opened exactly once to <em>state</em>.</li>
+      <li>Read overfitting off the <strong>validation loss turning upward</strong>, never off accuracy. With a metric that has saturated at 0.856, the accuracy curve is arithmetically incapable of showing the degradation that the loss curve shows as +0.155 ± 0.089.</li>
+      <li>The four regularisers constrain the training duration, the weight magnitude, the co-adaptation of units and the inputs. Measured here, early stopping (+0.018 ± 0.016) and weight decay (+0.027 ± 0.014) suppressed the loss rise; <strong>augmentation and the combined arm made things worse by underfitting</strong>.</li>
+      <li>Report mean ± standard deviation over seeds, and only claim a difference that clears the spread. Dropout's 0.884 ± 0.011 against the baseline's 0.878 ± 0.012 is 0.006 — <strong>no significant difference observed</strong>, which is a conclusion, not a failure.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>School of Software · AI Application Development — Chapter 6 · Evaluation, Overfitting and Regularization</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

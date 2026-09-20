@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 4 · Lecture Part (Theory · 90 min)</div>
+  <h1>Neural Networks and Modelling with nn.Module</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the Lecture Part, 90 min (L1–L5)</span>
+    <span>📚 Chapter 4.1–4.6</span>
+    <span>🎯 Module 1 · closing week (milestone review at the end of the lab)</span>
+    <span>🧩 Lesson Plan ID: LP-W4-A</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Explain what a single neuron can and cannot represent, and why a hidden layer changes that</li>
+      <li>Trace a forward pass with shapes: <code class="inline">(N, 2) → (N, 8) → (N, 8) → (N, 2)</code></li>
+      <li>Compare sigmoid, tanh, ReLU and LeakyReLU by range, gradient behaviour and intended use</li>
+      <li>State why removing the hidden activation reduces a two-layer network to a linear model</li>
+      <li>State the four rules of building a model with <code class="inline">nn.Module</code> and what goes wrong when each is broken</li>
+      <li>Explain why all-zero initialisation leaves hidden units symmetric</li>
+      <li>Read an ablation table — config / parameters / accuracy / conclusion — and say which variable mattered</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Compute the parameter count of a layer by hand (<code class="inline">in × out + out</code>) and verify it with <code class="inline">sum(p.numel() ...)</code></li>
+      <li>Write an <code class="inline">nn.Module</code> subclass with layers in <code class="inline">__init__</code>, a shape-annotated <code class="inline">forward</code>, and logits as output</li>
+      <li>Diagnose a model that never trains by reading <code class="inline">print(model)</code></li>
+      <li>Design a controlled experiment in which exactly one variable changes</li>
+      <li>Judge an AI-suggested architecture by testing it, not by accepting it</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Judge an architecture by fitness for the problem, not by size: a structure that is 1,500× larger and three points worse is a worse structure.
+  Hold the same standard for advice — including advice from an AI — that arrives without evidence.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>Perceptron → MLP; the forward pass as matrix multiplies plus element-wise non-linearity; the activation family; the four <code class="inline">nn.Module</code> rules; initialisation; the ablation table</td><td>Live experimentation first, formulas after: run the with/without-ReLU comparison before naming the composition argument; every concept checked against <code class="inline">print(model)</code> and a parameter count</td></tr>
+  <tr><td>Difficulties</td><td>Why <em>two</em> linear layers compose into one; why a layer that is not registered on <code class="inline">self</code> silently never trains; why wider/deeper is not monotonically better; why the output must be logits</td><td>Composition: write the two matrix multiplies and collapse them on the board; registration: show that <code class="inline">print(model)</code> omits the global layer and the loss still decreases slowly; capacity: run the ablation table and let the numbers speak; logits: point at <code class="inline">CrossEntropyLoss</code> containing softmax</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lec">Lecture Part · Theory · 90 min (first half of the weekly 180-min integrated session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>From a Perceptron to an MLP</strong>: week's structure; three generations (perceptron → MLP → modern deep nets); what one straight line can and cannot do — on <code class="inline">make_moons</code> a linear model still reaches ≈0.89, on <code class="inline">make_circles</code> it stays at ≈0.47, so the second one is the honest demonstration; the forward pass step by step; shapes and parameter counts of a 2-4-2 network</td><td>p1–p7</td><td>Lecture + board drawing</td></tr>
+  <tr><td>L2</td><td>25 min</td><td><strong>Activations and Non-linearity</strong>: the four-member family with trade-offs; the comparison table; the live experiment (deck chart: loss pinned at 0.693 = ln 2 — reproducible on <code class="inline">make_circles</code>, not on <code class="inline">make_moons</code>, where the no-activation run still reaches 0.890 and ReLU only lifts it to 0.953); the code that flips one boolean between <code class="inline">nn.ReLU()</code> and <code class="inline">nn.Identity()</code></td><td>p8–p12</td><td>Live experiment + discussion</td></tr>
+  <tr><td>L3</td><td>23 min</td><td><strong>Modelling with nn.Module</strong>: the four rules; the correct form side by side with two classic mistakes; common layers and parameter counts; default vs kaiming vs all-zero initialisation; the model-definition self-check</td><td>p13–p17</td><td>Live coding + follow-along</td></tr>
+  <tr><td>L4</td><td>22 min</td><td><strong>Width, Depth and Capacity</strong>: the ablation table read row by row (two rows with 42 parameters and a 51-point gap on circles: 0.473 vs 0.980); the train/validation divergence chart; the trade-off between capacity and overfitting; why fitness beats size</td><td>p18–p21</td><td>Lecture + case discussion</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>Lab Bridge &amp; Milestone Brief</strong>: preview the lab tasks (build → activate/not → width → depth → table); explain that M4 = problem sheet + data pipeline + model; announce the integrated quiz and the end-of-class quiz</td><td>p22</td><td>Preview + Q&amp;A</td></tr>
+</table>
+
+<div class="callout warn">
+  <span class="label">Facilitator Note · The Numbers in the Deck</span>
+  The deck's activation chart (p11) is measured on <code class="inline">make_circles</code>: the no-activation loss is pinned at 0.693 and accuracy sits at 0.473 (chance level), rising to 0.980 with ReLU. Measured under the deck's own protocol
+  (1000 samples, <code class="inline">noise=0.10</code>/<code class="inline">factor=0.5</code>, 7:3 stratified split, <code class="inline">seed=42</code>, Adam <code class="inline">lr=1e-2</code>, 300 epochs), these numbers reproduce exactly.
+  The same comparison on <code class="inline">make_moons</code> is a much weaker demonstration: a linear model already reaches 0.890, the no-activation MLP also scores 0.890, and ReLU
+  lifts it only to 0.953 — about 6 points, against 51 points on <code class="inline">make_circles</code>. Run the demonstration on <code class="inline">make_circles</code>
+  and show the moons rows as the counter-example. Turning this into an explicit "the dataset decided how visible the effect is" moment makes the lesson stronger, not weaker.
+</div>
+
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · One Line or a Curve? (L1, p5)</h4>
+  <p style="font-size:13.5px;">Draw <code class="inline">make_circles</code> — two concentric rings — on the board and ask the class to separate them with a single straight line. Nobody can: the best a line achieves is ≈0.47, and it does not matter where you put it. Add a hidden layer of eight units and sketch how each unit contributes one cut, and the piecewise-linear boundary assembles itself into a closed region. Then show the <code class="inline">make_moons</code> scatter and ask the same question — most will claim a line cannot work there either, and the measurement says otherwise (≈0.89). That surprise is the lesson: <em>linear separability is a property you measure, not one you eyeball</em>.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Guess the Number Before Running (L2, p11–p12)</h4>
+  <p style="font-size:13.5px;">Before running the with/without-ReLU comparison on <code class="inline">make_circles</code>, ask the class to write down two numbers: the expected accuracy with ReLU and the expected loss of the no-activation run. Most will guess near 0.5 for the second — exactly right — but they will be surprised by how flat the curve stays for the whole run. Then run the identical comparison on <code class="inline">make_moons</code> and watch the two curves stay much closer (0.890 vs 0.953 — about 6 points, against 51 on circles). Ask which dataset they would have chosen, and what conclusion they would have drawn from it alone. The prediction-then-run format converts a chart into a result — and the follow-up converts a result into an experiment-design lesson.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Break It on Purpose: Three Models That Never Train (L3, p15)</h4>
+  <p style="font-size:13.5px;">Show three short snippets: a layer held as a module-level global, a layer constructed inside <code class="inline">forward</code>, and a manual <code class="inline">softmax</code> on top of <code class="inline">CrossEntropyLoss</code>. Ask what each one prints and which one raises an error. The first two raise nothing, and the third raises nothing either — that absence of error is the lesson. The test is always <code class="inline">print(model)</code> plus a parameter count.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · Two Rows, 42 Parameters (L4, p19)</h4>
+  <p style="font-size:13.5px;">Read the ablation table aloud on <code class="inline">make_circles</code>, stopping on the two rows that both show 42 parameters — 0.473 and 0.980. Ask what single change separates them (one <code class="inline">nn.ReLU()</code>), then show the proof: after fitting, the no-activation network's outputs match <code class="inline">x @ (W2W1).T + (W2b1 + b2)</code> to within 1e-7, so it <em>is</em> one affine map. Then flip to the <code class="inline">make_moons</code> rows, where the same two configurations read 0.890 and 0.953, and let the class discover that the dataset, not the architecture, decided how visible the effect was. Finally note the 67,074-parameter row: over 200× the parameters of 2-64-2 for no gain at all — the synthesis ("capacity helps until it does not; what helps is the non-linearity") is theirs rather than yours.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · Audit the AI's Advice (L4, p21)</h4>
+  <p style="font-size:13.5px;">Paste an AI-generated architecture recommendation for this dataset onto the board ("use 3 layers of 256, add dropout, train 1,000 epochs"). Ask the class to name what the advice does not know: the sample count (1,000), the memory budget, and the fact that on 2-d data a 256-wide layer is 130× wider than the input. Then assign one row of the ablation table to test it — and a line for <code class="inline">AI_USE.md</code> either way.</p>
+</div>
+
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
+  <tr><td>Quiz</td><td>At the end of class (after the Lab part): 6-item in-class quiz covering the activation argument, the <code class="inline">nn.Module</code> convention, capacity, initialisation and one short answer (see LP-W4-B and slide p27)</td><td>Lab 10%</td></tr>
+  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the Lab part (75 min, LP-W4-B): build → with/without activation → width → depth → table → M4 push</td><td>—</td></tr>
+  <tr><td>Reading</td><td>Read textbook Chapter 4 (the full chapter, exercises and pitfall checklist included) to consolidate the lab</td><td>—</td></tr>
+  <tr><td>Assignment</td><td>Submit the model code and the ablation report: <code class="inline">model.py</code>, the config/params/accuracy/conclusion table, and a reproducible command. Due before the next session, pushed via Git (≥ 2 commits)</td><td>Lab component — 15 marks</td></tr>
+  <tr><td>Module milestone</td><td><strong>M4 · model v0 (MLP) + the Module 1 integrated quiz</strong> — problem sheet + data pipeline + model, all three due at the end of this session</td><td>Milestone review (4 pts)</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Mid-Class · Transition After This Session</span>
+  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, LP-W4-B). During the break, patrol to confirm that every student can print
+  <code class="inline">print(model)</code> for a working <code class="inline">nn.Module</code> and can state its parameter count. Module 1 closes today — nothing may be left for next week.
+</div>
+
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Read textbook Chapter 4.1–4.6 (this session's material)</li>
+      <li>Run the with/without-ReLU experiment yourself and note the two real numbers you obtain</li>
+      <li>Have the make_moons split fixed at <code class="inline">random_state=42</code> so your numbers match the class's</li>
+      <li>Reflection: when did a larger model in your experience turn out to be the wrong decision?</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Slides: Week 4 deck (29-page edition; p1–p22 cover this part and the lab bridge)</li>
+      <li>Textbook Chapter 4 (produced with this kit)</li>
+      <li>PyTorch reference: <code class="inline">torch.nn</code> (Linear, ReLU, Identity, Dropout, Sequential) and <code class="inline">torch.nn.init</code></li>
+      <li>Lab handout: <code class="inline">labs/week-04/lab-handout.md</code></li>
+      <li>Course code 52015CC3BV · the whole course uses PyTorch and <code class="inline">nn.Module</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W4-A (Lecture Part · Theory · 90 min)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

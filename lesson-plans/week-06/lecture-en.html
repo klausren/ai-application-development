@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 6 · Lecture Part (Theory · 90 min)</div>
+  <h1>Model Evaluation, Overfitting and Regularization</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers Review + Introduction 10 min and New Content 80 min, 90 min in total (L1–L5)</span>
+    <span>📚 Course textbook Chapter 6 (evaluation metrics, overfitting diagnosis, regularization)</span>
+    <span>🎯 Module 2 · Core Deep Learning and Model Training (Week 5–8) — second week of the module</span>
+    <span>🧩 Lesson Plan ID: LP-W6-A</span>
+    <span>🖼 Deck: 27 pages (this part covers p1–p21)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Read a <strong>Confusion Matrix</strong> and derive precision, recall and F1 from its four cells, and state what accuracy hides when the classes are not balanced</li>
+      <li>Choose an evaluation metric from the business cost of the two error types, instead of from the metric that is easiest to compute</li>
+      <li>Explain the job of each part of the training / validation / test split, and why k-fold cross-validation is steadier when the data set is small</li>
+      <li>Describe the bias-variance trade-off and name the three states of a model — underfitting, well-fitted, overfitting — by the shape of its two curves</li>
+      <li>State what <strong>Early Stop</strong>, <strong>Weight Decay</strong>, <strong>Dropout</strong>, batch normalization and <strong>Data Augmentation</strong> each do during training, and what each one costs</li>
+      <li>Explain why <strong>Validation Loss</strong> — not validation accuracy — is the reliable signal that a model has started to overfit</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Say whether a training log shows overfitting or underfitting, using the numbers rather than an impression</li>
+      <li>Implement early stopping with a patience counter and record the best epoch it stopped at</li>
+      <li>Set up a six-arm regularization comparison in which one variable changes per arm, repeated over five seeds, reported as mean ± standard deviation</li>
+      <li>Quantify generalization with a single number: the rise of validation loss from its minimum to the last epoch</li>
+      <li>Check an AI-suggested diagnosis against the actual training and validation curves, and delete the explanations the curves do not support</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  <strong>Reporting an experiment that did not work is a basic requirement of research integrity.</strong> This week's measured table contains arms that failed on purpose — and they are kept, printed and discussed. The professional habit is: regularisation is not a ritual that makes a number go up. Measure it, keep the arm that helped, and say honestly which arm made things worse.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Knowledge Units</td><td>KT11 · evaluation metrics and evaluation protocol (precision / recall / F1 / confusion matrix) — cognitive level <em>analyse</em>, key point, difficulty medium. KT12 · overfitting diagnosis and regularization (early stop / weight decay / Dropout / augmentation) — cognitive level <em>analyse</em>, key point, difficulty hard</td><td>KT11 is taught from the business cost backwards to the formula (p5–p7); KT12 is taught from one measured table that the class reads line by line (p20)</td></tr>
+  <tr><td>Key Points</td><td>The metric follows the business cost; the four-cell confusion matrix; the training / validation / test split and k-fold cross-validation; the bias-variance diagnosis; early stop with patience; weight decay; Dropout; batch normalization; Data Augmentation; validation loss as the overfitting signal; reporting every arm as mean ± standard deviation over five seeds</td><td>Every claim lands on a number measured on this machine and stored in <code class="inline">outputs/w6_regularisation.json</code>; each segment closes with one whole-class answer that must contain a figure (p14, p15, p20, p21)</td></tr>
+  <tr><td>Difficulties</td><td>Why a rising training accuracy proves nothing; why validation accuracy stays flat at 0.856 while the model is visibly degrading (the ceiling effect); why the only decisive evidence is validation loss turning upward; why Data Augmentation <em>hurt</em> on 8×8 images; why a 0.006 gap between two arms is not a result</td><td>Ceiling: draw the validation accuracy curve and the validation loss curve on the same axes and let the class find which one moves (p14–p15); augmentation: show the 0.824 and 0.740 rows before explaining them (p20); noise: put the two means and the 0.012 standard deviation on the board and let the class vote on whether the difference is real (p21)</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lec">Lecture Part · Theory · 90 min (Review + Introduction 10 min and New Content 80 min, the first half of the weekly 180-min integrated session)</div></div>
+<p style="font-size:13.5px;color:var(--text-sec);">The official 180-min teaching sequence is Review and Introduction 10 min → New Content 80 min → In-Class Lab 80 min → Summary and Assignment 10 min. This lesson plan covers the first 90 min; the Lab Part (LP-W6-B) covers the remaining 90 min.</p>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>L1</td><td>10 min</td><td><strong>Review and Introduction — The Number We Chose to Trust</strong>: Week 5 recap (the training loop is now a fixed instrument); the module shift from "how do we train it" to "how do we know whether it is good"; the two knowledge units of this week; the framing case — a model with 99% accuracy that satisfied no customer</td><td>p1–p3</td><td>Lecture + hand-vote</td></tr>
+  <tr><td>L2</td><td>20 min</td><td><strong>Metrics — Choosing the Right Number (KT11)</strong>: the failure case that really happens; the four-cell confusion matrix and the five metrics derived from it; counting the matrix by hand and then reading precision, recall and F1; translating the cost of a false negative and a false positive into the choice of a metric</td><td>p4–p7</td><td>Lecture + board drawing + Live Counting</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>Protocol — Can the Number Be Trusted (KT11)</strong>: the three-way split and the single job of each part; the three classic ways to inflate a score; k-fold cross-validation as the steadier option on small data; why the test set may be touched once and only once</td><td>p8–p11</td><td>Lecture + quick write</td></tr>
+  <tr><td>L4</td><td>20 min</td><td><strong>Bias and Variance — Diagnose with Evidence (KT12)</strong>: the three states of a model and their curve shapes; the measured train-versus-validation chart of the baseline arm; the decisive evidence — validation loss touching bottom at epoch 85 ± 17 and rising from 0.516 to 0.671 by epoch 400, while validation accuracy stays at 0.856; the symptom → diagnosis → remedy table</td><td>p12–p16</td><td>Chart reading + predict-then-reveal</td></tr>
+  <tr><td>L5</td><td>20 min</td><td><strong>Regularization — Four Brakes and Their Cost (KT12)</strong>: early stop, weight decay, Dropout and Data Augmentation, each with its mechanism and its price; the four brakes in PyTorch; the measured six-arm table; the three honest conclusions, including the two arms that made the result worse; lab bridge — the five lab parts and the rubric</td><td>p17–p21</td><td>Lecture + table reading + Preview</td></tr>
+</table>
+
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · The 99% Accuracy That Satisfied Nobody (L2, p4)</h4>
+  <p style="font-size:13.5px;">Open with the extreme case: a classifier that is right 99 times out of 100, and yet not one customer is satisfied, because the only error it ever makes is the one the customer cares about. Ask the class to name a real business in which this would happen. Then derive precision, recall and F1 from the confusion matrix, and re-read the case with the words "false negative" and "false positive" attached to it. The point of the activity is the direction of the reasoning: the cost comes first, the metric comes second.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Count the Matrix by Hand (L2, p5–p6)</h4>
+  <p style="font-size:13.5px;">Hand out a small 10-class confusion matrix and have students compute precision, recall and F1 for one class with pen and paper before any code appears. Then run the code on p6 and compare. Students who computed it by hand immediately see why the per-class numbers differ so much from accuracy — and why a single aggregate number cannot describe a multi-class model.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Which Curve Moved? (L4, p14–p15)</h4>
+  <p style="font-size:13.5px;">Show the measured train-versus-validation chart of the baseline arm and ask one question: at which epoch did this model start to overfit? The training accuracy curve answers "never" (it reaches 1.0 and stays there from epoch 61 onward), and the validation accuracy curve also answers "never" (it oscillates between 0.833 and 0.841). Only the validation loss curve answers at all: 0.6357 at epoch 81, then a monotone climb to 0.8672. The lesson is that the diagnostic question is "which curve actually moves", not "what does the training loss do".</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · The Arm That Made Things Worse (L5, p20)</h4>
+  <p style="font-size:13.5px;">Reveal the six-arm table without commenting on the last two rows. Then ask the class to read the Data Augmentation row aloud: training accuracy 0.960 ± 0.027 instead of 1.000, validation accuracy 0.814, test accuracy 0.824 instead of 0.878 — and the combined arm down at 0.740. Ask: if augmentation is a standard technique, why does it lose here? The answer the class must reach is that the training set has 80 images of 8×8 pixels, and shifting a digit by ±1 pixel or adding σ=0.15 noise erases the stroke structure, which is equivalent to manufacturing wrong labels. This is underfitting, not a failed regularization.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · Is 0.006 a Result? (L5, p21)</h4>
+  <p style="font-size:13.5px;">Write two numbers on the board: Dropout 0.884 ± 0.011 and baseline 0.878 ± 0.012 in test accuracy. The gap is 0.006, and the standard deviation is 0.012 — twice the gap. Let the class vote on whether Dropout is better, then compute. The only defensible sentence is "no significant difference was observed for this comparison", which is exactly the sentence students find hardest to write. This activity is also where the AI-diagnosis exercise starts: an AI will confidently explain why Dropout wins, and the curve and the standard deviation say otherwise.</p>
+</div>
+<div class="callout tip">
+  <span class="label">Teaching Tip · AI-Assisted Diagnosis</span>
+  The AI-assisted step of this session runs in the lab part, but it is set up here: ask the AI for the reasons why the baseline model overfits, and then require every proposed reason to be checked against the train and validation curves. Explanations the curves do not support are deleted, not softened. The deliverable is the shortened list plus the curve evidence for each surviving item.
+</div>
+
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Quiz</td><td>At the end of the lab part: the Module 2 comprehensive quiz, 6 items, covering metric choice under class imbalance, the evidence for overfitting, the four regularization mechanisms, and reading a five-seed result (see slide p25)</td><td>Lab 10%</td></tr>
+  <tr><td>Mid-Class Bridge</td><td>After this Lecture Part (90 min), a 10-minute break, then the Lab Part (90 min, LP-W6-B): protocol check → baseline overfitting → four regularization arms → five-seed quantification → combined arm and conclusion</td><td>—</td></tr>
+  <tr><td>Reading</td><td>The corresponding sections of the course textbook (model selection, underfitting and overfitting; weight decay; Dropout) together with the d2l companion code for those sections</td><td>—</td></tr>
+  <tr><td>Assignment</td><td>The regularization comparison report: the six-arm table over five seeds, the training and validation curves for every arm, and a conclusion that names the most effective method for this task <em>and why</em> — including the arms that did not help. Plus the Module 2 comprehensive quiz. Due next Monday 23:59, pushed via Git (≥ 2 commits)</td><td>Lab 5.0 class hours</td></tr>
+  <tr><td>Course Grading</td><td>Formative 50%: attendance 10 + in-class labs 15 + module reviews 15 + <code class="inline">AI_USE.md</code> 10. Summative 50%: the individual project. This week's lab is Lab 05, a single design-type experiment supporting SP(2) "Visual and Text Model Training Experiment", 5.0 class hours, counted inside the 15-point lab component. The course is assessed by coursework; there is no closed-book written examination</td><td>Full semester</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Mid-Class · Transition After This Session</span>
+  After the Lecture Part (90 min) there is a 10-minute break, then the Lab Part begins (90 min, LP-W6-B). During the break the instructor patrols to confirm two things for every student: that they can state in one sentence which curve is the evidence of overfitting, and that <code class="inline">load_digits</code> loads offline in the <code class="inline">ai-app</code> environment. A student who still believes training accuracy is the evidence does not start the lab until the validation loss curve is explained back to the instructor.
+</div>
+
+<h3>Measured on This Machine · Six Arms, Five Seeds (slide p20)</h3>
+<table>
+  <tr><th>Arm</th><th>Train accuracy</th><th>Validation accuracy</th><th>Test accuracy</th><th>Epochs run</th></tr>
+  <tr><td>No regularization (baseline)</td><td>1.000</td><td>0.856 ± 0.024</td><td>0.878 ± 0.012</td><td>400</td></tr>
+  <tr><td>Early Stop patience=20</td><td>1.000</td><td>0.858 ± 0.025</td><td>0.874 ± 0.011</td><td>105</td></tr>
+  <tr><td>Weight Decay 1e-2</td><td>1.000</td><td>0.844 ± 0.023</td><td>0.867 ± 0.024</td><td>400</td></tr>
+  <tr><td>Dropout 0.3</td><td>1.000</td><td>0.857 ± 0.032</td><td>0.884 ± 0.011</td><td>400</td></tr>
+  <tr><td>Data Augmentation σ=0.15 + ±1 px shift</td><td>0.960 ± 0.027</td><td>0.814 ± 0.013</td><td>0.824 ± 0.010</td><td>400</td></tr>
+  <tr><td>Combined (weight decay + Dropout + augmentation)</td><td>0.875 ± 0.048</td><td>0.716 ± 0.035</td><td>0.740 ± 0.053</td><td>400</td></tr>
+</table>
+<table>
+  <tr><th>Arm</th><th>Validation loss: best → epoch 400</th><th>Rise Δ</th><th>Best epoch</th></tr>
+  <tr><td>No regularization (baseline)</td><td>0.516 → 0.671</td><td>+0.155 ± 0.089</td><td>85 ± 17</td></tr>
+  <tr><td>Early Stop patience=20</td><td>0.516 → 0.534</td><td>+0.018 ± 0.016</td><td>85 ± 17</td></tr>
+  <tr><td>Weight Decay 1e-2</td><td>0.497 → 0.524</td><td>+0.027 ± 0.014</td><td>262 ± 76</td></tr>
+  <tr><td>Dropout 0.3</td><td>0.474 → 0.645</td><td>+0.171 ± 0.102</td><td>163 ± 100</td></tr>
+  <tr><td>Data Augmentation σ=0.15 + ±1 px shift</td><td>0.529 → 0.606</td><td>+0.077 ± 0.027</td><td>348 ± 36</td></tr>
+  <tr><td>Combined (weight decay + Dropout + augmentation)</td><td>0.849 → 0.884</td><td>+0.035 ± 0.022</td><td>376 ± 13</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Protocol for every arm: <code class="inline">load_digits</code> (8×8 grayscale, 10 classes, 1797 samples) → normalized to 0–1 → 70/15/15 stratified split → training set of 80 samples only → 64-128-64-10 MLP with 17,226 parameters (about 215 parameters per sample) → Adam at <code class="inline">1e-3</code>, batch 32, 400 epochs → 5 seeds (42, 43, 44, 45, 46), reported as mean ± standard deviation. Fully offline; the whole sweep runs on CPU.</p>
+<div class="callout tip">
+  <span class="label">How to Read the Table · Three Honest Conclusions</span>
+  <strong>1.</strong> Regularization suppresses the <em>rise</em> of validation loss; it does not raise accuracy. All six arms land between 0.716 and 0.858 in validation accuracy, and every test-accuracy difference sits inside one standard deviation (0.010–0.024). <strong>2.</strong> Data Augmentation and the combined arm are harmful on 8×8 images because they cause underfitting: augmentation pulls test accuracy down from 0.878 to 0.824 and training accuracy from 1.000 to 0.960, and the combined arm collapses to 0.740. On 64 pixels, a pixel-level shift erases the stroke structure, which is equivalent to manufacturing wrong labels. <strong>3.</strong> A single run cannot settle a comparison: the same change moves by up to ±3 percentage points across seeds, and Dropout 0.884 against baseline 0.878 is a gap of 0.006, smaller than the 0.012 standard deviation.
+</div>
+
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Review Week 5 (the training loop and the log format are assumed from here on)</li>
+      <li>Read the corresponding textbook sections on model selection, weight decay and Dropout</li>
+      <li>Run <code class="inline">scripts/w6_overfit_experiment.py</code> once yourself and open <code class="inline">outputs/w6_regularisation.json</code>, so the six-arm table is familiar before you teach it</li>
+      <li>Confirm the environment works offline: <code class="inline">load_digits</code> ships with scikit-learn and needs no download; the whole six-arm, five-seed run is CPU-only</li>
+      <li>Reflection: have you ever reported an experiment that failed, with the curve that shows it failed?</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Slides: Week 6 deck, 27 pages (p1–p21 cover this part; p22 opens the lab)</li>
+      <li>Course textbook Chapter 6</li>
+      <li>Measured data: <code class="inline">outputs/w6_regularisation.json</code> (5 seeds × 6 arms) and <code class="inline">scripts/w6_overfit_experiment.py</code></li>
+      <li>Lab handout: <code class="inline">labs/week-06/lab-handout.md</code></li>
+      <li>d2l companion code for the corresponding sections; PyTorch documentation: pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development (52015CC3BV) — Lesson Plan LP-W6-A (Lecture Part · Theory · 90 min) · Week 6 · Module 2</p>
+  <p>School of Software, Dalian Neusoft University of Information · Department of Software and Big Data Technology · Instructor: Ren Zheng · Class: International Software Engineering 24401 (2026-2027 Semester 1)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

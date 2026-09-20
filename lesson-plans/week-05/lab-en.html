@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 5 · Lab Part (Lab 75 min + Quiz &amp; Summary 15 min)</div>
+  <h1>Lab 04 — Training Loop, Loss and Optimizer: the 3 × 3 optimizer × learning-rate experiment</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the Lab Part 75 min + Quiz &amp; Summary 15 min</span>
+    <span>📚 Chapter 5.5–5.7</span>
+    <span>🔧 Hands-on Lab · Official number 实验 4</span>
+    <span>🧩 Lesson Plan ID: LP-W5-B</span>
+    <span>🖼 Deck: 29 pages (this part covers p20–p29)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>State the five steps of a training loop and the exact call for each, from memory</li>
+      <li>Explain why gradients accumulate when <code class="inline">zero_grad()</code> is missing, and what that does to the effective step size</li>
+      <li>Explain why <code class="inline">CrossEntropyLoss</code> must receive raw logits, and what a second softmax does to the gradient</li>
+      <li>Distinguish the three failure regimes of a learning rate — exploding, converging, crawling — from the shape of the loss curve</li>
+      <li>Explain why the initial weights must be identical across every compared run</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Write a reusable <code class="inline">train()</code> function with a per-epoch log, using the five-step loop correctly</li>
+      <li>Run a 3 × 3 optimizer × learning-rate grid with only two variables changing</li>
+      <li>Plot loss and accuracy curves (shared axes plus small multiples) and read the convergence speed and stability off them</li>
+      <li>Name the winning combination with a number, a comparison and a mechanism — not a preference</li>
+      <li>Write a four-line "does not converge" log: symptom → hypothesis → evidence → conclusion</li>
+      <li>Push the M5 capstone milestone (training loop + comparison table) before the lab ends</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Treat tuning as <strong>experimental design, not luck</strong>. Every claim about a hyper-parameter must trace to a run you performed, with one variable changed and everything else pinned. An honest "this combination failed, and here is the curve" earns more credit than an unexamined success.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The five-step loop written from memory; a reusable <code class="inline">train()</code> with logging; the 3 × 3 grid as a controlled experiment; reading convergence speed and stability from curves; the four-line debugging log; M5 push</td><td>Every part ends with a checkpoint that must be written into a Markdown cell before the student moves on; the instructor demos each part for 3–5 minutes, then patrols while students reproduce it</td></tr>
+  <tr><td>Difficulties</td><td>Re-initialising the model each run (otherwise run 2 inherits run 1's weights); reading nine curves on one figure; telling "too small a learning rate" apart from "a weak model"; writing a debugging log that checks the learning rate <em>first</em></td><td>Rebuild: put <code class="inline">torch.manual_seed(42); model = Net()</code> inside the inner loop and ask what happens without it; nine curves: require small multiples per optimizer; crawling: show a run with 30 epochs at <code class="inline">1e-5</code> and one with 300 epochs at <code class="inline">1e-5</code> side by side; debugging: the handout fixes the four labels, so the order is enforced by the template</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min (second half of the weekly 180-min integrated session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Five Steps From Memory, Then the Two Silent Bugs</strong>: write the loop on paper before touching the keyboard; reproduce the accumulating gradient without <code class="inline">zero_grad()</code> (11.78 → 23.58 → 35.39), then fix it; reproduce the double-softmax loss pair (2.2865 vs 2.3002)</td><td>p20 (recaps p17–p18)</td><td>Write first + follow-along</td></tr>
+  <tr><td>Lab B</td><td>15 min</td><td><strong>One Honest Training Run</strong>: build <code class="inline">load_data()</code>, <code class="inline">Net</code>, <code class="inline">make_optimizer()</code> and <code class="inline">train()</code>; run Adam at <code class="inline">1e-3</code> for 30 epochs with one log row per epoch; read the train/val gap</td><td>p18</td><td>Follow-along + patrol</td></tr>
+  <tr><td>Lab C</td><td>25 min</td><td><strong>The 3 × 3 Grid</strong>: nine runs, 3 optimizers × 3 learning rates, with the model rebuilt under a fixed seed each time; save results to <code class="inline">grid_results.json</code>; fill the table; identify the non-converging runs and name each symptom</td><td>p21, p23</td><td>Self practice + patrol</td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>Curves, Verdict and the Debug Log</strong>: plot loss and accuracy (shared axes + small multiples); state the winner with number, comparison and mechanism; run the <code class="inline">diagnose()</code> helper and write the four-line log for the worst run</td><td>p22, p24</td><td>Self practice + Q&amp;A</td></tr>
+  <tr><td>Lab E</td><td>10 min</td><td><strong>Wrap-up &amp; Capstone Push (Part F)</strong>: complete the submission checklist; write one AI collaboration trace; push <code class="inline">src/train.py</code> + the optimizer × learning-rate table, re-run on the project's own data, plus the W5 <code class="inline">DEVLOG.md</code> entry</td><td>p25–p26</td><td>Checklist</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 6 items on loss choice, the double-softmax effect, optimizer properties, the first response to a nan loss, the five-step order, and batch size vs learning rate; hand-vote, then debrief</td><td>p27</td><td>Vote + debrief</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO; preview Week 6 (regularisation and generalisation — dropout, weight decay, early stopping applied to this week's loop)</td><td>p28–p29</td><td>Recap + preview</td></tr>
+</table>
+
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Write It Before You Type It (Lab A, p20)</h4>
+  <p style="font-size:13.5px;">Every student writes the five steps on paper, in order, before opening the notebook. The instructor walks the room and reads them; students who omit step 1 are asked to reproduce the accumulating-gradient snippet (11.78 → 23.58 → 35.39) and then explain what a three-times-too-large gradient does to the step size. Typing without writing first turns the loop into copy-paste.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · One Number, Two Softmaxes (Lab A, p20)</h4>
+  <p style="font-size:13.5px;">Students print <code class="inline">CrossEntropyLoss()(logits, y)</code> and <code class="inline">CrossEntropyLoss()(softmax(logits), y)</code> side by side. Both look plausible; neither raises an error. The instructor then trains both for 30 epochs on the projector and lets the accuracy curves separate. Nobody forgets the rule "pass raw logits" afterwards.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Predict Before You Run (Lab C, p21)</h4>
+  <p style="font-size:13.5px;">Before starting the grid, each student writes down three predictions: which optimizer wins at <code class="inline">1e-3</code>, which combinations fail to converge, and whether <code class="inline">1e-1</code> hurts every optimizer equally. Then they run. Comparing the predictions with the nine results is what turns a mechanical sweep into calibration — and the "momentum amplifies at 1e-1" result usually surprises the room.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · Twelve Curves, Four Figures (Lab D, p22)</h4>
+  <p style="font-size:13.5px;">The first attempt is always nine curves on one axes, and it is always unreadable. The instructor requires small multiples: one figure per optimizer, three learning rates each. Students immediately see the within-optimizer comparison (the learning rate effect) separately from the between-optimizer comparison (the update-rule effect) — which is the whole point of a factorial design.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · Four Lines for a Failing Run (Lab D–E, p24)</h4>
+  <p style="font-size:13.5px;">Each student writes the debugging log using the fixed labels — <em>symptom / hypothesis / evidence / conclusion</em> — for their worst run. The evidence line must cite the control run that confirms the hypothesis. The instructor's standard: if the first hypothesis is not about the learning rate, the log goes back. This is exactly the format the CS-style debugging records in later weeks reuse.</p>
+</div>
+
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
+  <tr><td>Deliverable</td><td><code class="inline">lab-05.ipynb</code> + <code class="inline">train_sweep.py</code>: Restart &amp; Run All clean, nine runs executed, curves plotted, verdict written in the student's own words, ≥ 2 meaningful commits, pushed to a public repo</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Five steps from memory 15 · single honest run + logging 15 · the 3 × 3 grid 30 · curves and verdict 20 · debugging log 10 · exit ticket 10</td><td>Lab component — 15 marks</td></tr>
+  <tr><td>Quiz</td><td>6 items at the end of the lab; counted as 10% of the Lab grade (see slide p27)</td><td>Lab 10%</td></tr>
+  <tr><td>Capstone M5</td><td>Part F (training loop + optimizer × learning-rate comparison table, re-run on the project's own data) is graded under the Capstone (50%), not here; missing it costs −2 project points; late: −2 each time, up to −20</td><td>Capstone 50%</td></tr>
+  <tr><td>Late policy</td><td>Lab deliverable: −10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Before Students Leave</span>
+  Confirm three things for every student: the notebook runs top-to-bottom; <code class="inline">grid_results.json</code> holds nine rows; and the optimizer × learning-rate table exists in the capstone repo with the project's own metric. A milestone pushed next week is a milestone not done.
+</div>
+
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Week 4 lab committed (baseline metric recorded; success target committed)</li>
+      <li>Chapter 5.5–5.7 read</li>
+      <li>Run the reference grid once on your own machine, so you know what "normal" looks like and can spot a broken student run quickly</li>
+      <li>Laptop with the <code class="inline">ai-app</code> environment and <code class="inline">torch</code> importable</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Lab handout: <code class="inline">labs/week-05/lab-handout.md</code> (Lab 04)</li>
+      <li>Slides p20–p29</li>
+      <li>Textbook Chapter 5.5–5.7</li>
+      <li>Dataset ships with scikit-learn — <code class="inline">load_digits</code>, no download needed</li>
+      <li>matplotlib for the curves; the whole grid runs on CPU in well under a minute</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W5-B (Lab Part · 75 min + Quiz &amp; Summary 15 min) · Week 5 · Module 2</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 04 · Module 1 · Week 4</div>
+  <h1>Neural Networks and Modelling with nn.Module</h1>
+  <p class="overview">Chapter 2 trained a model from raw tensors; Chapter 3 built the pipeline that feeds it. This chapter closes Module 1 by giving that model a shape. You will go from a single neuron to a multi-layer network, discover that non-linearity is the only thing that makes depth useful, learn to write models the way PyTorch expects them to be written, and finish by deciding how big and how deep a network should be — with an ablation table rather than an opinion.</p>
+</div>
+
+<!-- ========== 4.1 ========== -->
+<div class="section">
+  <h2>4.1 From a Perceptron to an MLP</h2>
+  <p>A single neuron computes a weighted sum and applies a threshold. That is a linear model with a decision rule attached, and it can draw exactly one straight line.</p>
+
+  <h3>4.1.1 Three Generations</h3>
+  <div class="terms">
+    <div class="term"><h4>1 · The perceptron (1958)</h4><p>One neuron. It solves AND and OR, and it cannot solve XOR — no straight line separates the classes.</p></div>
+    <div class="term"><h4>2 · The multilayer perceptron</h4><p>Hidden layers transform the features first; the output layer decides afterwards. The same data becomes separable in the new space.</p></div>
+    <div class="term"><h4>3 · Modern deep networks</h4><p>Dozens to hundreds of layers. Architecturally they are still stacked affine maps plus non-linearities, with structure and tricks added on top.</p></div>
+  </div>
+
+  <h3>4.1.2 A Single Layer vs a Hidden Layer</h3>
+  <table>
+    <tr><th></th><th>Single layer (linear)</th><th>Hidden layer + activation</th></tr>
+    <tr><td>Form</td><td>y = σ(Wx + b)</td><td>h = ReLU(W₁x + b₁); y = W₂h + b₂</td></tr>
+    <tr><td>Boundary</td><td>One line (a hyperplane in higher dimensions)</td><td>Can bend — a piecewise-linear assembly</td></tr>
+    <tr><td>Handles</td><td>Linearly separable data only</td><td>Non-linearly separable data</td></tr>
+    <tr><td><code class="inline">make_circles</code> (concentric rings)</td><td>0.473 — no better than chance</td><td>0.980 (2-8-2, 300 epochs)</td></tr>
+    <tr><td><code class="inline">make_moons</code> (two crescents)</td><td>0.890 — nearly separable already</td><td>0.953 (2-8-2, 300 epochs)</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">Common Misconception</span>
+    <code class="inline">make_moons</code> is routinely described as "linearly inseparable", and it is a poor demonstration dataset because of it: measured under a fixed protocol a linear model
+    already reaches <strong>about 0.89</strong> on it. Use <code class="inline">make_circles</code> or XOR when you need to show what a hidden layer buys you. <em>Always measure linear separability; never assume it from the shape of the scatter plot.</em>
+  </div>
+  <p>The point is not "more layers". It is <em>non-linearity between layers</em>. Two affine maps with nothing between them compose into a single affine map, so any number of linear layers is still a linear model.</p>
+
+  <h3>4.1.3 The Forward Pass, Step by Step</h3>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>Input</strong> — a batch x of shape <code class="inline">(N, 2)</code>: N samples, two features each.</div></div>
+    <div class="step"><div class="body"><strong>Linear 1</strong> — <code class="inline">z1 = x @ W1.T + b1</code>, shape <code class="inline">(N, 8)</code>: features are lifted into a new space.</div></div>
+    <div class="step"><div class="body"><strong>Activation</strong> — <code class="inline">h = ReLU(z1)</code>, still <code class="inline">(N, 8)</code>: element-wise, zero parameters.</div></div>
+    <div class="step"><div class="body"><strong>Linear 2</strong> — <code class="inline">z2 = h @ W2.T + b2</code>, shape <code class="inline">(N, 2)</code>: these are the logits.</div></div>
+    <div class="step"><div class="body"><strong>Loss</strong> — <code class="inline">CrossEntropyLoss(z2, y)</code>. Softmax is already inside it; do not add another.</div></div>
+  </div>
+
+  <table>
+    <tr><th>Component</th><th>Weight shape</th><th>Params</th><th>Note</th></tr>
+    <tr><td>Input x</td><td>(4, 2)</td><td>0</td><td>4 samples, 2 features each</td></tr>
+    <tr><td>nn.Linear(2, 4)</td><td>W (4, 2), b (4,)</td><td>12</td><td>2 → 4: params = 2×4 + 4</td></tr>
+    <tr><td>nn.ReLU()</td><td>(4, 4)</td><td>0</td><td>Element-wise: same shape, no parameters</td></tr>
+    <tr><td>nn.Linear(4, 2)</td><td>W (2, 4), b (2,)</td><td>10</td><td>4 → 2 logits: 4×2 + 2</td></tr>
+    <tr><td>Total</td><td>—</td><td>22</td><td>Forward = two matrix multiplies + one activation</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Reading Rule</span>
+    <code class="inline">nn.Linear(in, out)</code> always costs <code class="inline">in × out + out</code> parameters. From this chapter on, the first thing you do with any network is count its parameters.
+  </div>
+</div>
+
+<!-- ========== 4.2 ========== -->
+<div class="section">
+  <h2>4.2 Activations and Non-linearity</h2>
+  <p>The activation function is the only source of non-linearity in a network. Remove it and, no matter how many layers you stack, the network degenerates into a linear model.</p>
+
+  <h3>4.2.1 The Family</h3>
+  <div class="terms">
+    <div class="term"><h4>Sigmoid</h4><p>σ(z) = 1/(1+e⁻ᶻ), range (0,1), readable as a probability. Its derivative peaks at 0.25, so gradients vanish quickly when deep. Today used mainly at the output for a binary probability.</p></div>
+    <div class="term"><h4>Tanh</h4><p>Range (−1,1), zero-centred, so it trains better than sigmoid. It still saturates, so vanishing gradients are not solved. Seen in early RNNs and some Transformer variants.</p></div>
+    <div class="term"><h4>ReLU</h4><p>max(0, z). The gradient is exactly 1 on the positive side and it is the cheapest to compute. On the negative side it outputs 0, so units can die. The default for hidden layers.</p></div>
+    <div class="term"><h4>LeakyReLU</h4><p>max(0.01z, z). A small negative slope keeps units from dying completely. The cost is one more hyper-parameter, and the gain is not always visible.</p></div>
+  </div>
+
+  <table>
+    <tr><th>Function</th><th>Range</th><th>Gradient</th><th>Where to use it</th></tr>
+    <tr><td>Sigmoid</td><td>(0, 1)</td><td>Max 0.25, decays extremely fast when deep</td><td>Output layer for a binary probability; avoid in hidden layers</td></tr>
+    <tr><td>Tanh</td><td>(−1, 1)</td><td>Max 1.0, still saturates</td><td>When you need a zero-centred output; still not for deep nets</td></tr>
+    <tr><td>ReLU</td><td>[0, +∞)</td><td>Exactly 1 on the positive side, no decay</td><td>Default for hidden layers; pair with kaiming initialisation</td></tr>
+    <tr><td>LeakyReLU</td><td>(−∞, +∞)</td><td>Slope 0.01 on the negative side</td><td>The fallback when ReLU leaves many units inactive</td></tr>
+  </table>
+
+  <h3>4.2.2 The Experiment You Should Run Yourself</h3>
+  <p>One protocol, two datasets, one flag apart. We run it on both because a single dataset can hide the very effect you are trying to measure.</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> make_moons, make_circles
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+<span class="kw">def</span> <span class="fn">load</span>(kind):
+    <span class="kw">if</span> kind == <span class="str">"moons"</span>:
+        X, y = make_moons(n_samples=<span class="num">1000</span>, noise=<span class="num">0.25</span>, random_state=<span class="num">42</span>)
+    <span class="kw">else</span>:
+        X, y = make_circles(n_samples=<span class="num">1000</span>, noise=<span class="num">0.10</span>, factor=<span class="num">0.5</span>,
+                            random_state=<span class="num">42</span>)
+    Xtr, Xva, ytr, yva = train_test_split(X, y, test_size=<span class="num">0.3</span>,
+                                          random_state=<span class="num">42</span>, stratify=y)
+    t = <span class="kw">lambda</span> a, d: torch.tensor(a, dtype=d)
+    <span class="kw">return</span> (t(Xtr, torch.float32), t(Xva, torch.float32),
+            t(ytr, torch.long),    t(yva, torch.long))
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, use_relu=<span class="kw">True</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()
+        self.fc1 = nn.Linear(<span class="num">2</span>, <span class="num">8</span>)
+        self.fc2 = nn.Linear(<span class="num">8</span>, <span class="num">2</span>)
+        self.act = nn.ReLU() <span class="kw">if</span> use_relu <span class="kw">else</span> nn.Identity()
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.fc2(self.act(self.fc1(x)))   <span class="cm"># (N,2) -> (N,8) -> (N,2)</span>
+
+<span class="kw">def</span> <span class="fn">run</span>(data, use_relu, seed=<span class="num">42</span>, epochs=<span class="num">300</span>, lr=<span class="num">1e-2</span>):
+    Xtr, Xva, ytr, yva = data
+    torch.manual_seed(seed)
+    model = <span class="fn">MLP</span>(use_relu)
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    crit = nn.CrossEntropyLoss()
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(epochs):
+        opt.zero_grad()
+        loss = <span class="fn">crit</span>(model(Xtr), ytr)
+        loss.backward(); opt.step()
+    model.eval()
+    <span class="kw">with</span> torch.no_grad():
+        acc = (model(Xva).argmax(<span class="num">1</span>) == yva).float().mean().item()
+    <span class="kw">return</span> acc, loss.item()
+
+<span class="kw">for</span> kind <span class="kw">in</span> (<span class="str">"moons"</span>, <span class="str">"circles"</span>):
+    d = <span class="fn">load</span>(kind)
+    a_on,  l_on  = <span class="fn">run</span>(d, <span class="kw">True</span>)
+    a_off, l_off = <span class="fn">run</span>(d, <span class="kw">False</span>)
+    <span class="fn">print</span>(f<span class="str">"{kind:8s} ReLU {a_on:.3f} (loss {l_on:.3f})  "
+          f"none {a_off:.3f} (loss {l_off:.3f})"</span>)</pre>
+  <p>Measured under exactly this protocol:</p>
+  <table>
+    <tr><th>Dataset</th><th>2-8-2 · ReLU</th><th>2-8-2 · no activation</th><th>Final loss, no activation</th></tr>
+    <tr><td><code class="inline">make_moons</code></td><td>0.953</td><td>0.890</td><td>0.322</td></tr>
+    <tr><td><code class="inline">make_circles</code></td><td>0.980</td><td>0.473</td><td><strong>0.693</strong></td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">The Number to Recognise</span>
+    On <code class="inline">make_circles</code> the no-activation loss stops at <strong>0.693</strong>, which is ln 2 — the loss of guessing between two classes. Two <code class="inline">nn.Linear</code>
+    layers with nothing non-linear between them are equivalent to one linear layer, and a linear model cannot separate two concentric rings. The flat curve is not a bug; it is the result.
+  </div>
+  <div class="callout key">
+    <span class="label">Why the Dataset Decides</span>
+    On <code class="inline">make_moons</code> the same comparison yields 0.953 against 0.890, and the loss curve never flattens at 0.693 — because a linear model already scores 0.890 on that data.
+    Two rows of your table, same 42 parameters, one flag apart, and a gap of about 6 points — against 51 points on circles. If you had only run moons you would have concluded, wrongly, that activations hardly matter.
+    <strong>An experiment can only detect an effect the data is able to expose.</strong> Choosing data is part of the experiment, not a preliminary to it.
+  </div>
+
+  <h3>4.2.3 Prove the Composition Numerically</h3>
+  <p>The collapse is not only an argument on paper. Fit the no-activation model, then fold the two layers into one matrix and compare outputs:</p>
+  <pre>torch.manual_seed(<span class="num">42</span>)
+m = nn.Sequential(nn.Linear(<span class="num">2</span>, <span class="num">8</span>), nn.Linear(<span class="num">8</span>, <span class="num">2</span>))   <span class="cm"># no activation</span>
+
+W = m[<span class="num">1</span>].weight @ m[<span class="num">0</span>].weight          <span class="cm"># (2,8) @ (8,2) -> (2,2)</span>
+b = m[<span class="num">1</span>].weight @ m[<span class="num">0</span>].bias + m[<span class="num">1</span>].bias
+
+x = torch.randn(<span class="num">64</span>, <span class="num">2</span>)
+<span class="kw">with</span> torch.no_grad():
+    <span class="fn">print</span>((m(x) - (x @ W.T + b)).abs().max().item())   <span class="cm"># ~2e-7 (float32 round-off)</span>
+<span class="fn">print</span>(torch.linalg.matrix_rank(W).item())             <span class="cm"># 2, not 8</span></pre>
+  <p>The eight hidden units buy nothing: the composition is a 2×2 map. This is the fastest way to kill the belief that "deeper means more powerful" when the non-linearity is missing.</p>
+</div>
+
+<!-- ========== 4.3 ========== -->
+<div class="section">
+  <h2>4.3 Modelling with nn.Module</h2>
+  <p>From this chapter onward your model is a class you can reuse, print, save and move to a device. Following the convention is not formalism: build the layers in the wrong place and your parameters never train — while you believe the model is learning.</p>
+
+  <h3>4.3.1 Four Rules</h3>
+  <div class="terms">
+    <div class="term"><h4>1 · Layers in __init__</h4><p>Create every <code class="inline">nn.Linear</code>, <code class="inline">nn.ReLU</code> and <code class="inline">nn.Dropout</code> in <code class="inline">__init__</code> and assign it to <code class="inline">self</code>. Only then is it registered in the module tree and visible to <code class="inline">model.parameters()</code>.</p></div>
+    <div class="term"><h4>2 · forward is data flow only</h4><p><code class="inline">forward</code> describes how tensors are computed, step by step. It never creates a layer, and it never holds hyper-parameter logic or prints.</p></div>
+    <div class="term"><h4>3 · State the shapes</h4><p>Comment the shapes: <code class="inline">(N, 2) → (N, 8) → (N, 2)</code>. The output is logits — do not attach a softmax early.</p></div>
+    <div class="term"><h4>4 · Make the model inspectable</h4><p><code class="inline">print(model)</code> should reveal the whole structure; the parameter count should be computable; <code class="inline">model.to(device)</code> should move everything in one line.</p></div>
+  </div>
+
+  <h3>4.3.2 The Correct Form, and Two Mistakes That Never Train</h3>
+  <pre><span class="cm"># A - the correct form (copy this)</span>
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, in_dim=<span class="num">2</span>, hidden=<span class="num">16</span>, n_class=<span class="num">2</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden),
+            nn.ReLU(),
+            nn.Dropout(<span class="num">0.2</span>),
+            nn.Linear(hidden, n_class),
+        )
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x)          <span class="cm"># (N,2) -> (N,16) -> (N,2) logits</span>
+
+<span class="cm"># B - why these two never train</span>
+fc1 = nn.Linear(<span class="num">2</span>, <span class="num">16</span>)                 <span class="cm"># mistake 1: a module-level global</span>
+
+<span class="kw">class</span> <span class="fn">BadA</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> <span class="fn">fc1</span>(x)                 <span class="cm"># not in model.parameters()</span>
+
+<span class="kw">class</span> <span class="fn">BadB</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        layer = nn.Linear(x.shape[<span class="num">1</span>], <span class="num">2</span>)
+        <span class="kw">return</span> <span class="fn">layer</span>(x)                <span class="cm"># mistake 2: fresh random params each call</span></pre>
+  <div class="callout warn">
+    <span class="label">The Dangerous Part Is the Silence</span>
+    In mistake 1 the optimiser never sees the parameters, and nothing raises an error. In mistake 2 every call uses newly random parameters with nowhere to store gradients. The test is simple: a layer that does not appear in <code class="inline">print(model)</code> does not exist.
+  </div>
+
+  <h3>4.3.3 Common Layers and the Parameter Count</h3>
+  <pre>model = nn.Sequential(
+    nn.Linear(<span class="num">2</span>, <span class="num">16</span>),   <span class="cm"># 48 parameters = 2*16 + 16</span>
+    nn.ReLU(),          <span class="cm"># same shape, 0 parameters</span>
+    nn.Dropout(<span class="num">0.2</span>),    <span class="cm"># active in train() mode only</span>
+    nn.Linear(<span class="num">16</span>, <span class="num">2</span>),   <span class="cm"># 34 parameters = 16*2 + 2 -> logits</span>
+)
+
+n = <span class="fn">sum</span>(p.<span class="fn">numel</span>() <span class="kw">for</span> p <span class="kw">in</span> model.parameters())
+<span class="fn">print</span>(n)               <span class="cm"># 82</span>
+model.eval()           <span class="cm"># switch to eval before testing: dropout off</span></pre>
+</div>
+
+<!-- ========== 4.4 ========== -->
+<div class="section">
+  <h2>4.4 Width, Depth and Capacity</h2>
+  <p>A bigger architecture is not a better one — but "bigger is worse" is not a law either. Both directions have to be measured, and the measurement depends on the data. Here is the same table on two datasets, under one identical protocol (1,000 samples, 7:3 stratified split, <code class="inline">seed=42</code>, Adam <code class="inline">lr=1e-2</code>, 300 epochs).</p>
+
+  <h3>4.4.1 The Ablation Table</h3>
+  <table>
+    <tr><th>Configuration</th><th>Parameters</th><th>Val. acc · circles</th><th>Val. acc · moons</th><th>Conclusion</th></tr>
+    <tr><td>2 → 2 (linear, Chapter 2 baseline)</td><td>6</td><td>0.473</td><td>0.890</td><td>No hidden layer, one straight line</td></tr>
+    <tr><td>2-8-2 · no activation</td><td>42</td><td>0.473</td><td>0.890</td><td>A hidden layer without an activation is still that same straight line</td></tr>
+    <tr><td>2-8-2 · ReLU</td><td>42</td><td><strong>0.980</strong></td><td>0.953</td><td>Same 42 parameters, one non-linearity: +51 points on circles, 6 on moons</td></tr>
+    <tr><td>2-64-2 · ReLU</td><td>322</td><td>0.990</td><td>0.960</td><td>Wider helps, and the gain is already diminishing</td></tr>
+    <tr><td>2-64-64-2 · ReLU</td><td>4,482</td><td>0.987</td><td>0.960</td><td>A second layer buys nothing more — on circles it slips slightly</td></tr>
+    <tr><td>2-256-256-2 · ReLU</td><td>67,074</td><td>0.987</td><td>0.960</td><td>15× the parameters of the row above for ≈0 gain — and the widest train/validation gap</td></tr>
+  </table>
+  <p>Three readings, each of which needs the dataset column to mean anything:</p>
+  <ul>
+    <li><strong>Rows 2 and 3</strong> — identical parameter counts, one <code class="inline">nn.ReLU()</code> apart. On <code class="inline">make_circles</code> that is 0.473 versus 0.980; on <code class="inline">make_moons</code> it is 0.890 versus 0.953. The 51-point gap on circles against the 6-point gap on moons is the dataset's doing, not the architecture's.</li>
+    <li><strong>Row 4 onward</strong> — going from 322 to 4,482 to 67,074 parameters buys nothing at all. Capacity helps until it does not.</li>
+    <li><strong>The last row</strong> — 67,074 parameters is about 15× the previous row and 1,600× the 2-8-2 row, yet validation accuracy does not improve on circles and the train/validation gap widens. Not "capacity is harmful", but <em>this much capacity is not where the remaining error is</em>.</li>
+  </ul>
+  <div class="callout warn">
+    <span class="label">Report the Dataset, Not Just the Number</span>
+    A validation accuracy with no dataset beside it is not a result. The same architecture, the same seed and the same optimiser produce a 51-point contrast on one dataset and a 6-point contrast on another.
+    Every ablation row you publish must name its dataset.
+  </div>
+
+  <h3>4.4.2 Train and Validation Diverge</h3>
+  <p>As capacity grows, training accuracy climbs towards 1.00 while validation accuracy eventually stops improving. The gap between the two curves is overfitting, and it grows with capacity. The gap — not the training number — is what tells you whether the extra parameters did any work.</p>
+
+  <h3>4.4.3 One Variable at a Time</h3>
+  <pre>CONFIGS = [                          <span class="cm"># one variable per row</span>
+    (<span class="str">"2-8-2     ReLU"</span>, [<span class="num">8</span>],      <span class="kw">True</span>),
+    (<span class="str">"2-8-2     none"</span>, [<span class="num">8</span>],      <span class="kw">False</span>),
+    (<span class="str">"2-64-2    ReLU"</span>, [<span class="num">64</span>],     <span class="kw">True</span>),
+    (<span class="str">"2-64-64-2 ReLU"</span>, [<span class="num">64</span>, <span class="num">64</span>], <span class="kw">True</span>),
+]
+
+<span class="kw">def</span> <span class="fn">build</span>(hidden, use_relu, in_dim=<span class="num">2</span>, n_class=<span class="num">2</span>):
+    layers, prev = [], in_dim
+    <span class="kw">for</span> h <span class="kw">in</span> hidden:
+        layers += [nn.Linear(prev, h)]
+        <span class="kw">if</span> use_relu:
+            layers += [nn.ReLU()]
+        prev = h
+    layers += [nn.Linear(prev, n_class)]
+    <span class="kw">return</span> nn.Sequential(*layers)
+
+<span class="kw">for</span> name, hidden, use_relu <span class="kw">in</span> CONFIGS:
+    model = <span class="fn">build</span>(hidden, use_relu)
+    n = <span class="fn">sum</span>(p.<span class="fn">numel</span>() <span class="kw">for</span> p <span class="kw">in</span> model.parameters())
+    <span class="fn">print</span>(f<span class="str">"{name:18s} {n:7d}"</span>)</pre>
+  <p>Note that both the widths and the presence of the ReLU are parameters of <code class="inline">build()</code>: change the configuration and the network changes, without touching a single line of training code. That is modularity paying off.</p>
+</div>
+
+<!-- ========== 4.5 ========== -->
+<div class="section">
+  <h2>4.5 Parameter Initialisation</h2>
+  <p>Initialisation decides where training starts. It is easy to ignore until it silently costs you half your accuracy.</p>
+
+  <pre><span class="cm"># nn.Linear's default initialisation is kaiming_uniform, uniform on</span>
+<span class="cm"># [-1/sqrt(in), 1/sqrt(in)]. One apply() rewrites every submodule.</span>
+<span class="kw">def</span> <span class="fn">init_weights</span>(m):
+    <span class="kw">if</span> <span class="fn">isinstance</span>(m, nn.Linear):
+        nn.init.<span class="fn">kaiming_normal_</span>(m.weight)
+        nn.init.<span class="fn">zeros_</span>(m.bias)
+
+torch.manual_seed(<span class="num">42</span>)
+model.<span class="fn">apply</span>(init_weights)</pre>
+
+  <table>
+    <tr><th>Initialisation</th><th>Effect</th><th>Verdict</th></tr>
+    <tr><td>Default (kaiming_uniform)</td><td>Reasonable for most cases; scale depends on fan-in</td><td>Fine to leave alone</td></tr>
+    <tr><td>kaiming_normal + zero bias</td><td>Matches ReLU's variance behaviour</td><td>The standard pairing for ReLU networks</td></tr>
+    <tr><td>All zeros</td><td>Every hidden unit computes the same thing forever</td><td>Broken: the network has one effective unit per layer</td></tr>
+    <tr><td>All identical constants</td><td>Same symmetry problem, slightly less extreme</td><td>Broken for the same reason</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">Why Symmetry Breaks</span>
+    With identical initial weights, every hidden unit receives the same gradient and moves identically. They never differentiate, so a layer of 64 units behaves like a layer of one. Randomness at initialisation is not noise to be removed — it is the mechanism that lets units specialise.
+  </div>
+</div>
+
+<!-- ========== 4.6 ========== -->
+<div class="section">
+  <h2>4.6 The Module 1 Milestone: Three Pieces, One System</h2>
+  <p>Module 1 ends here, and the milestone is deliberately the whole of it rather than the model alone. A model without data is a demo; data without a model is a spreadsheet.</p>
+
+  <div class="terms">
+    <div class="term"><h4>1 · Problem definition sheet <span style="color:#6b7280;font-weight:600;">(since W1)</span></h4><p>Target users, the problem you are solving, the data you actually have, one success metric and one failure criterion. You must be able to state what you are building in one sentence.</p></div>
+    <div class="term"><h4>2 · Data pipeline <span style="color:#6b7280;font-weight:600;">(since W3)</span></h4><p>Cleaning, splitting and the <code class="inline">Dataset</code>/<code class="inline">DataLoader</code> code. The split ratios live in the configuration, the leakage self-check has been run, and the same script rebuilds the dataset on another machine.</p></div>
+    <div class="term"><h4>3 · Model and ablation <span style="color:#6b7280;font-weight:600;">(today, W4)</span></h4><p>An MLP defined with <code class="inline">nn.Module</code>, a computed parameter count, logits as output, and an ablation table that justifies why this configuration was chosen.</p></div>
+    <div class="term"><h4>The integrated quiz</h4><p>Three parts, mirroring the three pieces above, completed in class. It is the same structure as the milestone, which is the point: the review checks whether the module holds together, not whether one week was understood in isolation.</p></div>
+  </div>
+
+  <p>Two questions the review will ask. First, do the three pieces agree with each other — does the model consume exactly what the pipeline produces? Second, is the ablation table evidence, or decoration? A table with the correct four columns but no conclusion per row is decoration.</p>
+</div>
+
+<!-- ========== 4.7 ========== -->
+<div class="section">
+  <h2>4.7 Pitfalls and a Debugging Checklist</h2>
+  <div class="callout warn">
+    <span class="label">Checklist</span>
+    <ul>
+      <li><strong>Not in <code class="inline">print(model)</code>, not trained.</strong> Layers created in <code class="inline">forward</code> or stored as globals are invisible to the optimiser.</li>
+      <li><strong>Layers belong in <code class="inline">__init__</code>.</strong> Assign to <code class="inline">self</code> so they are registered in the module tree.</li>
+      <li><strong>Output logits, not probabilities.</strong> <code class="inline">CrossEntropyLoss</code> contains softmax; adding another one flattens the gradients.</li>
+      <li><strong>Count the parameters.</strong> <code class="inline">sum(p.numel() for p in model.parameters())</code> must agree with your hand calculation.</li>
+      <li><strong><code class="inline">model.eval()</code> before testing, <code class="inline">model.train()</code> after.</strong> Otherwise Dropout keeps dropping units and the metric changes every run.</li>
+      <li><strong>Never initialise to constants.</strong> Identical units learn identically and the layer collapses to one effective unit.</li>
+      <li><strong>Change one variable per comparison.</strong> Fix the seed, the split, the epochs, the optimiser and the learning rate before you start.</li>
+      <li><strong>Treat a flat loss curve as data.</strong> A loss pinned at 0.693 is a finding, not a bug.</li>
+      <li><strong>Report a conclusion, not a number.</strong> Every ablation row needs a sentence about what it proves.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 4.8 ========== -->
+<div class="section">
+  <h2>4.8 Summary and Exercises</h2>
+  <div class="callout key">
+    <span class="label">Five Takeaways</span>
+    <ol>
+      <li>One neuron draws one line; a hidden layer transforms features so that linearly inseparable problems become separable — and whether a dataset is linearly separable is a number you measure, not a shape you recognise.</li>
+      <li>The forward pass is matrix multiplies plus element-wise non-linearity, repeated. Remove the activation and the network is a linear model — the two affine maps compose into one, verifiable numerically to about 1e-7.</li>
+      <li>The <code class="inline">nn.Module</code> convention: layers created in <code class="inline">__init__</code> and registered on <code class="inline">self</code>, <code class="inline">forward</code> describing data flow only, output logits.</li>
+      <li>Initialisation sets the starting point: pair ReLU with kaiming; constant initialisation leaves hidden units symmetric and undifferentiated.</li>
+      <li>Bigger is not automatically better, and it is not automatically worse — it is <em>measurable</em>, per dataset. Only a controlled experiment in which one variable changes at a time tells you which configuration wins, and every reported number needs its dataset attached.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · Shapes and Parameter Counts (Required)</h4>
+    <ol>
+      <li>Build <code class="inline">nn.Sequential(nn.Linear(2, 8), nn.ReLU(), nn.Linear(8, 3))</code> and print the model. Compute the parameter count by hand, then verify with <code class="inline">sum(p.numel() for p in model.parameters())</code>.</li>
+      <li>Feed it a batch of shape <code class="inline">(5, 2)</code>. Write down the shape after each step: linear, activation, output.</li>
+      <li>Explain in one sentence why the activation adds no parameters and does not change the shape.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2 · The Activation Experiment on Two Datasets (Required)</h4>
+    <ol>
+      <li>Implement <code class="inline">load(kind)</code> and the parameterised <code class="inline">MLP(use_relu)</code> of Section 4.2.2, and run all four combinations (moons/circles × with/without activation) with the same seed and split.</li>
+      <li>Record the four accuracies and the four final losses. Confirm that only the circles no-activation run stops at approximately <code class="inline">ln 2 = 0.693</code>, and explain why the moons run does not.</li>
+      <li>Now write the composition argument: show algebraically that <code class="inline">W2(W1 x + b1) + b2</code> equals a single affine map, name the matrix that plays the role of the single weight, and verify it numerically as in Section 4.2.3 (record your maximum absolute difference and the rank of <code class="inline">W</code>).</li>
+      <li>Write three sentences: if you had only run <code class="inline">make_moons</code>, what would you have concluded about activations, and what is wrong with that conclusion?</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3 · Break the Model Three Ways (Required)</h4>
+    <p>For each broken model below, predict what happens, then run it and record what actually happened.</p>
+    <ol>
+      <li>A layer stored as a module-level global and used inside <code class="inline">forward</code>. Check <code class="inline">len(list(model.parameters()))</code>.</li>
+      <li>A layer constructed inside <code class="inline">forward</code> on every call. Compare the loss after 50 epochs against the correct version.</li>
+      <li>A correct model with an extra <code class="inline">nn.Softmax(dim=1)</code> before <code class="inline">CrossEntropyLoss</code>. Compare the first-epoch loss against the correct version and explain the difference.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4 · The Ablation Table (Required)</h4>
+    <ol>
+      <li>Reproduce the six rows of Section 4.4.1 on <em>both</em> datasets, with one seed, one split, one optimiser and one learning rate. Report five columns: configuration, parameters, validation accuracy on circles, validation accuracy on moons, conclusion.</li>
+      <li>Add two rows of your own choosing (for example a different activation, or dropout).</li>
+      <li>Answer in three sentences: which single variable mattered most on each dataset, and why the answers differ. Then state in one sentence why a row without its dataset named is not a result.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5 · Initialisation and Training Curves (Required)</h4>
+    <ol>
+      <li>Train the same architecture three times: default initialisation, kaiming normal, and all-zero weights. Record the validation accuracy of each.</li>
+      <li>Plot the training loss curves. Explain the all-zero result using the symmetry argument.</li>
+      <li>State which initialisation you would ship, and why the answer is not "whichever got the highest number on this one run".</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 6 · Audit an AI's Architecture Advice (Optional, +5 bonus)</h4>
+    <p>Ask an AI to recommend an architecture for a dataset you know well: depth, width, activation, regularisation, epochs. Then test its recommendation as one row in your ablation table, on the same split and seed as everything else. Submit the recommendation, the measured result, and a paragraph stating which parts of the advice your data supported and which it falsified. Record the falsified parts in <code class="inline">AI_USE.md</code>.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Chapter 4 · Neural Networks and Modelling with nn.Module</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

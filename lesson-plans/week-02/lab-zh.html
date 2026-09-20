@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W2-B (Lab Part · 75 min + Quiz 15 min) — EDA & Data Cleaning Lab | 第2周教案B · Lab段</title>
 <style>
   :root {
     --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
@@ -12,18 +11,15 @@
     --blue: #1e40af; --blue-bg: #eff6ff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
   .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
   .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
   .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
   .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
-  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
   .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
   h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
-  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
   h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
   h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
-  .en { color: var(--text-sec); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
   th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
   td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
@@ -56,136 +52,131 @@
 <div class="container">
 
 <div class="header">
-  <div class="tag">Lesson Plan · 教案 · Week 2 · Lab Part (Lab 75 min + Quiz & Summary 15 min)</div>
-  <h1>EDA 与数据清洗实战<span class="en">Exploratory Data Analysis & Data Cleaning Lab</span></h1>
+  <div class="tag">教案 · 第 2 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
+  <h1>实验 1 · 只用张量与 autograd 实现线性回归</h1>
   <div class="meta">
-    <span>⏱ 每周 180 min 一体课 · 本教案为 Lab 段 75 min + 小测与小结 15 min</span>
-    <span>📚 Chapter 2.5–2.6</span>
-    <span>🔧 Hands-on Lab</span>
-    <span>🧩 教案编号 LP-W2-B</span>
-    <span>🌐 English (with Chinese support)</span>
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 分钟 + 小测与小结 15 分钟</span>
+    <span>📚 教材 2.4–2.6</span>
+    <span>🔧 随堂实验</span>
+    <span>🧩 教案编号：LP-W2-B</span>
+    <span>🌐 中文</span>
   </div>
 </div>
 
-<!-- ===== 一、教学目标 ===== -->
-<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<h2>1. 教学目标</h2>
 <div class="grid2">
   <div class="card">
-    <h4>知识目标 · Knowledge</h4>
+    <h4>知识目标</h4>
     <ul>
-      <li>能复述 EDA 五步法流程<span class="en"> — 5-step EDA workflow</span></li>
-      <li>能说出缺失值的三种处理策略及各自适用条件<span class="en"> — 3 missing value strategies</span></li>
-      <li>能解释 IQR 异常值检测原理<span class="en"> — IQR outlier detection</span></li>
-      <li>能描述数据泄漏为何要"先 split 再填充"<span class="en"> — data leakage prevention</span></li>
+      <li>说出一次参数更新的四个动作，并解释顺序为什么不能颠倒</li>
+      <li>解释 <code class="inline">.grad</code> 为什么必须清零，以及不清零时损失曲线长什么样子</li>
+      <li>解释基线损失在训练之前证明了什么</li>
+      <li>区分数据生成真值、闭式最小二乘解与训练解三个数</li>
+      <li>解释为什么即使不报错也必须检查形状</li>
     </ul>
   </div>
   <div class="card">
-    <h4>技能目标 · Skills</h4>
+    <h4>能力目标</h4>
     <ul>
-      <li>能独立完成 Titanic 数据集的完整 EDA（五步法）<span class="en"> — full EDA on Titanic</span></li>
-      <li>能对缺失值制定差异化策略并实现<span class="en"> — per-column missing value strategy</span></li>
-      <li>能用 IQR 检测异常值并做截断处理<span class="en"> — IQR outlier handling</span></li>
-      <li>选做：从现有列构造新特征<span class="en"> — engineer new features (optional)</span></li>
+      <li>用固定种子生成合成数据，并算出 <code class="inline">w = b = 0</code> 时的基线 MSE</li>
+      <li>只用张量与 autograd 训练线性回归——不许出现 <code class="inline">nn.Module</code>、不许出现 <code class="inline">torch.optim</code></li>
+      <li>在同一张图上画出三种学习率的损失曲线，并各自给出一句正确解读</li>
+      <li>算出闭式最小二乘解，并给出相对误差</li>
+      <li>用报错原文记录形状踩坑，并写成一条 AI 协同记录</li>
+      <li>推送 M2 里程碑：题目确定、<code class="inline">DATA.md</code> v0、数据可加载</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
-  <span class="label">素养目标 · Attitudes</span>
-  建立"先理解数据再碰模型"的工程纪律；体会"80% 法则"在实践中的体感（数据处理确实花大量时间）；养成每次处理数据都做 EDA 的职业习惯。
+  <span class="label">素养目标（课程思政）</span>
+  把错误留在记录里——形状报错与调试过程是能力证据，不是需要藏起来的扣分项。只贴成功结果的报告，
+  反而无法说明你是否真的动过手。严谨求实的底线：不编造输出、不美化曲线；换设备出现微小差异如实写明即可，
+  不要悄悄只留最好那一次。
 </div>
 
-<!-- ===== 二、重难点 ===== -->
-<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<h2>2. 重点与难点</h2>
 <table>
-  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
-  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>EDA 五步法实操；缺失值按列差异化处理；IQR 异常值检测</td><td>教师先演示一步 → 学生跟练 → 教师巡视答疑 → 进入下一步。每步设 checkpoint，学生须跑通才能继续</td></tr>
-  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>数据泄漏概念（先 split 再填充）；特征工程"想什么特征有用"的思维转换（选做环节）</td><td>数据泄漏画数据流图（训练集信息→测试集=作弊）；特征工程用 Titanic 的 Title 提取做思维示范</td></tr>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>手写训练循环；梯度清零；学习率三档；四列收敛对比表；形状踩坑记录</td><td>教师现场写一遍循环（5 分钟），随后学生凭记忆重写而不是照抄；每段结束前必须打印一个形状或一个数值才能进入下一段</td></tr>
+  <tr><td>难点</td><td>不报错的 <code class="inline">(n,)</code> 与 <code class="inline">(n,1)</code> 陷阱；正确读出三条曲线；「误差」到底跟谁比；解释 AI 生成的 bug 而不是默默修掉</td><td>形状：第一次算损失之前先打印 <code class="inline">y.shape</code> 与 <code class="inline">X @ w + b</code> 的 shape；曲线：先预测再运行；对比：先争论表头里的「相对误差」分母是谁，唯一错的答案是不写；AI 记录：必须附上那句错误写法原文和它错在哪里</td></tr>
 </table>
 
-<!-- ===== 三、时间分配 ===== -->
-<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
-<div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min（每周 180 min 一体课的后半段）</div></div>
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
 <table>
-  <tr><th style="width:70px;">时段</th><th style="width:80px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:80px;">课件页</th><th style="width:90px;">方法 / Method</th></tr>
-  <tr><td>Lab A</td><td>10 min</td><td><strong>NumPy 热身</strong>：创建 4×4 矩阵 → 切片练习（行/列/子块，强调切片是视图）→ 广播运算（每行加 [0,1,2,3]）。检查点：三个任务全绿再进入下一步</td><td>p25</td><td>学生跟练 + 巡视</td></tr>
-  <tr><td>Lab B</td><td>25 min</td><td><strong>Pandas 探索</strong>：加载 <code class="inline">titanic.csv</code> → <code class="inline">info()</code>/<code class="inline">describe()</code>/<code class="inline">isna().sum()</code> 数据体检 → 用代码回答四个必答问题（哪几列缺失 / 各舱位票价均值 / 30 岁以上男性生还率 / 女性生还率是男性几倍）→ 每个答案写一句「我发现……」</td><td>p26</td><td>学生自主探索 + 巡视</td></tr>
-  <tr><td>Lab C</td><td>20 min</td><td><strong>三张图，三个问题</strong>：年龄直方图（分布）→ 各舱位生还率条形图（比较）→ 年龄×票价散点图（关系）；每图配 1-2 句 Markdown 解读；形成 ≥3 个可检验假设</td><td>p27</td><td>学生自主 + 快问快答</td></tr>
-  <tr><td>Lab D</td><td>15 min</td><td><strong>清洗实战</strong>：age 中位数填充 + <code class="inline">age_missing</code> 标记 → embarked 众数填充 → fare IQR 上下界截断 → <code class="inline">duplicated()</code> 检查 → 清洗后复检（重跑 info + describe）。每步前写一行「为什么这么做」</td><td>p28</td><td>教师演示 → 学生跟练</td></tr>
-  <tr><td>Lab E</td><td>5 min</td><td><strong>收尾提交</strong>：核对交付清单（notebook + 三图解读 + 假设清单）；Git 推送到 <code class="inline">week2-lab</code> 分支</td><td>p29</td><td>检查清单</td></tr>
-  <tr><td>Quiz</td><td>10 min</td><td><strong>随堂小测</strong>：3 题（2 单选 + 1 判断），先举手投票再讲评，请答对的同学说理由。计入 Lab 成绩 10%；3 题全对者期末「实验参与」加 0.5 分</td><td>p30</td><td>投票 + 讲评</td></tr>
-  <tr><td>Wrap</td><td>5 min</td><td><strong>小结与预告</strong>：五要点回顾；课后 TODO（Lab 交付 / Git 推送 / 预习 Chapter 3）；下周预告：scikit-learn 第一个完整模型</td><td>p31–p32</td><td>回顾 + 预告</td></tr>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>实验 A</td><td>10 min</td><td><strong>造数据与基线</strong>：用 <code class="inline">torch.manual_seed(42)</code> 生成 <code class="inline">X</code> <code class="inline">(100,1)</code> 与 <code class="inline">y = 3X + 2 + 噪声</code>；打印四个张量的形状；算出 <code class="inline">w = b = 0</code> 时的基线 MSE——那个「不训练就不行」的数字</td><td>p22–p23</td><td>跟随操作 + 巡场</td></tr>
+  <tr><td>实验 B</td><td>18 min</td><td><strong>只用张量训练</strong>：用 <code class="inline">requires_grad=True</code> 初始化 <code class="inline">w</code>、<code class="inline">b</code>；循环内依次做前向 → MSE → 反向 → <code class="inline">no_grad</code> 内更新 → 清零；<code class="inline">nn.Linear</code> 与一切 <code class="inline">torch.optim</code> 禁用并会被检查</td><td>p23–p24</td><td>凭记忆重写 + 巡场</td></tr>
+  <tr><td>实验 C</td><td>17 min</td><td><strong>三条学习率曲线</strong>：分别以 <code class="inline">lr = 0.001 / 0.1 / 1.0</code> 重跑，每次都用全新模型和同一颗种子；三条曲线画在同一张图上并用对数纵轴；标出 <code class="inline">lr = 0.1</code> 曲线不再明显下降的位置；每条曲线写一句判读</td><td>p19 + p24</td><td>先预测 → 再运行 → 对比</td></tr>
+  <tr><td>实验 D</td><td>15 min</td><td><strong>验证收敛</strong>：用 <code class="inline">torch.linalg.lstsq</code> 算闭式最小二乘解；填四列表（真值 / OLS / 200 步梯度下降 / 相对误差）；用三四句话解释三个数为何不相等</td><td>p20</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>实验 E</td><td>15 min</td><td><strong>踩坑记录、AI 记录与 M2 推送</strong>：至少记录两条形状错误并附报错原文，其中必须包含那条「不报错」的广播坑；写一条 AI 协同记录，指出 AI 错在哪里；随后把 <code class="inline">DATA.md</code> v0 与数据加载证明推到项目仓库</td><td>p25–p26 + 里程碑 M2</td><td>清单核对 + 推送</td></tr>
+  <tr><td>小测</td><td>10 min</td><td><strong>随堂小测</strong>：4 题（矩阵乘法结果形状、广播结果、某点梯度值、损失震荡时最先检查什么），举手作答后讲评</td><td>p28</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>5 min</td><td><strong>小结与预告</strong>：五条要点；课后待办（实验 1 报告 + AI 协同记录）；预告第 3 周（数据准备与管道构建——同一条直线，但框架开始替你干活，也替你藏起一些东西）</td><td>p29–p30</td><td>回顾 + 预告</td></tr>
 </table>
 
-<!-- ===== 四、教学活动 ===== -->
-<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<h2>4. 关键活动设计</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 1 · 数据体检站（Lab B，p26）</h4>
-  <p style="font-size:13.5px;">学生在 3 分钟内用 <code class="inline">info()</code> + <code class="inline">describe()</code> + <code class="inline">isna().sum()</code> 三条命令"体检"Titanic 数据集，然后写下"3 个最让你意外的发现"。教师收集 2-3 个学生的发现，如"Cabin 列缺失 77%——是否该删？"为清洗环节埋下伏笔。<span class="en">3-minute data health check — students write 3 surprising findings.</span></p>
+  <h4>活动 1 · 算损失之前先印形状（实验 A，p23）</h4>
+  <p style="font-size:13.5px;">训练开始前，每人必须先打印 <code class="inline">X.shape</code>、<code class="inline">y.shape</code>、<code class="inline">w.shape</code>、<code class="inline">b.shape</code>，并断言 <code class="inline">X @ w + b</code> 的形状是 <code class="inline">(100, 1)</code>。把 <code class="inline">y</code> 写成 <code class="inline">torch.randn(100)</code> 的同学，会在这里而不是半小时后发现——而且这个错误本来永远不会报错。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 2 · 假设生成与验证（Lab C，p27）</h4>
-  <p style="font-size:13.5px;">学生在三张图的基础上提出至少 3 个假设（如"三等舱生还率最低""票价越高生还率越高""儿童生还率高于成人"），写在 notebook 的 Markdown 里。这一环节训练的是"用数据回答问题"的思维——先观察再提出假设，而不是先有结论再找数据。<span class="en">Generate 3+ hypotheses from the three charts.</span></p>
+  <h4>活动 2 · 禁用库自查（实验 B，p24）</h4>
+  <p style="font-size:13.5px;">进行到一半时，每人对自己写的文件执行 <code class="inline">grep -nE "nn\.|optim\." lab1_linear_regression.py</code>，有任何命中就是违规。目的不是抠字眼：只有亲手写那一行更新，才能体会到优化器替你做了什么、以及它做了哪些你没让它做的事。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 3 · 清洗策略快辩论（Lab D，p28）</h4>
-  <p style="font-size:13.5px;">对 Age 列缺失值（177/891 = 20%），教师快速举手调查：删除 vs 中位数填充 vs 按舱位分组填充？请两三位不同选择的学生各说一句理由，教师总结"没有唯一正确答案，但要有依据并留痕"。引出"正式 ML 流程中先 train_test_split 再填充"的正确做法。<span class="en">Quick poll: how to handle Age missing values — no single answer, but there must be reasoning.</span></p>
+  <h4>活动 3 · 先预测再画曲线（实验 C，p19）</h4>
+  <p style="font-size:13.5px;">每人先写下对 <code class="inline">lr = 0.001 / 0.1 / 1.0</code> 三档的预期：会收敛、会停滞，还是会发散。再与真实曲线对比。这样一来，机械的练习变成了校准练习，「学习率过大」这件事也在被讲出来之前就先变成了自己的经验。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 4 · 特征工程挑战（选做加分，Lab E 后）</h4>
-  <p style="font-size:13.5px;">挑战题：除了教材示例的 Title / FamilySize / IsAlone，你还能从现有列中提取什么新特征？最有创意的特征（如从 Ticket 编号规律提取舱位信息、从 Cabin 首字母提取楼层）在下周课开头展示。学有余力的同学课后完成，计入 Lab 加分。<span class="en">Optional bonus: engineer a creative feature beyond textbook examples.</span></p>
+  <h4>活动 4 · 你刚算的是哪个误差？（实验 D，p20）</h4>
+  <p style="font-size:13.5px;">填表之前，先让全班争论分母：相对误差是相对真值、相对 OLS，还是相对上一步？三种都说得通，唯一错的答案是「不写」。这就是「一个数」和「一个结果」的分界线。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 复现别人的曲线（实验 E，p25）</h4>
+  <p style="font-size:13.5px;">两人互换仓库，只照对方的 README 复现他的损失曲线。缺种子、版本没固定、路径写死——问题会立刻暴露。随后每人写下自己 README 缺了什么。</p>
 </div>
 
-<!-- ===== 五、作业与评估 ===== -->
-<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<h2>5. 作业与考核</h2>
 <table>
-  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">分值 / Score</th></tr>
-  <tr><td>代码质量<br><span class="en">Code</span></td><td>代码可运行、逻辑清晰、无报错；Markdown 结构清楚</td><td>30 分</td></tr>
-  <tr><td>EDA 完整性<br><span class="en">EDA</span></td><td>五步法每步有产出；四个必答问题有答案与「我发现……」记录</td><td>30 分</td></tr>
-  <tr><td>清洗留痕<br><span class="en">Cleaning</span></td><td>缺失值按列差异化处理并记录策略理由；IQR 截断有前后对比复检</td><td>20 分</td></tr>
-  <tr><td>可视化<br><span class="en">Charts</span></td><td>三张图选型正确、有标题轴标签，各配 1-2 句解读</td><td>10 分</td></tr>
-  <tr><td>假设清单<br><span class="en">Hypotheses</span></td><td>≥3 条可检验、有图表依据的假设（Markdown）</td><td>10 分</td></tr>
-  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>课末 3 题小测（p30），计入 Lab 成绩 10%；特征工程挑战为选做加分项</td><td>另计</td></tr>
+  <tr><th style="width:130px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>交付物</td><td><code class="inline">lab1_linear_regression.py</code>、<code class="inline">loss.png</code>（三条曲线）、参数收敛对比表、形状踩坑记录、可复现命令、一条 AI 协同记录</td><td>100 分</td></tr>
+  <tr><td>评分维度</td><td>训练循环 25 · 损失曲线与判读 20 · 收敛验证 20 · 形状踩坑记录 15 · 可复现 10 · 课后反思 10</td><td>课程实验 15</td></tr>
+  <tr><td>课堂小测</td><td>实验结束前 4 题，计入随堂实验成绩（见课件 p28）</td><td>随堂实验 15 分</td></tr>
+  <tr><td>大作业 M2</td><td>Part F 计入大作业，不计入本实验：题目确定 + <code class="inline">DATA.md</code> v0 + 数据可加载（≥ 1000 条）。漏交扣项目分 2 分／次，最多 −20</td><td>大作业</td></tr>
+  <tr><td>迟交政策</td><td>实验交付物每天 −10%，最多 3 天，之后记 0。以 commit 时间为准，不以平台上传时间为准</td><td>—</td></tr>
 </table>
-<div class="callout info">
-  <span class="label">交付物清单</span>
-  <strong>提交到 GitHub <code class="inline">week2-lab</code> 分支（下周一 23:59 截止，迟交每 24h 扣 10%）：</strong>① <code class="inline">lab02_eda.ipynb</code>（主 notebook：NumPy 热身 + EDA + 清洗 + Markdown 留痕） ② 三张图（在 notebook 内）+ 各自解读 ③ 假设清单（≥3 条） ④ <code class="inline">environment.yml</code>（更新版） ⑤ 选做：<code class="inline">figures/</code> PNG 导出与 <code class="inline">README.md</code> 摘要（加分）
-</div>
 <div class="callout warn">
-  <span class="label">教师备注 · Lab 注意事项</span>
-  <ul style="margin-bottom:0;">
-    <li><strong>网络问题预案：</strong>如果在线下载失败，教师准备好本地 <code class="inline">titanic.csv</code> 备用副本，学生改用 <code class="inline">pd.read_csv()</code> 加载</li>
-    <li><strong>环境检查：</strong>Lab 开始前统一跑 <code class="inline">import numpy, pandas, matplotlib, seaborn; print("all imports OK")</code>，报错的同学用 Google Colab 兜底</li>
-    <li><strong>时间压力预案：</strong>Lab 段仅 75 min。若 Lab C 进度落后，可只完成前两张图（直方图 + 条形图），散点图转为课后完成；Quiz 环节不可省略</li>
-    <li><strong>数据泄漏提示：</strong>Lab D 清洗环节，教师需明确提醒"正式 ML 流程中要先 train_test_split 再做缺失值填充"——本 Lab 为简化暂用全局填充，第 3-4 周会讲 Pipeline 正确做法</li>
-  </ul>
+  <span class="label">下课前的四项确认</span>
+  逐人确认四件事：脚本不经任何修改就能从头跑到尾；三条曲线在同一张图上、有图例、纵轴取了对数；
+  收敛表里明确写了跟谁比；踩坑记录里至少有一条是<em>不报错</em>的错误。最后确认 M2 已推送。
 </div>
 
-<!-- ===== 六、预习与资源 ===== -->
-<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<h2>6. 课前准备与资源</h2>
 <div class="grid2">
   <div class="card">
-    <h4>课前预习 · Before Class</h4>
+    <h4>课前</h4>
     <ul>
-      <li>完成理论段（教案 LP-W2-A）后即进入本 Lab，无前置课后任务；理论段休息期间确认 <code class="inline">ai-app</code> 环境 <code class="inline">import numpy, pandas, matplotlib, seaborn</code> 成功</li>
-      <li>浏览 Kaggle Titanic Competition 页面，了解数据集字段含义</li>
+      <li>提前通读实验指导书：<code class="inline">labs/week-02/lab-handout.md</code>（实验 1）</li>
+      <li>自己跑一遍参考解，记下期望值：<code class="inline">w ≈ 2.987</code>、<code class="inline">b ≈ 2.013</code>、OLS <code class="inline">w ≈ 2.991</code></li>
+      <li>准备一份「不清零梯度」的错误版本，用于现场演示损失震荡</li>
+      <li>打开里程碑表，供 M2 核对</li>
     </ul>
   </div>
   <div class="card">
-    <h4>配套资源 · Resources</h4>
+    <h4>资源</h4>
     <ul>
-      <li>教材 Chapter 2（本套件产出）</li>
-      <li>课件：Week 2 Lecture（32 页版，p23–p32 对应本教案 Lab 段与小测小结）</li>
-      <li>Titanic 数据集文档：kaggle.com/c/titanic/data</li>
-      <li>Pandas Cookbook（免费）：pandas.pydata.org/docs/user_guide/cookbook.html</li>
-      <li>Seaborn Gallery：seaborn.pydata.org/examples/index.html</li>
-      <li>第 3 周预告：scikit-learn 工作流（fit → predict → evaluate）</li>
+      <li>课件 p22–p30</li>
+      <li>教材 2.4–2.6</li>
+      <li>画 <code class="inline">loss.png</code> 需要 <code class="inline">matplotlib</code>，确认 <code class="inline">ai-app</code> 环境里已安装</li>
+      <li>里程碑表：<code class="inline">projects/capstone/milestones.md</code>（W2 · M2）</li>
+      <li>无需外部数据集——数据在脚本里用固定种子生成</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W2-B (Lab Part · 75 min + Quiz & Summary · 15 min)</p>
-  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+  <p>AI 应用开发 — 教案 LP-W2-B（实验部分 · 75 min + 小测与小结 15 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 
 </div>

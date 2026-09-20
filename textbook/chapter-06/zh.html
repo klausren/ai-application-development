@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 06 章 · 模块 2 · 第 6 周</div>
+  <h1>模型评估、过拟合与正则化</h1>
+  <p class="overview">第 5 周结束时，你手里有一个能跑通的训练循环，以及日志末尾的一个数字：验证损失。这一周要问的是工程师真正被雇来回答的那个问题——<strong>这个数字是真的吗？</strong>80 张训练图配一个 17226 个参数的网络，足以把训练准确率推到完美的 1.000；而它离那个诚实分数有多远，就是本章的全部主题。我们把评测工具搭起来（混淆矩阵、精确率、召回率、F1），把让分数可信的协议固定下来（划分、分层、交叉验证、泄漏），直接从损失曲线上读偏差-方差权衡，再用 PyTorch 实现四种正则化手段。章末是一个六方案、五种子的实测实验——它真正跑在笔记本 CPU 上，而它诚实的结论比「正则化提高了准确率」这句口号**更窄，也更有用**。</p>
+</div>
+
+<!-- ========== 6.1 ========== -->
+<div class="section">
+  <h2>6.1 为什么训练集上的分数不算成绩单</h2>
+  <p>第 5 周里，训练损失越低越是目标。这一周，它变成了警报。原因不是哲学问题，是算术问题。</p>
+
+  <h3>6.1.1 每张图两百一十五个参数</h3>
+  <p>本章全程使用的协议，是让一个 64-128-64-10 的多层感知机——共 <strong>17226 个参数</strong>——只吃 <strong>80 张训练图</strong>。也就是每个训练样本大约对应 <strong>215 个参数</strong>。一台可调数字比样本数还多的机器，有能力把这 80 个点精确记住，而它一定会这么做：损失曲面上的空间足够把每一个点都放到边界的正确一侧，却完全不需要学出一条能迁移到别处的规则。</p>
+
+  <div class="callout key">
+    <span class="label">本章的第一个测量</span>
+    基线方案的<strong>训练准确率是 1.000</strong>，而验证准确率停在 <strong>0.856 ± 0.024</strong>。模型在训练集上不是「差不多对」，是完美；在没见过的数据上，大约每七张错一张。<strong>只有第二个数字才算成绩单。</strong>
+  </div>
+
+  <h3>6.1.2 三个划分，以及各自被允许做什么</h3>
+  <p>实践中的混乱，很少来自指标怎么算，而来自<em>在做某个决定的时候，你被允许看哪一份数据</em>。三份数据，三种权限：</p>
+  <table>
+    <tr><th>划分</th><th>用途</th><th>允许做的事</th><th>禁止做的事</th></tr>
+    <tr><td>训练集</td><td>拟合权重</td><td>只做梯度更新</td><td>报告任何最终指标——它是被直接优化的对象</td></tr>
+    <tr><td>验证集</td><td>模型选择</td><td>挑超参数、挑停止轮次、挑正则化强度</td><td>当作最终结论——选的次数多了，它也被拟合了</td></tr>
+    <tr><td>测试集</td><td>一次诚实的测量</td><td>在模型冻结之后，评测一次</td><td>任何决定，包括「我就再看一个想法」</td></tr>
+  </table>
+  <p>第三行是最常被破坏的。每一次看测试集，都是一次用「测试集本该封存的信息」做出的超参数决定。看十次之后，测试集就变成了第四份、且被更严重过拟合的验证集。</p>
+
+  <h3>6.1.3 本周的评测协议</h3>
+  <p>本章后面出现的所有数字，都来自同一套固定协议，这样数字变化就只能来自被检验的那个改动：</p>
+  <div class="callout tip">
+    <span class="label">冻结的协议</span>
+    <ul>
+      <li><strong>数据。</strong><code class="inline">sklearn.datasets.load_digits</code>——8×8 灰度手写数字，10 类，1797 张，随库自带，因此<strong>整个实验全程离线，不下载任何东西</strong>。像素缩放到 0–1。</li>
+      <li><strong>划分。</strong>70 / 15 / 15，<strong>分层</strong>，固定种子——约留下 270 张作验证集、270 张作测试集。</li>
+      <li><strong>训练子集。</strong>从训练池里只取 <strong>80 张</strong>。数据稀缺是刻意设计的：正因为它，过拟合才在 400 轮内而不是 40000 轮内显形。</li>
+      <li><strong>模型。</strong>MLP 64-128-64-10，输出原始 logits，<strong>17226 个参数</strong>——平均每张训练图约 215 个。</li>
+      <li><strong>优化。</strong><code class="inline">Adam(lr=1e-3)</code>，批大小 32，最多 400 轮。</li>
+      <li><strong>重复。</strong>五个随机种子（42–46）；所有数字都以<strong>五种子的均值 ± 标准差</strong>报告，绝不用单次运行。</li>
+    </ul>
+  </div>
+
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_split</span>(seed=<span class="num">42</span>):
+    <span class="str">"""1797 张数字图缩放到 [0, 1]；分层 70 / 15 / 15。"""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)        <span class="cm"># 8x8 像素，10 类</span>
+    X = X / <span class="num">16.0</span>                              <span class="cm"># 像素范围 0..16 变为 0..1</span>
+    Xtr, Xtmp, ytr, ytmp = train_test_split(
+        X, y, test_size=<span class="num">0.30</span>, random_state=seed, stratify=y)
+    Xva, Xte, yva, yte = train_test_split(
+        Xtmp, ytmp, test_size=<span class="num">0.50</span>, random_state=seed, stratify=ytmp)
+    <span class="kw">return</span> Xtr, Xva, Xte, ytr, yva, yte
+
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="str">"""64-128-64-10 —— 17226 个参数，只喂 80 张训练图。"""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, p_drop=<span class="num">0.0</span>):
+        <span class="fn">super</span>().__init__()
+        self.body = nn.Sequential(
+            nn.Linear(<span class="num">64</span>, <span class="num">128</span>), nn.ReLU(), nn.Dropout(p_drop),
+            nn.Linear(<span class="num">128</span>, <span class="num">64</span>),  nn.ReLU(), nn.Dropout(p_drop),
+            nn.Linear(<span class="num">64</span>, <span class="num">10</span>))                 <span class="cm"># 原始 logits，不加 softmax</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.body(x)</pre>
+  <p>分层在这里比第 5 周更重要。1797 张图分 10 类，若随意切出 80 张训练子集，很可能某类只有 6 张、另一类有 11 张，于是准确率曲线的起伏来自类别构成，而不是来自正则化。分层会保证每个划分——包括那 80 张子集——都保留整个训练池的类别比例。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>泛化差距</strong>——训练表现减去验证表现。这里是 1.000 − 0.856 = 0.145，跨种子报 0.145 ± 0.024。</li>
+      <li><strong>容量</strong>——可调参数的个数，更准确地说，是模型所能表示的函数族有多丰富。</li>
+      <li><strong>参数/样本比</strong>——容量除以训练集大小；本章最有用的一个预警数字。</li>
+      <li><strong>留出集</strong>——训练开始之前就从训练池里物理移除的任何数据。</li>
+      <li><strong>模型选择</strong>——一切通过比较分数做出的决定：架构、学习率、轮数、正则化强度。</li>
+      <li><strong>分层划分</strong>——在每一部分中都保持整体类别比例的划分方式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.2 ========== -->
+<div class="section">
+  <h2>6.2 混淆矩阵：四个格子推出所有指标</h2>
+  <p>准确率只有一个数，而一个数无法描述「会犯两种不同错误的分类器」。混淆矩阵把错误分开保存；本章的每一个分类指标，都只是它几个格子上的简单算术。</p>
+
+  <h3>6.2.1 二分类决策的四个格子</h3>
+  <table>
+    <tr><th>格子</th><th>含义</th><th>在缺陷检测线上的对应</th></tr>
+    <tr><td>真正例（TP）</td><td>预测为正，实际也为正</td><td>真有缺陷，被正确拦下</td></tr>
+    <tr><td>假正例（FP）</td><td>预测为正，实际为负</td><td>良品被拒——一次误报</td></tr>
+    <tr><td>假负例（FN）</td><td>预测为负，实际为正</td><td>缺陷流向客户——一次漏检</td></tr>
+    <tr><td>真负例（TN）</td><td>预测为负，实际也为负</td><td>良品被正确放行</td></tr>
+  </table>
+
+  <h3>6.2.2 手算一遍</h3>
+  <p>一百张图，其中三十张真有缺陷。模型把四十张判为有缺陷；这四十次标记里二十四种，十六次是误报；另外漏掉了六个缺陷。纯粹靠数格子：</p>
+  <table>
+    <tr><th>量</th><th>算法</th><th>取值</th></tr>
+    <tr><td>准确率——模型整体上有多少次是对的？</td><td>(24 + 54) / 100</td><td>0.780</td></tr>
+    <tr><td>精确率——它一报警，有多准？</td><td>24 / (24 + 16) = 24 / 40</td><td>0.600</td></tr>
+    <tr><td>召回率——真缺陷里，抓到了多少？</td><td>24 / (24 + 6) = 24 / 30</td><td>0.800</td></tr>
+    <tr><td>F1——两者的调和平均</td><td>2 · 0.600 · 0.800 / (0.600 + 0.800)</td><td>0.686</td></tr>
+  </table>
+  <p>同一个模型，四个数字，而其中只有第四个与第一个属于同一类量。准确率 0.780 与 F1 0.686 之间的差距，全部都是关于<em>犯的是哪一种错</em>的信息。</p>
+
+  <h3>6.2.3 准确率悖论</h3>
+  <p>如果正样本只占 4%，一个对所有样本都回答「负」的模型能拿到 96% 准确率，同时召回率为 0、毫无价值。准确率本质上是<em>跨类的加权平均</em>；当某一类占了 96% 的权重时，这个平均值描述的就是那一类，别的什么都没说。这也是为什么 6.1 节的泛化差距并不是唯一值得警惕的数字：<strong>任何一个作为「招牌」的指标，都要先检查它是否可以通过忽略你在乎的那一类而被抬高。</strong></p>
+
+  <h3>6.2.4 读十类矩阵</h3>
+  <p>十个数字类别时矩阵是 10 × 10，读法不变：<strong>对角线是判对，每个非对角格子都是两个具体类别之间的一次具体混淆。</strong>真正有价值的问题从来不是「准确率多少」，而是「哪些格子里有质量，这些对子看起来像不像？」——一个数字被误读成它最像的那个数字，与一个数字被随机误读，是两个完全不同的工程问题。</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix, classification_report
+
+y_true = yte.numpy()
+y_pred = net(Xte).argmax(dim=<span class="num">1</span>).numpy()          <span class="cm"># dropout 已经关掉</span>
+
+cm = confusion_matrix(y_true, y_pred)            <span class="cm"># 行是真类别，列是预测类别</span>
+<span class="fn">print</span>(cm)
+<span class="fn">print</span>(<span class="str">"accuracy = %.3f"</span> % (cm.trace() / cm.sum()))
+
+off = cm.copy()
+np.fill_diagonal(off, <span class="num">0</span>)                              <span class="cm"># 只留下错误</span>
+<span class="fn">print</span>(<span class="str">"最常见的混淆："</span>, np.dstack(
+    np.unravel_index(np.argsort(off.ravel())[::-<span class="num">1</span>][:<span class="num">5</span>], cm.shape))[<span class="num">0</span>])
+
+<span class="fn">print</span>(classification_report(y_true, y_pred, digits=<span class="num">3</span>))</pre>
+  <div class="callout tip">
+    <span class="label">三种平均，各一句话</span>
+    <strong>宏平均（macro）</strong>对每个类的指标等权平均——它把稀有类看得和常见类一样重要。<strong>加权平均（weighted）</strong>按类别频率加权，因此在平衡数据上会收敛到准确率。<strong>微平均（micro）</strong>先把所有决策汇总再算一个指标，在单标签问题上恰好就是准确率。一份只给出三者之一的报告，等于替你做了优先级选择。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>混淆矩阵</strong>——真类别与预测类别构成的表；对角线统计判对的次数。</li>
+      <li><strong>真正例 / 假正例 / 假负例 / 真负例</strong>——四个格子，按（预测、真实）是否一致命名。</li>
+      <li><strong>准确率</strong>——所有决策中判对的比例，被最大的那个类主导。</li>
+      <li><strong>支持数（support）</strong>——某一类真实样本的个数，也就是它在加权平均里的权重。</li>
+      <li><strong>宏 / 加权 / 微平均</strong>——把逐类指标压成一个数的三种方式，隐含三种不同的优先级。</li>
+      <li><strong>准确率悖论</strong>——在类别不平衡的数据上，一个没用的分类器报出很高准确率的失效模式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.3 ========== -->
+<div class="section">
+  <h2>6.3 精确率、召回率与 F1：把业务代价写进公式</h2>
+  <p>精确率与召回率不是同一个品质的两个视角，而是同一条决策边界的两种代价。你该保护哪一个，说的是后果，不是数学。</p>
+
+  <h3>6.3.1 三个公式，各自拒绝隐藏什么</h3>
+  <table>
+    <tr><th>指标</th><th>公式</th><th>它回答的问题</th><th>它忽略的东西</th></tr>
+    <tr><td>精确率</td><td>TP / (TP + FP)</td><td>我标记出来的东西里，有多少是真的？</td><td>所有我没标记的</td></tr>
+    <tr><td>召回率</td><td>TP / (TP + FN)</td><td>所有真实存在的里，我找到了多少？</td><td>我制造的每一次误报</td></tr>
+    <tr><td>F1</td><td>2 · P · R / (P + R) = 2TP / (2TP + FP + FN)</td><td>当两者都重要时，哪一个数还能站得住？</td><td>真负例——刻意忽略，因为它不构成一次决策</td></tr>
+  </table>
+  <p>F1 用的是<strong>调和平均</strong>而不是算术平均，这个选择正是重点：0.9 与 0.1 的调和平均是 0.18，算术平均是 0.5。一个「什么都抓、每抓一个真缺陷顺手报出一千次误报」的模型，无法靠精确率把自己买回来——F1 会向两者中更差的那个塌缩，而这正是一个指标在两种代价都真实时该有的行为。</p>
+
+  <h3>6.3.2 在两者之间取舍是一个代价决策</h3>
+  <table>
+    <tr><th>场景</th><th>假正例的代价</th><th>假负例的代价</th><th>该保护谁</th></tr>
+    <tr><td>垃圾邮件过滤</td><td>一封重要邮件被埋进垃圾箱</td><td>一封垃圾邮件进了收件箱</td><td>通常是精确率</td></tr>
+    <tr><td>癌症筛查</td><td>一次不必要的复查</td><td>一次漏诊</td><td>几乎总是召回率</td></tr>
+    <tr><td>工业缺陷检测</td><td>良品被报废</td><td>缺陷被出货</td><td>先召回率，再精确率</td></tr>
+    <tr><td>视频推荐</td><td>一次糟糕的推荐</td><td>一个内容永远没被看到</td><td>看哪个更伤害参与度</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">误区：「把 F1 最大化就对了」</span>
+    当两类错误的代价相当，F1 是个合理的默认值；当它们不相当，F1 就是个坏指标。在筛查场景里，召回率 0.80 配精确率 0.30 可能正是正确的工程选择，而它 0.44 的 F1 在看不懂代价表的人眼里糟糕透顶。<strong>先把代价说清楚，再选指标——绝不能反过来。</strong>
+  </div>
+
+  <h3>6.3.3 阈值就是旋钮</h3>
+  <p>输出概率的分类器，靠一个阈值把概率变成决策；移动这个阈值，就是确定性地用一种错误去换另一种：<strong>调高，精确率上升、召回率下降；调低，反之。</strong>模型本身一点没变。这就是为什么「我们的模型精确率 92%」是一句没说完的话：它缺了工作点，而工作点属于替错误付账的那个人。</p>
+  <pre><span class="kw">from</span> sklearn.metrics <span class="kw">import</span> precision_recall_fscore_support
+
+<span class="cm"># 逐类的精确率 / 召回率 / F1 以及该类支持数</span>
+p, r, f1, sup = precision_recall_fscore_support(
+    y_true, y_pred, average=<span class="kw">None</span>, zero_division=<span class="num">0</span>)
+<span class="kw">for</span> c <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>):
+    <span class="fn">print</span>(f<span class="str">"class {c}:  P={p[c]:.3f}  R={r[c]:.3f}  F1={f1[c]:.3f}  n={sup[c]}"</span>)
+
+<span class="cm"># 同一件事的三种压法——它们不可互换</span>
+<span class="kw">for</span> how <span class="kw">in</span> (<span class="str">"macro"</span>, <span class="str">"weighted"</span>, <span class="str">"micro"</span>):
+    P, R, F, _ = precision_recall_fscore_support(
+        y_true, y_pred, average=how, zero_division=<span class="num">0</span>)
+    <span class="fn">print</span>(f<span class="str">"{how:8s} P={P:.3f} R={R:.3f} F1={F:.3f}"</span>)</pre>
+  <div class="callout tip">
+    <span class="label">一个值得养成的报告习惯</span>
+    报告逐类表格，而不只是那几个平均值。在十类问题上，本章协议下宏平均 F1 大约 0.86，完全可以掩盖某一类只有 0.60——而那一类通常才是有意思的发现。平均值是一种概括，而一个不能被拆开的概括不是证据。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>精确率</strong>——正类预测中判对的比例；度量误报的代价。</li>
+      <li><strong>召回率</strong>（灵敏度）——真实正样本中被找出的比例；度量漏检的代价。</li>
+      <li><strong>F1 分数</strong>——精确率与召回率的调和平均，被两者中较小的那个拉低。</li>
+      <li><strong>调和平均</strong>——倒数的平均的倒数；与算术平均不同，它无法靠抬高其中一项来变好。</li>
+      <li><strong>决策阈值</strong>——作用在分数或概率上、用来产生类别的那一刀；它是换取精确率与召回率的旋钮。</li>
+      <li><strong>逐类指标</strong>——针对某一类对其余所有类计算的精确率、召回率与 F1，这才是多分类问题被真正评测的方式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.4 ========== -->
+<div class="section">
+  <h2>6.4 评估协议：划分、分层、测试集只碰一次</h2>
+  <p>指标是否可信，取决于产出它的协议。两名同学在同一份数据上跑同一个模型，可以诚实地报出 0.91 和 0.84，差别完全活在协议里。</p>
+
+  <h3>6.4.1 六条规则，按顺序</h3>
+  <div class="steps">
+    <div class="step"><h4>先划分，再看任何东西</h4><p>划分发生在第一张图、第一个直方图、第一句「我先看看类别分布」之前。在全量数据上算出统计量、并据此做出任何决定的那一刻，泄漏已经发生了。</p></div>
+    <div class="step"><h4>分层</h4><p>传 <code class="inline">stratify=y</code>，让每一部分都保持类别比例。类别样本很少时，一个不分层的划分带来的指标变化会大于模型本身带来的变化。</p></div>
+    <div class="step"><h4>固定并报告种子</h4><p>传 <code class="inline">random_state=</code>，并把它打印进日志。一个无法复现的划分，会让下游所有数字都不可复现。</p></div>
+    <div class="step"><h4>所有变换只在训练部分上拟合</h4><p>缩放、填补、特征选择、重采样、目标编码。在全部 1797 行上拟合 scaler 再划分，是学生项目里最常见的泄漏，而且它永远不报错。</p></div>
+    <div class="step"><h4>在验证集上选择，在测试集上报告——只报一次</h4><p>架构、学习率、轮数、正则化强度：全部在验证集上决定。测试集在模型冻结之后才打开，它给出的那个数字，就是你要公布的数字。</p></div>
+    <div class="step"><h4>跨种子报均值 ± 标准差</h4><p>本章每个方案都在五个种子（42–46）上跑并给出离散度。单次运行是轶事；离散度才是测量精度——6.8 节会展示，正是它决定了你有资格说什么。</p></div>
+  </div>
+
+  <h3>6.4.2 协议静默失效的三种方式</h3>
+  <table>
+    <tr><th>失效方式</th><th>看起来像什么</th><th>为什么这个数字是错的</th></tr>
+    <tr><td>反复使用测试集</td><td>「我们试了十二种配置，最好的测试准确率是 0.91。」</td><td>测试集参与了十二次决策，所以它已经是验证集；0.91 是十二次抽样的乐观最大值，不是估计量。</td></tr>
+    <tr><td>用测试分数挑最好轮次</td><td>「我们报告看起来最好的那一轮的测试分数。」</td><td>早停本身就是一次超参数选择；在测试集上做它，等于把测试集变成了停止准则——它带来的过拟合多于它消除的。</td></tr>
+    <tr><td>只报最好的那个种子</td><td>「五个种子里最高到 0.8926。」</td><td>五次带噪声运行的最大值是向上偏的。均值是 0.874 ± 0.011；「最高到」是另一个统计量，一个更好看的统计量。</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">误区：「划分能复现就够了」</span>
+    同一个划分、换一个<em>权重初始化种子</em>，就是另一个实验——本协议正是证据：同一个增强方案在一个种子上是 0.8074，在另一个种子上是 0.8333；同一个 Dropout 方案在几种子间的跨度是 0.8185 到 0.9000。可复现性必须同时覆盖划分、初始权重<em>和</em>批次顺序，而处理残余波动的诚实做法是把它测出来、报出来——不是用一次幸运的运行把它藏起来。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>评估协议</strong>——一个分数所依附的、固定的划分、拟合、选择与报告流程。</li>
+      <li><strong>训练 / 验证 / 测试划分</strong>——三种角色，以及三套被允许的操作。</li>
+      <li><strong>复现种子</strong>——让划分或初始化可重复的固定随机状态。</li>
+      <li><strong>乐观偏差</strong>——报告多次运行或多组配置中最优值所引入的向上误差。</li>
+      <li><strong>在验证集上选择</strong>——把所有选择都放在测试集从未影响过的数据上做的纪律。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.5 ========== -->
+<div class="section">
+  <h2>6.5 K 折交叉验证与数据泄漏</h2>
+  <p>一次划分只给出一个数，而在小数据上这个数自带很大的误差条。本章协议的训练子集只有 80 张；把其中几张从训练挪到验证，验证准确率就会变化几个百分点，而模型一点没改。交叉验证是标准答案：用多次划分的平均值，取代对一次的信任。</p>
+
+  <h3>6.5.1 K 折，以及你应该总是使用的分层变体</h3>
+  <p>把训练池切成 <em>K</em> 份。用其中 <em>K</em>−1 份训练、剩下 1 份评测，轮流进行直到每份都当过验证集，再把 <em>K</em> 个分数平均。每个样本恰好被验证一次、被训练 <em>K</em>−1 次。十个类别时请用 <strong>StratifiedKFold</strong>：普通的 <code class="inline">KFold</code> 可能让某一折里完全没有某个类，此时的指标衡量的不是模型，而是折的分配方式。</p>
+  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> StratifiedKFold
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> make_pipeline
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+
+skf = StratifiedKFold(n_splits=<span class="num">5</span>, shuffle=<span class="kw">True</span>, random_state=<span class="num">42</span>)
+scores = []
+
+<span class="kw">for</span> fold, (tr, va) <span class="kw">in</span> <span class="fn">enumerate</span>(skf.split(Xtr_pool, ytr_pool)):
+    pipe = make_pipeline(StandardScaler(), LogisticRegression(max_iter=<span class="num">1000</span>))
+    pipe.<span class="fn">fit</span>(Xtr_pool[tr], ytr_pool[tr])            <span class="cm"># scaler 在折内拟合</span>
+    s = pipe.<span class="fn">score</span>(Xtr_pool[va], ytr_pool[va])
+    scores.<span class="fn">append</span>(s)
+    <span class="fn">print</span>(f<span class="str">"fold {fold}: {s:.4f}"</span>)
+
+<span class="fn">print</span>(f<span class="str">"CV mean = {np.mean(scores):.4f} +/- {np.std(scores):.4f}"</span>)</pre>
+  <p>代价必须诚实说出来：<em>K</em> 折大约是单次训练的 <em>K</em> 倍时间。这是「带方差估计的指标」的价格，也正是交叉验证用于模型选择、而不是用于每一次实验的原因。</p>
+
+  <h3>6.5.2 泄漏就是任何让验证集看到答案的东西</h3>
+  <table>
+    <tr><th>泄漏</th><th>它怎么发生</th><th>为什么你看不见</th></tr>
+    <tr><td>预处理泄漏</td><td>在全部数据上拟合缩放器、填补器或特征选择器，然后再划分</td><td>代码跑得通；只是分数稍微好了一点</td></tr>
+    <tr><td>重复样本泄漏</td><td>同一行或近乎相同的行同时出现在训练集和验证集里</td><td>模型看起来在泛化，其实只是在回忆见过的那一行</td></tr>
+    <tr><td>测试集泄漏</td><td>用测试分数去挑配置</td><td>报出来的数字变好了，而这感觉像是进步</td></tr>
+    <tr><td>时间泄漏</td><td>时序数据在划分前被打乱，于是模型用未来训练</td><td>随机划分是默认行为，而默认感觉是中立的</td></tr>
+    <tr><td>目标泄漏</td><td>某个特征由「标签已知之后才能得到的信息」算出</td><td>该特征看起来完全正当，而且预测力极强——因为它把答案编了进去</td></tr>
+    <tr><td>分组泄漏</td><td>来自同一来源的多行（同一张图、同一个传感器、同一个人）落在划分的两侧</td><td>只有尊重分组时样本才独立；行数会骗人</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">一个问题的自检</span>
+    对每一个接触数据的步骤，问一句：<strong>这一步在线上推理时，只用当时可得的信息，能不能执行？</strong>如果答案是不能，这一步就必须放在折内、只在训练部分上拟合。用 <code class="inline">Pipeline</code> 是把这件事变成结构上成立、而不是靠记性的最省事做法。
+  </div>
+  <div class="callout warn">
+    <span class="label">误区：「交叉验证可以替代测试集」</span>
+    不能。交叉验证回答的是「这个分数在训练池的不同划分之间有多稳」，这是一个关于模型选择的问题。测试集回答的是「冻结后的模型，在从未被任何决策碰过的数据上表现如何」，这是一个关于报告的问题。用交叉验证去<em>选择</em>，用测试集去<em>陈述</em>，且只陈述一次。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>K 折交叉验证</strong>——轮转 <em>K</em> 份划分，使每个样本恰好被验证一次；<em>K</em> 个分数的均值和标准差都要报告。</li>
+      <li><strong>分层 K 折</strong>——在每一折中保持逐类比例的 K 折；分类任务的默认选择。</li>
+      <li><strong>数据泄漏</strong>——任何在训练或选择期间到达模型、而在预测时不可得的信息。</li>
+      <li><strong>预处理泄漏</strong>——在被后续用作验证的数据上拟合了变换。</li>
+      <li><strong>分组泄漏</strong>——相关的行被拆到训练与验证两侧，于是验证分数衡量的是记忆而非泛化。</li>
+      <li><strong>Pipeline</strong>——把预处理与模型绑定在一起的构造，使得拟合模型的同时也在正确的子集上拟合了预处理。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.6 ========== -->
+<div class="section">
+  <h2>6.6 偏差-方差权衡：从曲线读诊断</h2>
+  <p>欠拟合与过拟合不是两个无关的问题，而是同一个旋钮的两端，而这个旋钮有名字：模型容量相对于它所拟合的数据有多大。</p>
+
+  <h3>6.6.1 一个分解，两种失败模式</h3>
+  <p>训练后模型的期望误差分解成三部分：<strong>偏差</strong>（模型族中最优函数本身的误差，也就是它太简单）、<strong>方差</strong>（拟合结果对它恰好看到哪一批训练样本有多敏感）、以及<strong>不可约噪声</strong>（没有任何办法消除）。增加容量降偏差、升方差；减小容量则相反。由此得到一条实用规则：</p>
+  <div class="callout key">
+    <span class="label">规则</span>
+    <strong>欠拟合靠加容量或训练更久解决；过拟合靠加数据或约束模型解决。</strong>把这两个动作用反，一定会让情况更糟——而区分它们，恰恰是两条损失曲线存在的意义。
+  </div>
+
+  <h3>6.6.2 从日志里读出的四种形态</h3>
+  <table>
+    <tr><th>训练损失</th><th>验证损失</th><th>诊断</th><th>正确的动作</th></tr>
+    <tr><td>高，下降很慢</td><td>高，且贴近训练损失</td><td>欠拟合——容量或训练时长不足</td><td>换更大的模型、加轮次、提高学习率</td></tr>
+    <tr><td>下降到低位后走平</td><td>下降到低位后走平</td><td>拟合良好——两条曲线互相跟随</td><td>停下；或加数据把两者一起压低</td></tr>
+    <tr><td>降到接近零</td><td>先降，然后<strong>掉头上升</strong></td><td>过拟合——模型在背诵</td><td>正则化：早停、权重衰减、Dropout、加数据</td></tr>
+    <tr><td>锯齿状，无趋势</td><td>锯齿状，无趋势</td><td>不是容量问题——通常是学习率或循环的 bug</td><td>回到第 5 章，检查 <code class="inline">zero_grad()</code></td></tr>
+  </table>
+  <p>第三行是最费时间的一行，因为<strong>「验证损失掉头上升、而验证准确率纹丝不动」是常态，不是特例</strong>——下一小节就是实测证据。</p>
+
+  <h3>6.6.3 用真实数字看天花板效应</h3>
+  <p>下面是无正则基线在种子 42 下的轨迹，每 20 轮取一点。训练准确率在第 41 轮已达 0.9875，并从<strong>第 61 轮起恒为 1.000</strong>——背诵已经完成：</p>
+  <table>
+    <tr><th>取样轮次</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th></tr>
+    <tr><td>训练准确率</td><td>0.100</td><td>0.725</td><td>0.9875</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr>
+  </table>
+  <p>同一段时间里，验证准确率和验证损失讲了两个不同的故事——而只有其中一个察觉到了损伤：</p>
+  <table>
+    <tr><th>取样轮次</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th></tr>
+    <tr><td>验证准确率</td><td>0.100</td><td>0.4815</td><td>0.8074</td><td>0.8185</td><td>0.8296</td><td>0.8333</td><td>0.8296</td><td>0.837</td><td>0.837</td></tr>
+    <tr><td>验证损失</td><td>2.2906</td><td>1.5293</td><td>0.7305</td><td>0.650</td><td><strong>0.6357</strong></td><td>0.6704</td><td>0.6983</td><td>0.7168</td><td>0.742</td></tr>
+  </table>
+  <p>验证损失在<strong>第 81 轮触底 0.6357</strong>，此后<strong>单调上升</strong>到第 381 轮的 <strong>0.8672</strong>——最小值之后的每一个取样点都比前一个更差。而同一区间内，验证准确率始终待在 <strong>0.833 到 0.841</strong> 的带子里，什么都没显示出来。</p>
+  <div class="callout warn">
+    <span class="label">本章立论所依赖的结论</span>
+    <strong>在这个实验里，过拟合唯一可靠的证据是验证损失掉头上升。</strong>验证准确率看不到退化，原因是<em>天花板效应</em>：它的上限是 1.0，本身又已经横盘在 0.856 ± 0.024，于是模型对错误答案越来越自信这件事，在一个只统计「是否越过阈值」的指标上完全不会体现。只看准确率的同学会得出结论：跑 400 轮和跑 85 轮等价。损失曲线证明并非如此——上升幅度是 <strong>+0.155 ± 0.089</strong>，而最佳轮次是 <strong>85 ± 17</strong>。
+  </div>
+  <p>这也定义了 6.7 节要用的停止准则：<strong>最佳轮次是验证损失最小的那一轮</strong>，而不是验证准确率最高的那一轮。在这份数据上两个准则有时会不一致，而损失准则才是那个仍然看得见差别的准则。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>偏差</strong>——模型族中最优函数的误差；偏差高意味着欠拟合。</li>
+      <li><strong>方差</strong>——训练样本一换，拟合出的模型变化多大；方差高意味着过拟合。</li>
+      <li><strong>不可约误差</strong>——任何容量的模型都无法消除的噪声底。</li>
+      <li><strong>欠拟合</strong>——两条损失都高且彼此贴近；模型没有学到本就存在的结构。</li>
+      <li><strong>过拟合</strong>——训练损失接近零而验证损失掉头上升；模型学到的是样本，不是结构。</li>
+      <li><strong>天花板效应</strong>——指标饱和，因而不再能记录进一步的退化。</li>
+      <li><strong>最佳轮次</strong>——验证损失最小的那一轮，被用作停止与报告的时点。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.7 ========== -->
+<div class="section">
+  <h2>6.7 四种正则化手段</h2>
+  <p>正则化是任何让模型更难把容量花在「背诵」上的约束。下面四种是标准工具箱，它们的区别在于<em>约束什么</em>：训练时长、权重量级、哪些单元可以互相共谋，或者模型被允许看到什么样的输入。</p>
+
+  <h3>6.7.1 早停——约束训练时长</h3>
+  <p>最简单的正则化不需要改动模型。每个 epoch 记录验证损失，记住最好的权重，当损失连续 <code class="inline">patience</code> 轮没有改善时停止——然后<strong>恢复最佳权重，而不是保留最后一轮的权重</strong>。</p>
+  <pre>best, best_ep, best_state = <span class="fn">float</span>(<span class="str">"inf"</span>), -<span class="num">1</span>, <span class="kw">None</span>
+
+<span class="kw">for</span> ep <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, epochs + <span class="num">1</span>):
+    net.<span class="fn">train</span>()                                  <span class="cm"># 打开 dropout</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(Xsub), <span class="num">32</span>):
+        xb, yb = Xsub[i:i + <span class="num">32</span>], ysub[i:i + <span class="num">32</span>]
+        opt.<span class="fn">zero_grad</span>()
+        loss = criterion(<span class="fn">net</span>(xb), yb)
+        loss.<span class="fn">backward</span>()
+        opt.<span class="fn">step</span>()
+
+    net.<span class="fn">eval</span>()                                   <span class="cm"># 每次测量前都要关掉 dropout</span>
+    <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+        v_loss = criterion(<span class="fn">net</span>(Xva), yva).<span class="fn">item</span>()
+
+    <span class="kw">if</span> v_loss &lt; best - <span class="num">1e-4</span>:                  <span class="cm"># 严格改善</span>
+        best, best_ep = v_loss, ep
+        best_state = {k: v.<span class="fn">clone</span>() <span class="kw">for</span> k, v <span class="kw">in</span> net.<span class="fn">state_dict</span>().<span class="fn">items</span>()}
+    <span class="kw">elif</span> patience <span class="kw">and</span> ep - best_ep &gt;= patience:
+        <span class="kw">break</span>                                    <span class="cm"># 停止训练，保留最佳权重</span>
+
+net.<span class="fn">load_state_dict</span>(best_state)                 <span class="cm"># 恢复，不要用最后一轮</span></pre>
+  <p>在本协议上的实测：<code class="inline">patience=20</code> 把运行从 400 轮压缩到 <strong>105 ± 17</strong> 轮——大约只用掉四分之一的预算——同时把验证损失的上升压到 <strong>+0.018 ± 0.016</strong>，而基线是 <strong>+0.155 ± 0.089</strong>。这大约是九倍的下降，而它唯一的来源就是「更早停下」。</p>
+
+  <h3>6.7.2 权重衰减——约束权重量级</h3>
+  <p>L2 正则化在损失上加一项与权重平方成正比的惩罚，在梯度更新里表现为对所有权重的一股小小的「拉向零」的力。在 PyTorch 里，它只是优化器的一个参数：</p>
+  <pre><span class="cm"># 权重衰减是优化器的参数，不是一个层</span>
+opt = torch.optim.Adam(net.parameters(), lr=<span class="num">1e-3</span>, weight_decay=<span class="num">1e-2</span>)</pre>
+  <p>从机理上看，被迫把权重保持得很小的模型，无法围绕每一个训练点刻出一圈尖锐的边界，它被推向更平滑、更小幅的解。实测的印记在曲线上清清楚楚：最佳轮次从基线的 <strong>85 ± 17</strong> 移到加衰减后的 <strong>262 ± 76</strong>；在种子 42 的曲线上，验证损失在 <strong>0.5794 到 0.6261</strong> 的窄带内来回，最后收在 <strong>0.5956</strong>——它从未掉头，而基线是触底 <strong>0.6357</strong> 后一路爬到 <strong>0.8672</strong>。损失上升幅度是 <strong>+0.027 ± 0.014</strong>，基线是 <strong>+0.155 ± 0.089</strong>。</p>
+  <div class="callout tip">
+    <span class="label">强度怎么选</span>
+    对 Adam 家族，<code class="inline">1e-2</code> 是个合理的起点；权衡在本实验里看得见——衰减太强会把模型从「缓慢过拟合」推成「缓慢学习」。请把它理解成一个调节「验证最低点出现得多晚」的旋钮，而不是一个把过拟合关掉的开关。
+  </div>
+
+  <h3>6.7.3 Dropout——约束谁可以和谁共谋</h3>
+  <p>Dropout 在训练时的每次前向上随机把比例 <code class="inline">p</code> 的激活置零，于是任何单元都不能依赖某个特定伙伴的存在。评测时什么都不丢；取而代之的是把输出缩放，使期望激活保持不变。PyTorch 内部已经处理了缩放，这意味着<strong>你唯一必须做对的事情，就是切换模式</strong>。</p>
+  <pre>net = <span class="fn">MLP</span>(p_drop=<span class="num">0.3</span>)                <span class="cm"># 每个 ReLU 后面接 nn.Dropout(0.3)</span>
+
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+    net.<span class="fn">train</span>()                     <span class="cm"># dropout 生效——前向是随机的</span>
+    train_one_epoch(net, opt, criterion)
+
+    net.<span class="fn">eval</span>()                      <span class="cm"># dropout 关闭——推理是确定性的</span>
+    <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+        val_metrics = <span class="fn">evaluate</span>(net, Xva, yva)</pre>
+  <div class="callout warn">
+    <span class="label">整个模块的头号 bug 来源</span>
+    忘写 <code class="inline">net.eval()</code>（或评测时一直停在 <code class="inline">net.train()</code>），意味着<strong>每一次验证和测试的测量都是在随机丢掉一部分激活的状态下做的</strong>。它不会崩。<strong>数字只是偏低，而且更糟的是——每次调用都不一样</strong>，于是同学把它诊断成「训练不稳定」，跑去查学习率、架构和数据，而这三者谁都没错。对称的另一个 bug 同样常见：评测后忘了写回 <code class="inline">net.train()</code>，下一个 epoch 的 dropout 就是静默关闭的，日志上却仍写着它在生效。在第 5 周那个既没有 dropout 也没有批归一化的 MLP 上，这两个调用什么都不做——这正是为什么这个习惯要在它还不起作用的时候先养成。
+  </div>
+  <p>Dropout 在 <code class="inline">p=0.3</code> 下是最需要仔细读数的方案。它的验证损失上升是 <strong>+0.171 ± 0.102</strong>——六个方案里<em>最大</em>的，不是最小的——而它的最佳轮次波动极大，是 <strong>163 ± 100</strong>。它的测试准确率 <strong>0.884 ± 0.011</strong> 高于基线的 0.878，但差距是 0.006，只有基线自身标准差 0.012 的一半。6.8 节给出这个事实的后果。</p>
+
+  <h3>6.7.4 数据增强——约束模型的输入</h3>
+  <p>数据增强把变换后的训练输入副本喂给模型，教它「标签在这个变换下不变」。它有效有一个精确且极易被忽略的前提：<strong>该变换必须保持标签</strong>。把数字水平翻转会把 6 变成更像 9 的东西；垂直翻转会毁掉 9；旋转 180 度则改变了它是哪个数字。不保持标签的增强并不增加信息——<strong>它在制造错标签，一边拖慢训练，一边看起来像个高级的正则化手段。</strong></p>
+  <pre><span class="kw">def</span> <span class="fn">augment</span>(xb, sigma=<span class="num">0.15</span>):
+    <span class="str">"""在 8x8 图上加高斯噪声并随机平移 ±1 像素。"""</span>
+    xb = xb.<span class="fn">view</span>(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>)
+    shift = torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">2</span>,), device=xb.device)   <span class="cm"># dx, dy 取 {-1,0,1}</span>
+    xb = torch.<span class="fn">roll</span>(xb, shifts=(<span class="fn">int</span>(shift[<span class="num">0</span>]), <span class="fn">int</span>(shift[<span class="num">1</span>])), dims=(<span class="num">2</span>, <span class="num">3</span>))
+    xb = xb + sigma * torch.<span class="fn">randn_like</span>(xb)
+    <span class="kw">return</span> xb.<span class="fn">clamp</span>(<span class="num">0.0</span>, <span class="num">1.0</span>).<span class="fn">view</span>(xb.size(<span class="num">0</span>), -<span class="num">1</span>)</pre>
+  <p>实测下来，这个变换在这里是有害的：训练准确率从 <strong>1.000</strong> 掉到 <strong>0.960 ± 0.027</strong>，测试准确率从 <strong>0.878 ± 0.012</strong> 掉到 <strong>0.824 ± 0.010</strong>。两条曲线一起下移，是<em>欠拟合</em>的特征，而不是正则化成功的特征。6.8 节解释为什么 8 × 8 图像是不该做像素平移的地方。</p>
+
+  <h3>6.7.5 四种手段并排比较</h3>
+  <table>
+    <tr><th>手段</th><th>约束什么</th><th>写在代码哪里</th><th>实测损失上升 Δ</th><th>代价 / 失效模式</th></tr>
+    <tr><td>早停</td><td>训练时长</td><td>轮次循环；恢复最佳权重</td><td>+0.018 ± 0.016</td><td>需要验证集；在 400 轮里只跑 105 轮</td></tr>
+    <tr><td>权重衰减</td><td>权重量级</td><td><code class="inline">Adam(..., weight_decay=1e-2)</code></td><td>+0.027 ± 0.014</td><td>把最佳轮次推到 262 ± 76；过强则衰减成欠拟合</td></tr>
+    <tr><td>Dropout</td><td>单元之间的共适应</td><td><code class="inline">nn.Dropout(0.3)</code> + <code class="inline">train()</code>/<code class="inline">eval()</code></td><td>+0.171 ± 0.102</td><td>不切换模式就静默失效；逐轮指标噪声大</td></tr>
+    <tr><td>数据增强</td><td>模型看到的输入</td><td>数据管道，逐批次</td><td>+0.077 ± 0.027</td><td>只有保持标签才成立；每步都花 CPU</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>正则化</strong>——任何削弱模型拟合训练样本中噪声的能力的约束。</li>
+      <li><strong>早停</strong>——当验证损失不再改善时停止训练，并恢复最佳权重。</li>
+      <li><strong>耐心值（patience）</strong>——停止前允许「多少轮没有改善」；本实验取 20。</li>
+      <li><strong>权重衰减（L2）</strong>——通过优化器的 <code class="inline">weight_decay</code> 参数施加的、对权重量级的惩罚。</li>
+      <li><strong>Dropout</strong>——训练时随机把激活置零，使单元无法共适应；倒置缩放保证推理是确定性的。</li>
+      <li><strong>训练 / 评估模式</strong>——<code class="inline">net.train()</code> 与 <code class="inline">net.eval()</code> 切换 dropout 与批归一化的行为；使用 dropout 时静默 bug 的头号来源。</li>
+      <li><strong>保持标签的变换</strong>——正确标签能在其上存活的增强；增强有效的前提条件。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 6.8 ========== -->
+<div class="section">
+  <h2>6.8 一个诚实的实测案例</h2>
+  <p>前面都是主张，这一节是证据：六个正则化方案、每个五个种子、一套冻结的协议，全部在笔记本 CPU 上执行。这个实验刻意小到可以重跑，也刻意朴素到有点不方便——这正是它的意义。</p>
+
+  <div class="callout key">
+    <span class="label">协议，精确复述</span>
+    <code class="inline">load_digits</code>（8×8 灰度、10 类、1797 张、全程离线）→ 缩放到 0–1 → 分层 70 / 15 / 15 → <strong>80 张训练图</strong> → MLP 64-128-64-10（<strong>17226 个参数</strong>，平均每张训练图约 215 个）→ <code class="inline">Adam(lr=1e-3)</code>、批大小 32、最多 400 轮 → <strong>五个种子（42–46）</strong>，报均值 ± 标准差。早停的 <strong>patience=20</strong>；权重衰减 <strong>1e-2</strong>；Dropout <strong>p=0.3</strong>；数据增强为高斯噪声 <strong>σ=0.15</strong> 加<strong>±1 像素</strong>随机平移。
+  </div>
+
+  <h3>6.8.1 六个方案，每个五个种子</h3>
+  <table>
+    <tr><th>方案</th><th>训练准确率</th><th>验证准确率</th><th>验证损失 最低 → 第400轮</th><th>损失上升 Δ</th><th>最佳轮次</th><th>测试准确率</th><th>实跑轮次</th></tr>
+    <tr><td>无正则（基线）</td><td>1.000</td><td>0.856±0.024</td><td>0.516 → 0.671</td><td>+0.155±0.089</td><td>85±17</td><td>0.878±0.012</td><td>400</td></tr>
+    <tr><td>早停 patience=20</td><td>1.000</td><td>0.858±0.025</td><td>0.516 → 0.534</td><td>+0.018±0.016</td><td>85±17</td><td>0.874±0.011</td><td>105</td></tr>
+    <tr><td>权重衰减 1e-2</td><td>1.000</td><td>0.844±0.023</td><td>0.497 → 0.524</td><td>+0.027±0.014</td><td>262±76</td><td>0.867±0.024</td><td>400</td></tr>
+    <tr><td>Dropout 0.3</td><td>1.000</td><td>0.857±0.032</td><td>0.474 → 0.645</td><td>+0.171±0.102</td><td>163±100</td><td>0.884±0.011</td><td>400</td></tr>
+    <tr><td>数据增强 σ=0.15 + ±1px 位移</td><td>0.960±0.027</td><td>0.814±0.013</td><td>0.529 → 0.606</td><td>+0.077±0.027</td><td>348±36</td><td>0.824±0.010</td><td>400</td></tr>
+    <tr><td>组合（衰减+Dropout+增强）</td><td>0.875±0.048</td><td>0.716±0.035</td><td>0.849 → 0.884</td><td>+0.035±0.022</td><td>376±13</td><td>0.740±0.053</td><td>400</td></tr>
+  </table>
+
+  <h3>6.8.2 单种子的曲线</h3>
+  <p>种子 42，每 20 轮取一点（轮次 1, 21, 41, …, 381）。基线与权重衰减只差一件事，而这件事就是本章的全部教训：</p>
+  <table>
+    <tr><th>取样轮次</th><th>1</th><th>21</th><th>41</th><th>61</th><th>81</th><th>101</th><th>121</th><th>141</th><th>161</th><th>181</th></tr>
+    <tr><td>基线验证损失</td><td>2.2906</td><td>1.5293</td><td>0.7305</td><td>0.650</td><td>0.6357</td><td>0.6704</td><td>0.6983</td><td>0.7168</td><td>0.742</td><td>0.7549</td></tr>
+    <tr><td>权重衰减验证损失</td><td>2.292</td><td>1.7454</td><td>0.9045</td><td>0.7215</td><td>0.6261</td><td>0.612</td><td>0.5973</td><td>0.6032</td><td>0.6098</td><td>0.5859</td></tr>
+  </table>
+  <table>
+    <tr><th>取样轮次</th><th>201</th><th>221</th><th>241</th><th>261</th><th>281</th><th>301</th><th>321</th><th>341</th><th>361</th><th>381</th></tr>
+    <tr><td>基线验证损失</td><td>0.7706</td><td>0.7859</td><td>0.7947</td><td>0.8054</td><td>0.8193</td><td>0.8309</td><td>0.8389</td><td>0.8472</td><td>0.8593</td><td>0.8672</td></tr>
+    <tr><td>权重衰减验证损失</td><td>0.6025</td><td>0.5929</td><td>0.5794</td><td>0.5808</td><td>0.5953</td><td>0.6027</td><td>0.5895</td><td>0.5928</td><td>0.6088</td><td>0.5956</td></tr>
+  </table>
+  <p>基线降到<strong>第 81 轮的 0.6357</strong>，随后<strong>在每一个取样点上都单调上升</strong>，收在 <strong>0.8672</strong>。权重衰减则在最后 200 轮里于 <strong>0.58–0.61</strong> 之间振荡，收在 <strong>0.5956</strong>，从未掉头。而在同一区间内，基线的验证准确率在 <strong>0.833 到 0.841</strong> 之间游走，如 6.6 节所示——它什么也没记录到。</p>
+
+  <h3>6.8.3 数据真正支持的四个结论</h3>
+  <div class="callout key">
+    <span class="label">1 · 正则化压住的是验证损失的上升，不是提高准确率</span>
+    六个方案的验证准确率全落在 <strong>0.716 到 0.858</strong> 之间，测试准确率之间的差异全部落在一个标准差以内（测试准确率的标准差在 <strong>0.010 到 0.024</strong> 之间）。早停与权重衰减真正改变的是验证损失的<em>上升幅度</em>——从 <strong>+0.155 ± 0.089</strong> 降到 <strong>+0.018 ± 0.016</strong> 与 <strong>+0.027 ± 0.014</strong>——以及最低点出现的轮次（<strong>85 ± 17</strong> 对 <strong>262 ± 76</strong>）。说「正则化提高了准确率」是对这些数字的误读。
+  </div>
+  <div class="callout key">
+    <span class="label">2 · 在 8×8 图像上，增强与组合方案有害——是欠拟合，不是过拟合</span>
+    数据增强把测试准确率从 <strong>0.878</strong> 拉到 <strong>0.824</strong>，把训练准确率从 <strong>1.000</strong> 压到 <strong>0.960</strong>；三者叠加的组合方案则崩到测试 <strong>0.740</strong>、训练准确率 <strong>0.875 ± 0.048</strong>。这两个差距都超过基线标准差的四倍，而且——这一点是决定性的——<em>两条损失一起下移</em>，这正是欠拟合模型的印记，而不是被良好正则化的模型。机理是具体的：<strong>一张 8×8 的数字图就是 64 个像素的笔画；把它平移 ±1 像素，等于让笔画在画面中移动了相当可观的比例、并把「这是哪个数字」模糊掉，于是这个增强制造的是贴错标签的样本，而不是同一个数字的新视角。</strong>增强是有力的工具，但它要求那个不变性真的成立——而在这种分辨率下它不成立。
+  </div>
+  <div class="callout key">
+    <span class="label">3 · 单次运行的差异可能是噪声</span>
+    同一处改动、同一份代码，跨种子的结果波动可达 <strong>±3 个百分点</strong>——Dropout 方案的测试准确率从 <strong>0.8667 到 0.8963</strong>，增强方案从 <strong>0.8074 到 0.8333</strong>。在这个背景下，Dropout 的 <strong>0.884 ± 0.011</strong> 对基线的 <strong>0.878 ± 0.012</strong>，差值是 <strong>0.006——小于一个标准差</strong>。唯一站得住的说法是<strong>「未观察到显著差异」</strong>，而不是「Dropout 更好」。任何「方案 A 胜过方案 B」形式的结论，都要求 A 的差距越过 B 的离散度，而单个种子无法确立这一点。
+  </div>
+  <div class="callout key">
+    <span class="label">4 · 过拟合的唯一可靠证据是验证损失掉头上升</span>
+    训练准确率从第 61 轮起被钉在 <strong>1.000</strong>，验证准确率横盘在 <strong>0.856 ± 0.024</strong>，而验证损失从最低点一路爬到 <strong>0.8672</strong>。由于准确率指标已经饱和——天花板效应——这个退化<em>在算术上无法</em>出现在它身上。只看准确率，会把「85 轮」和「400 轮」判定为等价；损失曲线则显示出 <strong>+0.155 ± 0.089</strong> 的上升，以及方案层面 <strong>85 ± 17</strong> 的最佳轮次。这就是本章把停止准则定为「验证损失最小」的原因。
+  </div>
+
+  <h3>6.8.4 产出这些数字的实验框架</h3>
+  <pre><span class="kw">import</span> json, numpy <span class="kw">as</span> np, torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix, precision_recall_fscore_support
+
+ARMS = {
+    <span class="str">"baseline"</span>:   <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"early_stop"</span>: <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">True</span>,  aug=<span class="kw">False</span>),
+    <span class="str">"weight_decay"</span>: <span class="fn">dict</span>(wd=<span class="num">1e-2</span>, p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"dropout"</span>:    <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.3</span>, early=<span class="kw">False</span>, aug=<span class="kw">False</span>),
+    <span class="str">"augment"</span>:    <span class="fn">dict</span>(wd=<span class="num">0.0</span>,  p_drop=<span class="num">0.0</span>, early=<span class="kw">False</span>, aug=<span class="kw">True</span>),
+    <span class="str">"combined"</span>:   <span class="fn">dict</span>(wd=<span class="num">1e-2</span>, p_drop=<span class="num">0.3</span>, early=<span class="kw">False</span>, aug=<span class="kw">True</span>),
+}
+
+rows = []
+<span class="kw">for</span> arm, cfg <span class="kw">in</span> ARMS.<span class="fn">items</span>():
+    <span class="kw">for</span> seed <span class="kw">in</span> (<span class="num">42</span>, <span class="num">43</span>, <span class="num">44</span>, <span class="num">45</span>, <span class="num">46</span>):
+        hist = <span class="fn">run_arm</span>(arm, cfg, seed)      <span class="cm"># 每个方案走同一套协议</span>
+
+        net.<span class="fn">eval</span>()                          <span class="cm"># 任何测量之前都必须切到评估模式</span>
+        <span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+            y_pred = net(Xte).<span class="fn">argmax</span>(<span class="num">1</span>).numpy()
+
+        p, r, f1, _ = precision_recall_fscore_support(
+            yte.numpy(), y_pred, average=<span class="str">"macro"</span>, zero_division=<span class="num">0</span>)
+        rows.<span class="fn">append</span>({
+            <span class="str">"arm"</span>: arm, <span class="str">"seed"</span>: seed,
+            <span class="str">"epochs_run"</span>: hist[<span class="str">"epochs_run"</span>],
+            <span class="str">"train_acc"</span>: hist[<span class="str">"train_acc"</span>][-<span class="num">1</span>],
+            <span class="str">"val_acc"</span>: <span class="fn">max</span>(hist[<span class="str">"val_acc"</span>]),
+            <span class="str">"val_loss_best"</span>: <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"val_loss_best_epoch"</span>: <span class="fn">int</span>(np.<span class="fn">argmin</span>(hist[<span class="str">"val_loss"</span>])) + <span class="num">1</span>,
+            <span class="str">"val_loss_rise"</span>: hist[<span class="str">"val_loss"</span>][-<span class="num">1</span>] - <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"test_acc"</span>: <span class="fn">float</span>((y_pred == yte.<span class="fn">numpy</span>()).<span class="fn">mean</span>()),
+            <span class="str">"macro_f1"</span>: <span class="fn">float</span>(f1),
+            <span class="str">"cm"</span>: <span class="fn">confusion_matrix</span>(yte.<span class="fn">numpy</span>(), y_pred).<span class="fn">tolist</span>(),
+        })
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"w6_regularisation.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:  <span class="cm"># 留原始行，不留截图</span>
+    json.<span class="fn">dump</span>({<span class="str">"rows"</span>: rows}, f, indent=<span class="num">2</span>)
+
+<span class="cm"># 跨种子报均值 ± 标准差，绝不给单点值</span>
+<span class="kw">for</span> arm <span class="kw">in</span> ARMS:
+    t = [r[<span class="str">"test_acc"</span>] <span class="kw">for</span> r <span class="kw">in</span> rows <span class="kw">if</span> r[<span class="str">"arm"</span>] == arm]
+    <span class="fn">print</span>(f<span class="str">"{arm:13s} test_acc = {np.mean(t):.3f} +/- {np.std(t):.3f}"</span>)</pre>
+  <div class="callout tip">
+    <span class="label">这个实验建议的报告模板</span>
+    6.8.3 的每一条主张都是同一个形状：<em>一个数字、一个离散度，以及一句「离散度是否盖住了差异」的判断</em>。「Dropout 拿到 0.884」不是结果。「Dropout 在五个种子上是 0.884 ± 0.011，基线是 0.878 ± 0.012，差值 0.006 小于两个标准差中的任何一个，因此未观察到显著差异」才是结果——而且当别人重跑这份代码时，它依然成立。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>方案（arm）</strong>——被检验的一种配置，协议中其余所有因素都保持不变。</li>
+      <li><strong>种子重复</strong>——在多个随机种子上重复同一方案，使离散度而不是单次运行成为测量结果。</li>
+      <li><strong>均值 ± 标准差</strong>——本章所有数字的报告形式；单次运行的值不算结果。</li>
+      <li><strong>配对差值</strong>——逐种子比较两个方案，比比较两次运行各自的均值更灵敏。</li>
+      <li><strong>欠拟合</strong>——训练与验证指标一起下移；这正是本实验中增强与组合方案的诊断。</li>
+      <li><strong>主张强度</strong>——小于离散度的差异只能支持「未观察到显著差异」这条规则。</li>
+    </ul>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 从一个 3 × 3 矩阵推出五个指标（必做）</h4>
+    <p>100 张图里模型把 40 张判为有缺陷，其中 24 张真有缺陷，另有 6 个缺陷被漏掉。<em>解析要点：</em>TP = 24，FP = 16，FN = 6，TN = 54。</p>
+    <ol>
+      <li>手算准确率、精确率、召回率、特异度与 F1。<em>（0.780 / 0.600 / 0.800 / 0.771 / 0.686。）</em></li>
+      <li>指出上面哪一个指标，会被「对所有图都判无缺陷」的模型拿满分，并给出它的值。<em>（特异度 = TN / (TN + FP) = 1.0——这正是单看特异度永远无法为缺陷检测器辩护的原因。）</em></li>
+      <li>把阈值调高，使精确率变成 1.0、召回率降到 0.4。用两句话说明：什么业务场景下这是一笔好交易，什么场景下是坏交易。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 2 · 读曲线，而不是读准确率（必做）</h4>
+    <ol>
+      <li>用 6.8.2 的种子 42 数字，找出两个方案验证损失最低的轮次并写出数值。<em>（基线：第 81 轮 0.6357。权重衰减：取样点中第 241 轮 0.5794，此后在 0.58–0.61 之间振荡，收在 0.5956。）</em></li>
+      <li>算出基线从验证损失最低点到第 381 轮上升了多少。<em>（0.8672 − 0.6357 = 0.2315，这是该种子；五种子的平均上升幅度是 0.155 ± 0.089。）</em></li>
+      <li>用三句话解释：为什么同一区间内验证准确率什么都没显示，并说出这个效应的名字。<em>（天花板效应：准确率上界为 1.0，且已横盘在 0.856，于是对错误答案越来越自信不会改变任何一次阈值判定。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 3 · 故意弄坏 Dropout，再修好它（必做）</h4>
+    <ol>
+      <li>用 <code class="inline">p=0.3</code> 正确训练 dropout 方案并记录验证准确率；然后删掉所有 <code class="inline">net.eval()</code>，再记录一次。</li>
+      <li>在没有 <code class="inline">net.eval()</code> 的情况下对同一个模型连续评测两次，比较这两个数。用一句话说明：一个测量必须具有什么性质，而这个测量没有。<em>（确定性。）</em></li>
+      <li>换一种破坏方式：删掉 <code class="inline">net.train()</code>，并用两句话解释为什么训练损失也对不上了。<em>（dropout 一直处于关闭状态，模型在不带正则化的情况下训练，而日志仍然写着 p=0.3。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 4 · 解释增强为什么在这里失效（必做）</h4>
+    <ol>
+      <li>写出增强方案对训练准确率、验证准确率与测试准确率的实测影响。<em>（1.000 → 0.960 ± 0.027；0.856 → 0.814 ± 0.013；0.878 → 0.824 ± 0.010。）</em></li>
+      <li>两条曲线一起下移，说出这个形态指向的诊断。<em>（欠拟合——不是过拟合。）</em></li>
+      <li>从像素几何与标签保持两个角度给出机理；再各举两个在 8×8 像素上也<em>能</em>保持标签的变换，以及一个不能的。<em>（笔画包围盒百分之几范围内的小角度旋转与小位移；把 2 或 5 这类不对称数字水平翻转则不能。）</em></li>
+      <li>预测「σ=0.15 噪声 + ±1 像素位移」作用在 224×224 图像上会怎样，并说明为什么同一变换在那个分辨率上有用、在这里却是毁灭性的。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 5 · 设计你有资格做出的主张（必做）</h4>
+    <p>你想主张「Dropout 在这份数据上提高了测试准确率」。</p>
+    <ol>
+      <li>用实测值——Dropout <strong>0.884 ± 0.011</strong>、基线 <strong>0.878 ± 0.012</strong>，各五个种子——写出数据所能支持的最强主张。<em>（「未观察到显著差异」：0.006 的差距小于两个标准差中的任何一个。）</em></li>
+      <li>设计一个<em>足以</em>支持更强主张的实验：多少个种子、哪一种划分、哪个指标，以及你会怎么处理测试集。<em>（加到种子数使差值标准误远小于效应量；训练前就固定一个分层划分；决定做出后才打开测试集一次；比较逐种子的配对差值，而非两个均值。）</em></li>
+      <li>说出一个会让比较更灵敏的协议改动，以及一个会让它更不可信的改动。<em>（更灵敏：增加训练数据，降低两个方案的方差。更不可信：挑最好的种子，或反复用测试集测量。）</em></li>
+    </ol>
+  </div>
+
+  <div class="callout key">
+    <span class="label">六条要点</span>
+    <ol>
+      <li>训练分数完美、验证分数平庸，不是一个「运气不好的好模型」——<strong>17226 个参数对着 80 张图，就是一台背诵机器</strong>，只有留出的那个数才算成绩单。</li>
+      <li>混淆矩阵先行；准确率、精确率、召回率与 F1 都是它四个格子上的算术。准确率会被任何类别不平衡击穿，而 F1 刻意向精确率与召回率中更差的那个塌缩。</li>
+      <li>先信协议，再信数字——分层划分、固定种子、预处理在折内拟合、交叉验证用来<em>选择</em>、测试集只打开一次用来<em>陈述</em>。</li>
+      <li>过拟合要从<strong>验证损失掉头上升</strong>读出来，绝不要从准确率上读。当指标已经饱和在 0.856 时，准确率曲线在算术上就无法显示损失曲线所显示的 +0.155 ± 0.089。</li>
+      <li>四种正则化手段分别约束训练时长、权重量级、单元间的共适应与输入。实测中，早停（+0.018 ± 0.016）与权重衰减（+0.027 ± 0.014）压住了损失上升；<strong>增强与组合方案则因欠拟合而把事情弄坏</strong>。</li>
+      <li>跨种子报均值 ± 标准差，只主张那些越过离散度的差异。Dropout 的 0.884 ± 0.011 对基线的 0.878 ± 0.012，差 0.006——<strong>未观察到显著差异</strong>，这是一个结论，不是一次失败。</li>
+    </ol>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 —— 第 6 章 · 模型评估、过拟合与正则化</p>
+  <p>本章借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W2-A (Lecture Part · 90 min) — Data Handling Fundamentals | 第2周教案A · 理论段</title>
 <style>
   :root {
     --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
@@ -11,18 +10,15 @@
     --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
   .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
   .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
   .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
   .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
-  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
   .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
   h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
-  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
   h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
   h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
-  .en { color: var(--text-sec); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
   th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
   td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
@@ -53,128 +49,130 @@
 <div class="container">
 
 <div class="header">
-  <div class="tag">Lesson Plan · 教案 · Week 2 · Lecture Part (Theory · 90 min)</div>
-  <h1>AI 数据处理基础<span class="en">Data Handling Fundamentals for AI</span></h1>
+  <div class="tag">教案 · 第 2 周 · 授课部分（理论 · 90 min）</div>
+  <h1>PyTorch 基础：张量与自动求导</h1>
   <div class="meta">
-    <span>⏱ 每周 180 min 一体课 · 本教案为理论段 90 min（L1–L5）</span>
-    <span>📚 Chapter 2.1–2.5</span>
-    <span>🎯 Module 1 · AI & ML Foundations</span>
-    <span>🧩 教案编号 LP-W2-A</span>
-    <span>🌐 English (with Chinese support)</span>
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖授课部分 90 分钟（L1–L5）</span>
+    <span>📚 教材 2.1–2.4</span>
+    <span>🎯 模块一 · AI 应用开发基础（W1–4）</span>
+    <span>🧩 教案编号：LP-W2-A</span>
+    <span>🌐 中文</span>
   </div>
 </div>
 
-<!-- ===== 一、教学目标 ===== -->
-<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<h2>1. 教学目标</h2>
 <div class="grid2">
   <div class="card">
-    <h4>知识目标 · Knowledge</h4>
+    <h4>知识目标</h4>
     <ul>
-      <li>能说出数据质量的六个维度及 GIGO 原则<span class="en"> — six data quality dimensions & GIGO</span></li>
-      <li>能解释 NumPy 向量化为何比循环快 10-100 倍<span class="en"> — why vectorization outperforms loops</span></li>
-      <li>能描述 Pandas 四大核心操作（加载/筛选/聚合/合并）<span class="en"> — four core Pandas operations</span></li>
-      <li>能复述可视化四件套及适用场景<span class="en"> — four chart types & when to use each</span></li>
+      <li>说出张量五个关键属性——<code class="inline">shape</code>、<code class="inline">dtype</code>、<code class="inline">device</code>、<code class="inline">requires_grad</code>、<code class="inline">grad</code>——以及哪一个出错会导致什么后果</li>
+      <li>说出广播规则，并解释为什么广播只保证「合法」，不保证符合意图</li>
+      <li>解释计算图是什么、什么时候建、什么时候释放</li>
+      <li>说出 autograd 的两条规则：只有叶子张量的 <code class="inline">.grad</code> 被填充；<code class="inline">.grad</code> 是累加的</li>
+      <li>解释为什么固定种子是「把一次好结果变成可重复结论」的前提</li>
     </ul>
   </div>
   <div class="card">
-    <h4>技能目标 · Skills</h4>
+    <h4>能力目标</h4>
     <ul>
-      <li>能用 NumPy 完成向量化运算与广播操作<span class="inline"> — vectorized ops & broadcasting</span></li>
-      <li>能用 Pandas 完成布尔筛选、<code class="inline">groupby</code> 聚合、<code class="inline">merge</code> 合并<span class="en"> — filtering, groupby, merge</span></li>
-      <li>能用 Matplotlib/Seaborn 画出直方图、散点图、箱线图、热力图<span class="en"> — 4 key chart types</span></li>
-      <li>能描述 EDA 五步法与数据清洗六步流程<span class="en"> — 5-step EDA & 6-step cleaning workflow</span></li>
+      <li>拿到任意张量就能报出 shape、dtype、device，并在运行前预测结果形状</li>
+      <li>针对具体形状问题，正确选择 <code class="inline">view</code> / <code class="inline">reshape</code> / <code class="inline">unsqueeze</code> / <code class="inline">squeeze</code> / <code class="inline">permute</code></li>
+      <li>主动复现一个形状或广播错误，读懂报错信息并修好</li>
+      <li>用 <code class="inline">backward()</code>、<code class="inline">no_grad()</code> 内的更新与梯度清零完成一次参数更新</li>
+      <li>只靠张量和 autograd，写出能学出 <code class="inline">y = 3x + 2</code> 的训练循环</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
-  <span class="label">素养目标 · Attitudes</span>
-  建立"数据质量决定模型上限"的工程意识；理解为什么 AI 项目 80% 时间花在数据处理环节；养成"先看数据再碰模型"的职业习惯。
+  <span class="label">素养目标（课程思政）</span>
+  本周的落点是<em>严谨求实</em>：科学结论要求可复现。随机性是训练的一部分，所以必须被固定下来；
+  会报错的是好错误，不报错却算错的是坏错误。先读报错再动手修，把失败和成功一样认真地记录下来——
+  不编造输出、不美化曲线、不悄悄只留最好那一次。
 </div>
 
-<!-- ===== 二、重难点 ===== -->
-<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<h2>2. 重点与难点</h2>
 <table>
-  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
-  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>NumPy 向量化与广播机制；Pandas 布尔筛选 + groupby 聚合；EDA 五步法与清洗六步流程</td><td>每个知识点配一段 live coding（Jupyter 投影），学生跟练 → 每段代码 3-5 分钟可运行</td></tr>
-  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>广播机制形状匹配规则；数据泄漏概念（先 split 再填充）；groupby 多层聚合</td><td>广播用"形状对齐"口诀 + 3 个对比例子；数据泄漏画数据流图说明；groupby 用 Titanic 生存率案例演示</td></tr>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>五个属性及各自的失效方式；形状变换的三组动作；广播规则；autograd 的两条规则；一次参数更新的四个动作及其顺序</td><td>每条规则都放在一次现场失败之后讲：先写错、把报错念出来、再命名规则。每页结束问一句「这里每一行的 shape 是什么？」</td></tr>
+  <tr><td>难点</td><td>为什么 <code class="inline">(3,)</code> 加 <code class="inline">(3,1)</code> 会静默得到 <code class="inline">(3,3)</code>；为什么 <code class="inline">view</code> 在转置张量上失败；为什么忘了清零不是报错而是损失震荡；为什么更新必须写在 <code class="inline">torch.no_grad()</code> 里</td><td>广播：跑 <code class="inline">torch.broadcast_shapes((3,1),(3,))</code>，让全班自己读结果；连续性：先转置，再对比 <code class="inline">view</code> 与 <code class="inline">reshape</code>；累加：注释掉 <code class="inline">x.grad = None</code>，展示 <code class="inline">8 + 6 = 14</code>；建图：展示更新未包进 <code class="inline">no_grad</code> 时计算图不断增长</td></tr>
 </table>
 
-<!-- ===== 三、时间分配 ===== -->
-<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
-<div class="timebar"><div class="lec">Lecture Part · Theory · 90 min（每周 180 min 一体课的前半段）</div></div>
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lec">授课部分 · 理论 · 90 min（每周 180 分钟一体课的前半段）</div></div>
 <table>
-  <tr><th style="width:70px;">时段</th><th style="width:80px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:80px;">课件页</th><th style="width:90px;">方法 / Method</th></tr>
-  <tr><td>L1</td><td>15 min</td><td><strong>开场：数据为王</strong>：上周回顾（W1 五要点 + Module 1 四周走位）；数据在 AI 中的角色与质量六维度；数据类型与来源；坏数据案例（AI 招聘偏见）+ 六维度快问互动</td><td>p1–p7</td><td>讲授 + 举手投票</td></tr>
-  <tr><td>L2</td><td>25 min</td><td><strong>NumPy 与 Pandas</strong>：双工具分工图；向量化 vs 循环速度对决（<code class="inline">%%timeit</code> 实测）；索引、切片与广播规则三例；Pandas 操作链五步；实战速查 9 行代码 + 链式索引陷阱</td><td>p8–p13</td><td>讲授 + Live Coding</td></tr>
-  <tr><td>L3</td><td>20 min</td><td><strong>可视化与 EDA</strong>：四类图回答四个问题（直方/散点/条形/热力）+ 图表选择急诊活动；EDA 五步法；Titanic EDA 走查（五步逐一落地）</td><td>p14–p17</td><td>讲授 + 快问快答</td></tr>
-  <tr><td>L4</td><td>25 min</td><td><strong>数据清洗</strong>：清洗六步流程；缺失值决策路径（比例分档 + 填充策略）；异常值三法（IQR / Z-score / 领域规则）；GIGO 法则收尾——"数据质量是模型上限"</td><td>p18–p22</td><td>讲授 + 案例讨论</td></tr>
-  <tr><td>L5</td><td>5 min</td><td><strong>Lab 衔接与预告</strong>：预告本课后半段 Lab 四段任务（NumPy 热身 → Pandas 探索 → 可视化 → 清洗实战）；环境与数据检查；说明课末随堂小测安排（见教案 B）</td><td>p23–p24</td><td>预告 + Q&A</td></tr>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>L1</td><td>12 min</td><td><strong>开场 · 张量是通用容器</strong>：今日五部分地图；张量是什么（0 维到 n 维）；为什么不用 Python list（速度、形状、设备、求导）；与 NumPy 的关系与共享内存陷阱；GPU 张量与同设备规则</td><td>p1–p4</td><td>讲授 + 板书图示</td></tr>
+  <tr><td>L2</td><td>15 min</td><td><strong>张量的五个属性</strong>：shape、dtype、device、requires_grad、grad 各自说明什么、什么时候会咬你；一条能查出九成张量 bug 的习惯（<code class="inline">print(x.shape, x.dtype, x.device)</code>）；创建张量与 dtype 默认值（<code class="inline">arange</code> 默认 int64）</td><td>p5–p6</td><td>现场编码</td></tr>
+  <tr><td>L3</td><td>25 min</td><td><strong>形状变换与广播</strong>：三组动作（改形状 / 增删维 / 换轴）；view 与 reshape 及连续性；从最右一维对齐的广播规则；七种写法的「静默错 vs 报错」对照表；四个高频错误与五条自查手法</td><td>p7–p11</td><td>故意制造错误 + 全班诊断</td></tr>
+  <tr><td>L4</td><td>22 min</td><td><strong>计算图与自动求导</strong>：计算图是前向的副产品；<code class="inline">requires_grad</code> 是开关；叶子与非叶子、<code class="inline">grad_fn</code>；最小 autograd 示例；一次参数更新的五个动作与「先更新后清零」的固定顺序；梯度排查表</td><td>p12–p16</td><td>现场编码 + 读报错</td></tr>
+  <tr><td>L5</td><td>16 min</td><td><strong>用张量实现梯度下降</strong>：手写线性回归循环；三条损失曲线（正确 / 忘了清零 / 学习率过大）；与真值、闭式最小二乘解、训练解三方对比；学习率三档；衔接实验 1 脚本骨架</td><td>p17–p21</td><td>现场编码 + 读图</td></tr>
 </table>
 
-<!-- ===== 四、教学活动 ===== -->
-<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<h2>4. 关键活动设计</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 1 · 数据质量六维度快问（L1，p7）</h4>
-  <p style="font-size:13.5px;">投影 4 个真实数据问题场景（手机号 40% 为空、跨系统年龄不一致、2015 年房价预测 2026 年、只采集白天交通流量），学生举手投票属于哪个质量维度，再逐一揭晓。先建立"维度感"，再用 AI 招聘偏见案例讲"缺陷会被系统性放大"。<span class="en">Vote on which quality dimension each scenario violates, then reveal.</span></p>
+  <h4>活动 1 · 先报四件事（L1–L2，p4）</h4>
+  <p style="font-size:13.5px;">投影上依次给出 <code class="inline">torch.randn(4, 3)</code>、<code class="inline">torch.arange(6)</code>、<code class="inline">torch.randn(4,3).to("cuda")</code>，在动任何运算之前必须先回答四件事：shape、dtype、device、要不要算梯度。<code class="inline">arange</code> 那个是坑：int64 不能设 requires_grad，做除法还会取整。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 2 · 向量化 vs 循环速度对决（L2，p10）</h4>
-  <p style="font-size:13.5px;">在 Jupyter 中现场写两段代码：①用 <code class="inline">for</code> 循环计算 1000×1000 矩阵每列均值；②用 <code class="inline">np.mean(axis=0)</code>。用 <code class="inline">%%timeit</code> 计时，学生亲眼看到 100 倍差距。这一刻"向量化"从概念变成信念。<span class="en">Live benchmark: loop vs np.mean on 1000×1000 — students see the 100x gap.</span></p>
+  <h4>活动 2 · 把报错念出来（L3，p9–p10）</h4>
+  <p style="font-size:13.5px;">前两分钟不许修任何东西。先跑 <code class="inline">torch.randn(3,1) + torch.randn(3)</code>——它不报错；再跑 <code class="inline">torch.randn(4,3) + torch.randn(4,2)</code>——它报错。让全班解释：为什么「不报错的那个」反而更危险。看清一次报错，胜过背十条规则。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 3 · Titanic 生存率探索（L2–L3，p12 + p17）</h4>
-  <p style="font-size:13.5px;">现场用 <code class="inline">df.groupby(["Sex", "Pclass"])["Survived"].mean()</code> 一行代码揭示"女性 + 一等舱存活率 96.8%"——这个结果比任何文字都更有冲击力。随后在 EDA 走查页用五步法复现完整侦察过程，学生跟着在本地跑。<span class="en">One line of groupby reveals survival patterns; the 5-step walkthrough repeats it as a process.</span></p>
+  <h4>活动 3 · 我的梯度为什么是 14？（L4，p14）</h4>
+  <p style="font-size:13.5px;">先跑最小 autograd 示例，再把 <code class="inline">x.grad = None</code> 那一行注释掉重跑，梯度从 8 变成 14。追问：如果这个 14 出现在训练循环里，意味着什么？直接连到后面 p19 上那条来回震荡的损失曲线。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 4 · 图表选择急诊（L3，p15）</h4>
-  <p style="font-size:13.5px;">给 4 个数据分析问题（①年龄分布长什么样？②票价和年龄有没有关系？③各舱位生还率谁高？④哪些特征之间相关性最强？），学生 30 秒内说出用什么图。正确答案对应直方图/散点图/条形图/热力图。强化"先问题，后图表"口诀。<span class="en">4 questions → 30 seconds to pick the right chart type each.</span></p>
+  <h4>活动 4 · 五个动作，一个顺序（L4–L5，p15–p16）</h4>
+  <p style="font-size:13.5px;">板书上故意把五个步骤写乱——前向、反向、清零、更新、损失——请全班重新排序。再追问：如果更新写在 <code class="inline">with torch.no_grad():</code> 外面会怎样？答案：更新这一步本身被记进计算图，越训越慢。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 5 · 缺失值决策演练（L4，p20）</h4>
-  <p style="font-size:13.5px;">给出三个情境（缺失 &lt;5% / 5–30% / &gt;30%），学生按决策路径说出处理方案并说明理由；教师追问"为什么缺失"——区分随机缺失与系统性缺失。这是 Lab D 清洗实战的直接预演。<span class="en">Three missing-ratio scenarios → students walk the decision path aloud.</span></p>
+  <h4>活动 5 · 读三条曲线（L5，p19）</h4>
+  <p style="font-size:13.5px;">先给图、后给解释。每人写三句话，分别判断三条曲线是「单调下降」「来回震荡」还是「发散」，然后才公布原因（清零、累加、学习率）。要让学生形成一个认识：损失曲线首先是诊断工具，然后才是结果。</p>
 </div>
 
-<!-- ===== 五、作业与评估 ===== -->
-<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<h2>5. 作业与考核</h2>
 <table>
-  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">占比 / Weight</th></tr>
-  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>本节课末（Lab 段结束后）进行 3 题随堂小测（2 单选 + 1 判断，举手投票形式），计入 Lab 成绩 10%（详见教案 B 与课件 p30）</td><td>Lab 10%</td></tr>
-  <tr><td>课堂衔接<br><span class="en">Mid-Class</span></td><td>理论段结束后休息 10 分钟，随后进入同日 Lab 段（教案 LP-W2-B）：NumPy 热身 → Pandas 探索 → 可视化 → 清洗实战 → 交付</td><td>—</td></tr>
-  <tr><td>课后任务①<br><span class="en">Reading</span></td><td>阅读教材 Chapter 2.6–2.7（数据清洗实战 + 小结），巩固 Lab 中用到的清洗决策</td><td>—</td></tr>
-  <tr><td>课后任务②<br><span class="en">Assignment</span></td><td>完成 Lab 交付：lab02_eda.ipynb + 三张图解读 + 假设清单（≥3 条），下周一 23:59 截止，Git 推送</td><td>实验参与 20%</td></tr>
-  <tr><td>课程考核<br><span class="en">Course Grading</span></td><td>平时作业 30% + 期中项目 15% + Capstone 35% + 实验参与 20%（本周 Lab 交付物计入"实验参与"）</td><td>全学期</td></tr>
+  <tr><th style="width:130px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>课堂小测</td><td>实验后下课前的 4 题：矩阵乘法的结果形状、<code class="inline">(3,1)+(3,)</code> 的广播结果、某个点的梯度值、损失震荡时最先检查什么；举手作答后讲评</td><td>实验 15</td></tr>
+  <tr><td>课间衔接</td><td>授课部分结束后休息 10 分钟，随即进入实验部分（75 min，LP-W2-B）：造数据与基线 → 只用张量训练 → 三条学习率曲线 → 收敛验证 → 推 M2</td><td>—</td></tr>
+  <tr><td>阅读</td><td>阅读教材第 2 章（2.1–2.6）；主教材《动手学深度学习（PyTorch 版）》张量与自动求导相关章节</td><td>—</td></tr>
+  <tr><td>课后作业</td><td><strong>实验 1 报告</strong>——三种学习率的损失曲线、参数收敛对比表、形状变换踩坑记录、可复现命令；另加<strong>至少 1 条 AI 协同记录</strong></td><td>实验 15</td></tr>
+  <tr><td>课程考核</td><td>形成性考核 50（出勤与课堂参与 10 · 随堂实验 15 · 阶段评审 15 · AI 协同记录 10）+ 终结性考核 50（个人项目成果物 90 + 加分 10）。本课程为考查课，无闭卷笔试</td><td>全学期</td></tr>
 </table>
 <div class="callout warn">
-  <span class="label">Mid-Class · 本节课后衔接说明</span>
-  理论段（90 min）结束后休息 10 分钟，随后进入 Lab 段（75 min，教案 LP-W2-B）：NumPy 热身 → Pandas 探索 Titanic → 三张图可视化 → 清洗实战 → 交付与推送。教师在休息期间巡视确认学生 <code class="inline">ai-app</code> 环境可 <code class="inline">import numpy, pandas, matplotlib, seaborn</code>，并备好 Titanic CSV 本地副本（防止网络问题）。
+  <span class="label">课间 · 本环节之后</span>
+  授课部分（90 min）结束后休息 10 分钟，随即开始实验部分（75 min，LP-W2-B）。课间教师巡场确认每位学生的
+  实验 1 脚本在开始训练之前能打印出 <code class="inline">X</code>、<code class="inline">y</code>、<code class="inline">w</code>、
+  <code class="inline">b</code> 的形状——这一个检查能挡掉实验里绝大多数错误。
 </div>
 
-<!-- ===== 六、预习与资源 ===== -->
-<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<h2>6. 课前准备与资源</h2>
 <div class="grid2">
   <div class="card">
-    <h4>课前预习 · Before Class</h4>
+    <h4>课前</h4>
     <ul>
-      <li>复习教材 Chapter 1（第 1 周内容，尤其 80% 法则与项目生命周期）</li>
-      <li>阅读教材 Chapter 2.1–2.5（本节课对应章节）</li>
-      <li>思考题：你接触过的数据集中，最大的数据质量问题是什么？</li>
+      <li>阅读教材第 2 章（本次课内容）</li>
+      <li>亲自把每一段代码跑一遍，包括两处故意失败，并把报错原文记下来</li>
+      <li>确认投影机能在 30 秒内跑完整个训练循环（CPU 足够）</li>
+      <li>反思：上一次程序「不报错但答案错」，你花了多久找到它？</li>
     </ul>
   </div>
   <div class="card">
-    <h4>配套资源 · Resources</h4>
+    <h4>资源</h4>
     <ul>
-      <li>课件：Week 2 Lecture（32 页版，p1–p24 对应本教案理论段与 Lab 衔接）</li>
-      <li>教材 Chapter 2（本套件产出）</li>
-      <li>NumPy 官方快速入门：numpy.org/doc/stable/user/quickstart.html</li>
-      <li>Pandas 10 分钟入门：pandas.pydata.org/docs/getting_started/intro_tutorials/</li>
-      <li>Seaborn 教程：seaborn.pydata.org/tutorial.html</li>
+      <li>课件：第 2 周（30 页；p1–p21 对应本授课部分，p22–p30 为实验衔接）</li>
+      <li>教材第 2 章（本套件产出）</li>
+      <li>实验指导书：<code class="inline">labs/week-02/lab-handout.md</code>（实验 1）</li>
+      <li>PyTorch 广播语义：pytorch.org/docs/stable/notes/broadcasting.html</li>
+      <li>autograd 机制：pytorch.org/docs/stable/notes/autograd.html</li>
+      <li>大作业里程碑表：<code class="inline">projects/capstone/milestones.md</code>（W2 · M2）</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W2-A (Lecture Part · Theory · 90 min)</p>
-  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+  <p>AI 应用开发 — 教案 LP-W2-A（授课部分 · 理论 · 90 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 
 </div>

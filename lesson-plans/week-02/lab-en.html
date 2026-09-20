@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W2-B (Lab Part · 75 min + Quiz &amp; Summary 15 min) — EDA &amp; Data Cleaning Lab</title>
 <style>
   :root {
     --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
@@ -54,134 +53,130 @@
 
 <div class="header">
   <div class="tag">Lesson Plan · Week 2 · Lab Part (Lab 75 min + Quiz &amp; Summary 15 min)</div>
-  <h1>Exploratory Data Analysis &amp; Data Cleaning Lab</h1>
+  <h1>Lab 01 · Linear Regression with Tensors and Autograd Only</h1>
   <div class="meta">
     <span>⏱ Weekly 180-min integrated session · this plan covers the Lab Part 75 min + Quiz &amp; Summary 15 min</span>
-    <span>📚 Chapter 2.5–2.6</span>
+    <span>📚 Chapter 2.4–2.6</span>
     <span>🔧 Hands-on Lab</span>
     <span>🧩 Lesson Plan ID: LP-W2-B</span>
     <span>🌐 English</span>
   </div>
 </div>
 
-<!-- ===== Learning Objectives ===== -->
 <h2>1. Learning Objectives</h2>
 <div class="grid2">
   <div class="card">
     <h4>Knowledge</h4>
     <ul>
-      <li>Recall the 5-step EDA workflow</li>
-      <li>State three missing value handling strategies and their applicable conditions</li>
-      <li>Explain the IQR outlier detection principle</li>
-      <li>Explain why "split before imputing" prevents data leakage</li>
+      <li>State the four moves of one parameter update and why the order matters</li>
+      <li>Explain why <code class="inline">.grad</code> must be zeroed and what a loss curve looks like when it is not</li>
+      <li>Explain what a baseline loss proves before any training happens</li>
+      <li>Distinguish the generating truth, the closed-form least-squares solution, and the trained solution</li>
+      <li>Explain why shapes must be checked even when no error is raised</li>
     </ul>
   </div>
   <div class="card">
     <h4>Skills</h4>
     <ul>
-      <li>Complete a full EDA on the Titanic dataset independently (five steps)</li>
-      <li>Design and implement per-column missing value strategies</li>
-      <li>Detect outliers with IQR and apply clipping</li>
-      <li>Optional: engineer new features from existing columns</li>
+      <li>Generate a seeded synthetic dataset and compute the baseline MSE at <code class="inline">w = b = 0</code></li>
+      <li>Train linear regression with tensors and autograd — no <code class="inline">nn.Module</code>, no <code class="inline">torch.optim</code></li>
+      <li>Produce loss curves for three learning rates on one figure and read each one correctly</li>
+      <li>Compute the closed-form OLS solution and report relative errors against it</li>
+      <li>Log shape failures with verbatim error text and create one AI collaboration trace</li>
+      <li>Push the M2 capstone milestone: topic confirmed, <code class="inline">DATA.md</code> v0, data loads</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
   <span class="label">Attitudes</span>
-  Build the engineering discipline of "understand data before touching models"; experience the "80% rule" firsthand (data processing genuinely takes a lot of time); develop the professional habit of always performing EDA when handling data.
+  Keep the failures in the record — shape errors and debugging are evidence of skill, not marks to hide. A report that
+  contains only the successful run says nothing about whether you did the work. Never fabricate output and never
+  prettify a curve; small differences across devices are normal and must simply be stated.
 </div>
 
-<!-- ===== Key Points & Difficulties ===== -->
 <h2>2. Key Points &amp; Difficulties</h2>
 <table>
   <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
-  <tr><td>Key Points</td><td>Hands-on 5-step EDA; per-column missing value strategies; IQR outlier detection</td><td>Instructor demos one step → students follow → instructor patrols for Q&amp;A → move to the next step. Each step has a checkpoint; students must get it running before proceeding</td></tr>
-  <tr><td>Difficulties</td><td>Data leakage concept (split before imputing); the feature engineering mindset shift — "which features are useful?" (optional segment)</td><td>Data leakage: draw a data flow diagram (training info → test set = cheating); feature engineering: use Titanic Title extraction as a thinking demo</td></tr>
+  <tr><td>Key Points</td><td>The hand-written training loop; gradient zeroing; the three learning-rate regimes; the four-column convergence table; the shape pitfall log</td><td>Instructor writes the loop live (5 min), then students rewrite it from memory rather than copying it; each part ends with a printed shape or a printed number before moving on</td></tr>
+  <tr><td>Difficulties</td><td>The <code class="inline">(n,)</code> versus <code class="inline">(n,1)</code> trap that raises no error; reading a three-curve chart correctly; knowing which of the three parameter values your "error" is measured against; explaining an AI-generated bug rather than fixing it silently</td><td>Shape: print <code class="inline">y.shape</code> before the first loss and compare with <code class="inline">X @ w + b</code>; curves: predict each curve's verdict before the run finishes; comparison: fill the table's header first and argue about the denominator; AI trace: require the verbatim wrong line and the reason it was wrong</td></tr>
 </table>
 
-<!-- ===== Time Allocation ===== -->
 <h2>3. Time Allocation</h2>
 <div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min (second half of the weekly 180-min integrated session)</div></div>
 <table>
   <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
-  <tr><td>Lab A</td><td>10 min</td><td><strong>NumPy Warm-up</strong>: create a 4×4 matrix → slicing drills (rows/columns/sub-blocks, emphasizing that slices are views) → broadcasting (add [0,1,2,3] to each row). Checkpoint: all three tasks green before moving on</td><td>p25</td><td>Follow-along + patrol</td></tr>
-  <tr><td>Lab B</td><td>25 min</td><td><strong>Pandas Exploration</strong>: load <code class="inline">titanic.csv</code> → data health check with <code class="inline">info()</code>/<code class="inline">describe()</code>/<code class="inline">isna().sum()</code> → answer four must-answer questions in code (which columns are missing / mean fare per class / survival rate of men over 30 / how many times higher is female survival than male) → write one "I found…" sentence per answer</td><td>p26</td><td>Self exploration + patrol</td></tr>
-  <tr><td>Lab C</td><td>20 min</td><td><strong>Three Charts, Three Questions</strong>: age histogram (distribution) → survival rate by class bar chart (comparison) → age × fare scatter plot (relationship); each chart with 1-2 sentences of Markdown interpretation; form ≥3 testable hypotheses</td><td>p27</td><td>Self practice + rapid Q&amp;A</td></tr>
-  <tr><td>Lab D</td><td>15 min</td><td><strong>Cleaning Practice</strong>: median-fill age + add an <code class="inline">age_missing</code> flag → mode-fill embarked → clip fare at IQR bounds → check <code class="inline">duplicated()</code> → post-cleaning re-check (re-run info + describe). Write one line of "why I did this" before each step</td><td>p28</td><td>Demo → follow-along</td></tr>
-  <tr><td>Lab E</td><td>5 min</td><td><strong>Wrap-up &amp; Submission</strong>: check the deliverables list (notebook + three chart interpretations + hypothesis list); push to the Git <code class="inline">week2-lab</code> branch</td><td>p29</td><td>Checklist</td></tr>
-  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 3 items (2 multiple choice + 1 true/false), hand-vote first, then debrief; ask students who got it right to explain their reasoning. Counted as 10% of the Lab grade; students with all 3 correct earn +0.5 bonus points on the final "Lab Participation" score</td><td>p30</td><td>Vote + debrief</td></tr>
-  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO (Lab deliverables / Git push / preview Chapter 3); next week preview: your first complete model with scikit-learn</td><td>p31–p32</td><td>Recap + preview</td></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Data and baseline</strong>: with <code class="inline">torch.manual_seed(42)</code>, generate <code class="inline">X</code> <code class="inline">(100,1)</code> and <code class="inline">y = 3X + 2 + noise</code>; print all four shapes; compute the baseline MSE at <code class="inline">w = b = 0</code> — the number that proves training is needed</td><td>p22–p23</td><td>Follow-along + patrol</td></tr>
+  <tr><td>Lab B</td><td>18 min</td><td><strong>Train with tensors only</strong>: initialise <code class="inline">w</code> and <code class="inline">b</code> with <code class="inline">requires_grad=True</code>; inside the loop do forward → MSE → backward → update under <code class="inline">no_grad</code> → zero; <code class="inline">nn.Linear</code> and every <code class="inline">torch.optim</code> are forbidden and will be checked</td><td>p23–p24</td><td>Write from memory + patrol</td></tr>
+  <tr><td>Lab C</td><td>17 min</td><td><strong>Three learning-rate curves</strong>: re-run with <code class="inline">lr = 0.001, 0.1, 1.0</code>, each with a fresh model and the same seed; plot all three on one figure on a log scale; mark where the <code class="inline">lr = 0.1</code> curve stops dropping; write one reading sentence per curve</td><td>p19 + p24</td><td>Predict → run → compare</td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>Verify convergence</strong>: compute the closed-form OLS solution with <code class="inline">torch.linalg.lstsq</code>; fill the four-column table (truth / OLS / GD 200 steps / relative error); explain in three or four sentences why the three values are not equal</td><td>p20</td><td>Self practice + Q&amp;A</td></tr>
+  <tr><td>Lab E</td><td>15 min</td><td><strong>Pitfall log, AI trace and M2 push</strong>: log at least two shape failures with verbatim error text, including the broadcast case that raises nothing; write one AI collaboration trace naming where the AI was wrong; then push <code class="inline">DATA.md</code> v0 and the loading proof to the project repo</td><td>p25–p26 + milestone M2</td><td>Checklist + push</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 4 items (matrix-product shape, broadcast result, a gradient value, first check when the loss oscillates); hand-vote, then debrief</td><td>p28</td><td>Vote + debrief</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO (Lab 1 report + AI trace); preview Week 3 (data preparation and pipelines — the same straight line, but the framework starts doing work for you, and hiding some of it)</td><td>p29–p30</td><td>Recap + preview</td></tr>
 </table>
 
-<!-- ===== Activity Design ===== -->
 <h2>4. Key Activity Design</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 1 · Data Health Check Station (Lab B, p26)</h4>
-  <p style="font-size:13.5px;">In 3 minutes, students use <code class="inline">info()</code> + <code class="inline">describe()</code> + <code class="inline">isna().sum()</code> to "health-check" the Titanic dataset, then write down "3 most surprising findings." The instructor collects 2-3 student findings, e.g. "the Cabin column is 77% missing — should we drop it?" — setting up the cleaning discussion.</p>
+  <h4>Activity 1 · Print the Shapes Before the Loss (Lab A, p23)</h4>
+  <p style="font-size:13.5px;">Before any training, every student must print <code class="inline">X.shape</code>, <code class="inline">y.shape</code>, <code class="inline">w.shape</code> and <code class="inline">b.shape</code> and assert that <code class="inline">X @ w + b</code> has shape <code class="inline">(100, 1)</code>. Students who typed <code class="inline">torch.randn(100)</code> for <code class="inline">y</code> see the mismatch here instead of thirty minutes later — and it would never have raised an error.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 2 · Hypothesis Generation &amp; Verification (Lab C, p27)</h4>
-  <p style="font-size:13.5px;">Building on the three charts, students propose at least 3 hypotheses (e.g. "third-class survival rate is lowest," "higher fare means higher survival," "children survived more than adults") and write them in the notebook's Markdown. This trains the mindset of "answering questions with data" — observe first, then form hypotheses, rather than starting with a conclusion and finding data to match.</p>
+  <h4>Activity 2 · The Forbidden Libraries (Lab B, p24)</h4>
+  <p style="font-size:13.5px;">Halfway through, students run <code class="inline">grep -nE "nn\.|optim\." lab1_linear_regression.py</code> on their own file. Any hit is a violation for this lab. The purpose is not pedantry: writing the update line yourself is the only way to feel what an optimiser does for you — and what it does that you did not ask for.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 3 · Cleaning Strategy Quick Debate (Lab D, p28)</h4>
-  <p style="font-size:13.5px;">For the Age column missing values (177/891 = 20%), the instructor runs a quick hand poll: drop vs median-fill vs fill-by-class? Two or three students with different choices each give a one-sentence rationale; the instructor summarizes "there is no single right answer, but there must be reasoning — and a record of it." This leads into the correct "split before imputing" workflow for formal ML projects.</p>
+  <h4>Activity 3 · Predict the Curve Before You Run (Lab C, p19)</h4>
+  <p style="font-size:13.5px;">Each student writes down, for <code class="inline">lr = 0.001</code>, <code class="inline">0.1</code> and <code class="inline">1.0</code>, whether they expect convergence, stalling, or divergence. Comparing predictions with the plotted result turns a mechanical exercise into a calibration exercise — and makes the "lr too large" story personal before it is told.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 4 · Feature Engineering Challenge (optional bonus, after Lab E)</h4>
-  <p style="font-size:13.5px;">Challenge: beyond the textbook examples (Title / FamilySize / IsAlone), what new features can you extract from existing columns? The most creative feature (e.g. extracting cabin info from Ticket number patterns, extracting the deck from the Cabin first letter) will be showcased at the start of next week's class. Students with spare capacity complete it after class; it counts as Lab bonus points.</p>
+  <h4>Activity 4 · Which Error Did You Just Compute? (Lab D, p20)</h4>
+  <p style="font-size:13.5px;">Before filling the table, ask the class to argue about the denominator: relative error against the truth, against OLS, or against the previous step? All three are defensible, and the only wrong answer is leaving it unstated. This is the difference between a number and a result.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · Reproduce Someone Else's Curve (Lab E, p25)</h4>
+  <p style="font-size:13.5px;">Students swap repositories with a neighbour and try to reproduce the other person's loss curve from the README alone. A missing seed, an unpinned version, or a hardcoded path shows up immediately. Then each student writes down what their own README was missing.</p>
 </div>
 
-<!-- ===== Assignment & Assessment ===== -->
 <h2>5. Assignment &amp; Assessment</h2>
 <table>
-  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Score</th></tr>
-  <tr><td>Code</td><td>Code runs, logic is clear, no errors; Markdown structure is clean</td><td>30 pts</td></tr>
-  <tr><td>EDA</td><td>Every step of the five-step workflow has output; the four must-answer questions have answers plus "I found…" notes</td><td>30 pts</td></tr>
-  <tr><td>Cleaning</td><td>Per-column missing value handling with documented strategy rationale; IQR clipping with before/after re-check</td><td>20 pts</td></tr>
-  <tr><td>Charts</td><td>Three charts with correct type selection, titles, and axis labels, each with 1-2 sentences of interpretation</td><td>10 pts</td></tr>
-  <tr><td>Hypotheses</td><td>≥3 testable hypotheses supported by charts (in Markdown)</td><td>10 pts</td></tr>
-  <tr><td>Quiz</td><td>End-of-class 3-item quiz (p30), counted as 10% of the Lab grade; the feature engineering challenge is an optional bonus item</td><td>Counted separately</td></tr>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Deliverable</td><td><code class="inline">lab1_linear_regression.py</code>, <code class="inline">loss.png</code> (three curves), the parameter convergence table, the shape pitfall log, a reproducible command, and one AI trace</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Training loop 25 · loss curve and reading 20 · convergence verification 20 · shape pitfall log 15 · reproducibility 10 · exit ticket 10</td><td>Lab 15 of course</td></tr>
+  <tr><td>Quiz</td><td>4 items at the end of the lab; part of the in-class lab assessment (see slide p28)</td><td>Lab component — 15 marks</td></tr>
+  <tr><td>Capstone M2</td><td>Part F is graded under the Capstone Project, not here: topic confirmed + <code class="inline">DATA.md</code> v0 + data actually loads (≥ 1 000 samples). Missing it costs −2 project points; late: −2 each time, up to −20</td><td>Capstone</td></tr>
+  <tr><td>Late policy</td><td>Lab deliverable: −10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
 </table>
-<div class="callout info">
-  <span class="label">Deliverables</span>
-  <strong>Submit to the GitHub <code class="inline">week2-lab</code> branch (due next Monday 23:59; late submissions lose 10% per 24h):</strong> ① <code class="inline">lab02_eda.ipynb</code> (main notebook: NumPy warm-up + EDA + cleaning + Markdown documentation) ② three charts (inside the notebook) with interpretations ③ hypothesis list (≥3 items) ④ <code class="inline">environment.yml</code> (updated) ⑤ optional: <code class="inline">figures/</code> PNG exports and a <code class="inline">README.md</code> summary (bonus)
-</div>
 <div class="callout warn">
-  <span class="label">Instructor Notes · Lab Reminders</span>
-  <ul style="margin-bottom:0;">
-    <li><strong>Network fallback:</strong> if the online download fails, the instructor provides a local <code class="inline">titanic.csv</code> backup; students switch to <code class="inline">pd.read_csv()</code></li>
-    <li><strong>Environment check:</strong> before the Lab starts, everyone runs <code class="inline">import numpy, pandas, matplotlib, seaborn; print("all imports OK")</code>; students with errors fall back to Google Colab</li>
-    <li><strong>Time-pressure plan:</strong> the Lab part is only 75 min. If Lab C falls behind, complete just the first two charts (histogram + bar chart) and turn the scatter plot into homework; the Quiz segment must not be skipped</li>
-    <li><strong>Data leakage reminder:</strong> during Lab D cleaning, the instructor must explicitly remind students that "in a formal ML workflow, train_test_split must come before missing value imputation" — this Lab uses global imputation for simplicity; the correct Pipeline approach is covered in Weeks 3-4</li>
-  </ul>
+  <span class="label">Before Students Leave</span>
+  Confirm four things for every student: the script runs top-to-bottom with no edits, the three curves are on one figure
+  with a legend and a log scale, the convergence table has an explicit comparison target, and the pitfall log contains at
+  least one error that did <em>not</em> raise. Then confirm the M2 push landed.
 </div>
 
-<!-- ===== Preparation & Resources ===== -->
 <h2>6. Preparation &amp; Resources</h2>
 <div class="grid2">
   <div class="card">
     <h4>Before Class</h4>
     <ul>
-      <li>This Lab follows the Lecture part (Lesson Plan LP-W2-A) on the same day with no pre-class assignment; during the lecture break, confirm the <code class="inline">ai-app</code> environment passes <code class="inline">import numpy, pandas, matplotlib, seaborn</code></li>
-      <li>Browse the Kaggle Titanic Competition page to understand dataset field meanings</li>
+      <li>Lab handout: <code class="inline">labs/week-02/lab-handout.md</code> (Lab 01) read in advance</li>
+      <li>Run the reference solution yourself and note the expected values: <code class="inline">w ≈ 2.987</code>, <code class="inline">b ≈ 2.013</code>, OLS <code class="inline">w ≈ 2.991</code></li>
+      <li>Prepare a broken version with no gradient zeroing so the oscillation can be demonstrated live</li>
+      <li>Have the milestone table open for the M2 check</li>
     </ul>
   </div>
   <div class="card">
     <h4>Resources</h4>
     <ul>
-      <li>Textbook Chapter 2 (produced with this kit)</li>
-      <li>Slides: Week 2 Lecture (32-page edition; p23–p32 correspond to this Lab part and the quiz &amp; summary)</li>
-      <li>Titanic dataset documentation: kaggle.com/c/titanic/data</li>
-      <li>Pandas Cookbook (free): pandas.pydata.org/docs/user_guide/cookbook.html</li>
-      <li>Seaborn Gallery: seaborn.pydata.org/examples/index.html</li>
-      <li>Week 3 preview: the scikit-learn workflow (fit → predict → evaluate)</li>
+      <li>Slides p22–p30</li>
+      <li>Textbook Chapter 2.4–2.6</li>
+      <li><code class="inline">matplotlib</code> is required for <code class="inline">loss.png</code> — confirm it is installed in <code class="inline">ai-app</code></li>
+      <li>Milestone table: <code class="inline">projects/capstone/milestones.md</code> (W2 · M2)</li>
+      <li>No external dataset — the data is generated in the script with a fixed seed</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI Application Development — Lesson Plan LP-W2-B (Lab Part · 75 min + Quiz &amp; Summary · 15 min)</p>
+  <p>AI Application Development — Lesson Plan LP-W2-B (Lab Part · 75 min + Quiz &amp; Summary 15 min)</p>
   <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
 </div>
 

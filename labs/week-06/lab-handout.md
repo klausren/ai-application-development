@@ -1,166 +1,465 @@
-# Lab 06 · Training Deep Networks in Practice
-> **AI Application Development** · Week 6 Lab (75 min, 课时 3–4) · English with Chinese summary at the end · 中文摘要见文末
+# Lab 05 · Model Evaluation, Overfitting and Regularization — six arms, one honest verdict
+> **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 6 Lab (80 min, 课时 3–4) · English with Chinese summary at the end · 中文摘要见文末
+>
+> Official lab number: **实验 5** (this is the Week 6 lab). Module 2, week 2 of 4.
+> Supporting practical component: **SP(2) 视觉与文本模型训练实验** — single experiment, design type, 5.0 学时.
 
 | | |
 |---|---|
-| **Week / 周次** | 6 |
-| **Duration** | 75 min lab + 15 min quiz & wrap-up |
-| **Module** | 2 · Deep Learning & Computer Vision |
-| **Stack** | PyTorch, torchvision, TensorBoard |
-| **Dataset** | MNIST (torchvision, ~11 MB) |
-| **Deliverables** | `lab-06.ipynb` with an ablation table (optimizer × regularization × LR) |
-| **Weight** | Lab participation & quizzes = 20% of final grade (this lab is 1/16 of that) |
+| **Week / 周次** | 6 · CU(6) · Module 2 (Week 5–8) |
+| **Duration** | 80 min lab + 10 min quiz & wrap-up |
+| **Module** | 2 · Core Deep Learning: Techniques and Model Training (Week 5–8) |
+| **Stack** | Python 3.11, PyTorch 2.x, scikit-learn (`load_digits`), matplotlib — **100 % offline** |
+| **Dataset** | `sklearn.datasets.load_digits` — 1,797 samples × 64 pixels, 10 classes. Ships inside scikit-learn. The training split is then cut down to **80 images on purpose**. No download, no cached `.pt` files, nothing to fetch. |
+| **Protocol** | 64-128-64-10 MLP (**17,226 parameters**) · Adam(lr=1e-3) · batch 32 · 400 epochs · 5 seeds (42–46), reported as mean ± sd |
+| **Deliverables** | `lab-06.ipynb` + `regularisation_lab.py` + `arms.json` + the six-arm table with a Δ column + all curves + the AI-diagnosis verification note + ≥ 2 commits |
+| **Weight** | Formative: in-class labs (实验 0–13) = 15 marks of the course (this lab is 1/14 of them) |
 
 ## 1. Learning Objectives · 学习目标
 
 By the end of this lab you will be able to:
 
-- **Know** what Adam does differently from SGD, and when each is preferable
-- **Know** what BatchNorm and Dropout each fix, and that they are *not* interchangeable
-- **Do** run a controlled ablation: change one factor at a time, keep everything else fixed
-- **Do** log runs to TensorBoard and compare them honestly
-- **Do** read a training curve and decide: underfitting, overfitting, or unstable?
+- **Know** what overfitting looks like when you plot it — a training accuracy that has saturated at 1.000, a validation *loss* that turns around and climbs, and a validation *accuracy* that refuses to move
+- **Know** why accuracy is a blunt instrument at this sample size: with 270 validation images, one flipped image moves the metric by 0.0037, so "regularisation worked because accuracy went up" is usually a claim about one or two images
+- **Know** four different regularisation mechanisms and what each one actually constrains — stopping early (early stopping), shrinking the weights (`weight_decay`), randomly masking activations (`Dropout`), perturbing the inputs (augmentation)
+- **Know** that `weight_decay=` inside `torch.optim.Adam` adds an L2 penalty *into the gradient*, which is not the same operation as AdamW's decoupled decay — so the same value is not transferable between optimizers
+- **Do** build an overfit-by-design experiment: 17,226 parameters against 80 training images (a 215 : 1 ratio) and make the failure visible
+- **Do** run a six-arm controlled comparison over five seeds and report mean ± sd instead of a single number
+- **Do** read the curves and defend one verdict with a number, a comparison and a mechanism
+- **Do** verify or falsify an AI assistant's diagnosis of the overfitting, and throw out the explanations the curves do not support
+- **Do** report a technique that made things worse as *worse* — 实事求是 is a research-integrity requirement, not a politeness
 
 ## 2. Before You Start · 课前准备
 
-- [ ] Week 5 lab committed (PyTorch training loop works)
-- [ ] Disk space for MNIST (~11 MB)
-- [ ] Offline fallback if the download fails: `sklearn.datasets.load_digits()` (8×8, 1797 images) — the whole lab works with it, just note it in your report
-
-```python
-from torchvision import datasets, transforms
-train = datasets.MNIST("./data", train=True, download=True,
-                       transform=transforms.ToTensor())
-loader = torch.utils.data.DataLoader(train, batch_size=128, shuffle=True)
+```bash
+python -c "import torch, sklearn, matplotlib; print(torch.__version__)"
 ```
 
-> **Pitfall**: always `transforms.Normalize((0.1307,), (0.3081,))` — unnormalised inputs make every comparison below noisy.
+- [ ] Week 5 lab committed (you own the five-step training loop; this lab reuses it)
+- [ ] `import torch` works in the `ai-app` environment — no `ModuleNotFoundError`
+- [ ] Textbook read: 《动手学深度学习（PyTorch 版）》**4.4 模型选择、欠拟合和过拟合**, **4.5 权重衰减**, **4.6 暂退法（Dropout）**, **13.1 图像增广**
+- [ ] Pen and paper for Part A's prediction — you will be wrong about at least one arm, and the wrong prediction is the interesting part
+
+**Device line** (same as Week 5 — keep it at the top of the notebook):
+
+```python
+import torch
+device = torch.device("mps" if torch.backends.mps.is_available()
+                      else "cuda" if torch.cuda.is_available() else "cpu")
+print("using", device)
+```
+
+### This week has zero downloads · 本周全程离线
+
+Lab 04 read MNIST through `torchvision`, which needed ~11 MB over the network. **This lab never touches the network at all.** `load_digits` is a `.csv.gz` that ships inside the scikit-learn package, so the data exists the moment `import sklearn` succeeds. There is no MNIST, no CIFAR, no HuggingFace checkpoint, no TensorBoard — nothing to download, nothing to cache, nothing that fails when the campus proxy is down.
+
+Prove it to yourself in ten seconds, before writing any model code:
+
+```python
+from sklearn.datasets import load_digits
+X, y = load_digits(return_X_y=True)
+print(X.shape, X.dtype, X.min(), X.max(), len(set(y)))
+# (1797, 64) float64 0.0 16.0 10
+```
+
+**Offline fallback (two levels).** If that snippet prints the line above, you need no fallback. If your environment cannot import scikit-learn or torch at all — a broken install, a machine you cannot fix during the lab — the instructor's reference run is committed with the lab kit as `outputs/w6_regularisation.json`, generated by `scripts/w6_overfit_experiment.py`. Every number in §3 can be reproduced from that file, so **you can complete Parts B, C and D from it**, and you must write one sentence in your report saying that you did. What you cannot skip is the interpretation: the tables and curves are evidence, and reading them is the whole lab.
+
+### The one protocol, fixed for all six arms
+
+Change exactly one thing per arm. The data split, the network, the optimizer, the learning rate, the batch size, the epoch budget and the seed list are pinned by this table — if you touch any of them, your six rows stop being comparable and the lab produces no evidence.
+
+| Knob | Value |
+|---|---|
+| Dataset | `sklearn.datasets.load_digits`, pixels `/ 16.0` → 0–1, flattened to 64 dims |
+| Split | 70 / 15 / 15, stratified, `random_state = seed` |
+| Training rows | **80** (the split is 1,257 / 270 / 270, then the training part is cut to 80) |
+| Model | `64 → 128 → 64 → 10`, ReLU, raw logits |
+| Optimizer | `Adam(lr=1e-3)`, `batch_size=32`, `epochs=400` |
+| Seeds | 42, 43, 44, 45, 46 — every arm repeated, reported as mean ± sd |
 
 ## 3. Lab Tasks · 实验任务
 
-### Part A — Baseline and a reproducible setup (10 min)
+### Part A — Build the overfit on purpose (12 min)
+
+Overfitting is normally an accident. Today you cause it deliberately: **17,226 parameters, 80 training images, a ratio of about 215 parameters per sample.** The model has enough capacity to memorise the 80 images outright, and it will.
 
 ```python
-torch.manual_seed(42)      # do this once at the top of your notebook
+import json, math, random
+import numpy as np
+import torch
+import torch.nn as nn
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+
+SEEDS    = (42, 43, 44, 45, 46)
+N_TRAIN  = 80           # the whole experiment lives or dies on this number
+HIDDEN   = (128, 64)
+EPOCHS   = 400
+BATCH    = 32
+LR       = 1e-3
+PATIENCE = 20
+WD       = 1e-2
+P_DROPOUT   = 0.3
+NOISE_SIGMA = 0.15
+
+
+def set_seed(seed):
+    random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
+
+
+def get_data(seed):
+    """70/15/15 stratified; then shrink the training split to 80 rows."""
+    X, y = load_digits(return_X_y=True)
+    X = (X / 16.0).astype(np.float32)                  # 0..15 -> 0..1
+    Xtr, Xrest, ytr, yrest = train_test_split(
+        X, y, test_size=0.30, stratify=y, random_state=seed)
+    Xva, Xte, yva, yte = train_test_split(
+        Xrest, yrest, test_size=0.50, stratify=yrest, random_state=seed)
+
+    rng = np.random.RandomState(seed)
+    keep = rng.choice(len(Xtr), size=N_TRAIN, replace=False)
+    Xtr, ytr = Xtr[keep], ytr[keep]
+
+    t = lambda a, typ: torch.tensor(a, dtype=typ)
+    return (t(Xtr, torch.float32), t(ytr, torch.long),
+            t(Xva, torch.float32), t(yva, torch.long),
+            t(Xte, torch.float32), t(yte, torch.long))
+
+
+def make_model(dropout=0.0):
+    """64 -> 128 -> 64 -> 10 MLP; Dropout after each hidden block when asked."""
+    layers, prev = [], 64
+    for h in HIDDEN:
+        layers += [nn.Linear(prev, h), nn.ReLU()]
+        if dropout:
+            layers.append(nn.Dropout(dropout))
+        prev = h
+    layers.append(nn.Linear(prev, 10))
+    return nn.Sequential(*layers).float()
 ```
 
-Train a 3-layer MLP (784-256-128-10) for 5 epochs with Adam. Record test accuracy.
+Before you run anything, write down your prediction for the six arms you are about to build. Specifically: **which arm do you expect to give the best test accuracy, and which one do you expect to do real harm?**
 
-> **Checkpoint A** — baseline accuracy + a note on how you made the run reproducible.
-> **Pitfall**: without a seed, your "improvement" in Part B may just be noise.
+> **Checkpoint A** — four printed values, and they must match this protocol: `sum(p.numel() for p in make_model().parameters())` equals **17226**; the split sizes print as **1257 / 270 / 270** before truncation and **80 / 270 / 270** after (scikit-learn rounds the 30 % held-out share up to 540 rows); and the first baseline run reports train accuracy reaching **1.000** while validation accuracy stalls near **0.83–0.84**. Print the epoch and value of the **lowest** validation loss, then the value at epoch 400. If train accuracy has not saturated at 1.000, your training split is not 80 rows.
+> **Pitfall — deleting the overfitting you came to study.** The two most common protocol errors: (a) forgetting `N_TRAIN = 80` and training on all 1,257 rows, which makes the model *underfit* and every arm look identical; (b) forgetting `X / 16.0`, which leaves inputs on a 0–16 scale and shifts the effective learning rate. Both mistakes produce a clean-looking notebook with no evidence in it. Print the shapes and the parameter count in the first cell — always.
 
-### Part B — Optimizer ablation (20 min)
-
-Same architecture, same seed, change only the optimizer:
-
-| Run | Optimizer | Test acc | Epochs to 97% |
-|---|---|---|---|
-| 1 | `SGD(lr=0.1)` | | |
-| 2 | `SGD(lr=0.1, momentum=0.9)` | | |
-| 3 | `Adam(lr=1e-3)` | | |
-
-> **Checkpoint B** — the filled table and one sentence on the accuracy/**speed** trade-off.
-> **Think**: Adam converges faster. Does it always generalise better? Check test accuracy, not just training speed.
-
-### Part C — Regularization ablation (20 min)
-
-Take the best optimizer and ablate:
-
-1. no regularization (baseline)
-2. `nn.Dropout(0.3)` after each hidden layer
-3. `nn.BatchNorm1d` after each hidden linear layer
-4. both
+### Part B — The two cheap mechanisms: early stopping and weight decay (20 min)
 
 ```python
-nn.Sequential(nn.Linear(784,256), nn.BatchNorm1d(256), nn.ReLU(), nn.Dropout(0.3), ...)
+def evaluate(model, X, y):
+    """Loss and accuracy — ALWAYS in eval mode. See the Part C pitfall."""
+    model.eval()
+    with torch.no_grad():
+        out = model(X)
+        loss = nn.functional.cross_entropy(out, y).item()
+        acc = (out.argmax(1) == y).float().mean().item()
+    return loss, acc
+
+
+def run_arm(name, seed, *, wd=0.0, dropout=0.0, aug=False, early=False):
+    set_seed(seed)
+    Xtr, ytr, Xva, yva, Xte, yte = get_data(seed)
+    model = make_model(dropout)
+    opt = torch.optim.Adam(model.parameters(), lr=LR, weight_decay=wd)
+    g = torch.Generator().manual_seed(seed)
+
+    n = Xtr.shape[0]
+    hist = {"train_acc": [], "val_acc": [], "val_loss": []}
+    best = {"val_loss": float("inf"), "epoch": 0, "state": None}
+    bad = 0
+
+    for ep in range(1, EPOCHS + 1):
+        model.train()
+        perm = torch.randperm(n, generator=g)
+        for i in range(0, n, BATCH):
+            sel = perm[i:i + BATCH]
+            xb, yb = Xtr[sel], ytr[sel]
+            if aug:
+                xb = augment(xb, g)          # training batches ONLY
+            opt.zero_grad()
+            loss = nn.functional.cross_entropy(model(xb), yb)
+            loss.backward()
+            opt.step()
+
+        tr_loss, tr_acc = evaluate(model, Xtr, ytr)
+        va_loss, va_acc = evaluate(model, Xva, yva)
+        hist["train_acc"].append(round(tr_acc, 4))
+        hist["val_acc"].append(round(va_acc, 4))
+        hist["val_loss"].append(round(va_loss, 4))
+
+        if va_loss < best["val_loss"] - 1e-4:
+            best.update(val_loss=va_loss, epoch=ep,
+                        state={k: v.clone() for k, v in model.state_dict().items()})
+            bad = 0
+        else:
+            bad += 1
+            if early and bad >= PATIENCE:
+                break                    # stop...
+
+    if early and best["state"] is not None:
+        model.load_state_dict(best["state"])   # ...and RESTORE the valley weights
+
+    te_loss, te_acc = evaluate(model, Xte, yte)
+    final_vl = hist["val_loss"][-1]
+    return {
+        "arm": name, "seed": seed, "epochs_run": len(hist["train_acc"]),
+        "train_acc": hist["train_acc"][-1], "val_acc": hist["val_acc"][-1],
+        "val_loss_best": round(best["val_loss"], 4),
+        "val_loss_best_epoch": best["epoch"],
+        "val_loss_final": final_vl,
+        "val_loss_rise": round(final_vl - best["val_loss"], 4),
+        "test_acc": round(te_acc, 4),
+        "hist": hist,
+    }
 ```
 
-> **Checkpoint C** — four numbers in a table, plus **one sentence per row** explaining the observed effect.
-> **Pitfall**: `model.train()` and `model.eval()` matter. Dropout and BatchNorm behave differently in the two modes — forgetting `.eval()` before testing is a classic silent bug.
-
-### Part D — Learning-rate schedule + TensorBoard (20 min)
+Run the two arms that need no extra machinery:
 
 ```python
-from torch.utils.tensorboard import SummaryWriter
-writer = SummaryWriter("runs/exp1")
-writer.add_scalar("loss/train", loss, step)
-scheduler = torch.optim.lr_scheduler.StepLR(opt, step_size=3, gamma=0.5)
+baseline   = run_arm("baseline",   42)                     # the control
+early_stop = run_arm("early_stop", 42, early=True)         # patience = 20
+wdecay     = run_arm("weight_decay", 42, wd=WD)
+
+for r in (baseline, early_stop, wdecay):
+    print(f"{r['arm']:13s} epochs {r['epochs_run']:3d}  "
+          f"val_loss {r['val_loss_best']:.4f} @ep{r['val_loss_best_epoch']:<4d}"
+          f"-> {r['val_loss_final']:.4f}   rise {r['val_loss_rise']:+.4f}")
 ```
 
-Run two configs (constant LR vs StepLR) and compare in TensorBoard:
+**What these two arms do, in one line each.** Early stopping does not change the model at all — it changes *which checkpoint you keep*, and only if you restore it. Weight decay changes the objective, so the optimizer is never allowed to make the weights as large as it wants.
 
-```bash
-tensorboard --logdir runs
+Reference values for seed 42 (instructor's run, `w6_regularisation.json`): the baseline's lowest validation loss is **0.6212** at **epoch 64**; early stopping runs **84** epochs and keeps that same valley; weight decay's valley moves out to **epoch 346** with a best loss of **0.5738**.
+
+> **Checkpoint B** — three lines printed, plus the answer in one sentence each: (1) how many epochs did the early-stopping arm actually run compared with the 400 it was allowed, and did that change its best validation loss at all? (2) by how much did weight decay move the *epoch* of the valley? (3) across the five seeds, the baseline's validation-loss rise is **+0.155 ± 0.089** while early stopping's is **+0.018 ± 0.016** and weight decay's is **+0.027 ± 0.014** — which of the three numbers in that sentence did early stopping not change?
+> **Pitfall — stopping without restoring.** `break` alone leaves you holding the weights from `best_epoch + patience`, i.e. about 20 epochs *past* the valley. The arm then reports a model that was deliberately kept at its worst point in the recent window, and it will look worse than it is. Look at the two lines of code: the `break` and the `load_state_dict` are separate, and only one of them is optional.
+> **Pitfall — `weight_decay` on Adam is L2 in the gradient, not AdamW.** With `torch.optim.Adam(..., weight_decay=1e-2)` the penalty `wd * theta` is added to the gradient *before* Adam's first- and second-moment estimates, so the adaptive denominator rescales the decay as well — the effective shrinkage depends on the learning rate and on the gradient history. `torch.optim.AdamW` removes the penalty from the moments and applies it directly to the weights (decoupled decay). The consequence you must remember: **a `wd` value cannot be copied between `Adam` and `AdamW`, or between two different learning rates, and mean the same thing.** This lab uses `Adam(weight_decay=1e-2)` in every weight-decay arm, so all six rows stay comparable.
+
+### Part C — Dropout, augmentation, combined — and five seeds (18 min)
+
+```python
+def augment(xb, generator):
+    """Gaussian noise + random +/-1 px shift. Training batches only."""
+    n = xb.shape[0]
+    img = xb.view(n, 8, 8)
+    idx = torch.arange(8).view(1, 8).expand(n, 8)
+    shift = torch.randint(-1, 2, (n, 1), generator=generator)
+    col = ((idx + shift) % 8).unsqueeze(1).expand(n, 8, 8)
+    img = torch.gather(img, 2, col)
+    shift_r = torch.randint(-1, 2, (n, 1), generator=generator)
+    row = ((idx + shift_r) % 8).unsqueeze(2).expand(n, 8, 8)
+    img = torch.gather(img, 1, row)
+    img = img.reshape(n, 64)
+    noise = torch.randn(img.shape, generator=generator) * NOISE_SIGMA
+    return (img + noise).clamp(0.0, 1.0)
+
+
+ARMS = [("baseline",     {}),
+        ("early_stop",   {"early": True}),
+        ("weight_decay", {"wd": WD}),
+        ("dropout",      {"dropout": P_DROPOUT}),
+        ("augment",      {"aug": True}),
+        ("combined",     {"wd": WD, "dropout": P_DROPOUT, "aug": True})]
+
+rows, curves = [], {}
+for name, kw in ARMS:
+    for s in SEEDS:
+        r = run_arm(name, s, **kw)
+        r.pop("hist")                     # keep the table light; curves are separate
+        rows.append(r)
+    curves[name] = run_arm(name, 42, **kw)["hist"]   # one seed-42 curve per arm
+
+with open("arms.json", "w") as fh:        # 30 rows = evidence, not a screenshot
+    json.dump(rows, fh, indent=1)
 ```
 
-> **Checkpoint D** — a screenshot of the TensorBoard scalar panel comparing the two runs, plus one observation.
-> **Pitfall**: call `scheduler.step()` once per **epoch** (not per batch) unless you intentionally use per-batch scheduling.
+Then aggregate — mean ± sd over the five seeds, never a single number:
 
-### Part E — Wrap up (5 min)
+```python
+import statistics as st
+keys = ("train_acc", "val_acc", "val_loss_best", "val_loss_final",
+        "val_loss_rise", "val_loss_best_epoch", "test_acc", "epochs_run")
 
-Consolidate all runs into one DataFrame: `optimizer | regularization | lr schedule | test acc | notes`.
+def summarise(rows):
+    out = {}
+    for name, _ in ARMS:
+        v = [r for r in rows if r["arm"] == name]
+        out[name] = {k: (st.mean(r[k] for r in v),
+                         st.stdev(r[k] for r in v)) for k in keys}
+    return out
 
-### Part F — Capstone milestone (10 min) · 大作业里程碑
+summary = summarise(rows)
+for name, _ in ARMS:
+    s = summary[name]
+    print(f"{name:13s} train {s['train_acc'][0]:.3f}±{s['train_acc'][1]:.3f}  "
+          f"val {s['val_acc'][0]:.3f}±{s['val_acc'][1]:.3f}  "
+          f"rise {s['val_loss_rise'][0]:+.3f}±{s['val_loss_rise'][1]:.3f}  "
+          f"test {s['test_acc'][0]:.3f}±{s['test_acc'][1]:.3f}")
+```
 
-> **M6 · Ablation table** — see [`projects/capstone/milestones.md`](../../projects/capstone/milestones.md) for the full table.
+The instructor's reference run of all six arms, five seeds each — this is the table your numbers should look like. **It is the authoritative protocol result: read it, compare against it, and put your own run in your submission.**
 
-**Apply this week's skill:** Optimizer × regularisation × learning rate — you swept them today. Do exactly that on your project and write it down.
+| Arm | Train acc | Val acc | Val loss (valley → ep 400) | Δ rise | Valley epoch | Test acc | Epochs run |
+|---|---|---|---|---|---|---|---|
+| No regularization (baseline) | 1.000 | 0.856 ± 0.024 | 0.516 → 0.671 | **+0.155 ± 0.089** | 85 ± 17 | 0.878 ± 0.012 | 400 |
+| Early stopping, patience = 20 | 1.000 | 0.858 ± 0.025 | 0.516 → 0.534 | **+0.018 ± 0.016** | 85 ± 17 | 0.874 ± 0.011 | 105 |
+| Weight decay 1e-2 | 1.000 | 0.844 ± 0.023 | 0.497 → 0.524 | **+0.027 ± 0.014** | 262 ± 76 | 0.867 ± 0.024 | 400 |
+| Dropout 0.3 | 1.000 | 0.857 ± 0.032 | 0.474 → 0.645 | **+0.171 ± 0.102** | 163 ± 100 | 0.884 ± 0.011 | 400 |
+| Augmentation σ=0.15 + ±1 px | **0.960 ± 0.027** | 0.814 ± 0.013 | 0.529 → 0.606 | +0.077 ± 0.027 | 348 ± 36 | 0.824 ± 0.010 | 400 |
+| Combined (decay + dropout + aug) | **0.875 ± 0.048** | 0.716 ± 0.035 | 0.849 → 0.884 | +0.035 ± 0.022 | 376 ± 13 | 0.740 ± 0.053 | 400 |
 
-**Push to your project repo before the lab ends:**
+> **Checkpoint C** — your own six-arm table with mean ± sd over five seeds, including the **Δ rise** column. Then answer two questions with the table in front of you: (1) which arm never reaches train accuracy 1.000, and what does that mean — is that model overfitting or underfitting? (2) the test-accuracy standard deviation is ±0.012 for the baseline but ±0.053 for the combined arm; what does that tell you about how much of a difference between two arms you are allowed to believe?
+> **Pitfall — a missing `train()` / `eval()` switch.** Dropout is a *random mask* during training and an identity at evaluation. If `evaluate()` is called without `model.eval()`, every call samples a new mask and your validation accuracy changes between two identical evaluations. Proof, in three lines: build a dropout model, call `evaluate(model, Xva, yva)` three times in train mode and print the accuracies — they differ; then call `model.eval()` and repeat — they are identical. The damage is not a crash, it is a *best-epoch* selection driven by mask noise, which will happily hand you a "regularisation works" story built from nothing.
+> **Pitfall — augmenting the validation set.** `augment` belongs inside the batch loop, where it is fed `Xtr[sel]`. Apply it to `Xva` and you are scoring the model on perturbed images it will never see in production; validation loss rises, the curve gets noisy, and the valley you pick is meaningless. Test set: never touched at all until the final `evaluate(model, Xte, yte)`.
+> **Pitfall — one seed is not a result.** The baseline's own test accuracy across the five seeds is **0.870, 0.870, 0.874, 0.878, 0.900** — a 3-point spread produced by nothing but the split and the initialisation. Any claim resting on a single run is a claim about which seed you happened to pick.
 
-- `experiments/ablation.md`: a table with ≥ 3 rows.
-- **One change per row.** Three changes at once tells you nothing about which one worked.
-- Each row: change | metric | Δ vs previous | keep?
+### Part D — Curves, the verdict, the AI check, and the honest baseline (20 min)
 
-> **Checkpoint F** — the table isolates single changes. This is the strongest evidence in the whole project that you know *why* your model works.
-> **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
+**(a) Plot every arm.** One figure with two panels, plus six small multiples (one per arm, train/val loss and val accuracy on the same axes).
+
+```python
+import matplotlib.pyplot as plt
+
+fig, axes = plt.subplots(1, 2, figsize=(13, 4.5))
+for name, _ in ARMS:
+    h = curves[name]
+    axes[0].plot(h["val_loss"], label=name)
+    axes[1].plot(h["val_acc"],  label=name)
+axes[0].set(xlabel="epoch", ylabel="validation loss", title="Validation loss")
+axes[1].set(xlabel="epoch", ylabel="validation accuracy", title="Validation accuracy")
+for ax in axes:
+    ax.legend(fontsize=8); ax.grid(alpha=0.3)
+plt.tight_layout(); plt.savefig("curves_regularisation.png", dpi=150)
+```
+
+**(b) Two curves worth looking at for longer than the others.** Every 20 epochs, seed 42:
+
+```
+epoch        :    1       21      41      61      81    ...     381
+train acc    :  0.1    0.725  0.9875     1.0     1.0   ...     1.0
+val acc      :  0.1   0.4815  0.8074  0.8185  0.8296   ...   0.837
+   (from epoch 141 onwards the validation accuracy just oscillates inside 0.833-0.841)
+
+baseline val loss (20 samples):
+ 2.2906 1.5293 0.7305 0.65 0.6357 0.6704 0.6983 0.7168 0.742 0.7549
+ 0.7706 0.7859 0.7947 0.8054 0.8193 0.8309 0.8389 0.8472 0.8593 0.8672
+
+weight decay 1e-2 val loss (20 samples):
+ 2.292 1.7454 0.9045 0.7215 0.6261 0.612 0.5973 0.6032 0.6098 0.5859
+ 0.6025 0.5929 0.5794 0.5808 0.5953 0.6027 0.5895 0.5928 0.6088 0.5956
+```
+
+Two things to notice, and one trap. The baseline's sampled sequence bottoms out at **0.6357 at epoch 81** and then rises monotonically for the remaining 300 epochs — a straight line upward, no oscillation. Weight decay's sequence, in the same window, does the opposite of rising: it wanders around 0.58–0.61 and is still there at epoch 400. The trap: the curve is sampled every 20 epochs, so it *misses* the baseline's true minimum, which the run itself records as **0.6212 at epoch 64**. Curve resolution matters — an unsampled minimum is a minimum you cannot point at in a figure.
+
+**(c) State the verdict: number, comparison, mechanism.** Not "dropout helped". A claim shaped like this:
+
+> **No arm improved accuracy; three arms changed the shape of the validation-loss curve.** Validation accuracy across all six arms spans 0.716–0.858, and four of the six arms (baseline 0.856 ± 0.024, early stopping 0.858 ± 0.025, dropout 0.857 ± 0.032, weight decay 0.844 ± 0.023) sit inside one standard deviation of each other — the only two arms outside that band are the two whose *training signal itself* was degraded. What did change is the **post-valley rise in validation loss**: +0.155 ± 0.089 for the baseline against +0.018 ± 0.016 for early stopping and +0.027 ± 0.014 for weight decay. Mechanism: both arms constrain how far the model can travel after it has already fitted the 80 training images — early stopping refuses to keep any checkpoint past the valley, weight decay makes large weights expensive so the loss surface past the valley is shallower (its valley arrives at epoch 262 ± 76 instead of 85 ± 17). Neither changes the model's capacity to reach 1.000 on the training set, which is exactly why train accuracy stays at 1.000 in all three.
+
+**(d) The AI diagnosis: verify it, and throw out what does not survive.** Ask your AI assistant why this model overfits — with the protocol table in the prompt, not the whole notebook. Then, for **at least two** distinct claims it makes, write a testable prediction and check it against your curves. Three claims that show up almost every time:
+
+| Claim from the assistant | How you test it today | What the curves can say |
+|---|---|---|
+| "It is overfitting; get more training data." | Data-side fix already in the table: the `augment` arm adds synthetic variety | Augmentation drove test accuracy **0.878 → 0.824** and pulled train accuracy off its 1.000 ceiling down to 0.960 — the arm is starved, not overfitted. At most a partial confirmation |
+| "The learning rate is too high — that is why validation loss rises." | A too-large lr shows up as *oscillation or explosion* in the training loss, and usually in the first tens of epochs | Here the rise is slow, monotone and starts after epoch ~85, and weight decay at the same lr removes it. **Not supported** |
+| "The model is too big for 80 samples; shrink it." | Testable: re-run the baseline with `HIDDEN = (16, 8)` and compare the Δ rise | A falsifiable prediction you can actually run — do it |
+
+Write each verdict as three lines: `Claim — Test — Curve evidence — CONFIRMED / REJECTED / NOT TESTABLE`. The last label is a real option and you should use it when the curves cannot decide.
+
+**(e) Honest comparison against a simpler baseline — was any of this worth it?** This is a 17,226-parameter network trained on 80 images. Put the cheap non-deep-learning alternatives on the *same* 80 training images and the same 270-image test split, same seed:
+
+```python
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+
+Xtr, ytr, Xva, yva, Xte, yte = get_data(42)
+for clf in (KNeighborsClassifier(n_neighbors=3),
+            LogisticRegression(max_iter=1000)):
+    clf.fit(Xtr.numpy(), ytr.numpy())
+    print(type(clf).__name__, round(clf.score(Xte.numpy(), yte.numpy()), 4))
+```
+
+There is deliberately no reference number for this block: the comparison is the point, and your measured value is the evidence. Answer in three sentences: did the MLP, with any regulariser attached, earn its 17,226 parameters against a 3-neighbour vote on 8×8 images? **"No" is a perfectly good answer** and, if the numbers say so, the correct one.
+
+> **Checkpoint D** — `curves_regularisation.png` (both panels), the six small multiples, the written verdict in the number + comparison + mechanism shape, the AI table above with at least two claims labelled CONFIRMED / REJECTED / NOT TESTABLE, the two sklearn baseline accuracies, and your one-paragraph "was it worth it" answer.
+> **Pitfall — deciding from accuracy.** With 270 validation images, one image is worth 0.0037, so a one-point accuracy difference is under three images. Accuracy saturates near the ceiling long before the loss curve reaches the valley, which is why six arms with wildly different validation-loss behaviour (rise +0.018 vs +0.155) can all report validation accuracy inside 0.844–0.858. If your conclusion is "the accuracy went up, so regularisation worked", you are almost certainly reporting one flipped image. Read the loss curve.
+> **Pitfall — a difference smaller than one standard deviation.** Dropout's test accuracy is **0.884 ± 0.011** against the baseline's **0.878 ± 0.012**. The gap is 0.006; the baseline's own standard deviation is 0.012 — twice the gap. The only defensible sentence is "**no significant difference was observed**", and then you go and read the loss-rise column, where the two arms differ by +0.155 vs +0.171 (not in dropout's favour either). A claim you cannot show, you do not make.
+
+### Part E — Wrap up (10 min)
+
+Rebuild the six-arm table in a Markdown cell of your notebook — your numbers, not the reference table — with the Δ column included, and write the honesty note: **which arm(s) you predicted would help and did not.**
+
+Then confirm the notebook runs clean: `Kernel → Restart & Run All`. The whole grid (6 arms × 5 seeds × 400 epochs on 80 training rows) is a couple of minutes of CPU on this dataset; if it is not, reduce `SEEDS` to `(42, 43, 44)` and say so in the report — never leave the notebook in a state where you have deleted cells to make it finish.
+
+> **Checkpoint E** — your six-arm table with Δ, the AI-diagnosis verdicts, the "was it worth it" paragraph, and the three exit-ticket answers — all inside the notebook, which runs top-to-bottom with no errors.
+> **Pitfall — quietly dropping the arm that failed.** The `combined` arm collapses to 0.740 test accuracy; the `augment` arm never reaches train accuracy 1.000. Deleting those two rows restores a tidy story and destroys the experiment. 实事求是: an experiment in which three of six settings did nothing and two did harm is a *successful* experiment — it is the only kind that tells you something. Reporting a failed configuration honestly is a research-integrity requirement, not an optional courtesy.
+
+### After the lab · 课后作业 (not counted in the 80 min)
+
+1. **Regularisation comparison report.** Turn this notebook into a short written report (Markdown or PDF) with one section per arm. It must end with a conclusion that names **which measure was most effective for this task and why** — and "most effective" has to be defined by you, because this lab is where you learn that *effective* and *higher accuracy* are not the same thing. State the criterion you are ranking by, then rank the six arms by it.
+2. **Module 2 comprehensive quiz** (covers Weeks 5–6): the five-step training loop, loss functions and their logit/probability contract, optimizers and learning-rate behaviour, and the four regularisation mechanisms with their failure modes.
+
+Both are due before the Week 7 lab. The quiz is closed-book; the report is open-everything — including your AI assistant, as long as the AI-diagnosis verification in Part D is what you actually ran.
 
 ## 4. Deliverables Checklist · 交付清单
 
 - [ ] `lab-06.ipynb` runs top-to-bottom without errors (`Kernel → Restart & Run All`)
-- [ ] Every **Checkpoint** cell executed, with its output visible
-- [ ] Experiment results collected into **one summary table** (not scattered printouts)
-- [ ] Markdown cells contain your own interpretation, not just code
-- [ ] Pushed to GitHub with **≥ 2 meaningful commits**
+- [ ] The overfit-by-design setup validated in-cell: 17,226 parameters, 80 training rows, train accuracy reaching 1.000 (Part A)
+- [ ] `regularisation_lab.py` — one script that re-runs the full six-arm, five-seed grid and writes `arms.json`
+- [ ] `arms.json` — the raw per-seed rows (30 rows: 6 arms × 5 seeds), committing the evidence rather than a screenshot
+- [ ] Six-arm summary table with mean ± sd **and the Δ rise column** (Part C)
+- [ ] `curves_regularisation.png` — the two-panel figure, plus six small multiples
+- [ ] Written verdict in the number + comparison + mechanism shape, with the mechanism named (Part D)
+- [ ] AI-diagnosis verification: ≥ 2 assistant claims, each labelled CONFIRMED / REJECTED / NOT TESTABLE with the curve evidence
+- [ ] The simple-baseline comparison (k-NN and logistic regression on the same 80 images) and a "was it worth it" paragraph
+- [ ] Honesty note naming the arm(s) you predicted would help and did not
+- [ ] Pushed to GitHub with **≥ 2 meaningful commits** (`feat: ...` style messages)
+- [ ] *(after the lab)* Regularisation comparison report with an explicitly stated ranking criterion and a "which measure was most effective, and why" conclusion
+- [ ] *(after the lab)* Module 2 comprehensive quiz completed
 
 ## 5. Grading Rubric · 评分标准 (100 pts)
 
 | Criterion | Pts | What "full marks" looks like |
 |---|:---:|---|
-| Baseline + reproducibility (Part A) | 15 | seed set, baseline recorded, normalisation applied |
-| Optimizer ablation (Part B) | 25 | three runs, one variable changed, table filled, trade-off discussed |
-| Regularization ablation (Part C) | 30 | four runs, train/eval modes handled correctly, effects explained |
-| LR schedule + TensorBoard (Part D) | 20 | two runs logged, screenshot included, scheduler step placement correct |
-| Exit ticket | 10 | three questions answered |
+| Overfit-by-design setup (Part A) | 15 | 17,226 parameters and 80 training rows both verified in the notebook; train accuracy shown saturating at 1.000 while validation accuracy stalls; the valley epoch and value printed; a written pre-run prediction |
+| Early stopping + weight decay (Part B) | 20 | both arms run; best weights restored before the test evaluation; the `Adam` vs `AdamW` decay difference explained in the student's own words; the shrinkage of the loss rise (0.155 → 0.018 / 0.027) identified as the effect |
+| Dropout, augmentation, combined + 5 seeds (Part C) | 25 | all six arms × 5 seeds run; mean ± sd reported everywhere; Δ column present; the two arms whose train accuracy does not reach 1.000 named, and labelled underfitting rather than overfitting; the seed spread quantified |
+| Curves, verdict, AI check, honest comparison (Part D) | 30 | readable figures with legends; verdict has a number, a comparison and a mechanism; ≥ 2 AI claims tested with a stated prediction and a verdict, including at least one the curves do not support; the sklearn baselines measured on the same split; "was it worth it" answered with the numbers |
+| Exit ticket + honesty note (Part E) | 10 | three questions answered in the student's own words; the failed arms reported rather than removed |
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
+*The regularisation comparison report and the Module 2 comprehensive quiz are the official 课后作业 for Lab 05 (supporting practical component SP(2) 视觉与文本模型训练实验, 5.0 学时). They are graded separately from the 100-point lab rubric above — see the block at the end of §3.*
 
 ## 6. Submission · 提交方式
 
 ```bash
-git add lab-06.ipynb
-git commit -m "feat: complete lab 06"
+git add lab-06.ipynb regularisation_lab.py arms.json curves_regularisation.png
+git commit -m "feat: complete lab 05 (six-arm overfitting and regularisation study)"
 git push origin main
 ```
 
-## 7. Exit Ticket · 课后反思
+Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
 
-1. What surprised you most today?
-2. Which knob (hyperparameter) had the biggest effect, and how do you know it wasn't luck?
-3. One question you still have.
+## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
+
+1. Six arms, and the validation accuracy covers only 0.716–0.858 while the validation-loss rise covers +0.018 to +0.171. Look at where the baseline's loss curve turns around (epoch ~81–85) and what the training-accuracy curve is doing at that same epoch. **So what did regularisation accomplish here — did it make the model more accurate, or did it do something else to the curve?** Say which of the two your own numbers support, and also state whether your AI assistant's diagnosis survived the same test.
+2. Augmentation pulls test accuracy from 0.878 down to 0.824, and the combined arm down to 0.740 — and both of those arms are also the only two whose training accuracy never reaches 1.000. Compare those two facts against the baseline's saturated 1.000. Is this overfitting or underfitting? What exactly is a ±1 pixel shift doing to a 64-pixel image of a handwritten digit, and why would the same operation be helpful on a 224×224 photo?
+3. Dropout 0.3 gives test accuracy 0.884 compared with the baseline's 0.878. Write the arithmetic: what is the gap, what are the two standard deviations, and how many test images is the gap worth? Then finish the sentence honestly: *"The evidence supports the claim that ..."*
 
 ## 8. 中文摘要
 
-本周的核心方法论是**控制变量实验**（ablation）：一次只改一个因素，其余全部固定，否则你不知道是哪个改动起了作用。
+**实验 5（第 6 周）**：用**故意做小的数据集**把过拟合制造出来，再分别施加早停、权重衰减、Dropout、数据增强，记录训练/验证曲线，量化泛化改善。
 
-五个要点：
-1. **先固定随机种子**再比较，不然「提升」可能只是噪声。
-2. **Adam 快，SGD+momentum 往往泛化更好**——到底选谁要看测试集准确率，不能只看谁先收敛。
-3. **Dropout 和 BatchNorm 解决的不是同一个问题**：Dropout 抑制过拟合（随机丢神经元），BatchNorm 稳定分布、加速收敛。二者可以叠加。
-4. **`.eval()` 一定不能忘**——Dropout 和 BatchNorm 在训练/评估模式下行为不同，忘了会让测试指标莫名其妙地差。
-5. **scheduler.step() 按 epoch 调**（除非你明确要按 batch），放错位置等于没有调度。
+协议固定不变：`sklearn.datasets.load_digits`（8×8、10 类、1797 张，**随 sklearn 自带，全程零下载**）→ 像素除以 16 归一化 → 70/15/15 分层划分 → **训练集只留 80 张** → 64-128-64-10 MLP（**17,226 参数**，参数/样本 ≈ 215）→ Adam(lr=1e-3)、batch 32、400 轮 → **5 个种子（42–46）报均值 ± 标准差**。
 
-工具习惯：从本周起，所有实验都记到 TensorBoard，期末写项目报告时直接截图。
-- [ ] **Capstone milestone** pushed to the project repo (Part F — graded under the Capstone, not this lab)
+四点必须自己从曲线上读出来的结论：
+
+1. **正则化压住的是验证损失的上升，不是准确率。** 六臂验证准确率全落在 0.716–0.858，其中四臂（基线 0.856、早停 0.858、Dropout 0.857、权重衰减 0.844）彼此都在一个标准差之内；真正被改变的是"谷底之后验证损失抬高多少"——基线 **+0.155**，早停压到 **+0.018**，权重衰减压到 **+0.027**（并把谷底从第 85±17 轮推迟到第 262±76 轮）。基线种子 42 的采样曲线在第 81 轮触底 **0.6357** 后单调上升；同窗口的权重衰减曲线始终在 0.58–0.61 附近徘徊。训练准确率三臂都到 1.000——正则化没有限制模型的记忆能力，限制的是它对训练样本之外的态度。
+2. **数据增强与组合正则在这个任务上反而有害，而且是欠拟合不是过拟合。** ±1 像素位移 + σ=0.15 噪声把测试准确率从 **0.878 拉到 0.824**，训练准确率从 1.000 压到 **0.960**；三件套组合直接崩到 **0.740**（训练准确率 0.875）。原因指向输入分辨率：64 个像素上做平移，一次 ±1 像素就挪走整条笔画结构，图像增广（教材 13.1）是给大图设计的。
+3. **单次运行不构成证据。** 同一个改动跨种子波动可达 ±3 个百分点（基线自己的测试准确率在 0.870–0.900 之间摆动）；Dropout **0.884** 对基线 **0.878**，只差 0.006，小于基线自身的一个标准差 0.012——只能说"**未观察到显著差异**"。此外 270 张验证集里翻一张图就值 0.0037，准确率这个指标本身就有天花板，必须看验证损失。
+4. **诊断要能被曲线证伪。** 让 AI 说过拟合的原因，然后逐条检查：说"加数据"——增强臂已经在做数据侧干预，结果更差；说"学习率太大"——训练损失没有震荡、上升是第 85 轮之后缓慢单调发生的，且同一学习率下权重衰减把它压下去了，**不成立**；说"模型太大"——可以真的跑一次 `HIDDEN=(16, 8)` 去证伪。剔除不成立的解释，是本周 AI 赋能环节的产出。
+
+必须点名的六个坑：忘了 `net.train()` / `net.eval()` 切换（Dropout 在评估时仍生效，验证准确率随机抖动，甚至让人误判"正则化有效"）；对验证集也做了增强（评估被污染）；早停只 `break` 不恢复最佳权重（报出的是停在坏点上的模型）；把 `Adam(weight_decay=...)` 当成 AdamW（它把 L2 加进梯度、被自适应分母缩放，同一个 `wd` 不可跨优化器迁移）；只看准确率就宣布正则化有效；只跑一个种子就下结论。
+
+大作业关联：本周的六臂对照表就是你自己项目里"过拟合诊断 + 正则化取舍"一节的模板——一行只改一个因素，一行一个 Δ，失败的行也要留着。
+
+【思政】**实事求是**：本实验里三个方案没有效果、两个方案起了反作用。如实报告不成功的实验，是科研诚信的基本要求；悄悄删掉失败的那一行，等于毁掉整个实验。

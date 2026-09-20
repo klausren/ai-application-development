@@ -50,11 +50,11 @@
 
 <div class="header">
   <div class="tag">Lesson Plan · Week 3 · Lecture Part (Theory · 90 min)</div>
-  <h1>Machine Learning Foundations</h1>
+  <h1>Data Preparation and Pipelines</h1>
   <div class="meta">
     <span>⏱ Weekly 180-min integrated session · this plan covers the Lecture Part, 90 min (L1–L5)</span>
-    <span>📚 Chapter 3.1–3.5</span>
-    <span>🎯 Module 1 · AI &amp; ML Foundations</span>
+    <span>📚 Chapter 3.1–3.7</span>
+    <span>🎯 Module 1 · AI Application Development Foundations and PyTorch</span>
     <span>🧩 Lesson Plan ID: LP-W3-A</span>
     <span>🌐 English</span>
   </div>
@@ -65,81 +65,86 @@
   <div class="card">
     <h4>Knowledge</h4>
     <ul>
-      <li>State the Tom Mitchell definition of machine learning and name the three learning paradigms</li>
-      <li>Distinguish parameters from hyperparameters, and give three examples of each</li>
-      <li>Explain the roles of the loss function, gradient descent, and the learning rate</li>
-      <li>Explain the train / validation / test split and how k-fold cross-validation works</li>
-      <li>Read a (train score, validation score) pair and diagnose underfitting vs overfitting</li>
+      <li>State the week's thesis — <em>data sets the ceiling, models approach it</em> — and use it to decide what to fix first when results are poor</li>
+      <li>Name the six steps of the pipeline and explain why their order is not negotiable</li>
+      <li>Give an explicit detection criterion and an action for each of the four data problems: missing values, outliers, duplicates, label noise</li>
+      <li>Distinguish random, stratified, time-based and group splitting, and choose one from the nature of the data</li>
+      <li>Define data leakage and identify its four common shapes</li>
+      <li>State the two-method contract of a <code class="inline">Dataset</code> and the four jobs of a <code class="inline">DataLoader</code></li>
+      <li>Explain how augmentation and imbalance treatment must be bounded, and which metrics to switch to under imbalance</li>
     </ul>
   </div>
   <div class="card">
     <h4>Skills</h4>
     <ul>
-      <li>Classify a new problem into supervised / unsupervised / reinforcement learning</li>
-      <li>Choose an appropriate loss or metric for a given task (classification vs regression)</li>
-      <li>Build a leakage-free <code class="inline">Pipeline</code> and tune it with <code class="inline">GridSearchCV</code></li>
-      <li>Interpret <code class="inline">best_params_</code>, CV score and test score — and explain why they differ</li>
+      <li>Read an exploration report and convert every claim into one assert or one plot</li>
+      <li>Run a seeded, stratified split with <code class="inline">torch.Generator</code> and report the class ratios of all three splits</li>
+      <li>Implement a custom <code class="inline">torch.utils.data.Dataset</code> returning one <code class="inline">(x, y)</code> sample</li>
+      <li>Configure a <code class="inline">DataLoader</code> and justify <code class="inline">batch_size</code>, <code class="inline">shuffle</code>, <code class="inline">num_workers</code> and <code class="inline">generator</code></li>
+      <li>Detect leakage using one question: <em>is this information available at inference time?</em></li>
+      <li>Treat imbalance with <code class="inline">WeightedRandomSampler</code> or <code class="inline">CrossEntropyLoss(weight=...)</code> and re-measure with per-class metrics</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
   <span class="label">Attitudes</span>
-  Internalise that "a model is only as trustworthy as the protocol that evaluates it". Train the habit of asking
-  <em>how was this number produced?</em> before celebrating any score, and of writing down every modelling decision.
+  Internalise that <strong>a metric is only as trustworthy as the protocol that produced it</strong>. Train the habit of asking
+  <em>could the model have seen this during training?</em> before celebrating any score — and of treating data provenance and privacy
+  as a hard boundary rather than a formality. Respecting the source of your data is the baseline of engineering ethics.
 </div>
 
 <h2>2. Key Points &amp; Difficulties</h2>
 <table>
   <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
-  <tr><td>Key Points</td><td>Parameters vs hyperparameters; the train/val/test protocol; diagnosing overfitting; the Pipeline-as-leakage-guard idea</td><td>Each concept paired with a live one-liner in Jupyter; end every segment with a "which bucket does this go in?" check</td></tr>
-  <tr><td>Difficulties</td><td>Why data leakage makes a score meaningless; why the CV score is usually lower than the test score; what a gradient actually is</td><td>Leakage: draw the data-flow arrow and ask "did test information cross this line?"; CV-vs-test: remind them each fold trains on 4/5 of the data; gradient: the blindfolded-hill activity (no formulas)</td></tr>
+  <tr><td>Key Points</td><td>Data sets the ceiling; the six-step pipeline and its fixed order; the four data problems with criteria; the four split strategies; the four shapes of leakage; the <code class="inline">Dataset</code>/<code class="inline">DataLoader</code> contract; augmentation and imbalance boundaries</td><td>Every concept anchored to a live snippet in the notebook; each segment closes with a one-line check the class answers together; the leakage segment ends with the self-check checklist on p16</td></tr>
+  <tr><td>Difficulties</td><td>Why splitting must precede <em>every</em> step that learns (not only model fitting); why a duplicate across splits is leakage; why accuracy is the wrong metric under imbalance; how an AI's statistical claim can be plausible and still wrong</td><td>Leakage: draw the split line on the board and ask about one operation at a time; duplicates: use the same-entity argument; metrics: show 0.96 accuracy with a 4% class; AI claims: make the class write the assert that refutes the claim</td></tr>
 </table>
 
 <h2>3. Time Allocation</h2>
 <div class="timebar"><div class="lec">Lecture Part · Theory · 90 min (first half of the weekly 180-min integrated session)</div></div>
 <table>
   <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
-  <tr><td>L1</td><td>15 min</td><td><strong>Opening — What Is Learning?</strong>: Week 2 recap (data quality caps the model); traditional programming vs machine learning; the Tom Mitchell definition; the three paradigms table; the vocabulary card (sample / feature / label / inference)</td><td>p1–p7</td><td>Lecture + hand-vote</td></tr>
-  <tr><td>L2</td><td>20 min</td><td><strong>Model &amp; Parameters</strong>: hypothesis space as a family of functions; the linear model ŷ = wx + b expanded; the fitted-line chart (residuals = what the loss adds up); capacity trio (too small / right / too large); parameters vs hyperparameters table</td><td>p8–p12</td><td>Lecture + board drawing</td></tr>
-  <tr><td>L3</td><td>25 min</td><td><strong>Loss &amp; Optimisation</strong>: four losses and when to use them (MSE / MAE / cross-entropy / R²); the blindfolded-hill analogy for gradient descent; learning-rate trio (too small / right / too large); the training loop side by side with the sklearn version</td><td>p13–p17</td><td>Analogy + Live Coding</td></tr>
-  <tr><td>L4</td><td>25 min</td><td><strong>Generalisation &amp; Evaluation</strong>: the three splits and the "touch the test set once" rule; k-fold cross-validation diagram; the four-row diagnostic table; the training-vs-validation error curve and the bias-variance trade-off</td><td>p18–p22</td><td>Lecture + case discussion</td></tr>
-  <tr><td>L5</td><td>5 min</td><td><strong>Lab Bridge &amp; Preview</strong>: preview the four lab missions (baseline → Pipeline → GridSearchCV → regression), the datasets (digits, diabetes), and the Part F milestone; environment check; announce the end-of-class quiz</td><td>p23–p24</td><td>Preview + Q&amp;A</td></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>Opening — Data Sets the Ceiling</strong>: the week's thesis; the five-part structure; the three pillars (ceiling / approach / measurement); the six-step pipeline with its non-negotiable order; model-centric vs data-centric comparison</td><td>p1–p6</td><td>Lecture + hand-vote</td></tr>
+  <tr><td>L2</td><td>22 min</td><td><strong>Acquisition &amp; Cleaning</strong>: provenance and compliance; the four data problems (missing, outliers, duplicates, label noise); the actions-and-criteria table; AI-assisted exploration and the requirement that every claim be reproduced by an assert or a plot</td><td>p7–p11</td><td>Lecture + live coding</td></tr>
+  <tr><td>L3</td><td>23 min</td><td><strong>Splitting &amp; Data Leakage</strong>: what each of train/val/test is allowed to do; the 70/15/15 ratio and its two variants; the four split strategies; one wrong way and one right way; the production incident; the leakage self-check</td><td>p12–p16</td><td>Board drawing + case discussion</td></tr>
+  <tr><td>L4</td><td>25 min</td><td><strong>Dataset &amp; DataLoader</strong>: the six key points; a custom <code class="inline">Dataset</code> in two methods; a seeded split with <code class="inline">Subset</code>; the argument table with pitfalls; augmentation confined to train; imbalance via sampler or cost-sensitive loss</td><td>p17–p23</td><td>Live coding + follow-along</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>Lab Bridge &amp; Preview</strong>: preview the six lab tasks (explore → split → Dataset → DataLoader → imbalance → Data Card); announce the Data Card as the deliverable; confirm the capstone M3 push; announce the end-of-class quiz</td><td>p24</td><td>Preview + Q&amp;A</td></tr>
 </table>
 
 <h2>4. Key Activity Design</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 1 · Write Me a Spam Filter (L1, p4)</h4>
-  <p style="font-size:13.5px;">Ask the class to write <em>if-then rules</em> that catch spam email. Collect three attempts, then add one twist each ("what if the sender is a client named Cash?"). Within two minutes everyone agrees the rule list never ends — that is the exact moment machine learning becomes obvious: we supply examples, the algorithm supplies rules.</p>
+  <h4>Activity 1 · Where Is the Ceiling? (L1, p4)</h4>
+  <p style="font-size:13.5px;">Write a score on the board — "accuracy 0.91" — and ask the class to name five things that could be wrong with it. They will list models first. Push them back to data: coverage, label quality, split, duplication, timestamps. Close with the thesis line: a model can only approach the ceiling the data set; if the ceiling is low, no architecture rescues it.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 2 · Sort the Bucket (L2, p12)</h4>
-  <p style="font-size:13.5px;">Write eight items on the board — <code class="inline">w</code>, <code class="inline">b</code>, learning rate, <code class="inline">C</code>, a tree's split threshold, <code class="inline">max_depth</code>, <code class="inline">coef_</code>, <code class="inline">cv</code> — and have students sort each into <em>learned</em> vs <em>chosen</em>. Debrief with the one-liner: parameters are learned, hyperparameters are chosen, and <code class="inline">GridSearchCV</code> does the choosing.</p>
+  <h4>Activity 2 · Which Bucket? (L1, p6)</h4>
+  <p style="font-size:13.5px;">Read out eight actions — "switch to a bigger model", "check duplicate keys", "fix the random seed", "tune the learning rate", "clip the 1/99 percentiles", "add more layers", "check the label agreement rate", "write the split ratio into config". Students sort each into <em>model-centric</em> or <em>data-centric</em>. The debrief: the data-centric column is the one you can still act on when the metric refuses to move.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 3 · Blindfolded Descent (L3, p15)</h4>
-  <p style="font-size:13.5px;">A volunteer closes their eyes; the class guides them to the lowest spot in the room using only "warmer / colder" and step size. Then map it back: position = parameters, "colder" = gradient, step size = learning rate. Ask what happens if steps are tiny (forever) or huge (never settle) — the learning-rate trio lands without a formula.</p>
+  <h4>Activity 3 · Write the Assert That Refutes the AI (L2, p10–p11)</h4>
+  <p style="font-size:13.5px;">Project three AI claims about a dataset and ask students to write, in 60 seconds each, the one line that would prove or disprove it: "classes are balanced, train as is" → <code class="inline">assert share.min() &gt; 0.20</code>; "there are no missing values" → <code class="inline">assert df.isna().sum().sum() == 0</code>; "features correlate strongly with the label" → plot it and recompute independently. The lesson lands as a rule: every claim needs one assert or one plot, and a disagreement goes into <code class="inline">AI_USE.md</code>.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 4 · Read the Scoreboard (L4, p21)</h4>
-  <p style="font-size:13.5px;">Give four (train, validation) pairs — (62%, 60%), (98%, 72%), (95%, 93%), (58%, 91%) — and have students diagnose each in 30 seconds. The fourth row is the trap: it looks great and is broken (leakage or a bad split). This is the single most valuable 3 minutes of the session.</p>
+  <h4>Activity 4 · Legal or Leak? (L3, p15–p16)</h4>
+  <p style="font-size:13.5px;">Draw the split line on the board. Read operations one at a time — "compute the mean over the whole column and subtract it", "median-fill before splitting", "hyperparameter search on the test set", "shuffle a time series before cutting it", "put all records of one device on the same side of the line" — and ask each time: <em>legal or leak?</em> Ends with the single test that generalises: could you obtain this information at inference time? If not, it must not appear in training.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 5 · Did Information Cross the Line? (L4–L5, p19 + p25)</h4>
-  <p style="font-size:13.5px;">Draw the split line on the board, then name operations one at a time — fit a scaler on all rows, median-fill before splitting, compute the mean over the whole column — and ask each time: "legal or leak?" Ends with the punchline that a <code class="inline">Pipeline</code> makes the legal version the default, which is exactly what the lab does next.</p>
+  <h4>Activity 5 · The Exam You Already Saw (L3, p15)</h4>
+  <p style="font-size:13.5px;">Tell the production incident: a team trained on a frame that included the test samples, reported 0.99 offline, and dropped to 0.78 in production. Ask the class where the 21 points went. The answer is the point of the whole week — the model did not learn a rule, it had seen the exam. Then ask them to name the one-line check that would have caught it before the release.</p>
 </div>
 
 <h2>5. Assignment &amp; Assessment</h2>
 <table>
   <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
-  <tr><td>Quiz</td><td>At the end of class (after the Lab part): 6-item in-class quiz (5 choice/T-F + 1 short answer, hand-vote format), counted as 10% of the Lab grade (see LP-W3-B and slide p30)</td><td>Lab 10%</td></tr>
-  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the Lab part (75 min, LP-W3-B): baseline → Pipeline → GridSearchCV → regression → Part F push</td><td>—</td></tr>
-  <tr><td>Reading</td><td>Read textbook Chapter 3.6–3.8 (the sklearn workflow, pitfalls, summary and exercises) to consolidate the lab</td><td>—</td></tr>
-  <tr><td>Assignment</td><td>Complete the Lab deliverables: <code class="inline">lab-03.ipynb</code> with every checkpoint answered, due next Monday 23:59, pushed via Git (≥ 2 commits)</td><td>Lab Participation 20%</td></tr>
-  <tr><td>Course Grading</td><td>Assignments 30% + Midterm Project 15% + Capstone 35% + Lab Participation 20% (this week's Lab deliverable counts toward "Lab Participation")</td><td>Full semester</td></tr>
+  <tr><td>Quiz</td><td>At the end of class (after the Lab part): 4-item in-class quiz covering leakage, splitting, the <code class="inline">Dataset</code> contract and imbalance, hand-vote format (see LP-W3-B and slide p28)</td><td>Lab 10%</td></tr>
+  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the Lab part (75 min, LP-W3-B): explore → split → Dataset → DataLoader → imbalance → Data Card → M3 push</td><td>—</td></tr>
+  <tr><td>Reading</td><td>Read textbook Chapter 3 (sections 3.1–3.7 plus the exercises and the pitfall checklist) to consolidate the lab</td><td>—</td></tr>
+  <tr><td>Assignment</td><td>Submit the data-pipeline code and the Data Card: the split strategy, the augmentation strategy and the remaining bias must all be justified in writing. Due before the next session, pushed via Git (≥ 2 commits)</td><td>Lab component — 15 marks</td></tr>
+  <tr><td>Capstone</td><td>Milestone <strong>M3 · data pipeline in place</strong>: <code class="inline">src/data/</code> plus a runnable custom <code class="inline">Dataset</code>/<code class="inline">DataLoader</code>; pushed during the lab</td><td>Milestone review</td></tr>
 </table>
 <div class="callout warn">
   <span class="label">Mid-Class · Transition After This Session</span>
-  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, LP-W3-B). During the break, the instructor patrols to confirm every student can <code class="inline">import sklearn</code> in the <code class="inline">ai-app</code> environment, and that the capstone repo exists (Part F pushes today).
+  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, LP-W3-B). During the break, patrol to confirm that every student can load the dataset and print its shape, and that the capstone repo already has a W2 commit to build on.
 </div>
 
 <h2>6. Preparation &amp; Resources</h2>
@@ -147,18 +152,20 @@
   <div class="card">
     <h4>Before Class</h4>
     <ul>
-      <li>Review textbook Chapter 2 (data quality caps the model — the motivation for this week's protocol)</li>
-      <li>Read textbook Chapter 3.1–3.5 (this session's chapters)</li>
-      <li>Reflection: can you name one hyperparameter you have already set without knowing it?</li>
+      <li>Read textbook Chapter 3.1–3.7 (this session's material)</li>
+      <li>Have the leakage incident ready to tell in your own words — a real one if you have it</li>
+      <li>Check the demo dataset: <code class="inline">defects.csv</code> loads and has one minority class around 4%</li>
+      <li>Reflection: what is the last project you saw stall because of data rather than the model?</li>
     </ul>
   </div>
   <div class="card">
     <h4>Resources</h4>
     <ul>
-      <li>Slides: Week 3 Lecture (32-page edition; p1–p24 cover this part and the lab bridge)</li>
+      <li>Slides: Week 3 deck (30-page edition; p1–p24 cover this part and the lab bridge)</li>
       <li>Textbook Chapter 3 (produced with this kit)</li>
-      <li>sklearn Pipeline user guide: scikit-learn.org/stable/modules/compose.html</li>
-      <li>GridSearchCV reference: scikit-learn.org/stable/modules/grid_search.html</li>
+      <li>PyTorch data documentation: <code class="inline">torch.utils.data</code> — Dataset, DataLoader, Subset, WeightedRandomSampler</li>
+      <li>Lab handout: <code class="inline">labs/week-03/lab-handout.md</code></li>
+      <li>Course code 52015CC3BV · the whole course uses PyTorch for data loading</li>
     </ul>
   </div>
 </div>

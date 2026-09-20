@@ -121,241 +121,288 @@
 
 <!-- ========== CHAPTER HEADER ========== -->
 <div class="chapter-header">
-  <div class="chapter-no">第 03 章 · 模块 1 · 第 3 周</div>
-  <h1>机器学习基础</h1>
-  <p class="overview">机器学习从样例中反推规则，而不是让人去写规则。本章建立后续所有模型都会复用的心智模型：到底在学什么、误差怎么度量、参数如何更新——以及最重要的，一个分数到底能不能信。最后你会把第 1 周的三步工作流升级成工程可用的 scikit-learn <code class="inline">Pipeline</code>。</p>
+  <div class="chapter-no">第 03 章 · 模块一 · 第 3 周</div>
+  <h1>数据准备与管道构建</h1>
+  <p class="overview">第 2 章用原始张量搭出了一个模型。本章故意把视线从模型移开，去看它吃进去的东西。结论说得很直接：<strong>数据决定上限，模型只是逼近上限</strong>。你要用 PyTorch 把六步管道——原始数据、清洗、划分、<code class="inline">Dataset</code>、<code class="inline">DataLoader</code>、批次——真正建起来，学会识别并规避数据泄漏的四种形态，正确地处理数据增强与类别不平衡而不自欺，最后写出一张说清「结论到哪里就不成立」的数据卡片。</p>
 </div>
 
 <!-- ========== 3.1 ========== -->
 <div class="section">
-  <h2>3.1 机器学习到底在说什么</h2>
-  <p>第 1 章讲了项目的六个阶段，第 2 章讲了驱动它的数据。现在我们来到人人都以为最重要、但在前面几步失败时最不重要的阶段：模型。</p>
+  <h2>3.1 数据决定上限</h2>
+  <p>每个卡住的项目，第一个问题都一样：该改模型还是改数据？第 2 章已经说明参数是从数据里学出来的，其实已经暗示了答案。本章把它明确下来。</p>
 
-  <h3>3.1.1 定义</h3>
-  <p>Tom Mitchell 1997 年的定义至今仍是这个领域最干净的一句话：</p>
   <div class="callout key">
-    <span class="label">定义</span>
-    对于某类任务 <em>T</em> 和性能度量 <em>P</em>，如果一个程序在 <em>T</em> 上的性能（由 <em>P</em> 度量）随着经验 <em>E</em> 而提升，就说它从经验 <em>E</em> 中<strong>学习</strong>了。
+    <span class="label">总纲</span>
+    数据里包含的信息量、以及标注的质量，决定了误差最低能到多少。模型只能逼近这个界限。上限低，换任何结构都救不回来；而一旦划分错了，你连上限是多少都不知道。
   </div>
-  <p>永远是三个空。预测房价：<em>T</em> = 预测成交价，<em>P</em> = 平均绝对误差，<em>E</em> = 一万条历史成交记录。三个空填不满，你就还没有一个机器学习问题——你只有一个模糊的愿望。</p>
 
-  <h3>3.1.2 传统编程 vs 机器学习</h3>
+  <h3>3.1.1 三句推论</h3>
+  <div class="terms">
+    <div class="term"><h4>① 上限是真实存在的</h4><p>数据覆盖了多少种情况、标注有多准，决定了可达到的误差下界。一个从没被记录过的特征，再大的网络也变不出来。</p></div>
+    <div class="term"><h4>② 更好的模型只是更靠近它</h4><p>换结构、调超参，都是沿着同一条上限移动。进展停下来时，下一个有用的动作几乎总是回头检查数据。</p></div>
+    <div class="term"><h4>③ 度量决定你是否知道</h4><p>划分错了或泄漏了，得到的数字不只是偏乐观，而是毫无意义。本章后面的每一节都服务于同一个目标：看见真实水平。</p></div>
+  </div>
+
+  <h3>3.1.2 数据管道六步</h3>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>原始数据</strong>——多来源、多格式，尚未定义好坏。</div></div>
+    <div class="step"><div class="body"><strong>清洗</strong>——缺失、异常、重复与单位不一致，每类都要有明确的判据。</div></div>
+    <div class="step"><div class="body"><strong>划分</strong>——train / val / test，固定种子，策略有据可依。</div></div>
+    <div class="step"><div class="body"><strong>Dataset</strong>——把数据包装成「样本可索引」的形式：<code class="inline">__len__</code> 与 <code class="inline">__getitem__</code>。</div></div>
+    <div class="step"><div class="body"><strong>DataLoader</strong>——批处理、打乱、并行加载与批次拼装。</div></div>
+    <div class="step"><div class="body"><strong>批次</strong>——训练循环真正看到的东西。</div></div>
+  </div>
+  <div class="callout warn">
+    <span class="label">顺序不可交换</span>
+    划分必须发生在<em>任何</em>「会从数据里学习」的步骤之前——标准化、缺失填补、特征选择、数据增强都算。任何在全量数据上算出来的统计量，都已经被验证集和测试集的行污染过了。
+  </div>
+
+  <h3>3.1.3 以模型为中心 vs 以数据为中心</h3>
   <table>
-    <tr><th></th><th>传统编程</th><th>机器学习</th></tr>
-    <tr><td>输入</td><td>规则 + 数据</td><td>数据 + 答案</td></tr>
-    <tr><td>输出</td><td>答案</td><td>规则（模型）</td></tr>
-    <tr><td>逻辑谁写</td><td>程序员</td><td>学习算法</td></tr>
-    <tr><td>何时失效</td><td>规则复杂到写不出来</td><td>数据太少、不具代表性或标注错误</td></tr>
+    <tr><th></th><th>以模型为中心</th><th>以数据为中心</th></tr>
+    <tr><td>起手动作</td><td>数据原样喂给模型</td><td>先诊断质量，明确来源与合规</td></tr>
+    <tr><td>主要手段</td><td>换模型、调超参</td><td>修划分、修标签、去重、补覆盖</td></tr>
+    <tr><td>典型结果</td><td>提升越来越小且无法解释</td><td>同一个模型指标更稳更高</td></tr>
+    <tr><td>卡住时</td><td>说不清为什么</td><td>错误能归因到具体的数据问题</td></tr>
   </table>
-  <p>垃圾邮件过滤是最经典的例子。手写规则（「含 free」「发件人陌生」）一直有效，直到某位叫 Cash 的客户给你发合同——这时你会停止写规则，开始收集样例。</p>
-
-  <h3>3.1.3 三类范式</h3>
-  <div class="terms">
-    <div class="term"><h4>监督学习</h4><p>数据是带标准答案的 (x, y) 对。任务：分类（离散标签）与回归（连续值）。例子：逻辑回归、随机森林、SVM。<strong>第 1–6 周聚焦于此。</strong></p></div>
-    <div class="term"><h4>无监督学习</h4><p>只有 x，没有标签，算法自己找结构：聚类、低维结构、异常。例子：KMeans、PCA、DBSCAN。</p></div>
-    <div class="term"><h4>强化学习</h4><p>智能体在环境中行动并获得奖励，数据形如（状态, 动作, 奖励）序列。例子：Q-learning、PPO、DQN，多用于控制、博弈与决策策略。</p></div>
-  </div>
-
-  <h3>3.1.4 到处都会出现的术语</h3>
-  <div class="terms">
-    <div class="term"><h4>样本 Sample</h4><p>数据集中的一行——一套房、一张图、一个客户。</p></div>
-    <div class="term"><h4>特征 Feature (x)</h4><p>描述样本的属性列：面积、像素强度、年龄。合起来是特征矩阵 <code class="inline">X</code>。</p></div>
-    <div class="term"><h4>标签 Label (y)</h4><p>你要预测的东西。监督学习有，无监督学习没有。</p></div>
-    <div class="term"><h4>训练集 Training Set</h4><p>允许模型学习的那部分数据。</p></div>
-    <div class="term"><h4>推理 Inference</h4><p>用训练好的模型对新样本做预测。</p></div>
-    <div class="term"><h4>泛化 Generalization</h4><p>在没见过的数据上依然表现好——唯一算数的性能。</p></div>
-  </div>
+  <p>两条路线不是对立的，而是有先后：先做数据，再谈模型。顺序反过来，你连「模型到底好不好」都判断不了。</p>
 </div>
 
 <!-- ========== 3.2 ========== -->
 <div class="section">
-  <h2>3.2 模型、参数与容量</h2>
+  <h2>3.2 数据获取、清洗与来源</h2>
+  <p>清洗不是「把数据弄得好看」，而是把已知的问题变成可核查的记录：每个问题都要有一条发现它的判据、一个处理动作，以及一句「这个动作可能弄坏什么」。</p>
 
-  <h3>3.2.1 模型是一族函数</h3>
-  <p>选模型就是选<strong>假设空间</strong>——模型有能力表示的所有函数的集合。所有直线 <code class="inline">y = wx + b</code> 就是一族。训练不会创造新的族，它只是在族里挑一个成员，也就是确定 <code class="inline">w</code> 和 <code class="inline">b</code> 的具体数值。</p>
-  <p>这个视角能解释大多数建模失误：如果真实关系是弯的，而你的假设空间里只有直线，那么再多数据也没用——答案不在你选的空间里。</p>
-
-  <h3>3.2.2 线性模型</h3>
-  <pre><span class="cm"># 单个特征</span>
-y_hat = w * x + b
-
-<span class="cm"># n 个特征——同一个思路，写一次</span>
-y_hat = w1*x1 + w2*x2 + ... + wn*xn + b
-       = w · x + b</pre>
-  <p><code class="inline">w</code>（权重）表示每个特征有多重要，<code class="inline">b</code>（偏置）把整体预测上下平移。两者都从随机值出发，在训练中被不断修正。</p>
-
-  <h3>3.2.3 容量三档</h3>
+  <h3>3.2.1 四类常见问题</h3>
   <div class="terms">
-    <div class="term"><h4>容量太小 → 欠拟合</h4><p>连训练集都拟合不好。表现：训练分和验证分都低。对策：加特征、换更灵活的模型、减弱正则化。</p></div>
-    <div class="term"><h4>容量合适 → 拟合良好</h4><p>训练分与验证分都不错且互相接近。这就是目标。</p></div>
-    <div class="term"><h4>容量太大 → 过拟合</h4><p>模型把噪声背了下来。表现：训练分极好，验证分明显更低。对策：正则化、早停、增加数据、降低容量。</p></div>
+    <div class="term"><h4>缺失值</h4><p>先看缺失率排行，再看缺失是否与标签相关。填补用的统计量（中位数、众数）只能来自训练集。</p></div>
+    <div class="term"><h4>异常值</h4><p>用 1/99 分位或 IQR 规则判定，而不是「看起来奇怪」。可以截断、变换，也可以保留并加标记。</p></div>
+    <div class="term"><h4>重复与不一致</h4><p>按命名的主键去重，统一单位与类别编码。跨集合的重复样本就是直接的数据泄漏。</p></div>
+    <div class="term"><h4>标签噪声</h4><p>交叉核对、检查标注一致性、抽样人工复核。噪声比例高时，再多的数据也补不回来。</p></div>
   </div>
 
-  <h3>3.2.4 参数 vs 超参数</h3>
-  <p>这一组区别造成的困惑，比入门课上的任何其它概念都多。</p>
   <table>
-    <tr><th></th><th>参数 Parameter</th><th>超参数 Hyperparameter</th></tr>
-    <tr><td>谁决定</td><td>学习算法，从数据中学出</td><td>你，在训练开始前设定</td></tr>
-    <tr><td>例子</td><td><code class="inline">w</code>、<code class="inline">b</code>、树的划分阈值</td><td>学习率、<code class="inline">C</code>、<code class="inline">max_depth</code>、<code class="inline">cv</code></td></tr>
-    <tr><td>怎么获得</td><td>每一步自动更新</td><td>在验证集上用网格/随机搜索挑选</td></tr>
-    <tr><td>代码里</td><td><code class="inline">model.coef_</code>、<code class="inline">model.intercept_</code></td><td>Pipeline 网格里的 <code class="inline">clf__C</code></td></tr>
+    <tr><th>问题</th><th>怎么发现</th><th>处理动作</th><th>风险</th></tr>
+    <tr><td>缺失值</td><td><code class="inline">df.isna().mean()</code> 排序；缺失与标签的交叉统计</td><td>删除、中位数/众数填补、模型填补</td><td>用全量统计量填补就是泄漏</td></tr>
+    <tr><td>异常值</td><td>分位数、箱线图、IQR 规则</td><td>截断、对数变换，或保留并加标记</td><td>异常值可能正是你要预测的目标</td></tr>
+    <tr><td>重复与不一致</td><td>主键计数；单位与编码取值集合检查</td><td>去重、统一单位与类别编码</td><td>同一实体跨训练与测试即泄漏</td></tr>
+    <tr><td>标签噪声</td><td>一致性告警、模型高置信错例、人工抽样</td><td>重标、剔除，或使用鲁棒损失</td><td>先量化噪声比例，再决定是否清洗</td></tr>
   </table>
+
+  <h3>3.2.2 来源与隐私排在第一位</h3>
+  <p>在写下第一行清洗代码之前，先回答两个问题：<em>这份数据从哪里来、在什么许可下使用？</em>以及<em>它是否包含个人信息？</em>来源不清的数据，结果无法复现，在很多司法辖区也无法合法公开。个人信息必须在进入管道之前就完成去标识化，原始数据绝不能粘贴到公网服务里。尊重数据的来源不是形式要求，而是工程伦理的底线。</p>
+
+  <h3>3.2.3 用 AI 做探索而不被带偏</h3>
+  <p>让 AI 起草一段探索代码是高效的做法。纪律在于：它给出的每一条统计结论，都必须能被你用一行断言或一张图复现。</p>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="str">"data/raw/defects.csv"</span>)
+<span class="fn">print</span>(<span class="str">"shape:"</span>, df.shape)
+<span class="fn">print</span>(df[<span class="str">"label"</span>].value_counts(normalize=<span class="kw">True</span>).round(<span class="num">3</span>))
+
+<span class="cm"># AI 常在这里说：「类别分布均衡，可以直接训练。」</span>
+<span class="cm"># 别信，直接把它定论下来：</span>
+share = df[<span class="str">"label"</span>].value_counts(normalize=<span class="kw">True</span>)
+<span class="kw">assert</span> share.<span class="fn">min</span>() &gt; <span class="num">0.20</span>, <span class="str">"少数类占比过低，称不上均衡"</span>
+
+<span class="cm"># 「没有缺失值。」</span>
+<span class="kw">assert</span> df.isna().<span class="fn">sum</span>().<span class="fn">sum</span>() == <span class="num">0</span>, <span class="str">"存在缺失值"</span>
+
+<span class="cm"># 「特征与标签强相关。」-> 画图 + 独立复算</span>
+df.groupby(<span class="str">"label"</span>)[<span class="str">"size"</span>].mean().plot(kind=<span class="str">"bar"</span>)</pre>
   <div class="callout tip">
-    <span class="label">一句话</span>
-    参数是<strong>学</strong>出来的，超参数是<strong>选</strong>出来的。网格搜索返回的每一个值都是超参数——正因为如此，它不可能直接从数据里读出来。
+    <span class="label">规则</span>
+    当 AI 的统计结论与你画的图不一致时，以你自己跑出来的为准。把这次分歧、提问原文和更正后的结论写进 <code class="inline">AI_USE.md</code>。这份记录是评价项——它是你核对过的证据，而不是扣分项。
   </div>
 </div>
 
 <!-- ========== 3.3 ========== -->
 <div class="section">
-  <h2>3.3 损失函数：把「错了」变成一个数字</h2>
-  <p>损失函数把「这个预测很差」转换成一个可以被优化的数字。选损失函数就是在选目标——选错了，模型就会忠实地优化错的东西。</p>
+  <h2>3.3 划分：比例与策略</h2>
+  <p>划分决定了你之后看到的每一个数字是否可信。它是本章里影响最大的一步。</p>
 
+  <h3>3.3.1 三个集合各自只做一件事</h3>
   <table>
-    <tr><th>损失</th><th>公式</th><th>用在哪</th><th>特点</th></tr>
-    <tr><td>MSE</td><td>mean((y − ŷ)²)</td><td>回归（默认）</td><td>对大误差惩罚重，对异常值敏感</td></tr>
-    <tr><td>MAE</td><td>mean(|y − ŷ|)</td><td>有异常值的回归</td><td>与目标同量纲，稳健，零点有折点</td></tr>
-    <tr><td>交叉熵</td><td>−Σ y·log(ŷ)</td><td>分类</td><td>惩罚「错且自信」，概率校准好</td></tr>
-    <tr><td>R²（是指标不是损失）</td><td>1 − SS<sub>res</sub>/SS<sub>tot</sub></td><td>汇报回归质量</td><td>1 完美，0 等于猜均值，可以为负</td></tr>
+    <tr><th>集合</th><th>比例</th><th>职责</th><th>使用频率</th></tr>
+    <tr><td>训练集</td><td>约 70%</td><td>拟合参数，<em>以及</em>所有统计量：标准化、填补、特征选择、数据增强</td><td>一直用</td></tr>
+    <tr><td>验证集</td><td>约 15%</td><td>选模型、调超参</td><td>反复用——所以它不是最终成绩</td></tr>
+    <tr><td>测试集</td><td>约 15%</td><td>最终的真实性能估计</td><td>只用一次</td></tr>
   </table>
-
   <div class="callout warn">
-    <span class="label">本周的坑</span>
-    回归模型上调用 <code class="inline">model.score()</code> 返回的是 <strong>R²</strong>，不是准确率。把 R² 当成「正确率百分之多少」是本次实验最常见的错误。
+    <span class="label">铁律</span>
+    一旦测试集参与了调参，它就已经悄悄变成了验证集，报出的数字不再可信。数据量小（不足约 1 万条）时，用 5 折交叉验证代替固定验证集。
   </div>
+
+  <h3>3.3.2 四种策略——按数据性质选</h3>
+  <table>
+    <tr><th>策略</th><th>适用</th><th>失效情形</th></tr>
+    <tr><td>随机划分</td><td>样本相互独立、无时序、无重复实体</td><td>以上三条中有任一条不成立</td></tr>
+    <tr><td>分层划分</td><td>类别不平衡，尤其少数类样本很少</td><td>需要的是「实体级」隔离而不是「类别级」均衡</td></tr>
+    <tr><td>时间划分</td><td>存在真实先后关系：时序、流式、日志</td><td>—</td></tr>
+    <tr><td>分组划分</td><td>同一用户/设备/病人/文档有多条记录</td><td>—</td></tr>
+  </table>
+  <p>时序数据做随机划分，等于让模型在训练时就看到了未来。同一台设备贡献了几百行时做随机划分，会把近似重复的样本放到线的两侧——这也是泄漏，尽管代码一行都没写错。</p>
+
+  <h3>3.3.3 PyTorch 里可复现的固定种子划分</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> Subset
+
+<span class="cm"># torch.Generator 让划分可复现，同时不污染全局随机状态</span>
+g = torch.Generator().manual_seed(<span class="num">42</span>)
+perm = torch.randperm(<span class="fn">len</span>(ds), generator=g)
+
+i1, i2 = <span class="fn">int</span>(<span class="num">0.70</span> * <span class="fn">len</span>(ds)), <span class="fn">int</span>(<span class="num">0.85</span> * <span class="fn">len</span>(ds))
+train_ds = Subset(ds, perm[:i1])
+val_ds   = Subset(ds, perm[i1:i2])
+test_ds  = Subset(ds, perm[i2:])
+
+<span class="fn">print</span>(<span class="fn">len</span>(train_ds), <span class="fn">len</span>(val_ds), <span class="fn">len</span>(test_ds))</pre>
+  <p>类别不平衡时，把排列操作<em>放在每个类别内部</em>再做拼接。这样三个集合都能保住总体类别比例，少数类也不会碰巧从验证集里消失。</p>
 </div>
 
 <!-- ========== 3.4 ========== -->
 <div class="section">
-  <h2>3.4 优化：梯度下降</h2>
-  <p>误差一旦变成数字，改进模型就成了搜索问题：参数该往哪个方向走？</p>
+  <h2>3.4 数据泄漏</h2>
+  <p>泄漏指的是：模型在训练时用到了推理阶段拿不到的信息。它给出的分数不只是偏乐观，而是不对应任何真实部署场景。</p>
 
-  <h3>3.4.1 蒙眼下山</h3>
-  <div class="steps">
-    <div class="step"><h4>1 · 先站个位置</h4><p>参数从随机值出发。</p></div>
-    <div class="step"><h4>2 · 摸坡度</h4><p>梯度告诉你哪边是下坡、有多陡。</p></div>
-    <div class="step"><h4>3 · 迈一步</h4><p><code class="inline">w ← w − η · 梯度</code>，η 就是学习率。</p></div>
-    <div class="step"><h4>4 · 重复</h4><p>损失不再下降，或达到设定的 epoch 上限时停止。</p></div>
-  </div>
-  <p>梯度下降只保证找到<em>附近</em>的最低点。凸问题（线性回归、逻辑回归）里附近就是全局；神经网络不是，这也是深度学习需要更多机制（更好的初始化、自适应优化器、学习率调度）的原因之一。</p>
-
-  <h3>3.4.2 学习率怎么选</h3>
+  <h3>3.4.1 泄漏的四种形态</h3>
   <table>
-    <tr><th>η</th><th>行为</th><th>损失曲线长什么样</th></tr>
-    <tr><td>太小</td><td>慢得离谱，时间花完了还没收敛</td><td>几乎是平的</td></tr>
-    <tr><td>合适</td><td>先快后慢，平滑走平</td><td>像滑梯，末端走平</td></tr>
-    <tr><td>太大</td><td>跨过谷底来回震荡，甚至发散成 NaN</td><td>上下跳动甚至变大</td></tr>
+    <tr><th>形态</th><th>代码里的样子</th><th>为什么分数虚高</th></tr>
+    <tr><td>测试样本混入训练</td><td>划分之后又把测试集拼回训练数据</td><td>模型见过它正在被打分的那份考题</td></tr>
+    <tr><td>重复样本跨集合</td><td>去重步骤从没执行，同一实体出现在两个集合</td><td>近似相同的行让「记住答案」变得轻而易举</td></tr>
+    <tr><td>有序数据随机划分</td><td>对时序数据用 <code class="inline">random_split</code></td><td>模型在训练时就把过去和未来插值到了一起</td></tr>
+    <tr><td>统计量来自全量数据</td><td>划分之前做标准化或缺失填补</td><td>验证集与测试集的行参与了模型学到的那个均值</td></tr>
   </table>
 
-  <h3>3.4.3 batch、epoch、step</h3>
-  <p>训练日志里必然出现的三个词：</p>
-  <ul>
-    <li><strong>batch</strong>——一次参数更新所用的样本数；</li>
-    <li><strong>step（迭代）</strong>——一次参数更新；</li>
-    <li><strong>epoch</strong>——把训练集完整过一遍。</li>
-  </ul>
-  <p>实际工作中你几乎不会手写这个循环，它会被压缩成两行：</p>
-  <pre><span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> Pipeline
-<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
-<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+  <h3>3.4.2 一句判据识别全部四种</h3>
+  <div class="callout key">
+    <span class="label">判据</span>
+    这个信息在推理时拿得到吗？拿不到，就不该出现在训练里。对每一列、每一个统计量、每一步预处理都问一遍。
+  </div>
 
-pipe = Pipeline([
-    (<span class="str">'scale'</span>, StandardScaler()),
-    (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>)),
-])
-pipe.fit(X_train, y_train)   <span class="cm"># 学参数</span>
-pipe.score(X_test, y_test)   <span class="cm"># 评估</span></pre>
+  <h3>3.4.3 一个错误示范与一个正确示范</h3>
+  <pre><span class="kw">from</span> torch.utils.data <span class="kw">import</span> random_split
+
+<span class="cm"># 错误：统计量在全量数据上拟合，然后才划分</span>
+mu = X.<span class="fn">mean</span>(<span class="num">0</span>)
+X_norm = (X - mu) / X.std(<span class="num">0</span>)
+train_ds, val_ds, test_ds = random_split(ds, [<span class="num">0.7</span>, <span class="num">0.15</span>, <span class="num">0.15</span>])
+
+<span class="cm"># 正确：先划分，统计量只来自训练行</span>
+g = torch.Generator().manual_seed(<span class="num">42</span>)
+train_ds, val_ds, test_ds = random_split(
+    ds, [<span class="num">0.70</span>, <span class="num">0.15</span>, <span class="num">0.15</span>], generator=g)
+
+tr = X[train_ds.indices]                 <span class="cm"># 只取训练行</span>
+mu, sd = tr.<span class="fn">mean</span>(<span class="num">0</span>), tr.std(<span class="num">0</span>).clamp_min(<span class="num">1e-8</span>)
+X_norm = (X - mu) / sd                   <span class="cm"># 同一个变换应用到全部</span></pre>
+  <p>一个真实案例把代价讲得很清楚：某个项目用一份仍然混着测试样本的数据训练，线下报出 0.99，上线后跌到 0.78。那 21 个百分点不是学到的规律——模型只是见过了考题。</p>
 </div>
 
 <!-- ========== 3.5 ========== -->
 <div class="section">
-  <h2>3.5 泛化：训练、验证、测试</h2>
-  <p>训练集上的高分证明不了任何事——足够灵活的模型可以把训练集背得滚瓜烂熟，然后在新数据上一塌糊涂。唯一重要的问题是在没见过的数据上行不行，所以我们留出一部分数据来模拟「没见过」。</p>
+  <h2>3.5 Dataset 与 DataLoader</h2>
+  <p>划分之后，数据要以「样本可索引」的形式交给训练循环。PyTorch 用两个抽象完成这件事：<code class="inline">Dataset</code> 定义「一条样本是什么」，<code class="inline">DataLoader</code> 定义「批次怎么来」。</p>
 
-  <h3>3.5.1 三分数据</h3>
-  <table>
-    <tr><th>集合</th><th>常见比例</th><th>职责</th><th>能用多少次</th></tr>
-    <tr><td>训练集</td><td>60–80%</td><td>拟合参数</td><td>反复用</td></tr>
-    <tr><td>验证集</td><td>10–20%</td><td>挑超参数、早停</td><td>多次用</td></tr>
-    <tr><td>测试集</td><td>10–20%</td><td>对真实性能做最终估计</td><td><strong>一次</strong></td></tr>
-  </table>
+  <h3>3.5.1 Dataset 的契约</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> Dataset
+
+<span class="kw">class</span> <span class="fn">DefectDataset</span>(Dataset):
+    <span class="str">"""DataFrame -> PyTorch 数据集：只需要两个方法。"""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, df, transform=<span class="kw">None</span>):
+        self.y = torch.tensor(df[<span class="str">"label"</span>].values, dtype=torch.long)
+        self.x = torch.tensor(
+            df.drop(columns=[<span class="str">"label"</span>]).values.astype(<span class="str">"float32"</span>))
+        self.transform = transform       <span class="cm"># 只在训练集传入</span>
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):
+        <span class="kw">return</span> <span class="fn">len</span>(self.y)             <span class="cm"># 批次数靠它算出来</span>
+
+    <span class="kw">def</span> <span class="fn">__getitem__</span>(self, i):
+        x = self.x[i]                    <span class="cm"># 一次只返回一条样本</span>
+        <span class="kw">if</span> self.transform <span class="kw">is not</span> <span class="kw">None</span>:
+            x = self.transform(x)
+        <span class="kw">return</span> x, self.y[i]              <span class="cm"># (特征, 标签)</span>
+
+ds = DefectDataset(df)
+<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 12480 torch.Size([12])</span></pre>
   <div class="callout warn">
-    <span class="label">铁律</span>
-    测试集只碰一次。一旦你拿它反复调参，它就悄悄变成了验证集，你报出去的数字也就不再有意义。
+    <span class="label">两条纪律</span>
+    绝不要在 <code class="inline">__getitem__</code> 里计算跨样本统计量——那里的一列均值或全局词表是在全量数据上拟合的，是泄漏的温床。同时，<code class="inline">transform</code> 只传给训练集：验证与测试必须与线上推理保持一致。
   </div>
 
-  <h3>3.5.2 k 折交叉验证</h3>
-  <p>数据少的时候，单次划分的验证分噪声很大。k 折交叉验证把训练集切成 k 份，训 k 次（每次留不同的那一份），取平均分。代价是 k 倍训练时间，换来的是稳定得多的估计。分类任务请用 <code class="inline">StratifiedKFold</code>，保证每折里各类比例一致。</p>
+  <h3>3.5.2 DataLoader 做的四件事</h3>
+  <pre><span class="kw">from</span> torch.utils.data <span class="kw">import</span> DataLoader
 
-  <h3>3.5.3 诊断表</h3>
+train_loader = DataLoader(train_ds, batch_size=<span class="num">32</span>, shuffle=<span class="kw">True</span>,
+                          num_workers=<span class="num">4</span>, drop_last=<span class="kw">True</span>)
+val_loader   = DataLoader(val_ds,   batch_size=<span class="num">64</span>, shuffle=<span class="kw">False</span>)
+test_loader  = DataLoader(test_ds,  batch_size=<span class="num">64</span>, shuffle=<span class="kw">False</span>)
+
+xb, yb = <span class="fn">next</span>(<span class="fn">iter</span>(train_loader))
+<span class="fn">print</span>(xb.shape, yb.shape, <span class="fn">len</span>(train_loader))   <span class="cm"># (32, 12) (32,) 273</span></pre>
   <table>
-    <tr><th>训练集</th><th>验证集</th><th>结论</th><th>该干什么</th></tr>
-    <tr><td>低</td><td>低</td><td>欠拟合</td><td>加特征、换更强模型、减弱正则化、训练更久</td></tr>
-    <tr><td>高</td><td>明显更低</td><td>过拟合</td><td>加正则化、早停、增加数据、降低容量</td></tr>
-    <tr><td>高</td><td>高且接近</td><td>拟合良好</td><td>进入测试集做最终评估，一次</td></tr>
-    <tr><td>低</td><td>高（反常）</td><td>数据泄漏或划分错误</td><td>检查是否在划分前做了填充/标准化；检查时间序列的切分方式</td></tr>
+    <tr><th>参数</th><th>作用</th><th>建议初值</th><th>常见坑</th></tr>
+    <tr><td><code class="inline">batch_size</code></td><td>每个批次的样本数</td><td>32 / 64</td><td>太大显存爆且泛化可能变差；太小梯度噪声大、训练慢</td></tr>
+    <tr><td><code class="inline">shuffle</code></td><td>每轮是否打乱顺序</td><td>训练集 <code class="inline">True</code></td><td>与 <code class="inline">sampler=</code> 互斥；验证/测试开 <code class="inline">True</code> 会让排查困难</td></tr>
+    <tr><td><code class="inline">num_workers</code></td><td>并行加载的子进程数</td><td>2 – 4</td><td>设太大会拖慢；Notebook 与 Windows 下多进程容易报错</td></tr>
+    <tr><td><code class="inline">drop_last</code></td><td>丢弃不足一批的尾批</td><td>训练集 <code class="inline">True</code></td><td>不丢时尾批可能只剩 1 条，BatchNorm 会直接报错</td></tr>
+    <tr><td><code class="inline">collate_fn</code></td><td>自定义批次拼装</td><td>变长序列时自定义</td><td>默认要求同形状，NLP 任务里会直接报错</td></tr>
+    <tr><td><code class="inline">generator</code></td><td>固定 shuffle 的随机性</td><td><code class="inline">torch.Generator</code></td><td>不设时两次运行的批次顺序不同，结果无法逐位对齐</td></tr>
   </table>
-  <p>第四行最危险：数字好看，流程却坏了。</p>
+  <div class="callout tip">
+    <span class="label">第一个调试动作</span>
+    先打印 <code class="inline">xb.shape</code> 与 <code class="inline">xb.dtype</code>。批次大小 B、特征数 F 时，<code class="inline">xb</code> 必须是 <code class="inline">(B, F)</code>。形状不对，多半是 <code class="inline">__getitem__</code> 返回了整列而不是单条样本。
+  </div>
 </div>
 
 <!-- ========== 3.6 ========== -->
 <div class="section">
-  <h2>3.6 工程可用的 scikit-learn 工作流</h2>
+  <h2>3.6 数据增强与类别不平衡</h2>
+  <p>本节有两条边界。增强只作用于训练集；任何采样步骤都要报告处理前后的类别分布。</p>
 
-  <h3>3.6.1 Pipeline 为什么存在</h3>
-  <p>以标准化为例。如果在划分之前对全量数据调用 <code class="inline">scaler.fit(X)</code>，测试行的信息（它们的均值和方差）就进入了你的预处理——这就是<strong>数据泄漏</strong>，它会把分数抬高。</p>
-  <pre><span class="cm"># 错：缩放器看过测试行</span>
-X_scaled = StandardScaler().fit_transform(X)
-X_tr, X_te, y_tr, y_te = train_test_split(X_scaled, y, test_size=<span class="num">0.2</span>)
+  <h3>3.6.1 增强只属于训练集</h3>
+  <p>图像：翻转、裁剪、颜色抖动、随机擦除。表格数据：小幅高斯噪声、插值、特征扰动。增强不能改变标签语义——否则你就是在批量制造带标注的噪声。</p>
 
-<span class="cm"># 对：预处理是模型的一部分，每个折内单独拟合</span>
-pipe = Pipeline([(<span class="str">'scale'</span>, StandardScaler()),
-                 (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>))])
-X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="num">0.2</span>,
-                                          random_state=<span class="num">42</span>)
-pipe.fit(X_tr, y_tr)</pre>
-  <p><code class="inline">Pipeline</code> 的价值不在少敲几行代码，而在于它让正确的流程成为默认：每个转换器只在每个训练折内拟合。</p>
+  <h3>3.6.2 处理不平衡的两条路</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> DataLoader, WeightedRandomSampler
 
-  <h3>3.6.2 用 GridSearchCV 调参</h3>
-  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+<span class="cm"># 做法一 —— 重采样：少数类权重更大</span>
+y_tr = torch.tensor([ds[i][<span class="num">1</span>] <span class="kw">for</span> i <span class="kw">in</span> train_ds.indices])
+counts = torch.bincount(y_tr)
+w = (<span class="num">1.0</span> / counts.float())[y_tr]
+sampler = WeightedRandomSampler(weights=w, num_samples=<span class="fn">len</span>(w),
+                                replacement=<span class="kw">True</span>)
+train_loader = DataLoader(train_ds, batch_size=<span class="num">32</span>, sampler=sampler)
+<span class="cm"># 注意：sampler 与 shuffle=True 互斥</span>
 
-grid = {<span class="str">'clf__C'</span>: [<span class="num">0.01</span>, <span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>]}
-search = GridSearchCV(pipe, grid, cv=<span class="num">5</span>, n_jobs=-<span class="num">1</span>)
-search.fit(X_tr, y_tr)
+<span class="cm"># 做法二 —— 代价敏感损失：不动数据，改「犯错的代价」</span>
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+criterion = nn.CrossEntropyLoss(weight=<span class="num">1.0</span> / counts.float())</pre>
 
-print(search.best_params_)        <span class="cm"># 选出来的超参数</span>
-print(search.best_score_)         <span class="cm"># 交叉验证平均分</span>
-print(search.score(X_te, y_te))   <span class="cm"># 留出测试集分</span></pre>
-  <p>注意命名规则：<code class="inline">clf__C</code> 表示「Pipeline 里叫 <code class="inline">clf</code> 那一步的 <code class="inline">C</code>」，两个下划线。用 <code class="inline">cv_results_</code> 查看每个候选的表现，同时看标准差：两个均值差距不到一个标准差时，选更简单的那个，别纠结。</p>
-  <div class="callout tip">
-    <span class="label">为什么 CV 分通常低于测试分</span>
-    每一折只用训练数据的 (k−1)/k 来训练，所以分数通常略低于用全量训练的模型。小差距是正常的；差距过大（约 5 个点以上）才需要回头检查流程。
-  </div>
-
-  <h3>3.6.3 换成回归，骨架不变</h3>
-  <pre><span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_diabetes
-<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestRegressor
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_absolute_error, r2_score
-
-X, y = load_diabetes(return_X_y=<span class="kw">True</span>)
-reg = RandomForestRegressor(random_state=<span class="num">42</span>).fit(X_tr, y_tr)
-pred = reg.predict(X_te)
-print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
-  <p><code class="inline">fit → predict → evaluate</code> 永远不变，变的只是模型和指标。</p>
+  <h3>3.6.3 不平衡时，accuracy 是错的指标</h3>
+  <p>如果某个类别只占 4%，一个「永远预测多数类」的模型准确率是 0.96，却什么都没学到。此时要改用 per-class recall、F1 或 AUPRC，并报告处理前后的类别分布。任何处理都是取舍：如果少数类的 recall 上去了而多数类崩了，你就是用整体性能换了少数类性能——这件事必须写出来，而不是藏起来。</p>
 </div>
 
 <!-- ========== 3.7 ========== -->
 <div class="section">
-  <h2>3.7 常见坑与排查清单</h2>
+  <h2>3.7 常见误区与调试清单</h2>
   <div class="callout warn">
-    <span class="label">清单</span>
+    <span class="label">自查清单</span>
     <ul>
-      <li><strong>先划分，后拟合预处理。</strong>填充器和缩放器都放进 Pipeline。</li>
-      <li><strong>参数 ≠ 超参数。</strong><code class="inline">coef_</code> 是学出来的，<code class="inline">C</code> 是选出来的。</li>
-      <li><strong>按任务选指标。</strong>分类看 accuracy/F1，回归看 MAE/R²。</li>
-      <li><strong>固定随机种子。</strong>划分和模型都设 <code class="inline">random_state</code>，否则复现不了。</li>
-      <li><strong>先读警告再动手修。</strong>收敛警告是在提示你做标准化或提高 <code class="inline">max_iter</code>。</li>
-      <li><strong>说明划分策略。</strong>分类用分层，重复实体用分组，时间序列按时间切。</li>
+      <li><strong>先划分。</strong>所有会学习的步骤——标准化、填补、特征选择、增强——都在划分之后，且只作用于训练集。</li>
+      <li><strong>统计量只来自训练集。</strong>均值、方差、分位数、词表都在训练行上计算，再应用到 val 与 test。</li>
+      <li><strong>同一实体只在一个集合里。</strong>同一用户、设备、病人或文档的所有记录必须待在一起。</li>
+      <li><strong>有序数据用时间划分。</strong>打乱会让模型看到未来。</li>
+      <li><strong>测试集不复用。</strong>一旦它被用来挑模型或调参，它就已经是验证集。</li>
+      <li><strong>固定种子。</strong>划分与 <code class="inline">shuffle</code> 用 <code class="inline">torch.Generator</code>，多 worker 时用 <code class="inline">worker_init_fn</code> 固定各自种子。</li>
+      <li><strong>先看批次形状。</strong><code class="inline">xb</code> 必须是 <code class="inline">(B, F)</code>；不对就去查 <code class="inline">__getitem__</code>。</li>
+      <li><strong>绝不增强 val/test。</strong>它们的数字必须与推理时可比。</li>
+      <li><strong>报告采样前后的分布。</strong>否则你引入的偏差就是隐形的。</li>
+      <li><strong>保持数据卡片同步更新。</strong>偏差没有被记录下来的管道，不算做完。</li>
     </ul>
   </div>
 </div>
@@ -366,54 +413,67 @@ print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
   <div class="callout key">
     <span class="label">五条要点</span>
     <ol>
-      <li>机器学习从样例中反推规则；监督、无监督、强化学习是三类范式。</li>
-      <li>参数从数据中学出来；超参数由你设定，并在验证集上搜索。</li>
-      <li>损失函数定义什么算「错」；梯度下降决定往哪走；学习率决定步长。</li>
-      <li>训练 / 验证 / 测试三分，测试集只碰一次；数据少时用 k 折交叉验证。</li>
-      <li><code class="inline">Pipeline</code> 是防泄漏装置：预处理只在训练折内拟合。</li>
+      <li>数据决定上限，模型只是逼近上限。效果不好时，先诊断数据，再考虑换结构。</li>
+      <li>清洗是把已知问题变成可核查记录：缺失、异常、重复、标签噪声各有判据、动作与风险。</li>
+      <li>划分先于所有「会学习」的步骤；标准化、填补、特征选择背后的统计量只来自训练集。</li>
+      <li>泄漏 = 训练时用到了推理时拿不到的信息。用一句判据检验整条管道：这个信息推理时拿得到吗？</li>
+      <li><code class="inline">Dataset</code> 定义一条样本，<code class="inline">DataLoader</code> 定义批次；增强只加训练集；不平衡用 sampler 或代价敏感损失，并改用 per-class 指标复测。</li>
     </ol>
   </div>
 
   <div class="exercise">
-    <h4>练习 1 · 范式与术语（必做）</h4>
+    <h4>练习 1 · 管道的顺序（必做）</h4>
     <ol>
-      <li>判断下列任务属于监督、无监督还是强化学习：(a) 预测明天气温；(b) 按行为给客户分组；(c) 训练机器人走路；(d) 根据标注为合格/缺陷的芯片图片做检测。</li>
-      <li>任选其一，填出 Mitchell 的三个空：任务 <em>T</em>、性能度量 <em>P</em>、经验 <em>E</em>。</li>
+      <li>把以下八个操作排出正确顺序，并标注每个属于「可以跨过划分线」还是「绝不能跨」：计算列中位数、划分 train/val/test、特征零均值标准化、按互信息选出前 20 个特征、图像增强、按主键去重、构建 <code class="inline">Dataset</code>、包装成 <code class="inline">DataLoader</code>。</li>
+      <li>挑两个你标为「绝不能跨」的操作，各写一句：一旦跨线会坏在哪里。</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>练习 2 · 参数 vs 超参数（必做）</h4>
+    <h4>练习 2 · 诊断并清洗（必做）</h4>
+    <p>用自己的数据集（实验提供的 <code class="inline">defects.csv</code> 或你的大作业数据）产出一页质量报告。</p>
     <ol>
-      <li>把下列词分成两列：<code class="inline">w</code>、学习率、树的划分阈值、<code class="inline">max_depth</code>、<code class="inline">coef_</code>、<code class="inline">cv</code>、<code class="inline">C</code>、<code class="inline">intercept_</code>。</li>
-      <li>在 <code class="inline">load_digits</code> 上训练 <code class="inline">LogisticRegression</code>，分别打印 <code class="inline">coef_.shape</code> 与网格搜索得到的 <code class="inline">best_params_</code>。用两句话解释为什么只有其中一个来自数据。</li>
+      <li>对缺失、异常、重复、标签噪声四类问题，各给出你使用的<strong>数值判据</strong>与它检出的数量。</li>
+      <li>写出你采取的动作，以及这个动作的一个风险。</li>
+      <li>每条结论配一行断言或一张图；配不上证据的结论，从报告里删掉。</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>练习 3 · 泄漏实验（必做）</h4>
+    <h4>练习 3 · 复现泄漏（必做）</h4>
     <ol>
-      <li>在 <code class="inline">load_digits</code> 上复现 3.6.1 的两版写法，记录两个准确率。</li>
-      <li>增加一列纯随机噪声特征，重新拟合，观察训练分与验证分的变化。</li>
-      <li>写五句话：泄漏了什么、为什么数字变好看了、Pipeline 如何阻止它。</li>
+      <li>按 3.3.3 实现固定种子的 70/15/15 划分，打印三个集合的规模与类别比例。</li>
+      <li>再把特征均值在<em>全量</em>数据上算出来，在划分之前减掉，重跑一遍。记录两次的验证准确率。</li>
+      <li>写五句话：哪个统计量越了线、为什么数字更好看、正确示例里的哪一行挡住了它。</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>练习 4 · 读分数牌（必做）</h4>
-    <p>对每组分数给出结论与下一步动作，并用三句话解释最后一行。</p>
+    <h4>练习 4 · Dataset、DataLoader 与不平衡（必做）</h4>
     <ol>
-      <li>训练 62%，验证 60%</li>
-      <li>训练 98%，验证 72%</li>
-      <li>训练 95%，验证 93%</li>
-      <li>训练 58%，验证 91%</li>
+      <li>把清洗后的数据包装成自定义 <code class="inline">Dataset</code>，验证 <code class="inline">ds[0]</code> 与一个批次的形状和 dtype。</li>
+      <li>构建三个 <code class="inline">DataLoader</code>，并为 <code class="inline">batch_size</code>、<code class="inline">shuffle</code>、<code class="inline">num_workers</code> 以及打乱随机性的固定方式各给出理由。</li>
+      <li>统计各类占比，选择 <code class="inline">WeightedRandomSampler</code> 或 <code class="inline">CrossEntropyLoss(weight=...)</code>，报告处理前后的占比，以及你改用的 per-class 指标。</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>练习 5 · 小项目（选做，+5 加分）</h4>
-    <p>自选一个数据集（UCI、Kaggle 或你的大作业数据），跑完整流程：分层划分、至少两步的 Pipeline、一次 <code class="inline">GridSearchCV</code> 扫描、最后只做一次测试集评估。提交 notebook 与 150 字报告，说明你选了什么指标、为什么。</p>
+    <h4>练习 5 · 审计 AI 的数据结论（必做）</h4>
+    <ol>
+      <li>让 AI 为你的数据集生成一份探索报告，收集至少四条统计结论。</li>
+      <li>把每条结论改写成一行断言或一张图，统计几条成立、几条被证伪。</li>
+      <li>把被证伪的写进 <code class="inline">AI_USE.md</code>：提问、AI 原话、你的核对、更正后的结论。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 6 · 小项目：数据卡片（选做，+5 加分）</h4>
+    <p>自选一个数据集，交付一份包含全部五节的数据卡片——来源与合规、规模与结构、质量与已知问题、增强与不平衡、偏差与使用边界——以及生成它的可运行管道。缺少「偏差与使用边界」一节的数据卡片，视为 0 分。</p>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 — 第 3 章 · 机器学习基础</p>
+  <p>AI 应用开发 — 第 3 章 · 数据准备与管道构建</p>
   <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 

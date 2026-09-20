@@ -53,11 +53,11 @@
 
 <div class="header">
   <div class="tag">Lesson Plan · Week 3 · Lab Part (Lab 75 min + Quiz &amp; Summary 15 min)</div>
-  <h1>The scikit-learn Workflow Lab: fit → predict → evaluate</h1>
+  <h1>Lab 02 · Custom Dataset, DataLoader and the Data Card</h1>
   <div class="meta">
     <span>⏱ Weekly 180-min integrated session · this plan covers the Lab Part 75 min + Quiz &amp; Summary 15 min</span>
-    <span>📚 Chapter 3.6–3.7</span>
-    <span>🔧 Hands-on Lab</span>
+    <span>📚 Chapter 3.4–3.7</span>
+    <span>🔧 Hands-on Lab · Experiment 2</span>
     <span>🧩 Lesson Plan ID: LP-W3-B</span>
     <span>🌐 English</span>
   </div>
@@ -68,83 +68,88 @@
   <div class="card">
     <h4>Knowledge</h4>
     <ul>
-      <li>Explain why a <code class="inline">Pipeline</code> exists and what it prevents (leakage in cross-validation)</li>
-      <li>State the difference between a parameter and a hyperparameter, and name what <code class="inline">best_params_</code> holds</li>
-      <li>Explain why the CV score is usually a little lower than the test score</li>
-      <li>State which metrics belong to classification and which to regression</li>
+      <li>Explain why the split must happen before scaling, imputation, feature selection and augmentation</li>
+      <li>State the single question that detects every kind of leakage</li>
+      <li>Name the two methods a custom <code class="inline">Dataset</code> must implement and what each returns</li>
+      <li>Name the four jobs of a <code class="inline">DataLoader</code> and why <code class="inline">shuffle</code> is <code class="inline">True</code> for train only</li>
+      <li>Explain why accuracy is the wrong metric when a class holds 4% of the data</li>
+      <li>State what a Data Card must contain, including its bias-and-limits section</li>
     </ul>
   </div>
   <div class="card">
     <h4>Skills</h4>
     <ul>
-      <li>Build a <code class="inline">Pipeline</code> with preprocessing + model and use it like a single estimator</li>
-      <li>Run a hyperparameter sweep with <code class="inline">GridSearchCV</code> and read the results table</li>
-      <li>Switch the same workflow from classification to regression without changing the mental model</li>
-      <li>Push the M3 capstone milestone (repository + <code class="inline">src/train.py</code>) before the lab ends</li>
+      <li>Turn every exploration claim into one assert or one plot, and reconcile it with your own output</li>
+      <li>Split with a fixed <code class="inline">torch.Generator</code> and report sizes and class ratios for train/val/test</li>
+      <li>Implement <code class="inline">__len__</code> and <code class="inline">__getitem__</code> and verify the shape and dtype of a batch</li>
+      <li>Configure <code class="inline">DataLoader</code> with reasons, and confine augmentation to the training split</li>
+      <li>Treat imbalance and re-measure with per-class metrics</li>
+      <li>Push the capstone milestone M3 (<code class="inline">src/data/</code> + runnable pipeline) before the lab ends</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
   <span class="label">Attitudes</span>
-  Treat reproducibility as part of the deliverable: if <code class="inline">python src/train.py</code> does not run on a
-  fresh clone without edits, the work is not finished. Document decisions, do not hand-edit CSVs.
+  Treat the Data Card as part of the deliverable, not as paperwork: if a reader cannot tell where the data came from and where your conclusions stop being valid,
+  the pipeline is not finished. Use only data with a lawful, authorised source; de-identify personal data and never upload it to public tools.
 </div>
 
 <h2>2. Key Points &amp; Difficulties</h2>
 <table>
   <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
-  <tr><td>Key Points</td><td>Pipeline as the leakage guard; the <code class="inline">step__param</code> naming rule; reading <code class="inline">cv_results_</code>; metric choice per task</td><td>Instructor demos each part (3–5 min), then students reproduce; every part ends with a checkpoint that must be written down before moving on</td></tr>
-  <tr><td>Difficulties</td><td>Why CV &lt; test is normal; <code class="inline">score()</code> meaning R² on regressors; convergence warnings on unscaled digits</td><td>CV-vs-test: "each fold trains on 4/5"; regressor score: show <code class="inline">mean_absolute_error</code> and <code class="inline">r2_score</code> side by side; warnings: read the message aloud, then fix with scaling</td></tr>
+  <tr><td>Key Points</td><td>Seeded, stratified splitting; the <code class="inline">Dataset</code> contract; the four jobs of <code class="inline">DataLoader</code>; aug-train-only; sampler vs cost-sensitive loss; the five sections of the Data Card</td><td>Instructor demos each part (3–5 min), students reproduce; every part ends with a checkpoint that must be written down before moving on</td></tr>
+  <tr><td>Difficulties</td><td>Shape errors from returning a whole column instead of one sample; cross-sample statistics inside <code class="inline">__getitem__</code>; <code class="inline">shuffle=True</code> conflicting with <code class="inline">sampler=</code>; reading the sampled distribution honestly</td><td>Shapes: always print <code class="inline">xb.shape</code> first; leakage: point at the statistics line and ask "computed over what?"; sampler: let the <code class="inline">ValueError</code> happen and read it aloud; imbalance: show accuracy 0.96 next to per-class recall</td></tr>
 </table>
 
 <h2>3. Time Allocation</h2>
 <div class="timebar"><div class="lab">Lab Part · 75 min + Quiz &amp; Summary · 15 min (second half of the weekly 180-min integrated session)</div></div>
 <table>
   <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
-  <tr><td>Lab A</td><td>10 min</td><td><strong>Baseline, no Pipeline</strong>: load digits, split 80/20 with <code class="inline">random_state=42</code>, fit <code class="inline">LogisticRegression(max_iter=1000)</code>, record accuracy. If a ConvergenceWarning appears, write what it is telling you</td><td>p25</td><td>Follow-along + patrol</td></tr>
-  <tr><td>Lab B</td><td>15 min</td><td><strong>Same Model, Inside a Pipeline</strong>: rebuild with <code class="inline">StandardScaler</code> + classifier; compare accuracy; answer why scaling matters here but not for a tree; instructor draws the leakage arrow</td><td>p25</td><td>Demo → follow-along</td></tr>
-  <tr><td>Lab C</td><td>20 min</td><td><strong>Hyperparameter Sweep</strong>: <code class="inline">GridSearchCV(pipe, {'clf__C': [0.01, 0.1, 1, 10]}, cv=5)</code>; report <code class="inline">best_params_</code>, CV score, test score; inspect <code class="inline">cv_results_</code> and comment on the standard deviation</td><td>p26</td><td>Self practice + patrol</td></tr>
-  <tr><td>Lab D</td><td>20 min</td><td><strong>From Classification to Regression</strong>: repeat fit → predict → evaluate on <code class="inline">load_diabetes</code> with <code class="inline">RandomForestRegressor</code>; report MAE and R²; explain R² = 0.45 to a stakeholder in one sentence</td><td>p27</td><td>Self practice + Q&amp;A</td></tr>
-  <tr><td>Lab E</td><td>10 min</td><td><strong>Wrap-up &amp; Capstone Push (Part F)</strong>: write the three model-agnostic lines you will reuse forever; create <code class="inline">src/data/</code> + <code class="inline">src/train.py</code> in the project repo, justify the split strategy, pin <code class="inline">requirements.txt</code>, push</td><td>p28–p29</td><td>Checklist</td></tr>
-  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 6 items (5 choice / true-false + 1 short answer) on the board; hand-vote, then debrief; correct students explain their reasoning</td><td>p30</td><td>Vote + debrief</td></tr>
-  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO; preview Week 4 (metrics, thresholds, overfitting and Ridge)</td><td>p31–p32</td><td>Recap + preview</td></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Explore and diagnose</strong>: load <code class="inline">defects.csv</code>, print shape, class shares, missing rates and duplicates-on-key; write one assert or plot per claim; instructor pushes back on any criterion expressed as "looks wrong"</td><td>p25</td><td>Follow-along + patrol</td></tr>
+  <tr><td>Lab B</td><td>12 min</td><td><strong>A reproducible split</strong>: choose random / stratified / time / group and justify it; split with <code class="inline">torch.Generator(seed=42)</code>; report sizes and class ratios for all three splits; discuss what a plain random split would break when <code class="inline">batch_id</code> repeats</td><td>p25</td><td>Self practice + Q&amp;A</td></tr>
+  <tr><td>Lab C</td><td>15 min</td><td><strong>Custom <code class="inline">Dataset</code></strong>: implement <code class="inline">__len__</code> and <code class="inline">__getitem__</code>; verify <code class="inline">ds[0]</code>; deliberately break the index and observe the batch shape; state the shape rule for a batch</td><td>p25–p26</td><td>Demo → follow-along</td></tr>
+  <tr><td>Lab D</td><td>13 min</td><td><strong><code class="inline">DataLoader</code> &amp; augmentation</strong>: set and justify <code class="inline">batch_size</code>, <code class="inline">shuffle</code>, <code class="inline">num_workers</code>, <code class="inline">generator</code>; add augmentation to the training split only and compare; note that <code class="inline">shuffle=True</code> and <code class="inline">sampler=</code> are exclusive</td><td>p26</td><td>Self practice + patrol</td></tr>
+  <tr><td>Lab E</td><td>12 min</td><td><strong>Imbalance</strong>: count classes, compute shares, pick <code class="inline">WeightedRandomSampler</code> or <code class="inline">CrossEntropyLoss(weight=1/counts)</code>; report the before/after distribution; switch to per-class recall/F1 or AUPRC</td><td>p26</td><td>Self practice + Q&amp;A</td></tr>
+  <tr><td>Lab F</td><td>13 min</td><td><strong>Data Card, privacy and the M3 push</strong>: write all five sections, including bias and limits of use; de-identify identifiers and confirm nothing was uploaded to public tools; create <code class="inline">src/data/</code> + <code class="inline">src/train.py</code> in the capstone repo; pin <code class="inline">requirements.txt</code>; push</td><td>p26–p27</td><td>Checklist</td></tr>
+  <tr><td>Quiz</td><td>10 min</td><td><strong>In-Class Quiz</strong>: 4 items on the board (leakage, splitting, the <code class="inline">Dataset</code> contract, imbalance); hand-vote, then debrief; students who answer correctly explain their reasoning</td><td>p28</td><td>Vote + debrief</td></tr>
+  <tr><td>Wrap</td><td>5 min</td><td><strong>Summary &amp; Preview</strong>: five takeaways; after-class TODO (pipeline code + Data Card); preview Week 4 (from tensors to <code class="inline">nn.Module</code>)</td><td>p29–p30</td><td>Recap + preview</td></tr>
 </table>
 
 <h2>4. Key Activity Design</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 1 · Read the Warning Aloud (Lab A, p25)</h4>
-  <p style="font-size:13.5px;">Nobody may fix the ConvergenceWarning for the first two minutes — they must first write down what it says. This builds the reflex of reading diagnostics before reaching for a fix, and sets up Lab B where scaling resolves it.</p>
+  <h4>Activity 1 · Refuse the Vague Criterion (Lab A, p25)</h4>
+  <p style="font-size:13.5px;">The first time a student writes "this column looks wrong", stop the room. Ask for the number that made them say it: a missing rate above 2%, a value outside the 1/99 percentiles, a duplicate count on a named key. This single intervention improves the whole cohort's Data Cards, because a criterion that cannot be written as a number cannot be audited.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 2 · Two Models, One Leak (Lab B, p25)</h4>
-  <p style="font-size:13.5px;">Instructor shows two versions side by side: scaler fitted on all data (leaks) vs scaler inside the Pipeline (safe). Students predict which score is "too optimistic" before running either. The reveal: the leaking version reports a better number that nobody can trust.</p>
+  <h4>Activity 2 · The AI Said It Was Balanced (Lab A, p25)</h4>
+  <p style="font-size:13.5px;">Project a plausible AI claim — "classes are balanced, you can train as is" — and have students run <code class="inline">value_counts(normalize=True)</code> and then write the assert that settles it. When a claim turns out false, it goes into <code class="inline">AI_USE.md</code> with the corrected conclusion. The target is not mistrust of AI; it is a repeatable way to check it.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 3 · Guess C Before Running (Lab C, p26)</h4>
-  <p style="font-size:13.5px;">Students write down which <code class="inline">C</code> they expect to win and why, <em>before</em> running the sweep. Comparing predictions with <code class="inline">best_params_</code> turns a mechanical exercise into a calibration exercise — and the "C too large overfits" story becomes personal.</p>
+  <h4>Activity 3 · Break the Shape on Purpose (Lab C, p25)</h4>
+  <p style="font-size:13.5px;">Have students delete the <code class="inline">[i]</code> index in <code class="inline">__getitem__</code> so it returns a whole column, then print the batch shape. Seeing <code class="inline">(11, 32)</code> instead of <code class="inline">(32, 11)</code> makes the shape rule memorable. Restore it, then state the rule out loud: for batch size B and F features, <code class="inline">xb</code> is <code class="inline">(B, F)</code>.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 4 · Explain R² to a Stranger (Lab D, p27)</h4>
-  <p style="font-size:13.5px;">Each student writes one sentence explaining R² = 0.45 to a non-technical stakeholder, then reads it to a neighbour. Most first attempts say "45% accurate"; the correction — "we explain 45% of the variation, versus simply guessing the average" — is the point.</p>
+  <h4>Activity 4 · Two Leaks, One Line (Lab B–C, p25)</h4>
+  <p style="font-size:13.5px;">Instructor writes one line on the board: <code class="inline">mu = df.drop(columns="label").mean()</code>, then subtracts it from every row before the split is applied. Ask which set that mean was computed over. Students will say "all of them" — and that is the leak. The fix belongs in a comment they can point to: statistics come from the training split only.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 5 · Fresh-clone reproducibility test (Lab E, p29)</h4>
-  <p style="font-size:13.5px;">Clone the repo on a different machine and run it there and run <code class="inline">python src/train.py</code> on their repository. Absolute paths, missing requirements and hardcoded filenames surface instantly — far more convincingly than any checklist.</p>
+  <h4>Activity 5 · Fresh-clone reproducibility test (Lab F, p26–p27)</h4>
+  <p style="font-size:13.5px;">Have students clone their own repo into a new directory and run <code class="inline">python src/train.py</code> there. Absolute paths, an unpinned dependency and a hardcoded filename surface within seconds — far more convincingly than any checklist.</p>
 </div>
 
 <h2>5. Assignment &amp; Assessment</h2>
 <table>
   <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
-  <tr><td>Deliverable</td><td><code class="inline">lab-03.ipynb</code>: Restart &amp; Run All clean, every checkpoint answered in the student's own words, ≥ 2 meaningful commits, pushed to a public repo</td><td>100 pts</td></tr>
-  <tr><td>Rubric</td><td>Baseline vs Pipeline (A–B) 25 · GridSearchCV (C) 30 · Regression branch (D) 25 · reusable three-lines summary (E) 10 · exit ticket 10</td><td>Lab 20% of course</td></tr>
-  <tr><td>Quiz</td><td>6 items at the end of the lab; counted as 10% of the Lab grade (see slide p30)</td><td>Lab 10%</td></tr>
-  <tr><td>Capstone M3</td><td>Part F (repository + data pipeline) is graded under the Capstone (35%), not here; missing it costs −2 project points; late: −2 each time, up to −20</td><td>Capstone 35%</td></tr>
+  <tr><td>Deliverable</td><td><code class="inline">data_pipeline.py</code> + <code class="inline">data_card.md</code>: runs end to end on a clean checkout, every checkpoint answered in the student's own words, ≥ 2 meaningful commits pushed to a public repo</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Exploration &amp; diagnosis 15 · reproducible split 15 · custom <code class="inline">Dataset</code> 20 · <code class="inline">DataLoader</code> &amp; augmentation 15 · imbalance 15 · Data Card &amp; leakage self-check 15 · exit ticket 5</td><td>Lab component — 15 marks</td></tr>
+  <tr><td>Quiz</td><td>4 items at the end of the lab, hand-vote format; counted as 10% of the lab grade (see slide p28)</td><td>Lab 10%</td></tr>
+  <tr><td>Capstone M3</td><td>Part F, second half (<code class="inline">src/data/</code> + runnable custom <code class="inline">Dataset</code>/<code class="inline">DataLoader</code>) is graded under the Capstone, not here; missing it costs −2 project points; late: −2 each time, up to −20</td><td>Milestone review</td></tr>
   <tr><td>Late policy</td><td>Lab deliverable: −10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
 </table>
 <div class="callout warn">
   <span class="label">Before Students Leave</span>
-  Confirm three things for every student: the notebook runs top-to-bottom, the repo has ≥ 2 commits pushed, and
-  <code class="inline">src/train.py</code> exists in the capstone repo. A milestone pushed next week is a milestone not done.
+  Confirm three things for every student: the pipeline script runs end to end on a fresh clone, the Data Card has all five sections including bias and limits of use,
+  and <code class="inline">src/data/</code> is pushed to the capstone repo. A milestone pushed next week is a milestone not done.
 </div>
 
 <h2>6. Preparation &amp; Resources</h2>
@@ -152,18 +157,20 @@
   <div class="card">
     <h4>Before Class</h4>
     <ul>
-      <li>Week 2 lab committed (Titanic cleaning works)</li>
-      <li>Textbook Chapter 3 skimmed</li>
-      <li>Capstone repository created and initialized (public, your handle as owner)</li>
+      <li>Week 2 lab committed (raw-tensor linear model working)</li>
+      <li>Textbook Chapter 3 skimmed, especially the leakage self-check</li>
+      <li>Capstone repository has a W2 commit; <code class="inline">AI_USE.md</code> exists</li>
+      <li>Demo environment can load <code class="inline">defects.csv</code> and print the class shares</li>
     </ul>
   </div>
   <div class="card">
     <h4>Resources</h4>
     <ul>
       <li>Lab handout: <code class="inline">labs/week-03/lab-handout.md</code></li>
-      <li>Slides p23–p32</li>
-      <li>Textbook Chapter 3.6–3.7</li>
-      <li>Datasets ship with scikit-learn — no download needed</li>
+      <li>Slides p24–p30</li>
+      <li>Textbook Chapter 3.4–3.7</li>
+      <li>PyTorch <code class="inline">torch.utils.data</code> reference (Dataset, DataLoader, Subset, WeightedRandomSampler)</li>
+      <li>Dataset <code class="inline">defects.csv</code> ships with the lab — no download needed</li>
     </ul>
   </div>
 </div>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 6 周 · 授课部分（理论 · 90 min）</div>
+  <h1>模型评估、过拟合与正则化</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖复习与导入 10 分钟 + 新课讲授 80 分钟，共 90 分钟（L1–L5）</span>
+    <span>📚 教材第 6 章（评估指标、过拟合诊断、正则化）</span>
+    <span>🎯 模块二 · 深度学习核心技术与模型训练（W5–8）· 模块第二周</span>
+    <span>🧩 教案编号：LP-W6-A</span>
+    <span>🖼 课件共 27 页（本部分用到 p1–p21）</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>读懂<strong>混淆矩阵 Confusion Matrix</strong>，并会从四个格子推出精确率、召回率与 F1，说清当类别不均衡时准确率掩盖了什么</li>
+      <li>能按两类错误的业务代价来选评估指标，而不是按「哪个指标最好算」来选</li>
+      <li>说清训练集 / 验证集 / 测试集各自的分工，以及为什么小数据下 K 折交叉验证更稳</li>
+      <li>描述偏差-方差权衡，并能按两条曲线的形状判断模型处于欠拟合、拟合良好还是过拟合</li>
+      <li>说清<strong>早停 Early Stop</strong>、<strong>权重衰减 Weight Decay</strong>、<strong>Dropout</strong>、批归一化与<strong>数据增强 Data Augmentation</strong> 各自在训练中做了什么、代价是什么</li>
+      <li>解释为什么<strong>验证损失 Validation Loss</strong>（而不是验证准确率）才是模型开始过拟合的可靠信号</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>能根据训练日志里的数字，而不是印象，说清当前是过拟合还是欠拟合</li>
+      <li>能用耐心计数器实现早停，并记录它停下的最佳轮次</li>
+      <li>能搭出六臂正则化对照实验：每臂只改一个变量，每臂重复 5 个随机种子，用「均值 ± 标准差」汇报</li>
+      <li>能用单个数字量化泛化：验证损失从最低点到最后轮的上升量</li>
+      <li>能把 AI 给出的过拟合诊断逐条拿训练 / 验证曲线去核实，并删掉曲线不支持的解释</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素质目标</span>
+  <strong>实事求是：如实报告不成功的实验，是科研诚信的基本要求。</strong>本周的实测表里就有两条故意保留的失败方案，它们会被打印、被讲解、被讨论，而不是被删掉。本周要养成的职业习惯是——正则化不是「做了数字就会变好」的仪式：要实测，留下真正有用的那一臂，并诚实说出哪一臂把事情弄糟了。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>知识点群</td><td>KT11 · 评估指标与评估协议（精确率 / 召回率 / F1 / 混淆矩阵）——认知层次「分析」，重点，难度中。KT12 · 过拟合诊断与正则化（早停 / 权重衰减 / Dropout / 增强）——认知层次「分析」，重点，难度难</td><td>KT11 从业务代价反推到公式（p5–p7）；KT12 从一张本机实测表逐行读出来（p20）</td></tr>
+  <tr><td>重点</td><td>指标由业务代价决定；四格混淆矩阵；训练 / 验证 / 测试三段式划分与 K 折交叉验证；偏差-方差诊断；带耐心的早停；权重衰减；Dropout；批归一化；数据增强；验证损失作为过拟合信号；以「5 个种子的均值 ± 标准差」汇报每一臂</td><td>每个结论都锚在本机实测、并已落盘到 <code class="inline">outputs/w6_regularisation.json</code> 的数字上；每段以一句全班同答收口，且这句里必须含一个数字（p14、p15、p20、p21）</td></tr>
+  <tr><td>难点</td><td>为什么训练准确率一直涨什么都证明不了；为什么模型明显在退化、验证准确率却钉在 0.856 不动（天花板效应）；为什么唯一决定性的证据是验证损失掉头向上；为什么数据增强在 8×8 图像上反而变差；为什么两臂之间 0.006 的差距不构成结论</td><td>天花板：把验证准确率与验证损失画在同一组坐标里，让班级自己找出哪条在动（p14–p15）；增强：先摆出 0.824 与 0.740 两行再解释（p20）；噪声：把两个均值和 0.012 的标准差一起写在黑板上，让全班先投票再计算（p21）</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lec">授课部分 · 理论 · 90 min（复习与导入 10 min + 新课讲授 80 min，每周 180 分钟一体课的前半段）</div></div>
+<p style="font-size:13.5px;color:var(--text-sec);">官方教学进程为：复习与导入 10 min → 新课讲授 80 min → 随堂实验 80 min → 小结与作业 10 min。本教案覆盖前 90 分钟，其余 90 分钟由实验部分（LP-W6-B）承担。</p>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>L1</td><td>10 min</td><td><strong>复习与导入 · 我们选择相信哪个数字</strong>：第 5 周回顾（训练循环已成为固定仪器）；模块二的口径转变——从「怎么把它训出来」到「怎么知道它好不好」；本周两个知识点群；开场案例——准确率 99%，却没有一个客户满意</td><td>p1–p3</td><td>讲授 + 举手投票</td></tr>
+  <tr><td>L2</td><td>20 min</td><td><strong>评估指标 · 选对那个数字（KT11）</strong>：一个真实会发生的失败案例；四格混淆矩阵与由它推出的五个指标；先手数矩阵，再读精确率、召回率与 F1；把「漏报的代价」与「误报的代价」翻译成指标的选择</td><td>p4–p7</td><td>讲授 + 板书 + 现场手数</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>评估协议 · 这个数字可不可信（KT11）</strong>：三段式划分及每一段的唯一职责；三个会让分数虚高的典型错误；小数据下 K 折交叉验证是更稳的做法；为什么测试集只允许被碰一次</td><td>p8–p11</td><td>讲授 + 先写后讲</td></tr>
+  <tr><td>L4</td><td>20 min</td><td><strong>偏差-方差 · 按证据诊断（KT12）</strong>：模型的三种状态与对应的曲线形状；基线臂的训练 / 验证实测图；决定性证据——验证损失在第 85 ± 17 轮触底，从 0.516 升到第 400 轮的 0.671，而验证准确率始终停在 0.856；「症状 → 诊断 → 对策」对照表</td><td>p12–p16</td><td>读图 + 先猜后揭</td></tr>
+  <tr><td>L5</td><td>20 min</td><td><strong>正则化 · 四个刹车及其代价（KT12）</strong>：早停、权重衰减、Dropout、数据增强四种手段的机理与代价；四种手段在 PyTorch 里怎么写；本机实测的六臂横向对照表；三条诚实的结论，其中包括两臂把结果弄得更差；实验衔接——五个实验环节与评分</td><td>p17–p21</td><td>讲授 + 读表 + 预告</td></tr>
+</table>
+
+<h2>4. 关键活动设计</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 准确率 99% 却没用一个客户满意（L2，p4）</h4>
+  <p style="font-size:13.5px;">用极端案例开场：一个分类器一百次里对九十九次，却没有任何一个客户满意——因为它唯一会犯的错，恰好是客户在意的那个错。先让全班说出真实业务里什么场景会这样，再从混淆矩阵推出精确率、召回率与 F1，然后把「漏报」「误报」这两个词贴回案例上重读一遍。这个活动的关键在于推理方向：先有代价，再有指标。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 先用手数一遍矩阵（L2，p5–p6）</h4>
+  <p style="font-size:13.5px;">发一张小的 10 类混淆矩阵，在任何代码出现之前，让每位学生用笔算出某一个类别的精确率、召回率与 F1，然后再运行 p6 的代码对照。手算过的学生会立刻明白：为什么各类的数字差这么多，以及为什么一个聚合数字描述不了一个多分类模型。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 哪条曲线在动（L4，p14–p15）</h4>
+  <p style="font-size:13.5px;">展示基线臂的训练 / 验证实测图，只问一个问题：这个模型从第几轮开始过拟合？训练准确率曲线的回答是「没有」——它从第 61 轮起恒为 1.0；验证准确率曲线的回答也是「没有」——它在 0.833 到 0.841 之间横盘。只有验证损失曲线给了答案：第 81 轮 0.6357 之后单调升到 0.8672。本活动的落点是：诊断的问法不是「训练损失怎么样」，而是「到底哪条曲线在动」。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 把结果弄得更差的那一臂（L5，p20）</h4>
+  <p style="font-size:13.5px;">先摆出六臂对照表，但先不评论最后两行。请全班把数据增强那一行读出来：训练准确率 0.960 ± 0.027 而不是 1.000，验证准确率 0.814，测试准确率 0.824 而不是 0.878；组合那一臂更是跌到 0.740。追问：如果数据增强是标准手段，为什么在这里输了？学生必须自己得出的答案是：训练集只有 80 张 8×8 图像，把数字位移 ±1 px 或加 σ=0.15 的噪声会抹掉笔画结构，等于给训练数据制造错标签。这是欠拟合，不是正则化失败。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 0.006 算不算一个结果（L5，p21）</h4>
+  <p style="font-size:13.5px;">在黑板上写两个数：Dropout 测试准确率 0.884 ± 0.011，基线 0.878 ± 0.012。差距是 0.006，标准差是 0.012——标准差是差距的两倍。先让全班投票「Dropout 是不是更好」，再一起算。唯一站得住的句子是「未观察到显著差异」，而这恰恰是学生最难下笔的一句。AI 诊断练习也从这里开始：AI 会很自信地解释 Dropout 为什么更好，而曲线和标准差说的是另一回事。</p>
+</div>
+<div class="callout tip">
+  <span class="label">教学提示 · AI 辅助诊断</span>
+  AI 赋能环节在实验部分正式执行，但伏笔在这里埋下：让学生向 AI 询问基线模型过拟合的原因，然后要求每一条原因都必须拿训练与验证曲线去核实。曲线不支持的解释要删掉，而不是改成含糊说法。交付物是「删减后的原因清单 + 每条保留原因对应的曲线证据」。
+</div>
+
+<h2>5. 作业与考核</h2>
+<table>
+  <tr><th style="width:120px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>随堂小测</td><td>实验部分下课前：模块二综合小测 6 题，覆盖类别不均衡下的指标选择、过拟合的证据、四种正则化手段的机理、以及如何读一份 5 种子结果（见课件 p25）</td><td>实验 10%</td></tr>
+  <tr><td>课中衔接</td><td>授课部分（90 min）后休息 10 分钟，进入实验部分（90 min，LP-W6-B）：协议核对 → 基线的过拟合 → 四个正则化臂 → 5 种子量化 → 组合臂与结论</td><td>—</td></tr>
+  <tr><td>课外阅读</td><td>读教材对应章节（模型选择、欠拟合与过拟合；权重衰减；Dropout）及 d2l 配套代码</td><td>—</td></tr>
+  <tr><td>课后作业</td><td>正则化对比实验报告：六臂 5 种子对照表、每一臂的训练 / 验证曲线，以及一条结论——<em>哪种手段对本任务最有效，以及为什么</em>；同时要写明哪些手段没有帮上忙。另需完成模块二综合小测。下周一 23:59 前用 Git 提交（≥ 2 次提交）</td><td>实验 5.0 学时</td></tr>
+  <tr><td>课程考核</td><td>形成性 50%：出勤与课堂参与 10 + 随堂实验 15 + 阶段评审 15 + <code class="inline">AI_USE.md</code> 10。终结性 50%：个人项目。本周实验即实验 5（Lab 05），为支撑 SP(2)「视觉与文本模型训练实验」的单设计型实验，5.0 学时，计入 15 分的随堂实验部分。本课程为考查课，无闭卷笔试</td><td>全学期</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">课中衔接 · 本课后如何切换</span>
+  授课部分（90 min）结束后休息 10 分钟，再进入实验部分（90 min，LP-W6-B）。休息期间教师巡场，确认每位学生两件事：能用一句话说出哪条曲线是过拟合的证据；并确认 <code class="inline">load_digits</code> 能在 <code class="inline">ai-app</code> 环境里离线加载。仍然把训练准确率当成证据的学生，要先把验证损失曲线讲给教师听，再开始实验。
+</div>
+
+<h3>本机实测 · 六臂 × 5 个种子（课件 p20）</h3>
+<table>
+  <tr><th>方案</th><th>训练准确率</th><th>验证准确率</th><th>测试准确率</th><th>实跑轮次</th></tr>
+  <tr><td>无正则（基线）</td><td>1.000</td><td>0.856 ± 0.024</td><td>0.878 ± 0.012</td><td>400</td></tr>
+  <tr><td>早停 patience=20</td><td>1.000</td><td>0.858 ± 0.025</td><td>0.874 ± 0.011</td><td>105</td></tr>
+  <tr><td>权重衰减 1e-2</td><td>1.000</td><td>0.844 ± 0.023</td><td>0.867 ± 0.024</td><td>400</td></tr>
+  <tr><td>Dropout 0.3</td><td>1.000</td><td>0.857 ± 0.032</td><td>0.884 ± 0.011</td><td>400</td></tr>
+  <tr><td>数据增强 σ=0.15 + ±1 px 位移</td><td>0.960 ± 0.027</td><td>0.814 ± 0.013</td><td>0.824 ± 0.010</td><td>400</td></tr>
+  <tr><td>组合（权重衰减 + Dropout + 增强）</td><td>0.875 ± 0.048</td><td>0.716 ± 0.035</td><td>0.740 ± 0.053</td><td>400</td></tr>
+</table>
+<table>
+  <tr><th>方案</th><th>验证损失 最低 → 第 400 轮</th><th>损失上升 Δ</th><th>最佳轮次</th></tr>
+  <tr><td>无正则（基线）</td><td>0.516 → 0.671</td><td>+0.155 ± 0.089</td><td>85 ± 17</td></tr>
+  <tr><td>早停 patience=20</td><td>0.516 → 0.534</td><td>+0.018 ± 0.016</td><td>85 ± 17</td></tr>
+  <tr><td>权重衰减 1e-2</td><td>0.497 → 0.524</td><td>+0.027 ± 0.014</td><td>262 ± 76</td></tr>
+  <tr><td>Dropout 0.3</td><td>0.474 → 0.645</td><td>+0.171 ± 0.102</td><td>163 ± 100</td></tr>
+  <tr><td>数据增强 σ=0.15 + ±1 px 位移</td><td>0.529 → 0.606</td><td>+0.077 ± 0.027</td><td>348 ± 36</td></tr>
+  <tr><td>组合（权重衰减 + Dropout + 增强）</td><td>0.849 → 0.884</td><td>+0.035 ± 0.022</td><td>376 ± 13</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">所有方案的协议一致：<code class="inline">load_digits</code>（8×8 灰度、10 类、1797 张）→ 归一化到 0–1 → 70/15/15 分层划分 → 训练集只取 80 张 → 64-128-64-10 MLP，共 17,226 个参数（参数/样本约 215）→ Adam <code class="inline">1e-3</code>、batch 32、400 轮 → 5 个随机种子（42、43、44、45、46），报均值 ± 标准差。全程离线，整套扫描只用 CPU。</p>
+<div class="callout tip">
+  <span class="label">怎么读这张表 · 三条诚实的结论</span>
+  <strong>1.</strong> 正则化压住的是<em>验证损失的上升</em>，不是提高准确率。六臂的验证准确率全部落在 0.716–0.858 之间，测试准确率的差异都在一个标准差内（0.010–0.024）。 <strong>2.</strong> 数据增强与组合臂在 8×8 图像上反而有害，原因是欠拟合：增强把测试准确率从 0.878 拉到 0.824、训练准确率从 1.000 压到 0.960，组合臂更崩到 0.740。在 64 个像素上做像素级位移会抹掉笔画结构，等于给训练数据制造错标签。 <strong>3.</strong> 单次运行不足以支撑对比：同一改动跨种子波动可达 ±3 个百分点，而 Dropout 0.884 对基线 0.878 只差 0.006，小于 0.012 的标准差。
+</div>
+
+<h2>6. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前准备</h4>
+    <ul>
+      <li>回顾第 5 周（训练循环与日志格式从现在起视为已知）</li>
+      <li>阅读教材对应章节（模型选择、权重衰减、Dropout）</li>
+      <li>自己先跑一遍 <code class="inline">scripts/w6_overfit_experiment.py</code>，并打开 <code class="inline">outputs/w6_regularisation.json</code>，把六臂对照表在讲授前先看熟</li>
+      <li>确认环境可离线运行：<code class="inline">load_digits</code> 随 scikit-learn 提供、无需下载；六臂 × 5 种子的全流程只用 CPU</li>
+      <li>反思：你自己有没有如实报告过一次失败的实验，并把那条曲线一起贴出来？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>教学资源</h4>
+    <ul>
+      <li>课件：第 6 周，共 27 页（本部分用 p1–p21，p22 起进入实验）</li>
+      <li>教材第 6 章</li>
+      <li>实测数据：<code class="inline">outputs/w6_regularisation.json</code>（5 种子 × 6 臂）与 <code class="inline">scripts/w6_overfit_experiment.py</code></li>
+      <li>实验指导书：<code class="inline">labs/week-06/lab-handout.md</code></li>
+      <li>d2l 配套代码；PyTorch 官方文档：pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发（课程代码 52015CC3BV）—— 教案 LP-W6-A（授课部分 · 理论 · 90 min）· 第 6 周 · 模块二</p>
+  <p>大连东软信息学院 软件学院 · 软件与大数据技术系 · 授课教师 任政 · 授课班级 留软工 24401（来华项目，必修 5 人 + 限选 1 人）· 2026-2027 学年第 1 学期</p>
+  <p>本教案借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

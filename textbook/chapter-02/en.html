@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chapter 2 — Data Handling Fundamentals for AI</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -123,387 +122,362 @@
 <!-- ========== CHAPTER HEADER ========== -->
 <div class="chapter-header">
   <div class="chapter-no">Chapter 02 · Module 1 · Week 2</div>
-  <h1>Data Handling Fundamentals for AI</h1>
-  <p class="overview">Data is the fuel of AI. This chapter systematically covers NumPy vectorized computing, Pandas data manipulation, Matplotlib/Seaborn visualization, exploratory data analysis (EDA), and hands-on data cleaning. You will complete an end-to-end data pipeline on a real dataset, preparing the data foundation for ML modeling in Weeks 3-4.</p>
+  <h1>PyTorch Fundamentals: Tensors and Autograd</h1>
+  <p class="overview">In PyTorch, data, parameters, gradients and losses are all tensors — one container, one engine. This chapter teaches the container (shape, dtype, device, requires-grad, grad) and the engine (the computational graph and reverse-mode differentiation), then uses only those two things to learn a straight line by gradient descent. It also covers the one class of bug this course cares about most: the shape error that raises nothing and gives a wrong answer.</p>
 </div>
 
 <!-- ========== 2.1 ========== -->
 <div class="section">
-  <h2>2.1 The Role of Data in AI</h2>
-  <p>In the project lifecycle from Chapter 1, data acquisition and feature engineering account for ~80% of effort. This section answers: what makes data "good enough" to train a model?</p>
+  <h2>2.1 Tensors as the Universal Container</h2>
+  <p>Chapter 1 described the pipeline; this chapter opens the toolbox. Everything you will pass between the stages of that pipeline — a batch of inputs, a weight matrix, a loss, a gradient — is a tensor.</p>
 
-  <h3>2.1.1 Data Types</h3>
+  <h3>2.1.1 What a Tensor Is</h3>
+  <p>A tensor is an n-dimensional array with three extra capabilities: it carries its own shape and dtype, it can live on a GPU, and it can be differentiated.</p>
   <div class="terms">
-    <div class="term"><h4>Structured Data</h4><p>Tabular format with defined schema; e.g. CSV/Excel, database tables. Pandas territory.</p></div>
-    <div class="term"><h4>Unstructured Data</h4><p>Images, text, audio, video. Require feature extraction or embeddings before feeding to models. Focus of Module 2-3.</p></div>
-    <div class="term"><h4>Semi-structured Data</h4><p>JSON, XML, HTML. Hierarchical but schemaless; needs parsing to convert to structured tables.</p></div>
-    <div class="term"><h4>Time Series Data</h4><p>Time-ordered observations — stock prices, sensor logs. Needs temporal indexing and handling of periodicity.</p></div>
+    <div class="term"><h4>0-D — scalar</h4><p>A single number, e.g. a loss value. Produced by <code class="inline">.mean()</code> or <code class="inline">.sum()</code>. You call <code class="inline">.backward()</code> on one of these.</p></div>
+    <div class="term"><h4>1-D — vector</h4><p>A row of features for one sample, or a bias vector. Shape <code class="inline">(n,)</code>. This shape is the source of half the pitfalls in this chapter.</p></div>
+    <div class="term"><h4>2-D — matrix</h4><p>A batch of samples, <code class="inline">(n_samples, n_features)</code>. The workhorse of every tabular and linear model.</p></div>
+    <div class="term"><h4>3-D and above</h4><p>Images <code class="inline">(batch, channels, height, width)</code>, sequences <code class="inline">(batch, time, features)</code>. Same rules, more dimensions to get wrong.</p></div>
   </div>
 
-  <h3>2.1.2 Data Sources</h3>
+  <h3>2.1.2 Why Not a Python List</h3>
   <table>
-    <tr><th>Source</th><th>Examples</th><th>Characteristics</th></tr>
-    <tr><td>Public Datasets</td><td>UCI ML Repository, Kaggle Datasets, Hugging Face Datasets, sklearn.datasets</td><td>Free, labeled, suitable for teaching; check license terms</td></tr>
-    <tr><td>Enterprise Internal Data</td><td>User behavior logs, transaction records, IoT sensor streams</td><td>High real-world value; involves privacy compliance and data governance</td></tr>
-    <tr><td>API / Scraping</td><td>REST APIs, web scraping, open government data</td><td>Real-time access; handle rate limits, anti-scraping, quality fluctuations</td></tr>
-    <tr><td>Synthetic Data</td><td>Data augmentation, GAN-generated, LLM-generated</td><td>Supplements scarce labels; validate consistency with real distribution</td></tr>
+    <tr><th></th><th>Python list</th><th>torch.Tensor</th></tr>
+    <tr><td>Speed</td><td>Loops run element by element in the interpreter</td><td>Vectorised kernels in C++/CUDA — one to two orders faster</td></tr>
+    <tr><td>Shape</td><td>Nested lists have no shape; nothing checks lengths for you</td><td>A <code class="inline">torch.Size</code> that every operation validates</td></tr>
+    <tr><td>Broadcasting</td><td>Does not exist — you write the loops</td><td>Built in, with stated rules (and its own failure mode)</td></tr>
+    <tr><td>Device</td><td>CPU only</td><td><code class="inline">.to("cuda")</code> moves it to a GPU</td></tr>
+    <tr><td>Gradients</td><td>Not supported</td><td>Autograd tracks operations automatically</td></tr>
   </table>
 
-  <h3>2.1.3 Data Quality Dimensions</h3>
-  <div class="callout key">
-    <span class="label">Key Insight · Data Quality = Model Ceiling</span>
-    No model can save bad data. The industry consensus is <strong>"Garbage In, Garbage Out" (GIGO)</strong>. Six data quality dimensions cap model performance.
+  <h3>2.1.3 The Relation to NumPy</h3>
+  <pre>x = np.ones(<span class="num">3</span>)
+t = torch.from_numpy(x)     <span class="cm"># shares memory — no copy</span>
+t[<span class="num">0</span>] = <span class="num">9.0</span>
+<span class="fn">print</span>(x[<span class="num">0</span>])              <span class="cm"># 9.0 — the array changed too</span>
+
+t2 = torch.tensor(x)        <span class="cm"># copies instead</span>
+arr = t2.numpy()            <span class="cm"># back to NumPy, for matplotlib</span></pre>
+  <div class="callout tip">
+    <span class="label">One-liner</span>
+    A tensor is a NumPy array plus two things: it can run on a GPU, and it can be differentiated. The shared-memory behaviour of <code class="inline">from_numpy</code> is worth remembering precisely because it is silent.
   </div>
-  <table>
-    <tr><th>Dimension</th><th>Meaning</th><th>Common Issues</th></tr>
-    <tr><td>Completeness</td><td>Whether data has missing values</td><td>Nulls, NaN, missing rows</td></tr>
-    <tr><td>Accuracy</td><td>Whether data reflects true values</td><td>Entry errors, sensor noise</td></tr>
-    <tr><td>Consistency</td><td>Whether data from different sources contradicts</td><td>Inconsistent units, duplicate record conflicts</td></tr>
-    <tr><td>Timeliness</td><td>Whether data reflects the current state</td><td>Outdated data, update delays</td></tr>
-    <tr><td>Uniqueness</td><td>Whether there are duplicate records</td><td>Duplicate collection, merge conflicts</td></tr>
-    <tr><td>Validity</td><td>Whether values conform to business constraints</td><td>Negative age, probability outside [0,1]</td></tr>
-  </table>
+
+  <h3>2.1.4 GPU Tensors</h3>
+  <pre>device = <span class="str">"cuda"</span> <span class="kw">if</span> torch.cuda.is_available() <span class="kw">else</span> <span class="str">"cpu"</span>
+X = torch.randn(<span class="num">100</span>, <span class="num">1</span>).to(device)
+w = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, requires_grad=<span class="kw">True</span>, device=device)
+
+<span class="cm"># moving data and parameters together is your responsibility</span>
+<span class="fn">print</span>((X @ w).device)     <span class="cm"># cuda:0 — the result stays on the GPU</span></pre>
+  <p>Two tensors must be on the same device to be combined. Mixing CPU and GPU raises a <code class="inline">RuntimeError</code> immediately — one of the few errors in this chapter that is genuinely helpful. Running on CPU is perfectly acceptable in this course; what is not acceptable is not knowing which device you used.</p>
 </div>
 
 <!-- ========== 2.2 ========== -->
 <div class="section">
-  <h2>2.2 NumPy Arrays &amp; Vectorized Computing</h2>
-  <p>NumPy is the cornerstone of Python scientific computing. Nearly all higher-level libraries (Pandas, PyTorch, scikit-learn) build on the <code class="inline">ndarray</code>. The key insight is <strong>vectorization</strong>: array operations replace loops, yielding 10-100x speedup.</p>
+  <h2>2.2 The Five Attributes</h2>
+  <p>Get any one of these wrong and nothing crashes. The program runs, the loss prints a number, and the number is meaningless. This is why the habit below is worth more than any trick in the chapter.</p>
 
-  <h3>2.2.1 Creating Arrays</h3>
-  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
-
-<span class="cm"># From Python lists</span>
-a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>])
-b = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>]])
-
-<span class="cm"># Built-in generators</span>
-zeros = np.zeros((<span class="num">3</span>, <span class="num">4</span>))       <span class="cm"># 3×4 zero matrix</span>
-ones = np.ones(<span class="num">5</span>)              <span class="cm"># [1,1,1,1,1]</span>
-arange = np.arange(<span class="num">0</span>, <span class="num">10</span>, <span class="num">2</span>)     <span class="cm"># [0,2,4,6,8]</span>
-linspace = np.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>) <span class="cm"># [0, 0.25, 0.5, 0.75, 1.0]</span>
-rand = np.random.randn(<span class="num">3</span>, <span class="num">3</span>)   <span class="cm"># 3×3 standard normal</span>
-
-print(a.shape, b.shape)  <span class="cm"># (5,) (2,3)</span>
-print(a.dtype)           <span class="cm"># int64</span></pre>
-
-  <h3>2.2.2 Vectorization &amp; Broadcasting</h3>
-  <pre><span class="cm"># Vectorized arithmetic — NO loops needed</span>
-a = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
-print(a * <span class="num">2</span>)          <span class="cm"># [2 4 6 8]  — element-wise</span>
-print(a ** <span class="num">2</span>)         <span class="cm"># [1 4 9 16]</span>
-print(np.sqrt(a))      <span class="cm"># [1. 1.41 1.73 2.]</span>
-print(a.sum(), a.mean(), a.std())  <span class="cm"># 10 2.5 1.12</span>
-
-<span class="cm"># Broadcasting: shapes auto-expand for compatibility</span>
-matrix = np.ones((<span class="num">3</span>, <span class="num">4</span>))
-row = np.array([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>])
-result = matrix + row   <span class="cm"># row broadcasts to 3 rows</span>
-<span class="cm"># [[2,3,4,5], [2,3,4,5], [2,3,4,5]]</span></pre>
-  <div class="callout tip">
-    <span class="label">Performance Tip</span>
-    Vectorized ops are 10-100x faster than loops. Rule: <strong>always prefer NumPy built-in functions over for-loops</strong>. On million-row data, the difference is seconds vs minutes.
+  <h3>2.2.1 Reading a Tensor</h3>
+  <table>
+    <tr><th>Attribute</th><th>What it tells you</th><th>Typical value</th><th>When it bites you</th></tr>
+    <tr><td>shape</td><td>The size of every dimension</td><td><code class="inline">torch.Size([100, 1])</code></td><td>A wrong shape raises nothing; broadcasting guesses a result for you</td></tr>
+    <tr><td>dtype</td><td>Element type and precision</td><td><code class="inline">float32</code>, <code class="inline">int64</code></td><td><code class="inline">int64</code> cannot require grad, and integer division truncates</td></tr>
+    <tr><td>device</td><td>Where the data physically sits</td><td><code class="inline">cpu</code>, <code class="inline">cuda:0</code></td><td>Mixing CPU and CUDA raises a <code class="inline">RuntimeError</code></td></tr>
+    <tr><td>requires_grad</td><td>Whether this tensor is differentiated</td><td><code class="inline">True</code> / <code class="inline">False</code></td><td>Forget it on a parameter and <code class="inline">.grad</code> stays <code class="inline">None</code> — training silently does nothing</td></tr>
+    <tr><td>grad</td><td>The accumulated gradient</td><td>A tensor of the same shape</td><td>It accumulates: without zeroing, you read a sum of all previous steps</td></tr>
+  </table>
+  <div class="callout key">
+    <span class="label">The habit</span>
+    On any shape error, or whenever a result looks wrong, print first:
+    <code class="inline">print(x.shape, x.dtype, x.device)</code>.
+    Nine out of ten tensor bugs show up in that one line. This is not debugging; it is a default.
   </div>
 
-  <h3>2.2.3 Indexing &amp; Slicing</h3>
-  <pre>a = np.array([[<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>], [<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>]])
+  <h3>2.2.2 Creating Tensors</h3>
+  <pre><span class="kw">import</span> torch
 
-<span class="cm"># Basic indexing</span>
-print(a[<span class="num">0</span>, <span class="num">1</span>])       <span class="cm"># 2  (row 0, col 1)</span>
-print(a[:, <span class="num">0</span>])       <span class="cm"># [1 4 7]  (all rows, col 0)</span>
+t = torch.tensor([[<span class="num">1.</span>, <span class="num">2.</span>], [<span class="num">3.</span>, <span class="num">4.</span>]])   <span class="cm"># from Python data</span>
+z = torch.zeros(<span class="num">2</span>, <span class="num">3</span>)                    <span class="cm"># all zeros</span>
+o = torch.ones(<span class="num">2</span>, <span class="num">3</span>)                     <span class="cm"># all ones</span>
+r = torch.randn(<span class="num">2</span>, <span class="num">3</span>)                    <span class="cm"># standard normal</span>
+a = torch.arange(<span class="num">0</span>, <span class="num">6</span>)                   <span class="cm"># 0..5 — int64 by default</span>
+l = torch.linspace(<span class="num">0</span>, <span class="num">1</span>, <span class="num">5</span>)              <span class="cm"># 5 evenly spaced points</span>
 
-<span class="cm"># Boolean masking — filter by condition</span>
-mask = a > <span class="num">5</span>
-print(a[mask])        <span class="cm"># [6 7 8 9]</span>
+<span class="fn">print</span>(t.shape, t.dtype, t.device)
+<span class="cm"># torch.Size([2, 2]) torch.float32 cpu</span>
 
-<span class="cm"># Fancy indexing — select by index array</span>
-print(a[[<span class="num">0</span>, <span class="num">2</span>]])    <span class="cm"># rows 0 and 2</span>
-
-<span class="cm"># Where: conditional assignment</span>
-np.where(a > <span class="num">5</span>, <span class="str">"big"</span>, <span class="str">"small"</span>)</pre>
+<span class="fn">print</span>(a.dtype)                            <span class="cm"># torch.int64</span>
+<span class="fn">print</span>(torch.arange(<span class="num">6.</span>).dtype)             <span class="cm"># torch.float32 — one dot</span>
+<span class="fn">print</span>(round(r.mean().item(), <span class="num">2</span>))          <span class="cm"># about 0.00</span>
+<span class="fn">print</span>(round(r.std().item(), <span class="num">2</span>))           <span class="cm"># about 1.00</span></pre>
+  <div class="callout warn">
+    <span class="label">Trap</span>
+    <code class="inline">torch.arange(0, 6)</code> is <code class="inline">int64</code>, so <code class="inline">requires_grad=True</code> on it raises. In training code write <code class="inline">torch.arange(6.)</code>: a single decimal point makes it <code class="inline">float32</code>. The same trap appears as <code class="inline">y = 3.0 * X + 2.0</code> where <code class="inline">2.0</code> quietly keeps the tensor floating-point.
+  </div>
 </div>
 
 <!-- ========== 2.3 ========== -->
 <div class="section">
-  <h2>2.3 Pandas Data Manipulation</h2>
-  <p>Pandas is the de-facto standard for structured data processing. <code class="inline">Series</code> is a one-dimensional labeled array; <code class="inline">DataFrame</code> is a two-dimensional table — think of it as "Excel with row/column labels + SQL query capabilities".</p>
+  <h2>2.3 Shape Manipulation and Broadcasting</h2>
+  <p>This section contains the only class of failure in the chapter that produces no error at all. It deserves the most attention, not the least.</p>
 
-  <h3>2.3.1 Loading &amp; Overview</h3>
-  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+  <h3>2.3.1 Three Families of Shape Operations</h3>
+  <table>
+    <tr><th>Family</th><th>Operations</th><th>What to know</th></tr>
+    <tr><td>Change the shape</td><td><code class="inline">view</code>, <code class="inline">reshape</code>, <code class="inline">-1</code></td><td><code class="inline">view</code> shares memory and requires contiguity; <code class="inline">reshape</code> copies when it must — use it by default. <code class="inline">-1</code> means "infer this dimension"; all others must divide evenly.</td></tr>
+    <tr><td>Add or remove a dimension</td><td><code class="inline">unsqueeze</code>, <code class="inline">squeeze</code></td><td><code class="inline">unsqueeze(1)</code> turns <code class="inline">(n,)</code> into <code class="inline">(n,1)</code> — the most common rescue in this course. <code class="inline">squeeze</code> only removes dimensions of size 1.</td></tr>
+    <tr><td>Swap axes</td><td><code class="inline">transpose</code>, <code class="inline">permute</code></td><td>After an axis swap the tensor is usually non-contiguous, so <code class="inline">view</code> fails. Use <code class="inline">.contiguous().view(...)</code> or <code class="inline">reshape</code>.</td></tr>
+  </table>
+  <pre>x = torch.arange(<span class="num">6.</span>)           <span class="cm"># (6,)</span>
+a = x.view(<span class="num">2</span>, <span class="num">3</span>)               <span class="cm"># (2,3) — shares memory with x</span>
+x[<span class="num">0</span>] = <span class="num">99.</span>
+<span class="fn">print</span>(a[<span class="num">0</span>, <span class="num">0</span>])                 <span class="cm"># 99.0 -> a view, not a copy</span>
 
-<span class="cm"># Load from CSV</span>
-df = pd.read_csv(<span class="str">"titanic.csv"</span>)
+t = a.t()                      <span class="cm"># (3,2), now non-contiguous</span>
+<span class="cm"># t.view(6)                    # RuntimeError: view size is not compatible</span>
+<span class="fn">print</span>(t.reshape(<span class="num">6</span>).shape)         <span class="cm"># (6,) — reshape copies, so it works</span>
 
-<span class="cm"># Quick overview — the first 3 commands you always run</span>
-df.head()          <span class="cm"># first 5 rows</span>
-df.info()          <span class="cm"># dtypes, non-null counts, memory</span>
-df.describe()      <span class="cm"># statistical summary of numeric columns</span>
-df.shape           <span class="cm"># (rows, cols)</span>
-df.columns         <span class="cm"># column names</span>
-df.dtypes          <span class="cm"># data types per column</span></pre>
+<span class="fn">print</span>(x.reshape(<span class="num">2</span>, -<span class="num">1</span>).shape)       <span class="cm"># (2, 3)</span>
+<span class="fn">print</span>(x.unsqueeze(<span class="num">1</span>).shape)         <span class="cm"># (6, 1) — what MSE broadcasting wants</span></pre>
 
-  <h3>2.3.2 Indexing, Filtering &amp; Assignment</h3>
-  <pre><span class="cm"># Column selection</span>
-df[<span class="str">"Age"</span>]                    <span class="cm"># single column → Series</span>
-df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Survived"</span>]]  <span class="cm"># multiple → DataFrame</span>
+  <h3>2.3.2 The Broadcasting Rules</h3>
+  <div class="steps">
+    <div class="step"><h4>Align from the right</h4><p class="body">Compare the two shapes starting at the rightmost dimension and walk left.</p></div>
+    <div class="step"><h4>Equal sizes align directly</h4><p class="body">Dimension sizes that match are paired as they are.</p></div>
+    <div class="step"><h4>A dimension of 1 stretches</h4><p class="body">If one of the two is 1, it is copied along that dimension to match the other.</p></div>
+    <div class="step"><h4>Neither 1 nor equal raises</h4><p class="body">This is the good kind of error. It stops you before you compute something meaningless.</p></div>
+  </div>
+  <pre>w = torch.randn(<span class="num">3</span>)         <span class="cm"># (3,)</span>
+X = torch.randn(<span class="num">4</span>, <span class="num">3</span>)      <span class="cm"># (4,3)</span>
+<span class="fn">print</span>((X + w).shape)       <span class="cm"># (4,3) — w copied onto every row: intuitive</span>
 
-<span class="cm"># .loc = label-based, .iloc = position-based</span>
-df.loc[<span class="num">0</span>:<span class="num">4</span>, [<span class="str">"Name"</span>, <span class="str">"Age"</span>]]    <span class="cm"># rows 0-4, specific cols</span>
-df.iloc[<span class="num">0</span>:<span class="num">5</span>, <span class="num">0</span>:<span class="num">3</span>]              <span class="cm"># first 5 rows, first 3 cols</span>
+v = torch.randn(<span class="num">3</span>, <span class="num">1</span>)      <span class="cm"># (3,1)</span>
+<span class="fn">print</span>((v + w).shape)       <span class="cm"># (3,3) — silently larger. This is the bug.</span>
 
-<span class="cm"># Boolean filtering — the most common pattern</span>
-survived = df[df[<span class="str">"Survived"</span>] == <span class="num">1</span>]
-women_first = df[(df[<span class="str">"Sex"</span>] == <span class="str">"female"</span>) & (df[<span class="str">"Pclass"</span>] == <span class="num">1</span>)]
+<span class="fn">print</span>(torch.broadcast_shapes((<span class="num">3</span>, <span class="num">1</span>), (<span class="num">3</span>,)))
+<span class="cm"># -> (3, 3): legal by the rules, and not what you meant</span>
 
-<span class="cm"># Column creation from existing columns</span>
-df[<span class="str">"FamilySize"</span>] = df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] + <span class="num">1</span>
-df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"FamilySize"</span>] == <span class="num">1</span>).astype(int)</pre>
+w2 = w.reshape(-<span class="num">1</span>, <span class="num">1</span>)            <span class="cm"># write the intent into the shape</span>
+<span class="fn">print</span>((v + w2).shape)      <span class="cm"># (3,1) — what you actually wanted</span></pre>
+  <div class="callout key">
+    <span class="label">The rule behind the rule</span>
+    Broadcasting guarantees <em>legality</em>, not <em>intent</em>. The engine will happily produce a shape you never wanted, without a warning. Writing <code class="inline">reshape(-1, 1)</code> is partly about correctness and mostly about making the code explain itself.
+  </div>
 
-  <h3>2.3.3 GroupBy &amp; Aggregation</h3>
-  <pre><span class="cm"># Group by one column, aggregate multiple ways</span>
-df.groupby(<span class="str">"Pclass"</span>)[<span class="str">"Fare"</span>].agg([<span class="str">"mean"</span>, <span class="str">"median"</span>, <span class="str">"count"</span>])
+  <h3>2.3.3 Silent Wrong vs Loud Error</h3>
+  <p>Sort the failures you meet into these two columns; spend your attention on the left one.</p>
+  <table>
+    <tr><th>Expression</th><th>Result</th><th>Raises?</th><th>Why</th></tr>
+    <tr><td><code class="inline">X (4,3) + w (3,)</code></td><td><code class="inline">(4,3)</code></td><td>no</td><td>Right-aligned; <code class="inline">w</code> is copied onto every row — intended</td></tr>
+    <tr><td><code class="inline">v (3,1) + w (3,)</code></td><td><code class="inline">(3,3)</code></td><td>no — <strong>silent</strong></td><td><code class="inline">(3,1)</code> spreads down columns, <code class="inline">(3,)</code> across rows; an extra dimension appears</td></tr>
+    <tr><td><code class="inline">v + w.reshape(-1,1)</code></td><td><code class="inline">(3,1)</code></td><td>no</td><td>The intent is written into the shape</td></tr>
+    <tr><td><code class="inline">X (100,1) @ w (1,1)</code></td><td><code class="inline">(100,1)</code></td><td>no</td><td>Matrix multiply does not broadcast; inner dimensions match exactly</td></tr>
+    <tr><td><code class="inline">X (100,1) @ w (3,)</code></td><td>—</td><td><strong>yes</strong></td><td>Inner dimensions 1 and 3 differ: <em>mat1 and mat2 shapes cannot be multiplied</em></td></tr>
+    <tr><td><code class="inline">a (2,3).t().view(6)</code></td><td>—</td><td><strong>yes</strong></td><td>Non-contiguous after transpose: <em>view size is not compatible...</em></td></tr>
+    <tr><td><code class="inline">x (4,6).reshape(-1,3)</code></td><td><code class="inline">(8,3)</code></td><td>no</td><td><code class="inline">-1</code> is inferred; all other dimensions must divide evenly</td></tr>
+  </table>
 
-<span class="cm"># Group by multiple columns</span>
-df.groupby([<span class="str">"Sex"</span>, <span class="str">"Pclass"</span>])[<span class="str">"Survived"</span>].mean()
-<span class="cm"># → survival rate by gender × class</span>
-
-<span class="cm"># Custom aggregation</span>
-df.groupby(<span class="str">"Pclass"</span>).agg({
-    <span class="str">"Age"</span>: [<span class="str">"mean"</span>, <span class="str">"median"</span>],
-    <span class="str">"Fare"</span>: [<span class="str">"sum"</span>, <span class="str">"max"</span>],
-    <span class="str">"Survived"</span>: <span class="str">"mean"</span>
-})
-
-<span class="cm"># Pivot table — spreadsheet-style cross-tab</span>
-pd.pivot_table(df, values=<span class="str">"Survived"</span>, index=<span class="str">"Sex"</span>,
-               columns=<span class="str">"Pclass"</span>, aggfunc=<span class="str">"mean"</span>)</pre>
-
-  <h3>2.3.4 Merge &amp; Join</h3>
-  <pre><span class="cm"># Two DataFrames with a shared key</span>
-passengers = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>], <span class="str">"name"</span>: [<span class="str">"Alice"</span>,<span class="str">"Bob"</span>,<span class="str">"Carol"</span>]})
-tickets = pd.DataFrame({<span class="str">"pid"</span>: [<span class="num">1</span>,<span class="num">2</span>,<span class="num">4</span>], <span class="str">"fare"</span>: [<span class="num">50</span>,<span class="num">80</span>,<span class="num">120</span>]})
-
-<span class="cm"># Four join types — same as SQL</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"inner"</span>)  <span class="cm"># only matches</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"left"</span>)   <span class="cm"># keep all passengers</span>
-pd.merge(passengers, tickets, on=<span class="str">"pid"</span>, how=<span class="str">"outer"</span>)  <span class="cm"># keep all rows</span>
-pd.concat([df1, df2], axis=<span class="num">0</span>)  <span class="cm"># vertical stacking (more rows)</span></pre>
-  <div class="callout warn">
-    <span class="label">Common Pitfall</span>
-    Row count changed after <code class="inline">merge</code>? Check the <code class="inline">how</code> parameter and key uniqueness. <code class="inline">left</code> keeps all rows from the left table (missing filled with NaN); <code class="inline">inner</code> keeps only matches. Forgetting to check leads to data leakage or silent row loss.
+  <h3>2.3.4 The Four Classic Mistakes and Five Checks</h3>
+  <div class="terms">
+    <div class="term"><h4>Mistake 1</h4><p>Mixing <code class="inline">(n,)</code> with <code class="inline">(n,1)</code> and getting a silent <code class="inline">(n,n)</code>. In a regression loss this changes the scale of the MSE entirely.</p></div>
+    <div class="term"><h4>Mistake 2</h4><p>Forgetting a dimension where an outer product was intended, ending up with element-wise multiplication instead.</p></div>
+    <div class="term"><h4>Mistake 3</h4><p>Calling <code class="inline">view</code> on a transposed tensor — non-contiguity raises.</p></div>
+    <div class="term"><h4>Mistake 4</h4><p>Updating a parameter with a mismatched shape, so broadcasting quietly turns <code class="inline">w</code> from <code class="inline">(n,)</code> into <code class="inline">(n,n)</code>.</p></div>
+    <div class="term"><h4>Check 1–3</h4><p>Write each line's expected shape in a comment before writing the line; add <code class="inline">assert y_hat.shape == y.shape</code>; keep <code class="inline">(n,)</code> out of the fight by making targets <code class="inline">reshape(-1, 1)</code>.</p></div>
+    <div class="term"><h4>Check 4–5</h4><p>For non-contiguous tensors use <code class="inline">reshape</code> or <code class="inline">.contiguous().view(...)</code>; before training, print the shapes of the data and of every parameter once.</p></div>
   </div>
 </div>
 
 <!-- ========== 2.4 ========== -->
 <div class="section">
-  <h2>2.4 Data Visualization with Matplotlib &amp; Seaborn</h2>
-  <p>Visualization is the core weapon of EDA: one chart reveals data issues better than a thousand lines of <code class="inline">describe()</code>. Matplotlib is the underlying engine; Seaborn wraps it with statistical chart types, producing more professional plots with less code.</p>
+  <h2>2.4 Computational Graphs and Autograd</h2>
+  <p>Autograd does exactly one thing: it records each forward operation, then walks the recording backwards applying the chain rule. You never differentiate by hand — but you must know who is on the graph.</p>
 
-  <h3>2.4.1 Matplotlib Basics</h3>
-  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+  <h3>2.4.1 The Graph Is a By-Product</h3>
+  <p>Every operation involving a tensor with <code class="inline">requires_grad=True</code> records how it produced its output. The result is a directed acyclic graph whose leaves are your parameters. After <code class="inline">backward()</code> the graph is freed by default; if you need to traverse it twice, pass <code class="inline">retain_graph=True</code>.</p>
 
-fig, axes = plt.subplots(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">12</span>, <span class="num">4</span>))
+  <h3>2.4.2 requires_grad: the Switch</h3>
+  <ul>
+    <li>Only floating-point tensors accept <code class="inline">requires_grad=True</code>. An <code class="inline">int64</code> tensor raises.</li>
+    <li>Data (<code class="inline">X</code>, <code class="inline">y</code>) does not need it. Parameters (<code class="inline">w</code>, <code class="inline">b</code>) must have it.</li>
+    <li>Anything computed from such a tensor inherits the flag automatically — that is how the graph grows.</li>
+  </ul>
 
-<span class="cm"># Histogram — distribution of a numeric variable</span>
-axes[<span class="num">0</span>].hist(df[<span class="str">"Age"</span>].dropna(), bins=<span class="num">30</span>, edgecolor=<span class="str">"white"</span>)
-axes[<span class="num">0</span>].set_title(<span class="str">"Age Distribution"</span>)
+  <h3>2.4.3 backward, grad, and Accumulation</h3>
+  <pre>x = torch.tensor(<span class="num">3.0</span>, requires_grad=<span class="kw">True</span>)   <span class="cm"># a leaf tensor</span>
+y = x ** <span class="num">2</span> + <span class="num">2</span> * x + <span class="num">1</span>                      <span class="cm"># forward + graph</span>
+<span class="fn">print</span>(y.requires_grad, y.grad_fn)
+<span class="cm"># True &lt;AddBackward0&gt; — a non-leaf remembers how it was made</span>
 
-<span class="cm"># Scatter plot — relationship between two variables</span>
-axes[<span class="num">1</span>].scatter(df[<span class="str">"Age"</span>], df[<span class="str">"Fare"</span>], alpha=<span class="num">0.5</span>, s=<span class="num">10</span>)
-axes[<span class="num">1</span>].set_xlabel(<span class="str">"Age"</span>); axes[<span class="num">1</span>].set_ylabel(<span class="str">"Fare"</span>)
-axes[<span class="num">1</span>].set_title(<span class="str">"Age vs Fare"</span>)
+y.backward()                                <span class="cm"># walk the graph backwards</span>
+<span class="fn">print</span>(x.grad)                               <span class="cm"># 8.0 = 2*3 + 2</span>
 
-plt.tight_layout(); plt.show()</pre>
+x.grad = <span class="kw">None</span>                               <span class="cm"># gradients accumulate: clear first</span>
+z = (x ** <span class="num">2</span>).sum()
+z.backward()
+<span class="fn">print</span>(x.grad)                               <span class="cm"># 6.0 = 2*3</span>
 
-  <h3>2.4.2 Seaborn Statistical Plots</h3>
-  <pre><span class="kw">import</span> seaborn <span class="kw">as</span> sns
-sns.set_style(<span class="str">"whitegrid"</span>)
+<span class="kw">with</span> torch.no_grad():                       <span class="cm"># inference: do not build a graph</span>
+    <span class="fn">print</span>((x * <span class="num">2</span>).requires_grad)            <span class="cm"># False</span>
+<span class="fn">print</span>((x * <span class="num">3</span>).detach().requires_grad)       <span class="cm"># False — cut off the graph</span></pre>
+  <div class="callout warn">
+    <span class="label">The whole truth about accumulation</span>
+    Remove the line <code class="inline">x.grad = None</code> and run again: the gradient becomes <code class="inline">8 + 6 = 14</code>. Nothing raises. Inside a training loop this is the direct cause of a loss curve that jumps up and down instead of descending.
+  </div>
 
-<span class="cm"># Count plot — categorical frequency</span>
-sns.countplot(data=df, x=<span class="str">"Pclass"</span>, hue=<span class="str">"Survived"</span>)
-
-<span class="cm"># Box plot — detect outliers by group</span>
-sns.boxplot(data=df, x=<span class="str">"Pclass"</span>, y=<span class="str">"Age"</span>)
-
-<span class="cm"># Violin plot — distribution shape by category</span>
-sns.violinplot(data=df, x=<span class="str">"Sex"</span>, y=<span class="str">"Age"</span>, split=<span class="kw">True</span>)
-
-<span class="cm"># Correlation heatmap — the EDA power move</span>
-corr = df.select_dtypes(include=[<span class="str">"number"</span>]).corr()
-sns.heatmap(corr, annot=<span class="kw">True</span>, cmap=<span class="str">"coolwarm"</span>, center=<span class="num">0</span>)
-
-<span class="cm"># Pair plot — pairwise relationships at a glance</span>
-sns.pairplot(df[[<span class="str">"Age"</span>, <span class="str">"Fare"</span>, <span class="str">"Pclass"</span>, <span class="str">"Survived"</span>]], hue=<span class="str">"Survived"</span>)</pre>
-  <div class="callout key">
-    <span class="label">Key Insight · Chart Selection Guide</span>
-    <strong>Distribution → histogram/KDE; Relationship → scatter; Comparison → box/violin; Correlation → heatmap.</strong> These four cover 90% of EDA needs.
+  <h3>2.4.4 The Five Moves of One Update</h3>
+  <div class="steps">
+    <div class="step"><h4>Forward</h4><p class="body">Compute the prediction from the current parameters: <code class="inline">y_hat = X @ w + b</code>.</p></div>
+    <div class="step"><h4>Build the graph</h4><p class="body">Happens automatically because the parameters require grad.</p></div>
+    <div class="step"><h4>Scalar loss</h4><p class="body">Compress the error into one number: <code class="inline">loss = ((y_hat - y) ** 2).mean()</code>.</p></div>
+    <div class="step"><h4>Backward</h4><p class="body"><code class="inline">loss.backward()</code> fills <code class="inline">.grad</code> on every leaf.</p></div>
+    <div class="step"><h4>Update, then zero</h4><p class="body">Edit the parameters inside <code class="inline">with torch.no_grad():</code>, then zero the gradients immediately. The order is fixed; the <code class="inline">no_grad</code> wrapper is not optional.</p></div>
   </div>
 </div>
 
 <!-- ========== 2.5 ========== -->
 <div class="section">
-  <h2>2.5 Exploratory Data Analysis</h2>
-  <p>EDA is not "making plots" — it is <strong>a systematic method of answering questions with data</strong>: understand distributions → find anomalies → test hypotheses → prepare for feature engineering. The standard 5-step EDA routine:</p>
+  <h2>2.5 Gradient Descent with Tensors</h2>
+  <p>Put the three previous sections together: tensors hold the data, shapes line up, autograd supplies the gradient, and you write the descent step yourself.</p>
 
-  <div class="steps">
-    <div class="step"><div class="body"><strong>Overview</strong> — <code class="inline">df.shape</code>, <code class="inline">df.info()</code>, <code class="inline">df.describe()</code>. Answer: how many rows and columns? Which are numeric/categorical/datetime? Any missing values?</div></div>
-    <div class="step"><div class="body"><strong>Univariate Analysis</strong> — histograms for numeric variables, <code class="inline">value_counts</code> for categorical variables. Answer: what does each variable's own distribution look like? Is it skewed? Are there outliers?</div></div>
-    <div class="step"><div class="body"><strong>Bivariate Analysis</strong> — scatter plots, group statistics, cross-tabulations; add a correlation matrix + heatmap when several variables are involved. Answer: which features relate to the target? Is there collinearity among features?</div></div>
-    <div class="step"><div class="body"><strong>Anomalies &amp; Missingness</strong> — extreme values and missing patterns (<code class="inline">isnull().sum()</code> + missing-value heatmap). Answer: data entry error or genuine phenomenon? Is the missingness random or patterned?</div></div>
-    <div class="step"><div class="body"><strong>Hypotheses</strong> — write down your conjectures based on the observations above (e.g. "female survival rate is higher"), then verify with group statistics. Answer: which features might be predictive? What transformations are needed?</div></div>
-  </div>
+  <h3>2.5.1 The Hand-Written Loop</h3>
+  <pre><span class="kw">import</span> torch
+torch.manual_seed(<span class="num">42</span>)                  <span class="cm"># fixed seed: reproducible</span>
 
-  <h3>2.5.1 Titanic Walkthrough: The Five Steps End-to-End</h3>
-  <p>Below, the five steps applied end-to-end to <code class="inline">sns.load_dataset("titanic")</code> (mirrors slides p16–p17). Note: every step must yield <strong>a finding written into the notebook</strong> — not a chart you glance at and close.</p>
-  <pre><span class="cm"># Step 1 · Overview</span>
-df = sns.load_dataset(<span class="str">"titanic"</span>)
-df.shape          <span class="cm"># (891, 12)</span>
-df.info()         <span class="cm"># age: 177 missing, deck: 688, embarked: 2</span>
+X = torch.randn(<span class="num">100</span>, <span class="num">1</span>)                <span class="cm"># (100, 1)</span>
+y = <span class="num">3.0</span> * X + <span class="num">2.0</span> + <span class="num">0.1</span> * torch.randn(<span class="num">100</span>, <span class="num">1</span>)
+w = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, requires_grad=<span class="kw">True</span>)
+b = torch.zeros(<span class="num">1</span>, requires_grad=<span class="kw">True</span>)
+lr, history = <span class="num">0.1</span>, []
 
-<span class="cm"># Step 2 · Univariate</span>
-df[<span class="str">"age"</span>].plot.hist()      <span class="cm"># age right-skewed, mostly 20-40; fare heavy tail (max 512)</span>
+<span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(<span class="num">200</span>):
+    y_hat = X @ w + b                  <span class="cm"># forward: (100,1)</span>
+    loss = ((y_hat - y) ** <span class="num">2</span>).mean()   <span class="cm"># MSE</span>
+    loss.backward()                    <span class="cm"># backward: fills w.grad</span>
+    <span class="kw">with</span> torch.no_grad():              <span class="cm"># the update must not be traced</span>
+        w -= lr * w.grad
+        b -= lr * b.grad
+    w.grad.zero_(); b.grad.zero_()     <span class="cm"># skip this and gradients accumulate</span>
+    history.append(loss.item())
 
-<span class="cm"># Step 3 · Bivariate</span>
-df.groupby(<span class="str">"sex"</span>)[<span class="str">"survived"</span>].mean()
-<span class="cm"># female 0.74 vs male 0.19 — sex is a strong feature</span>
+<span class="fn">print</span>(round(w.item(), <span class="num">3</span>), round(b.item(), <span class="num">3</span>))   <span class="cm"># 2.987 2.013</span></pre>
+  <p>Three things must happen inside the loop, and no two of them are interchangeable: <code class="inline">loss.backward()</code>, the update wrapped in <code class="inline">with torch.no_grad():</code>, and <code class="inline">w.grad.zero_()</code>. Remove any one and training will not converge the way you expect.</p>
 
-<span class="cm"># Step 4 · Anomalies &amp; missingness</span>
-df[<span class="str">"fare"</span>].describe()    <span class="cm"># 15 tickets cost 0 — crew tickets or data entry errors?</span>
-
-<span class="cm"># Step 5 · Hypotheses (write them in Markdown)</span>
-<span class="cm"># H1: sex + class + age can predict survival</span>
-<span class="cm"># H2: deck is >75% missing — consider dropping the column</span>
-<span class="cm"># H3: fare = 0 records need a separate check</span></pre>
+  <h3>2.5.2 Three Learning Rates</h3>
+  <table>
+    <tr><th>η</th><th>What the loss curve looks like</th><th>What is actually happening</th></tr>
+    <tr><td>Too small, 0.001</td><td>Almost flat; the descent is invisible</td><td>Each step is tiny; 200 steps never reach the bottom — easily misread as "the model does not work"</td></tr>
+    <tr><td>About right, 0.1</td><td>A clear descent, then a plateau</td><td>The default for this lab and the reference for the comparison</td></tr>
+    <tr><td>Too large, 1.0</td><td>Rises, oscillates, eventually <code class="inline">nan</code></td><td>Every step overshoots the valley and lands further away on the other side</td></tr>
+  </table>
   <div class="callout tip">
-    <span class="label">Takeaway · Five Steps Are Enough to Act</span>
-    One dataset, five steps, actionable conclusions — the feature shortlist takes shape before any modeling. Your findings don't have to match the example: same data, different perspectives.
+    <span class="label">Debugging first move</span>
+    When a loss curve misbehaves, ask two questions in this order: is the loss descending at all, and are the gradients zeroed each step? The learning rate is the third question, not the first.
   </div>
+
+  <h3>2.5.3 Where "Converged" Means: Three Numbers, Not One</h3>
+  <p>Linear regression is one of the few models where you know the right answer <em>before</em> training. Use that: it turns your first training run into a check rather than a hope.</p>
+  <table>
+    <tr><th>Parameter</th><th>Generating truth</th><th>Closed-form OLS</th><th>GD, 200 steps</th><th>Relative error</th></tr>
+    <tr><td>w (slope)</td><td>3.000</td><td>2.991</td><td>2.987</td><td>0.13%</td></tr>
+    <tr><td>b (intercept)</td><td>2.000</td><td>2.014</td><td>2.013</td><td>0.05%</td></tr>
+    <tr><td>train MSE</td><td>0.0100 (noise variance)</td><td>0.0098</td><td>0.0099</td><td>not comparable</td></tr>
+  </table>
+  <p>Each number means something different. The truth is what you generated the data with; the closed-form solution is the best possible fit <em>on this particular sample</em>; the trained solution is what 200 steps produced. Your report must state which one it compares against, or the word "error" carries no information.</p>
+  <pre><span class="cm"># closed-form least squares on the same sample</span>
+X1 = torch.cat([X, torch.ones_like(X)], dim=<span class="num">1</span>)   <span class="cm"># (100, 2)</span>
+theta = torch.linalg.lstsq(X1, y).solution
+<span class="fn">print</span>(theta.flatten().tolist())                    <span class="cm"># [w_ols, b_ols]</span></pre>
 </div>
 
 <!-- ========== 2.6 ========== -->
 <div class="section">
-  <h2>2.6 Hands-On Data Cleaning</h2>
-  <p>Real datasets are never clean. This section uses the Titanic dataset to demonstrate the four most common cleaning operations.</p>
-
-  <h3>2.6.1 Handling Missing Values</h3>
-  <pre><span class="cm"># Step 1: Find them</span>
-df.isnull().sum()
-<span class="cm"># Age            177  ← lots of missing
-# Cabin         687  ← mostly missing → consider dropping
-# Embarked        2  ← trivial → fill with mode</span>
-
-<span class="cm"># Step 2: Strategy per column</span>
-<span class="cm"># Option A: Drop columns with too many missing</span>
-df = df.drop(columns=[<span class="str">"Cabin"</span>])
-
-<span class="cm"># Option B: Fill numeric with median (robust to outliers)</span>
-df[<span class="str">"Age"</span>] = df[<span class="str">"Age"</span>].fillna(df[<span class="str">"Age"</span>].median())
-
-<span class="cm"># Option C: Fill categorical with mode</span>
-df[<span class="str">"Embarked"</span>] = df[<span class="str">"Embarked"</span>].fillna(df[<span class="str">"Embarked"</span>].mode()[<span class="num">0</span>])</pre>
-  <div class="callout warn">
-    <span class="label">Warning · Data Leakage</span>
-    Filling missing values with global stats (e.g. global median) before train/test split leaks test set information into the training set. Correct approach: <strong>split first, then impute with training statistics</strong>. In scikit-learn, this is enforced by <code class="inline">SimpleImputer</code> + <code class="inline">Pipeline</code>.
+  <h2>2.6 Pitfalls and a Debugging Checklist</h2>
+  <div class="callout key">
+    <span class="label">Rigour: Why the Seed Must Be Fixed</span>
+    Randomness is part of training — initialisation, noise, shuffling — so it must be pinned down. Without a fixed seed, your experiment cannot be re-checked by anyone, including you in three days.
+    A single good run is not a conclusion; a repeatable one is. Every report you write this term carries three things: the seed, the environment version, and one runnable command.
+    And keep the failures in the record: shape errors and debugging traces are evidence of skill, not marks to hide. Never fabricate an output; never prettify a curve. Small cross-device differences are normal — state them rather than quietly keeping the best run.
   </div>
-
-  <h3>2.6.2 Outlier Detection</h3>
-  <pre><span class="cm"># IQR method — robust to extreme values</span>
-Q1 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.25</span>)
-Q3 = df[<span class="str">"Fare"</span>].quantile(<span class="num">0.75</span>)
-IQR = Q3 - Q1
-lower = Q1 - <span class="num">1.5</span> * IQR
-upper = Q3 + <span class="num">1.5</span> * IQR
-
-outliers = df[(df[<span class="str">"Fare"</span>] < lower) | (df[<span class="str">"Fare"</span>] > upper)]
-print(<span class="str">f"Found {len(outliers)} outliers in Fare"</span>)
-
-<span class="cm"># Z-score method — assumes normal distribution</span>
-from scipy <span class="kw">import</span> stats
-z = np.abs(stats.zscore(df[<span class="str">"Age"</span>].dropna()))
-print(<span class="str">f"Z-score outliers (>3): {(z > 3).sum()}"</span>)</pre>
-
-  <h3>2.6.3 Duplicates &amp; Type Conversion</h3>
-  <pre><span class="cm"># Remove exact duplicates</span>
-df = df.drop_duplicates()
-print(<span class="str">f"After dedup: {df.shape}"</span>)
-
-<span class="cm"># Type conversion — save memory, enable operations</span>
-df[<span class="str">"Pclass"</span>] = df[<span class="str">"Pclass"</span>].astype(<span class="str">"category"</span>)  <span class="cm"># saves ~90% memory</span>
-df[<span class="str">"Sex"</span>] = df[<span class="str">"Sex"</span>].map({<span class="str">"male"</span>: <span class="num">0</span>, <span class="str">"female"</span>: <span class="num">1</span>})  <span class="cm"># label encoding</span></pre>
-
-  <h3>2.6.4 Feature Engineering Preview</h3>
-  <pre><span class="cm"># Extract title from name — a proxy for social status</span>
-df[<span class="str">"Title"</span>] = df[<span class="str">"Name"</span>].str.extract(<span class="str">r' ([A-Za-z]+)\.'</span>)
-df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace([<span class="str">"Mlle"</span>, <span class="str">"Ms"</span>], <span class="str">"Miss"</span>)
-df[<span class="str">"Title"</span>] = df[<span class="str">"Title"</span>].replace(<span class="str">"Mme"</span>, <span class="str">"Mrs"</span>)
-
-<span class="cm"># Bin age into groups — converts continuous to ordinal</span>
-df[<span class="str">"AgeBin"</span>] = pd.cut(df[<span class="str">"Age"</span>], bins=[<span class="num">0</span>, <span class="num">12</span>, <span class="num">18</span>, <span class="num">35</span>, <span class="num">60</span>, <span class="num">100</span>],
-                     labels=[<span class="str">"Child"</span>, <span class="str">"Teen"</span>, <span class="str">"Young"</span>, <span class="str">"Adult"</span>, <span class="str">"Senior"</span>])
-
-<span class="cm"># Family size → alone flag (feature compression)</span>
-df[<span class="str">"IsAlone"</span>] = (df[<span class="str">"SibSp"</span>] + df[<span class="str">"Parch"</span>] == <span class="num">0</span>).astype(int)</pre>
-  <div class="callout tip">
-    <span class="label">Pro Tip</span>
-    Feature engineering turns domain knowledge into signal. The classic Titanic example: <strong>extracting Title from Name</strong> (Mr/Mrs/Master/Dr) adds a layer of social status beyond mere Sex — historically, in "women and children first," Master (boys) had significantly higher survival than Mr.
+  <div class="callout warn">
+    <span class="label">Checklist</span>
+    <ul>
+      <li><strong>Print shapes before anything else.</strong> <code class="inline">print(x.shape, x.dtype, x.device)</code> on the first look at any new tensor.</li>
+      <li><strong>Predict the shape before running the line.</strong> Write it in a comment; if the print disagrees, stop and find out why.</li>
+      <li><strong>Assert the contract.</strong> <code class="inline">assert y_hat.shape == y.shape</code> costs one line and catches the silent bug.</li>
+      <li><strong>Prefer <code class="inline">reshape</code> to <code class="inline">view</code>.</strong> Use <code class="inline">view</code> only when you know the tensor is contiguous.</li>
+      <li><strong>Unify the target's shape.</strong> Keep everything <code class="inline">(n, 1)</code> and refuse to let <code class="inline">(n,)</code> into the fight.</li>
+      <li><strong>Zero the gradients after every update.</strong> Not before, not sometimes.</li>
+      <li><strong>Wrap the update in <code class="inline">no_grad</code>.</strong> Otherwise the update enters the graph and training slows down as it goes.</li>
+      <li><strong>Fix the seed.</strong> Or your three learning-rate curves cannot be compared at all.</li>
+      <li><strong>Check the import count.</strong> In this lab, a single <code class="inline">nn.</code> or <code class="inline">optim.</code> in the file is a violation.</li>
+      <li><strong>Read the error aloud.</strong> PyTorch error messages state the shapes involved; that is usually the diagnosis.</li>
+    </ul>
   </div>
 </div>
 
 <!-- ========== 2.7 ========== -->
 <div class="section">
-  <h2>2.7 Chapter Summary</h2>
-  <ul>
-    <li>Six data quality dimensions (completeness / accuracy / consistency / timeliness / uniqueness / validity) cap model performance — GIGO is the iron law.</li>
-    <li>NumPy vectorized operations are 10-100x faster than loops; broadcasting auto-aligns arrays of different shapes.</li>
-    <li>Pandas four core operations: loading &amp; overview (<code class="inline">read_csv</code> + <code class="inline">info</code> + <code class="inline">describe</code>) → filtering (<code class="inline">loc/iloc</code> + boolean) → aggregation (<code class="inline">groupby</code>) → merging (<code class="inline">merge</code>).</li>
-    <li>Four chart types: histogram for distribution, scatter for relationships, box plot for comparison, heatmap for correlation.</li>
-    <li>5-step EDA routine: overview → univariate → bivariate → anomalies &amp; missingness → hypotheses (see the Titanic walkthrough in 2.5.1).</li>
-    <li>Core data cleaning: per-column missing value strategies (drop/fill/interpolate), IQR outlier detection, split before imputing to prevent data leakage.</li>
-  </ul>
-</div>
+  <h2>2.7 Summary and Exercises</h2>
+  <div class="callout key">
+    <span class="label">Five Takeaways</span>
+    <ol>
+      <li>A tensor is the only container this course uses. On first sight, report four things: shape, dtype, device, requires-grad.</li>
+      <li>Prefer <code class="inline">reshape</code>; add dimensions with <code class="inline">unsqueeze(1)</code>; <code class="inline">view</code> is safe only on contiguous tensors.</li>
+      <li>Broadcasting aligns from the right and stretches every 1 — it guarantees legality, not intent. <code class="inline">(3,)</code> plus <code class="inline">(3,1)</code> silently gives <code class="inline">(3,3)</code>.</li>
+      <li>Autograd has two rules: only leaves receive <code class="inline">.grad</code>, and <code class="inline">.grad</code> accumulates.</li>
+      <li>One update is four moves in a fixed order: backward, update under <code class="inline">no_grad</code>, zero the gradients, log the loss.</li>
+    </ol>
+  </div>
 
-<!-- ========== EXERCISES ========== -->
-<div class="section">
-  <h2>Exercises</h2>
   <div class="exercise">
-    <h4>Exercise 1 · NumPy Vectorization (Required)</h4>
+    <h4>Exercise 1 · Read a Tensor (Required)</h4>
     <ol>
-      <li>Create a 1000×1000 random matrix <code class="inline">A</code>. Compute column means using both a <code class="inline">for</code> loop and NumPy vectorization, comparing timing with <code class="inline">%timeit</code>.</li>
-      <li>Use a boolean mask to select all elements greater than 0.5, replace them with 1.0, and the rest with 0.0.</li>
-      <li>Use <code class="inline">np.where</code> to implement a piecewise function: x &lt; 0 → -1, x == 0 → 0, x &gt; 0 → 1.</li>
+      <li>For each of these, write down shape, dtype and device <em>before</em> running the code: <code class="inline">torch.tensor(3.0)</code>, <code class="inline">torch.arange(5)</code>, <code class="inline">torch.linspace(0, 1, 7)</code>, <code class="inline">torch.randn(2, 3).t()</code>, <code class="inline">torch.zeros(4).unsqueeze(0)</code>.</li>
+      <li>Run it and compare. Which prediction did you get wrong, and what does that tell you about the default dtype rules?</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>Exercise 2 · Pandas EDA (Required)</h4>
+    <h4>Exercise 2 · Break Broadcasting on Purpose (Required)</h4>
     <ol>
-      <li>Load the Titanic dataset from <code class="inline">seaborn</code>: <code class="inline">df = sns.load_dataset("titanic")</code>.</li>
-      <li>Complete the 5-step EDA from Section 2.5, producing at least one chart or table per step and writing down one finding per step.</li>
-      <li>Propose and verify at least 3 hypotheses (e.g. "third-class passengers had the lowest survival rate"), supporting conclusions with <code class="inline">groupby</code> + visualization.</li>
-      <li>Write a 3-5 line EDA report (Markdown) recording key findings.</li>
+      <li>Produce, deliberately, a <code class="inline">(3,3)</code> result from a <code class="inline">(3,1)</code> and a <code class="inline">(3,)</code> tensor, and explain in one sentence why the engine allowed it.</li>
+      <li>Produce a shape error that raises, and paste the full message.</li>
+      <li>Write a version of the same two lines that cannot be misinterpreted, and say what you added.</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>Exercise 3 · Hands-On Data Cleaning (Required)</h4>
+    <h4>Exercise 3 · Accumulation, Measured (Required)</h4>
     <ol>
-      <li>Load the dataset from Exercise 2, handle all missing values (at least 3 columns), and record the strategy and rationale for each column.</li>
-      <li>Use the IQR method to detect outliers in the <code class="inline">"fare"</code> column, and compare the distribution before and after removal.</li>
-      <li>Perform Label Encoding on the <code class="inline">"who"</code> or <code class="inline">"class"</code> column, and add a new <code class="inline">"_alone"</code> boolean column.</li>
+      <li>Run the minimal autograd example from Section 2.4.3 and record <code class="inline">x.grad</code>.</li>
+      <li>Comment out the line that clears the gradient and run again. Record the new value and explain the arithmetic.</li>
+      <li>Change the loop on p. 2.5.1 so that gradients are never zeroed, run 200 steps, and describe the loss curve in one sentence. Compare it with the correctly zeroed curve on the same figure.</li>
     </ol>
   </div>
   <div class="exercise">
-    <h4>Exercise 4 · Discussion Questions</h4>
+    <h4>Exercise 4 · Linear Regression from Tensors Only, and Reproducible (Required)</h4>
     <ol>
-      <li>Why is "split first, then impute" correct? What exactly happens if you impute before splitting? Draw a data flow diagram to explain.</li>
-      <li>You have 1 million rows and 50 columns, 5 of which have 30% missing. Would you drop or impute? What is your decision criteria?</li>
-      <li>For the Titanic <code class="inline">"deck"</code> column (>70% missing), what approach could still make it informative?</li>
+      <li>Implement it with tensors and autograd only — no <code class="inline">nn.Module</code>, no <code class="inline">torch.optim</code>. Verify with <code class="inline">grep -nE "nn\.|optim\."</code> that your file is clean.</li>
+      <li>Record the baseline MSE at <code class="inline">w = b = 0</code> and the final MSE.</li>
+      <li>Compare the trained parameters against the truth and against the closed-form OLS solution; report relative errors and say explicitly which reference you used.</li>
+      <li>Fix the seed, and confirm that re-running the script reproduces the parameters to three decimal places.</li>
+      <li>Re-run the 200 steps with three different seeds and plot the three loss curves together. On this convex problem the final parameters should agree to within a few thousandths. Report the spread, then write five sentences explaining why here — but not in a neural network trained from scratch — the seed affects the trajectory far more than it affects the destination.</li>
+    </ol>
+  </div>
+  <div class="exercise">
+    <h4>Exercise 5 · Audit AI-Generated Code (Required)</h4>
+    <ol>
+      <li>Ask an AI tool for "linear regression in PyTorch with tensors and autograd, no nn, no optimiser".</li>
+      <li>Read the code line by line and look specifically for these four defects: no gradient zeroing, a <code class="inline">(n,)</code> target instead of <code class="inline">(n, 1)</code>, the update outside <code class="inline">no_grad</code>, and no fixed seed.</li>
+      <li>For every defect you find: quote the wrong line, state the symptom it would produce, and show your corrected version.</li>
+      <li>Write the result up as one entry in <code class="inline">AI_USE.md</code>. Remember that the grade comes from the defects and how you found them, not from the fact that you used an AI.</li>
     </ol>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI Application Development — Chapter 2</p>
-  <p>64 hours · Year-3 Software Engineering International Students · Week 2 / 16</p>
-  <p style="margin-top:8px;">Generated with AI assistance; the instructor may adapt the content.</p>
+  <p>AI Application Development — Chapter 2 · PyTorch Fundamentals: Tensors and Autograd</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
 </div>
 
 </div>

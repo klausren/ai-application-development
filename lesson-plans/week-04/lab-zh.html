@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 4 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
+  <h1>实验 3 · 用 nn.Module 搭 MLP、对照实验与模块一里程碑</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 min + 小测与小结 15 min</span>
+    <span>📚 教材 4.4–4.6</span>
+    <span>🔧 动手实验 · 实验 3 + 模块里程碑评审</span>
+    <span>🧩 教案编号：LP-W4-B</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>说明为什么两层网络在没有隐藏层激活时数学上就是线性模型</li>
+      <li>认出 0.693（= ln 2）是二分类在当前水平上的损失，并说出它意味着什么</li>
+      <li>解释为什么必须选择「能显现待测效应」的数据集：线性模型在 <code class="inline">make_moons</code> 上已有约 0.89，因此这个数据集上激活带来的落差远小于 <code class="inline">make_circles</code></li>
+      <li>说出 <code class="inline">nn.Module</code> 四条纪律，以及破坏每一条的症状</li>
+      <li>解释为什么消融表要求每一行只改一个变量</li>
+      <li>解释训练准确率与验证准确率之间的缺口衡量的是什么</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>写出可按深度、宽度、激活参数化的 <code class="inline">nn.Module</code> 子类</li>
+      <li>在只差一个布尔值的两组设置下跑同一个实验</li>
+      <li>产出四列消融表，每一行都带结论</li>
+      <li>用一条命令加一个已记录的种子，让报告中每个数字可复现</li>
+      <li>下课前推送模块一里程碑 M4（问题定义单 + 数据管道 + 模型）</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标</span>
+  交的是结论，不是数字。一行只有数字没有「它证明了什么」的表格，不算结果。
+  把 AI 给的结构建议当作待验证的假设——验证后发现它不成立，这是一个成功的结果，同样要写进协同记录。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>只翻一个开关的对照；参数化的 <code class="inline">build()</code>；消融对照表；一条命令可复现；M4 交付三件套</td><td>教师演示一次参数化构建函数（5 分钟），之后每一轮运行都由学生自己完成；每段以 Checkpoint 收口，写完才能进入下一段</td></tr>
+  <tr><td>难点</td><td>选出「能显现待测效应」的数据集；除一个变量外全部冻结（种子、划分、轮数、学习率）；把一条平直损失曲线读成结论而不是 bug；区分「容量更大」与「有用的容量更大」；把三周的产出凑成一个里程碑</td><td>数据集选择：两个数据集跑同一个对照，让分歧自己说话——moons 是 0.953 对 0.890，circles 是 0.980 对 0.473（损失 0.693）；纪律：把冻结设置写在黑板上并保留全程；平线：与 0.693 对比，问「瞎猜能得多少分」；容量：把 42 参数那两行一起读；里程碑：用三列清单，让每人逐项念出来</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>Lab A</td><td>15 min</td><td><strong>搭建 MLP</strong>：在同一套协议下载入 <code class="inline">make_moons</code> 与 <code class="inline">make_circles</code>（各 1000 样本、7:3 分层划分、<code class="inline">random_state=42</code>）；一次性固定种子；写出按 <code class="inline">hidden</code> 与 <code class="inline">use_relu</code> 参数化的 <code class="inline">nn.Module</code> 子类；打印模型；用 <code class="inline">sum(p.numel() ...)</code> 与手算核对参数量</td><td>p22–p23</td><td>跟做 + 巡场</td></tr>
+  <tr><td>Lab B</td><td>15 min</td><td><strong>有/无激活对照，两个数据集都跑</strong>：只差一个布尔值；四次运行；四张损失曲线同图；记录 circles 上的决定性对照（0.473、损失 0.693 对 0.980）与 moons 上小得多的落差（0.890 对 0.953），再解释两个数据集为什么会给出不同答案</td><td>p23–p24</td><td>演示 → 跟做</td></tr>
+  <tr><td>Lab C</td><td>12 min</td><td><strong>宽度对照</strong>：至少四种宽度，先在 circles 上做；轮数、优化器、学习率、种子、划分全部保持一致；逐行记录参数量与验证准确率</td><td>p24</td><td>自主练习 + 巡场</td></tr>
+  <tr><td>Lab D</td><td>10 min</td><td><strong>深度对照</strong>：每次增加一个隐藏层；回答「在这份数据上深度有没有胜过宽度」，以及「换更难的任务答案会不会一样」</td><td>p24</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>Lab E</td><td>10 min</td><td><strong>形成对照表</strong>：把 Part B–D 合并成「数据集 / 配置 / 参数量 / 训练准确率 / 验证准确率 / 结论」六列；封装成 <code class="inline">run_ablation.py</code>，一条命令复现全部行；记录命令与种子</td><td>p24–p25</td><td>自主练习 + 清单核对</td></tr>
+  <tr><td>Lab F</td><td>13 min</td><td><strong>模块一里程碑 M4 与综合小测</strong>：交三部分小测卷（问题定义单 + 数据管道 + 模型）；推送 <code class="inline">src/models/model.py</code>、扩展后的 <code class="inline">src/train.py</code> 与 <code class="inline">experiments/ablation.md</code>；确认干净检出可运行</td><td>p25–p26</td><td>清单核对 + 巡场</td></tr>
+  <tr><td>小测</td><td>10 min</td><td><strong>课堂小测</strong>：6 题（概念、<code class="inline">nn.Module</code>、容量、初始化、AI 建议判断题、1 道简答）投屏；先举手投票，再讲评</td><td>p27</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>5 min</td><td><strong>总结与预告</strong>：五条要点；课后待办（模型代码 + 对照实验报告）；预告第 5 周（训练循环、损失与优化器）与模块二的开始</td><td>p28–p29</td><td>回顾 + 预告</td></tr>
+</table>
+
+<h2>4. 关键活动设计</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 把黑板冻结住（Lab A，p22）</h4>
+  <p style="font-size:13.5px;">实验一开始就把冻结设置写在黑板上并保留整场：<code class="inline">make_moons(1000, noise=0.25)</code> 与 <code class="inline">make_circles(1000, noise=0.10, factor=0.5)</code>、7:3 分层划分、<code class="inline">random_state=42</code>、<code class="inline">set_seed(42)</code>、Adam <code class="inline">lr=1e-2</code>、300 轮。每一行对照都必须用这一套。任何为了「让结果更好看」而改动的学生，其实已经作废了这次对照，而黑板就是证据。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 那条平线就是结论（Lab B，p23–p24）</h4>
+  <p style="font-size:13.5px;">在 <code class="inline">make_circles</code> 上，无激活那一行的损失整程停在 0.693。学生多半会以为代码坏了并开始调试——叫停他们，问：二分类上瞎猜的损失是多少？<code class="inline">-ln(1/2) = 0.693</code>。所谓「bug」正是发现本身。然后把 moons 那两行摆到旁边：同一段代码，无激活 0.890、加 ReLU 0.953（只差约 6 个百分点，而 circles 上是 51 个百分点），再问一个更难的问题——<em>如果只跑了 moons，你会报出哪个结果？</em>这一分钟就是整次实验的意义。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2b · 先用代数证明，再用数值验证（Lab B，p24）</h4>
+  <p style="font-size:13.5px;">对无激活的模型，在黑板把两个权重矩阵乘开：<code class="inline">W2(W1x + b1) + b2 = (W2W1)x + (W2b1 + b2)</code>。然后让学生用代码验证——算出 <code class="inline">W = model[1].weight @ model[0].weight</code>，把 <code class="inline">model(x)</code> 与 <code class="inline">x @ W.T + b</code> 对比，最大差异在 1e-7 量级（float32 舍入误差），等价权重矩阵的秩为 2。两层，一个仿射变换——是证明出来的，不是被告知的。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 先画出你猜的宽度曲线（Lab C，p24）</h4>
+  <p style="font-size:13.5px;">跑宽度扫描前，每人在纸上画出「宽度从 4 增到 128 时验证准确率的样子」。跑完再把真实数字叠上去。多数人画的是直线上升，真实曲线会弯下来。自己画的图与实测之间的差距，就是关于「收益递减」的那一课——是亲身经历的，不是被告诉的。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 跑不出来的数字不算（Lab E，p24–p25）</h4>
+  <p style="font-size:13.5px;">报告定稿前，必须先用 <code class="inline">python run_ablation.py</code> 重新生成表中每一个数字。凡是这条命令跑不出来的数字，一律从报告中删掉。这是关于可复现性最小的一课，却是会一直用到后面每一周的一课。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 把里程碑念出来（Lab F，p25–p26）</h4>
+  <p style="font-size:13.5px;">每人向邻座说出自己的三件交付——问题定义单、数据管道、模型——并指出哪一件最弱。说出最弱的那一件，里程碑评审才会诚实，也才能在模块一最后十分钟里给到最准确的帮助。</p>
+</div>
+
+<h2>5. 作业与考核</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:90px;">权重</th></tr>
+  <tr><td>交付物</td><td><code class="inline">model.py</code> + <code class="inline">ablation.md</code> + <code class="inline">run_ablation.py</code>：在干净检出下能端到端运行，每个 Checkpoint 用自己的话回答，≥ 2 次有意义的 commit 推送到公开仓库</td><td>100 分</td></tr>
+  <tr><td>评分标准</td><td>规范 MLP 20 分 · 有/无激活对照 20 分 · 宽度对照 15 分 · 深度对照 10 分 · 消融表 20 分 · M4 里程碑与小测 10 分 · 课后反思 5 分</td><td>随堂实验 15 分</td></tr>
+  <tr><td>Part B 特别说明</td><td>激活那一行的评分要求<em>两个数据集都报</em>。只报 circles 的对照、或只报 moons 上小得多的落差，该项各扣一半分——这里的要点是发现「数据集本身会让正在检验的效应显得小得多」。</td><td>—</td></tr>
+  <tr><td>课堂小测</td><td>实验结束前 6 题，举手作答；计入实验成绩 10%（见课件 p27）</td><td>实验 10%</td></tr>
+  <tr><td>模块里程碑</td><td>M4（模型 v0 + 综合小测）计入模块里程碑评审：问题定义单 + 数据管道 + 模型三部分齐全</td><td>里程碑评审（4 分）</td></tr>
+  <tr><td>迟交规则</td><td>实验交付物：每天 −10%，最多 3 天，之后 0 分。里程碑缺失每次 −2 项目分，上限 −20。以 commit 哈希为时间戳</td><td>—</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">学生离开前确认四件事</span>
+  模块一今天收官。确认每位学生：<code class="inline">python run_ablation.py</code> 能复现对照表；表中每行都有结论；
+  三件里程碑交付已推送；小测卷已交。模块一不允许留到第 5 周。
+</div>
+
+<h2>6. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前</h4>
+    <ul>
+      <li>第 3 周实验已提交（自定义 <code class="inline">Dataset</code>/<code class="inline">DataLoader</code> 可运行）</li>
+      <li>教材第 4 章已浏览，重点看消融表与常见误区清单</li>
+      <li>自己先把两个数据集的参考对照各跑一遍，把冻结设置下的真实数字带上</li>
+      <li>检查大作业仓库的 M3 状态（<code class="inline">src/data/</code>），确认 M4 能在其上延续</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>资源</h4>
+    <ul>
+      <li>实验指导书：<code class="inline">labs/week-04/lab-handout.md</code></li>
+      <li>课件 p22–p29</li>
+      <li>教材 4.4–4.6</li>
+      <li>PyTorch 参考：<code class="inline">torch.nn</code>（Linear、ReLU、Identity、Dropout、Sequential）与 <code class="inline">torch.nn.init</code></li>
+      <li><code class="inline">make_moons</code> 与 <code class="inline">make_circles</code> 随 scikit-learn 自带，无需下载数据</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 — 教案 LP-W4-B（实验部分 · 75 min + 小测与小结 15 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

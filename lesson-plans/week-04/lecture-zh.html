@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 4 周 · 授课部分（理论 · 90 min）</div>
+  <h1>神经网络与 nn.Module 建模</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖授课部分 90 分钟（L1–L5）</span>
+    <span>📚 教材 4.1–4.6</span>
+    <span>🎯 模块一 · 收官周（模块里程碑在实验结束时评审）</span>
+    <span>🧩 教案编号：LP-W4-A</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>说明一个神经元能表示什么、不能表示什么，以及隐藏层为什么改变这一点</li>
+      <li>带形状地复述前向传播：<code class="inline">(N, 2) → (N, 8) → (N, 8) → (N, 2)</code></li>
+      <li>按输出范围、梯度特性与适用场景比较 sigmoid、tanh、ReLU、LeakyReLU</li>
+      <li>解释为什么去掉隐藏层激活后，两层网络退化为线性模型</li>
+      <li>说出 <code class="inline">nn.Module</code> 建模的四条纪律，以及各自被破坏时会出什么问题</li>
+      <li>解释全零初始化为什么会让隐藏单元始终对称</li>
+      <li>读懂「配置 / 参数量 / 准确率 / 结论」消融表，并说出哪个变量影响最大</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>手算一层参数量（<code class="inline">in × out + out</code>）并用 <code class="inline">sum(p.numel() ...)</code> 验证</li>
+      <li>写出规范的 <code class="inline">nn.Module</code> 子类：层在 <code class="inline">__init__</code>、<code class="inline">forward</code> 带形状注释、输出 logits</li>
+      <li>通过 <code class="inline">print(model)</code> 诊断一个「怎么都训不动」的模型</li>
+      <li>设计一次只改一个变量的对照实验</li>
+      <li>对 AI 给出的结构建议，用实验去判断而不是直接采信</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素养目标</span>
+  以「是否适用于这个问题」而不是「是否够大」来评价结构：大 1500 倍却低 3 个百分点的结构就是更差的结构。
+  对「没有证据的建议」用同一把尺子——包括 AI 给出的建议。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>感知机 → 多层感知机；前向传播 = 矩阵乘法 + 逐元素非线性；激活函数家族；<code class="inline">nn.Module</code> 四条纪律；参数初始化；消融对照表</td><td>先做实验、再讲推导：先现场跑「有/无 ReLU」对照，再讲两次线性变换可合并；每个概念都用 <code class="inline">print(model)</code> 与参数量核对一次</td></tr>
+  <tr><td>难点</td><td>两个线性层为什么会合并成一个；没注册到 <code class="inline">self</code> 的层为什么悄悄不训练；为什么更宽更深不是单调更好；输出为什么必须是 logits</td><td>合并：在黑板把两次矩阵乘法写出来再收缩成一次；注册：展示 <code class="inline">print(model)</code> 里没有那一层，而损失还在缓慢下降；容量：让消融表的数字自己说话；logits：指出 <code class="inline">CrossEntropyLoss</code> 里已含 softmax</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lec">授课部分 · 理论 · 90 min（每周 180 分钟一体课的前半段）</div></div>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>从感知机到多层感知机</strong>：本周结构；三代结构（感知机 → 多层感知机 → 现代深度网络）；一条直线能做什么、不能做什么——在 <code class="inline">make_moons</code> 上线性模型仍有约 0.89，在 <code class="inline">make_circles</code> 上只有约 0.47，所以后者才是诚实的演示数据；前向传播逐步走一遍；2-4-2 网络的形状与参数量</td><td>p1–p7</td><td>讲授 + 板书图示</td></tr>
+  <tr><td>L2</td><td>25 min</td><td><strong>激活函数与非线性</strong>：四大家族及各自取舍；四种激活对比表；现场对照实验（课件图：损失卡在 0.693 = ln 2——这个现象在 <code class="inline">make_circles</code> 上可复现；换到 <code class="inline">make_moons</code> 上说服力弱得多，后者无激活也有 0.890、加 ReLU 只到 0.953）；只翻一个布尔值切换 <code class="inline">nn.ReLU()</code> 与 <code class="inline">nn.Identity()</code> 的代码</td><td>p8–p12</td><td>现场实验 + 讨论</td></tr>
+  <tr><td>L3</td><td>23 min</td><td><strong>nn.Module 规范建模</strong>：四条纪律；规范写法与两种典型错法并排；常用层与参数量；默认 / kaiming / 全零初始化的对照；模型定义自检清单</td><td>p13–p17</td><td>现场编码 + 跟做</td></tr>
+  <tr><td>L4</td><td>22 min</td><td><strong>宽度、深度与模型容量</strong>：逐行读 circles 上的消融表（参数量同为 42 的两行相差 51 个百分点：0.473 与 0.980）；训练/验证准确率分叉图；容量与过拟合的权衡；为什么「适用」比「大」重要</td><td>p18–p21</td><td>讲授 + 案例讨论</td></tr>
+  <tr><td>L5</td><td>5 min</td><td><strong>实验衔接与里程碑说明</strong>：预告实验任务（搭建 → 有/无激活 → 宽度 → 深度 → 对照表）；说明 M4 = 问题定义单 + 数据管道 + 模型；宣布模块一综合小测与下课前的课堂小测</td><td>p22</td><td>预告 + 答疑</td></tr>
+</table>
+
+<div class="callout warn">
+  <span class="label">教师提示 · 课件里的数字</span>
+  课件第 11 页的激活函数图现在测在 <code class="inline">make_circles</code> 上：无激活时损失卡在 0.693、准确率停在 0.473（随机水平），加上 ReLU 后升到 0.980。按课件自己的协议实测（1000 样本、<code class="inline">noise=0.10</code>/<code class="inline">factor=0.5</code>、7:3 分层划分、<code class="inline">seed=42</code>、Adam <code class="inline">lr=1e-2</code>、300 轮），这些数字完全可复现。
+  同一对照换到 <code class="inline">make_moons</code> 上说服力弱得多：线性模型已有 0.890，无激活的 2-8-2 也是 0.890，加 ReLU 只到 0.953——只差约 6 个百分点，而 circles 上是 51 个百分点。
+  演示请在 <code class="inline">make_circles</code> 上做，再把 moons 两行作为反例展示。把它明确讲成「是数据集决定了效应有多显眼」，这节课只会更有力，而不是更弱。
+</div>
+
+<h2>4. 关键活动设计</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 一条直线还是一道曲线（L1，p5）</h4>
+  <p style="font-size:13.5px;">在黑板上画出 <code class="inline">make_circles</code>——两个同心圆环——请全班用一条直线把它们分开。没人做得到：直线最多只有约 0.47，放在哪里都一样。再加一个 8 个单元的隐藏层，示意每个单元贡献一刀，分段线性的边界就自己围成一个闭合区域。然后展示 <code class="inline">make_moons</code> 的散点图，问同一个问题——多数人会断言直线同样不行，而实测结果恰好相反（约 0.89）。这个意外才是要点：<em>「线性可分」是要测出来的性质，不是用眼睛看出来的</em>。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 先猜数，再运行（L2，p11–p12）</h4>
+  <p style="font-size:13.5px;">在 <code class="inline">make_circles</code> 上跑「有/无 ReLU」对照之前，请学生写下两个数：有激活时的预期准确率、无激活时的预期损失。第二个多数人会猜到接近 0.5——猜对了，但他们仍会对「整程几乎一条平线」感到意外。接着在 <code class="inline">make_moons</code> 上跑同一个对照，看着两条曲线靠得更近（0.890 对 0.953，只差约 6 个百分点，而 circles 上是 51 个百分点），再问：如果只跑了 moons，你会选哪个数据集、会得出什么结论。「先预测再运行」把一张图变成一次结论，而这一问把一次结论变成一节实验设计课。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 故意搞坏：三个训不动的模型（L3，p15）</h4>
+  <p style="font-size:13.5px;">投屏三段代码：层写成模块级全局变量、层在 <code class="inline">forward</code> 里新建、在 <code class="inline">CrossEntropyLoss</code> 之上又手工加了一次 softmax。问全班各自会打印什么、哪一个会报错。前两个不报错，第三个也不报错——<strong>不报错</strong>本身才是这节课的要点。判据永远是 <code class="inline">print(model)</code> 加一次参数量核对。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 两行，同样 42 个参数（L4，p19）</h4>
+  <p style="font-size:13.5px;">在 <code class="inline">make_circles</code> 上逐行念消融表，在参数量同为 42 的两行停下——0.473 与 0.980——问：唯一的差别是什么（一个 <code class="inline">nn.ReLU()</code>）。接着给证明：训练后无激活网络的输出与 <code class="inline">x @ (W2W1).T + (W2b1 + b2)</code> 在 1e-7 内一致，说明它<em>就是</em>一个仿射变换。再切到 <code class="inline">make_moons</code> 的两行，同样两个配置读作 0.890 与 0.953，让全班自己发现：决定「效应有多显眼」的是数据集，而不是结构。最后点出 67,074 参数那一行——比 2-64-2 多 200 倍参数，验证准确率反而略降。综合判断（「容量有用，但有用到某个程度为止；真正起作用的是非线性」）由他们自己得出。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 审计 AI 的建议（L4，p21）</h4>
+  <p style="font-size:13.5px;">把一份 AI 生成的结构建议贴到黑板上（「用 3 层 256，加 dropout，训 1000 轮」），请全班说出它不知道什么：样本量（1000 条）、显存预算、以及输入只有 2 维——256 宽的层比输入宽了 130 倍。然后分配其中一行去实测——无论结果支持还是推翻，都写进 <code class="inline">AI_USE.md</code>。</p>
+</div>
+
+<h2>5. 作业与考核</h2>
+<table>
+  <tr><th style="width:120px;">项目</th><th>内容</th><th style="width:90px;">权重</th></tr>
+  <tr><td>课堂小测</td><td>实验后下课前的 6 题小测（激活与非线性、<code class="inline">nn.Module</code> 规范、容量、初始化 + 1 道简答），见 LP-W4-B 与课件 p27</td><td>实验 10%</td></tr>
+  <tr><td>课间衔接</td><td>授课部分结束后休息 10 分钟，随后进入实验部分（75 min，LP-W4-B）：搭建 → 有/无激活 → 宽度 → 深度 → 对照表 → M4 推送</td><td>—</td></tr>
+  <tr><td>阅读</td><td>阅读教材第 4 章（含练习与常见误区清单），巩固实验</td><td>—</td></tr>
+  <tr><td>作业</td><td>提交模型代码与对照实验报告：<code class="inline">model.py</code>、配置/参数量/准确率/结论四列对照表、一条可复现命令。下次课前 Git 推送（≥ 2 次 commit）</td><td>随堂实验 15 分</td></tr>
+  <tr><td>模块里程碑</td><td><strong>M4 · 模型 v0（MLP）+ 模块一综合小测</strong>——问题定义单 + 数据管道 + 模型，三件事本次课结束前凑齐</td><td>里程碑评审（4 分）</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">课间 · 本环节之后</span>
+  授课部分（90 min）结束后休息 10 分钟，随即开始实验部分（75 min，LP-W4-B）。课间教师巡场确认每位学生都能对一个可运行的 <code class="inline">nn.Module</code>
+  打印 <code class="inline">print(model)</code> 并说出参数量。模块一今天收官——不允许留到下周。
+</div>
+
+<h2>6. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前</h4>
+    <ul>
+      <li>阅读教材第 4 章 4.1–4.6（本次课内容）</li>
+      <li>自己先跑一遍「有/无 ReLU」实验，记下你得到的两个真实数字</li>
+      <li>把 make_moons 的划分固定在 <code class="inline">random_state=42</code>，保证你的数字与全班一致</li>
+      <li>反思：你经历过的哪一次「换更大的模型」其实是错的决策？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>资源</h4>
+    <ul>
+      <li>课件：第 4 周 Lecture（29 页版；p1–p22 对应本部分与实验衔接）</li>
+      <li>教材第 4 章（本套件产出）</li>
+      <li>PyTorch 参考：<code class="inline">torch.nn</code>（Linear、ReLU、Identity、Dropout、Sequential）与 <code class="inline">torch.nn.init</code></li>
+      <li>实验指导书：<code class="inline">labs/week-04/lab-handout.md</code></li>
+      <li>课程编号 52015CC3BV · 全课程统一使用 PyTorch 与 <code class="inline">nn.Module</code></li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 — 教案 LP-W4-A（授课部分 · 理论 · 90 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

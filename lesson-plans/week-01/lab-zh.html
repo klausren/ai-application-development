@@ -1,56 +1,33 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W1-B (Lab + Quiz, 90 min) — Environment Setup & First ML Program | 第1周教案B · 实验段</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --text: #1f2937;
-    --text-sec: #6b7280;
-    --border: #e5e7eb;
-    --card-bg: #f9fafb;
-    --accent: #1e40af;
-    --accent-bright: #2563eb;
-    --accent-bg: #eff6ff;
-    --green: #059669;
-    --green-bg: #ecfdf5;
-    --orange: #d97706;
-    --orange-bg: #fffbeb;
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
   .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
-
-  .header { border-bottom: 3px solid var(--green); padding-bottom: 20px; margin-bottom: 32px; }
-  .header .tag { font-size: 12px; font-weight: 800; color: var(--green); letter-spacing: 1px; text-transform: uppercase; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
   .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
-  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
   .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
-
-  h2 {
-    font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px;
-    border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px;
-  }
-  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
-  h2::before { content: ""; width: 5px; height: 20px; background: var(--green); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
   h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
-  .en { color: var(--text-sec); }
-
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
   th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
   td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
-
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
   .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
   .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
   .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
   .card li { margin-bottom: 4px; }
-
   .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
   .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
@@ -59,16 +36,14 @@
   .callout.tip .label { color: var(--green); }
   .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
   .callout.warn .label { color: var(--orange); }
-
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
   ul, ol { padding-left: 22px; margin-bottom: 10px; }
   li { margin-bottom: 5px; }
   code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
-
   .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
   .timebar div { padding: 10px 4px; }
-  .timebar .lec { background: var(--accent-bright); flex: 50; }
-  .timebar .lab { background: var(--green); flex: 50; }
-
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
   .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
   @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
 </style>
@@ -77,142 +52,130 @@
 <div class="container">
 
 <div class="header">
-  <div class="tag">Lesson Plan · 教案 · Week 1 · Part B (Lab 75 min + Quiz & Wrap-up 15 min)</div>
-  <h1>开发环境搭建与第一个 ML 程序<span class="en">Environment Setup & First ML Program</span></h1>
+  <div class="tag">教案 · 第 1 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
+  <h1>实验 0 · 环境搭建、GPU 验证、可复现性与记录仓库</h1>
   <div class="meta">
-    <span>⏱ 90 min（Lab A–E 75 min + 小测与小结 15 min）· 每周 180 min 一体课 · 后半段</span>
-    <span>📚 Chapter 1.5–1.8</span>
-    <span>🎯 Module 1 · AI & ML Foundations</span>
-    <span>🧩 教案编号 LP-W1-B</span>
-    <span>🖥️ 课件 p23–p32（32 页版）</span>
-    <span>🌐 English (with Chinese support)</span>
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 分钟 + 小测与小结 15 分钟</span>
+    <span>📚 教材 1.3–1.5</span>
+    <span>🔧 随堂实验</span>
+    <span>🧩 教案编号：LP-W1-B</span>
+    <span>🌐 中文</span>
   </div>
 </div>
 
-<!-- ===== 一、教学目标 ===== -->
-<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<h2>1. 教学目标</h2>
 <div class="grid2">
   <div class="card">
-    <h4>知识目标 · Knowledge</h4>
+    <h4>知识目标</h4>
     <ul>
-      <li>理解 conda 环境隔离的意义与基本命令<span class="en"> — conda environment & commands</span></li>
-      <li>理解 Git 基本工作流（init → add → commit → push）<span class="en"> — Git workflow</span></li>
-      <li>掌握 scikit-learn 的 fit → predict → evaluate 工作流<span class="en"> — sklearn pipeline pattern</span></li>
-      <li>理解 random_state 对可复现性的作用<span class="en"> — reproducibility via random_state</span></li>
+      <li>解释隔离环境防的是什么，以及 <code class="inline">environment.yml</code> 里应该有什么</li>
+      <li>说出环境自检必须证明的三件事：版本、设备、显存</li>
+      <li>解释固定种子为什么让两次运行可比，以及有哪些随机源必须一起固定</li>
+      <li>说出可复现标准的三个组成部分：种子、配置、版本</li>
+      <li>说出一条合格的 AI 协同记录必须包含什么</li>
     </ul>
   </div>
   <div class="card">
-    <h4>技能目标 · Skills</h4>
+    <h4>能力目标</h4>
     <ul>
-      <li>能独立创建 conda 环境并安装依赖清单<span class="en"> — create conda env & install deps</span></li>
-      <li>能在 Jupyter/Colab 中运行代码并验证 GPU<span class="en"> — run notebooks & check GPU</span></li>
-      <li>能用 Git 初始化项目并推送 GitHub（含规范提交信息）<span class="en"> — git init & push with commit convention</span></li>
-      <li>能运行第一个 Iris 分类程序并对比模型结果<span class="en"> — run & compare Iris classifiers</span></li>
+      <li>建立 conda 环境、安装 PyTorch，并用一个脚本验证计算设备</li>
+      <li>同一脚本带种子与不带种子各跑一次，用原始输出证明两者的差别</li>
+      <li>导出并提交环境配置，让别人能重建你的环境</li>
+      <li>建立 Git 实验记录仓库，写清目录结构与命名约定</li>
+      <li>推送 M1 里程碑：三个题目提案、<code class="inline">PROJECT_PLAN.md</code> 与 <code class="inline">DEVLOG.md</code> v0</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
-  <span class="label">素养目标 · Attitudes</span>
-  建立"每个项目独立环境"的专业习惯；体验排障（错误诊断）是 AI 工程师的日常技能；完成第一次 GitHub 版本化交付，形成"写完就提交"的工程习惯。
+  <span class="label">素养目标</span>
+  把工作台当作交付物的一部分。「我这里能跑」说的是你的机器，不是你的结果。从今天起，你报出的每一个数
+  都要有一条 README 里的命令能把它跑出来；同时，任何 AI 协助都要在记录里看得见——**包括 AI 错在哪里**。
 </div>
 
-<!-- ===== 二、重难点 ===== -->
-<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<h2>2. 重点与难点</h2>
 <table>
-  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
-  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>环境搭建全流程（conda → notebook → Git）；sklearn 训练-评估的最小代码模式</td><td>教师分步演示 + 学生同步跟做；重点步骤（import 验证、git push）全班一起跑通再进入下一步</td></tr>
-  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>环境问题诊断（版本冲突、路径问题、网络超时）；学生机器配置差异大</td><td>提供"环境检查脚本"与故障排查表（F.A.Q.）；Google Colab 作为统一兜底；"环境故障诊所"活动训练诊断思维；助教课堂巡视</td></tr>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>隔离环境与 <code class="inline">environment.yml</code>；三行设备自检；固定种子对比实验；记录仓库目录结构；实验 0 的五项交付物</td><td>教师逐段演示（3–5 分钟一段），学生随后复现；每段结束必须先把结果写进 <code class="inline">report.md</code> 再进入下一段</td></tr>
+  <tr><td>难点</td><td><code class="inline">torch.manual_seed</code> 之后 <code class="inline">run1</code> 与 <code class="inline">run2</code> 仍可能不同；「没有 GPU」是可接受的答案但「我没查」不是；报告里的输出必须是真跑的而不是手打的</td><td>种子：跑完脚本后逐个去掉随机源，看哪一次结果变了；GPU：现场展示一台无 GPU 机器也能产出合法的 <code class="inline">check_env.txt</code>（<code class="inline">device: cpu</code>）；诚信：对比「粘贴的真实输出」与「手打的输出」，说明手打等于编造</td></tr>
 </table>
 
-<!-- ===== 三、时间分配 ===== -->
-<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
-<div class="timebar"><div class="lab" style="flex:75;">Lab · 75 min</div><div style="background:#1e40af; flex:25;">Quiz & Wrap-up · 15 min</div></div>
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
 <table>
-  <tr><th style="width:70px;">时段 / Phase</th><th style="width:90px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:110px;">课件页 / Slides</th><th style="width:90px;">方法 / Method</th></tr>
-  <tr><td>Lab A</td><td>20 min</td><td><strong>环境搭建</strong>：conda 创建 <code class="inline">ai-app</code> 环境（Python 3.11）→ 安装依赖清单 → 运行环境检查脚本验证 import；卡壳 5 分钟以上直接举手</td><td>p24–p25</td><td>演示 + 跟做</td></tr>
-  <tr><td>Lab B</td><td>15 min</td><td><strong>Jupyter 与 Colab</strong>：本机 Jupyter 启动并运行第一个 cell；同一 notebook 上传 Colab，验证 <code class="inline">torch.cuda.is_available()</code></td><td>p26</td><td>演示 + 跟做</td></tr>
-  <tr><td>Lab C</td><td>15 min</td><td><strong>Git 初始化</strong>：<code class="inline">git init</code> → add → commit → GitHub 建仓 → push；讲解提交信息规范与 .gitignore（五分钟上手法）</td><td>p27</td><td>演示 + 跟做</td></tr>
-  <tr><td>Lab D</td><td>20 min</td><td><strong>第一个 ML 程序</strong>：Iris 分类完整运行（课件逐步走查）；改模型对比（LogisticRegression / SVC）；改 random_state 观察结果差异</td><td>p28</td><td>自主练习 + 助教辅导</td></tr>
-  <tr><td>Lab E</td><td>5 min</td><td><strong>交付与评分说明</strong>：交付清单核对（environment.yml + notebook + GitHub 链接）；Rubric 五项逐条过一遍</td><td>p29</td><td>检查清单</td></tr>
-  <tr><td>Quiz</td><td>10 min</td><td><strong>随堂小测</strong>（3 题，举手投票，60 秒一题，计入 Lab 成绩 10%）：①DL 与 ML 的关系；②无标签用户分群属于哪种范式；③"训练模型"占项目时间比例。即时讲评</td><td>p30</td><td>互动小测</td></tr>
-  <tr><td>Wrap</td><td>5 min</td><td><strong>小结与预告</strong>：本周五个核心要点回顾；下周预告——AI 数据处理基础（Pandas / EDA / 数据清洗）</td><td>p31–p32</td><td>回顾 + 金句收尾</td></tr>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>实验 A</td><td>15 min</td><td><strong>搭建并验证环境</strong>：建立 <code class="inline">ai-app</code> conda 环境，安装 PyTorch（CPU 或 CUDA 版），编写并运行 <code class="inline">check_env.py</code>，保存 <code class="inline">check_env.txt</code>。没有 NVIDIA GPU 的同学记录 <code class="inline">device: cpu</code> 并在报告中写明</td><td>p22–p23（代码见 p14）</td><td>跟随操作 + 巡场</td></tr>
+  <tr><td>实验 B</td><td>15 min</td><td><strong>固定种子跑两次</strong>：实现 <code class="inline">set_seed()</code> 与 <code class="inline">draw()</code>，运行脚本，确认 <code class="inline">run1 == run2</code> 逐位相同、<code class="inline">no-seed</code> 不同，并把三行真实输出贴进记录</td><td>p24</td><td>演示 → 跟随操作</td></tr>
+  <tr><td>实验 C</td><td>10 min</td><td><strong>故意去掉种子</strong>：连抽三次不固定种子，用自己的实测差异回答——为什么本课程要求固定种子。照抄课件原话不得分</td><td>p24</td><td>自主练习 + 书面作答</td></tr>
+  <tr><td>实验 D</td><td>15 min</td><td><strong>建立记录仓库</strong>：<code class="inline">git init</code>，第一次 commit <em>之前</em>就写好 <code class="inline">.gitignore</code>，按 <code class="inline">w01-lab0/</code> 布局整理，README 写明命名约定，加入 <code class="inline">environment.yml</code> 与第一条 <code class="inline">AI_USE.md</code>，推送到公开远端</td><td>p25</td><td>自主练习 + 巡场</td></tr>
+  <tr><td>实验 E</td><td>20 min</td><td><strong>收尾与大作业推送（Part F）</strong>：完成五项提交清单；随后建立项目仓库，写三个题目提案、带裁剪清单的 <code class="inline">PROJECT_PLAN.md</code> 与 <code class="inline">DEVLOG.md</code> v0，下课前完成首次推送</td><td>p26 + 里程碑 M1</td><td>清单核对 + 推送</td></tr>
+  <tr><td>小测</td><td>10 min</td><td><strong>随堂小测</strong>：4 题（概念 / 岗位 / 可复现 / AI 边界），举手作答后讲评，由答对的学生讲自己的推理过程</td><td>p27</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>5 min</td><td><strong>小结与预告</strong>：五条要点；课后待办（问题定义单草案、环境截图、仓库地址）；预告第 2 周（张量、广播、自动求导——手写一次线性回归）</td><td>p28–p29</td><td>回顾 + 预告</td></tr>
 </table>
 
-<!-- ===== 四、教学活动 ===== -->
-<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<h2>4. 关键活动设计</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 1 · 环境故障诊所（Lab A/B 之间）</h4>
-  <p style="font-size:13.5px;">预设 3 个典型报错投到屏幕：①版本冲突（numpy 2.x 与旧代码不兼容）；②conda 未激活就运行 python；③pip 网络超时。先让学生 2 人一组自行诊断 3 分钟，教师再给标准排查路径，并鼓励全班互相帮忙。<span class="en">Troubleshooting clinic — 3 pre-set errors, peer diagnosis first.</span></p>
+  <h4>活动 1 · 先读报错，再动手修（实验 A，p22）</h4>
+  <p style="font-size:13.5px;">当 <code class="inline">import torch</code> 失败时，前两分钟不许重装任何包：必须先口头回答三个问题——这个终端用的是哪个解释器、当前激活的是哪个环境、包装在哪里。养成一个反射：导入失败在没有反证之前，都是「路径问题」而不是「包没装」。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 2 · 模型对比挑战（Lab D）</h4>
-  <p style="font-size:13.5px;">完成 Iris 基线后，额外挑战：分别用 LogisticRegression 与 SVC 训练，记录准确率；再换 3 个 random_state 观察波动。完成最快的 3 名同学上台展示自己的结果表——引导讨论"模型选择与随机性"。</p>
-  <p style="font-size:13.5px;color:var(--text-sec);">Challenge: compare two classifiers and 3 seeds; fastest 3 present their results.</p>
+  <h4>活动 2 · 先预测第二次运行（实验 B，p24）</h4>
+  <p style="font-size:13.5px;">运行之前，每人先写下自己预期 <code class="inline">run1</code>、<code class="inline">run2</code>、<code class="inline">no-seed</code> 三行是否相同，然后再跑。对 <code class="inline">run2</code> 感到意外的学生人数，正好等于从没检查过自己结果是否可复现的人数。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 找出漏掉的随机源（实验 C，p24）</h4>
+  <p style="font-size:13.5px;">如果有学生两次运行不一致，全班一起诊断，而不是教师直接改好。按可能性排序：种子设在数据生成之后、<code class="inline">numpy</code> 没固定、用了带 shuffle 与多 worker 的 <code class="inline">DataLoader</code>。诊断清单比修好那一处更有价值。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 换目录重新克隆（实验 D，p25）</h4>
+  <p style="font-size:13.5px;">每人把自己的仓库克隆到另一个目录，只照着自己的 README 从 <code class="inline">environment.yml</code> 重建环境。绝对路径、缺失文件、README 里根本没写「怎么跑」——这些问题会立刻暴露，比任何检查清单都更有说服力。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 三个提案，而不是一个想法写三遍（实验 E，p26）</h4>
+  <p style="font-size:13.5px;">两人互读对方的三个提案，各自指出其中一个「大概率做不完」的并说明原因。这不是批评，而是写三个的意义所在。最后五分钟教师逐人确认选题与裁剪清单。</p>
 </div>
 
-<!-- ===== 五、实验步骤与交付物 ===== -->
-<h2>五、实验步骤与要求 <span class="en">Lab Steps & Deliverables</span></h2>
-<ol>
-  <li><strong>环境搭建：</strong>创建 <code class="inline">ai-app</code> conda 环境（Python 3.11），安装 <code class="inline">numpy pandas matplotlib seaborn scikit-learn torch jupyter</code>，导出 <code class="inline">environment.yml</code>。</li>
-  <li><strong>Notebook 验证：</strong>新建 notebook，验证 <code class="inline">import numpy, pandas, sklearn, torch</code> 成功；在 Google Colab 打开同一文件并运行 <code class="inline">torch.cuda.is_available()</code>。</li>
-  <li><strong>Git 提交：</strong>本地 <code class="inline">git init</code> → add → commit → GitHub 新建仓库 → push。提交信息规范：<code class="inline">feat: week1 lab environment setup</code>；配置 <code class="inline">.gitignore</code> 排除 <code class="inline">__pycache__</code> 与 <code class="inline">.ipynb_checkpoints</code>。</li>
-  <li><strong>第一个模型：</strong>运行 Iris 分类程序；分别用 <code class="inline">LogisticRegression</code> 与 <code class="inline">SVC</code> 对比准确率；记录 3 种 random_state 的结果差异并写进 notebook 结论。</li>
-  <li><strong>思考题（提交到 notebook 末尾）：</strong>举出 3 个身边产品并归类 ML/DL/GenAI；解释 random_state 对可复现性的意义；说明"训练模型"在 AI 项目生命周期中处于哪个阶段、占比如何。</li>
-</ol>
-
-<div class="callout tip">
-  <span class="label">Deliverable · 交付物（计入实验参与 20%）</span>
-  ① <code class="inline">environment.yml</code>；② 完成练习的 notebook（含思考题）；③ GitHub 仓库链接。<br>
-  截止：下周一 23:59。晚交每日扣 10%。<span class="en">Submit env file + notebook + GitHub link by next Monday 23:59; -10%/day late.</span>
-</div>
-
-<!-- ===== 六、评估 ===== -->
-<h2>六、评分要点 <span class="en">Rubric</span></h2>
+<h2>5. 作业与考核</h2>
 <table>
-  <tr><th style="width:200px;">检查项 / Checkpoint</th><th style="width:100px;">分值 / Pts</th><th>达标标准 / Criterion</th></tr>
-  <tr><td>environment.yml 有效</td><td>20</td><td>文件可被 conda 成功导入（<code class="inline">conda env create -f</code>）</td></tr>
-  <tr><td>notebook 完整可运行</td><td>30</td><td>从头到尾无报错执行；GPU 验证输出真实结果</td></tr>
-  <tr><td>Git 仓库规范</td><td>20</td><td>GitHub 链接可访问；≥2 次有意义的提交；提交信息符合规范</td></tr>
-  <tr><td>模型对比实验</td><td>20</td><td>两个模型 + 3 个 random_state 的结果记录完整，有文字结论</td></tr>
-  <tr><td>思考题</td><td>10</td><td>3 题均有实质回答（非一句话敷衍）</td></tr>
+  <tr><th style="width:130px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>交付物</td><td>五项：环境信息截图、两次运行的真实输出、自己写的种子必要性结论、记录仓库链接、问题定义单草案</td><td>100 分</td></tr>
+  <tr><td>评分维度</td><td>环境验证 20 · 种子实验 25 · 书面结论 20 · 记录仓库 20 · AI 协同记录 15</td><td>课程实验 15</td></tr>
+  <tr><td>课堂小测</td><td>实验结束前 4 题，计入随堂实验成绩（见课件 p27）</td><td>随堂实验 15 分</td></tr>
+  <tr><td>大作业 M1</td><td>Part F 计入大作业，不计入本实验：三个题目提案 + <code class="inline">PROJECT_PLAN.md</code> + <code class="inline">DEVLOG.md</code> v0。漏交扣项目分 2 分／次，最多 −20</td><td>大作业</td></tr>
+  <tr><td>迟交政策</td><td>实验交付物每天 −10%，最多 3 天，之后记 0。以 commit 时间为准，不以平台上传时间为准</td><td>—</td></tr>
 </table>
-<div class="callout tip">
-  <span class="label">Quiz · 随堂小测（计入 Lab 成绩 10%）</span>
-  课末 3 题举手投票小测（DL⊂ML 关系 / 无标签分群的范式归属 / 训练占项目时间比例），按参与与正确情况计入 Lab 成绩 10%——鼓励暴露理解缺口，答错即时讲评。<span class="en">End-of-class quiz counts 10% toward the Lab grade.</span>
-</div>
-
 <div class="callout warn">
-  <span class="label">Teacher Note · 教师备注</span>
-  ① 提前准备：网络代理环境（如学校机房需代理才能访问 GitHub/Colab）务必在课前测试；② 备份一台装好完整环境的演示机，供网络故障时离线演示；③ 留意 Colab 免费额度限制，提醒学生当日用量。
+  <span class="label">下课前的四项确认</span>
+  逐人确认四件事：环境自检产出的是真实输出；两次固定种子的运行结果一致；记录仓库已推送且可访问；
+  项目仓库至少有一次提交、且三个提案是真正不同的三个。下周才推的里程碑等于没做。
 </div>
 
-<!-- ===== 七、预习与资源 ===== -->
-<h2>七、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<h2>6. 课前准备与资源</h2>
 <div class="grid2">
   <div class="card">
-    <h4>课前准备 · Before Class</h4>
+    <h4>课前</h4>
     <ul>
-      <li>确认已安装 Miniconda（理论段 / 教案 A 布置的前置任务，L5 间隙完成）</li>
-      <li>注册 GitHub 与 Google 账号</li>
-      <li>阅读教材 Chapter 1.5（环境搭建）与 1.6（第一个 ML 程序）</li>
+      <li>提前通读实验指导书：<code class="inline">labs/week-01/lab-handout.md</code>（实验 0）</li>
+      <li>确认教室网络下 CUDA 与 CPU 两条安装路径都可用，并想好推荐哪一条</li>
+      <li>准备一台<em>没有</em> NVIDIA GPU 的机器，用来演示 CPU 分支同样合规</li>
+      <li>打开大作业里程碑表与提案／计划模板，供 Part F 使用</li>
     </ul>
   </div>
   <div class="card">
-    <h4>配套资源 · Resources</h4>
+    <h4>资源</h4>
     <ul>
-      <li>教材 Chapter 1（本套件产出）</li>
-      <li>课件 Week 1 Lecture <b>32 页版 p23–p29</b>（Lab 实战）与 <b>p30–p32</b>（随堂小测与小结）</li>
-      <li>环境检查脚本（随 Lab 材料发放）</li>
-      <li>故障排查表 F.A.Q.（conda/pip/GPU/Git 常见报错）</li>
-      <li>scikit-learn Iris 官方示例</li>
-      <li>Pro Git 前 3 章（免费电子书）</li>
+      <li>课件 p22–p29</li>
+      <li>教材 1.3–1.5</li>
+      <li>记录仓库目录结构与命名约定（课件 p25）</li>
+      <li>里程碑表：<code class="inline">projects/capstone/milestones.md</code>（W1 · M1）</li>
+      <li>模板：<code class="inline">project-charter-template.md</code>、<code class="inline">project-plan-template.md</code></li>
+      <li>无需数据集——本实验不训练模型</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W1-B (Lab + Quiz, 90 min of a 180-min session)</p>
-  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+  <p>AI 应用开发 — 教案 LP-W1-B（实验部分 · 75 min + 小测与小结 15 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 
 </div>

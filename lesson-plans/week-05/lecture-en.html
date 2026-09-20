@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 5 · Lecture Part (Theory · 90 min)</div>
+  <h1>Training Loop, Loss and Optimizer</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the Lecture Part, 90 min (L1–L5)</span>
+    <span>📚 Chapter 5.1–5.5</span>
+    <span>🎯 Module 2 · Core Deep Learning (Week 5–8) — first week of the module</span>
+    <span>🧩 Lesson Plan ID: LP-W5-A</span>
+    <span>🖼 Deck: 29 pages (this part covers p1–p20)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Choose the right loss for a task: <code class="inline">CrossEntropyLoss</code> for multi-class, <code class="inline">BCEWithLogitsLoss</code> for binary and multi-label, <code class="inline">MSELoss</code> for regression</li>
+      <li>State why a loss with <em>WithLogits</em> in its name — or <code class="inline">CrossEntropyLoss</code> — must be fed raw logits, never probabilities</li>
+      <li>Explain what each optimizer does to the gradient before the step: SGD (the current gradient), momentum (an accumulated direction), Adam (a per-parameter adaptive step)</li>
+      <li>Describe how the learning rate appears in a loss curve — explosion, oscillation, crawl — and what a healthy curve looks like</li>
+      <li>Name the five steps of a training loop and the exact call for each</li>
+      <li>Explain how an optimizer's state relates to VRAM, and why doubling the batch size usually means raising the learning rate</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Write the five-step training loop from memory, in the correct order</li>
+      <li>Recognise and repair the two silent bugs: softmax applied twice, and a missing <code class="inline">optimizer.zero_grad()</code></li>
+      <li>Read a <code class="inline">(train_loss, val_loss, val_acc)</code> log and name the failure mode it shows</li>
+      <li>Set up a controlled comparison where one variable changes and every other variable — including the initial weights — is pinned</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes</span>
+  Internalise that <strong>tuning is experimental design, not luck</strong>. A hyper-parameter claim without a control run is an opinion. The professional habit this week is: change one thing, keep a log, and let the curve — not your memory — decide which configuration wins.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The loss is chosen by task; the <em>WithLogits</em> / <code class="inline">CrossEntropyLoss</code> activation rule; the three optimizer update rules; the learning rate as the dominant hyper-parameter; the five-step loop and its fixed order; one log row per epoch</td><td>Every concept lands on slide code that runs live (p4, p6, p11, p15, p18); each segment closes with a whole-class one-line answer; the loop is taught by writing it from memory first and checking second (p17)</td></tr>
+  <tr><td>Difficulties</td><td>Two softmaxes raise no error and only lower accuracy — why is a silent bug harder to find than a crash?; why "too large" is not a universal learning-rate threshold; why momentum helps at 1e-3 and destroys at 1e-1; why the initial weights must be identical across compared runs</td><td>Silence: print both losses side by side, then let them train for 30 epochs and watch the accuracy curves separate; threshold: the lab's 3 × 3 grid shows 1e-1 surviving for plain SGD and diverging for momentum; init: rebuild the model inside the loop on p11 and ask what run 2 would otherwise inherit from run 1</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar"><div class="lec">Lecture Part · Theory · 90 min (first half of the weekly 180-min integrated session)</div></div>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>Opening — What Are We Optimising?</strong>: Week 4 recap (the baseline is locked); the module shift from "which model" to "how do we train it"; the three-pillar framing of Part 01 (task decides the loss, the activation is already inside, logits are numerically safer); the three task types and their three losses</td><td>p1–p4</td><td>Lecture + hand-vote</td></tr>
+  <tr><td>L2</td><td>20 min</td><td><strong>Choosing a Loss, and the Two Silent Bugs</strong>: the five-row loss table (multi-class / binary / multi-label / regression / imbalanced); the class-weight trick for imbalance; the three losses in code; <em>Pitfall 1</em> — softmax applied twice; correct usage versus common pitfalls, side by side</td><td>p5–p7</td><td>Lecture + Live Coding</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>Optimizers</strong>: three generations of ideas (SGD → momentum → Adam); the four-row comparison table including AdamW; building all three on the same weights; the learning-rate sweep as controlled-experiment discipline; SGD and Adam as two personalities, and why the verdict must come from your own experiment</td><td>p8–p12</td><td>Lecture + board drawing</td></tr>
+  <tr><td>L4</td><td>15 min</td><td><strong>Learning Rate</strong>: the symptoms of too large and too small; the three-phase schedule (warmup / StepLR / cosine annealing); the ten-epoch diagnostic chart where only <code class="inline">lr</code> changes; how to read the three curves and name each failure</td><td>p13–p15</td><td>Chart reading + predict-then-reveal</td></tr>
+  <tr><td>L5</td><td>20 min</td><td><strong>The Five-Step Loop, the Log, and Batch Size</strong>: the flow diagram of zero → forward → loss → backward → step; the complete loop with per-epoch logging; what train-versus-val divergence means; the batch-size / VRAM table and the optimizer-state cost; lab bridge — the 3 × 3 grid, the four lab tasks, the submission checklist</td><td>p16–p20</td><td>Memory writing + Live Coding + Preview</td></tr>
+</table>
+
+<h2>4. Key Activity Design</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 1 · Write the Five Steps Before You See Them (L5, p17)</h4>
+  <p style="font-size:13.5px;">Before revealing the flow diagram, give the class 90 seconds to write the five steps and their calls on paper. Then show p17 and have students correct their own sheet. In every cohort most of the room omits step 1. That omission <em>is</em> the lesson: <code class="inline">optimizer.zero_grad()</code> is the step with no visible output, so it is the step people forget — and forgetting it makes gradients accumulate across batches.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 2 · Spot the Double Softmax (L2, p6–p7)</h4>
+  <p style="font-size:13.5px;">Put the two-line snippet on screen and ask the room to predict which loss will be printed. Run it: 2.2865 versus 2.3002. "Almost the same" is the correct first reaction — then let it train and show the accuracy curves separating. The punchline: <em>a mistake that raises no exception is more expensive than one that does.</em></p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 3 · Name the Optimizer From the Update Rule (L3, p10)</h4>
+  <p style="font-size:13.5px;">Read column two of the comparison table aloud — "one step along the current gradient", "accumulate past gradients into inertia", "adaptive per-parameter step" — and ask students to name the optimizer and predict what happens to each when the learning rate goes to 1e-1. The predicted answer (plain SGD survives; momentum and Adam do not) is exactly what the lab then measures.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 4 · Predict the Curve Before You See It (L4, p15)</h4>
+  <p style="font-size:13.5px;">Show only the axes of the learning-rate diagnostic chart — ten epochs, loss from 0 to 2.8 — and have students sketch three curves by hand: <code class="inline">lr=1e-1</code>, <code class="inline">1e-3</code>, <code class="inline">1e-5</code>. Then reveal the real chart. Sketching first makes the three shapes memorable and turns the chart into a diagnostic tool instead of an illustration.</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Activity 5 · The Gradient That Would Not Reset (L5, p18)</h4>
+  <p style="font-size:13.5px;">Run three steps without <code class="inline">zero_grad()</code> and print the summed gradient each time: 11.78, 23.58, 35.39 — a straight line upward. Ask what the optimizer will do with a gradient roughly three times too large. Then add the one line and re-run. This is the most useful three minutes of the session, because the bug reappears in real project code every term.</p>
+</div>
+
+<h2>5. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Quiz</td><td>At the end of class (after the Lab part): a 6-item in-class quiz on loss choice, the double-softmax effect, optimizer properties, the first response to a nan loss, the five-step order, and batch size versus learning rate (see slide p27)</td><td>Lab 10%</td></tr>
+  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the Lab part (75 min, LP-W5-B): five steps from memory → one honest run → the 3 × 3 grid → curves and verdict → M5 push</td><td>—</td></tr>
+  <tr><td>Reading</td><td>Read textbook Chapter 5.5–5.8 (the five-step loop, batch size and VRAM, pitfalls, summary and exercises)</td><td>—</td></tr>
+  <tr><td>Assignment</td><td>Lab 04 deliverables: <code class="inline">lab-05.ipynb</code>, <code class="inline">train_sweep.py</code>, the 3 × 3 hyper-parameter table, the loss/accuracy curves, and one "does not converge" debugging log. Due next Monday 23:59, pushed via Git (≥ 2 commits)</td><td>Lab 7.5%</td></tr>
+  <tr><td>Course Grading</td><td>Formative 50%: attendance &amp; participation 10 + labs 15 + module reviews 15 + <code class="inline">AI_USE.md</code> 10. Summative 50%: the individual capstone. This week's lab counts inside the 15-point lab component</td><td>Full semester</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">Mid-Class · Transition After This Session</span>
+  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, LP-W5-B). During the break, the instructor patrols to confirm every student can write the five steps on paper and can <code class="inline">import torch</code> in the <code class="inline">ai-app</code> environment. A student who cannot write the five steps does not start the grid until they can — it is the prerequisite for the whole lab.
+</div>
+
+<h2>6. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Review Week 4 (the baseline is locked and the metric is chosen — this week starts improving it)</li>
+      <li>Read textbook Chapter 5.1–5.5 (this session's sections)</li>
+      <li>Run the three-step snippet without <code class="inline">zero_grad()</code> once yourself, so you know the numbers</li>
+      <li>Reflection: can you name an experiment you ran where more than one variable changed at once?</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Slides: Week 5 deck, 29 pages (p1–p20 cover this part; p20 opens the lab)</li>
+      <li>Textbook Chapter 5 (produced with this kit)</li>
+      <li>Lab handout: <code class="inline">labs/week-05/lab-handout.md</code></li>
+      <li>PyTorch loss reference: pytorch.org/docs/stable/nn.html#loss-functions</li>
+      <li>PyTorch optimizer reference: pytorch.org/docs/stable/optim.html</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Lesson Plan LP-W5-A (Lecture Part · Theory · 90 min) · Week 5 · Module 2</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

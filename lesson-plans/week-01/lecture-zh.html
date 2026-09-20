@@ -1,56 +1,32 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W1-A (Theory, 90 min) — Introduction to AI | 第1周教案A · 理论段</title>
 <style>
   :root {
-    --bg: #ffffff;
-    --text: #1f2937;
-    --text-sec: #6b7280;
-    --border: #e5e7eb;
-    --card-bg: #f9fafb;
-    --accent: #1e40af;
-    --accent-bright: #2563eb;
-    --accent-bg: #eff6ff;
-    --green: #059669;
-    --green-bg: #ecfdf5;
-    --orange: #d97706;
-    --orange-bg: #fffbeb;
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-    background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15px; -webkit-font-smoothing: antialiased;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
   .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
-
   .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
   .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
   .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
-  .header h1 .en { display: block; font-size: 18px; font-weight: 600; color: var(--text-sec); margin-top: 4px; }
   .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
-
-  h2 {
-    font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px;
-    border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px;
-  }
-  h2 .en { font-size: 14px; font-weight: 500; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
   h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
   h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
-  .en { color: var(--text-sec); }
-
   table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
   th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
   td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
-
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
   .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
   .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
   .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
   .card li { margin-bottom: 4px; }
-
   .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
   .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
   .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
@@ -59,16 +35,12 @@
   .callout.tip .label { color: var(--green); }
   .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
   .callout.warn .label { color: var(--orange); }
-
   ul, ol { padding-left: 22px; margin-bottom: 10px; }
   li { margin-bottom: 5px; }
   code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
-
   .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
   .timebar div { padding: 10px 4px; }
-  .timebar .lec { background: var(--accent-bright); flex: 50; }
-  .timebar .lab { background: var(--green); flex: 50; }
-
+  .timebar .lec { background: var(--accent-bright); flex: 100; }
   .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
   @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
 </style>
@@ -77,120 +49,129 @@
 <div class="container">
 
 <div class="header">
-  <div class="tag">Lesson Plan · 教案 · Week 1 · Part A (Theory · 90 min)</div>
-  <h1>导论与 AI 基础<span class="en">Introduction to AI & Course Overview</span></h1>
+  <div class="tag">教案 · 第 1 周 · 授课部分（理论 · 90 min）</div>
+  <h1>AI 应用开发导论与岗位认知</h1>
   <div class="meta">
-    <span>⏱ 90 min（L1–L5）· 每周 180 min 一体课 · 前半段理论</span>
-    <span>📚 Chapter 1.1–1.4</span>
-    <span>🎯 Module 1 · AI & ML Foundations</span>
-    <span>🧩 教案编号 LP-W1-A</span>
-    <span>🖥️ 课件 p1–p22（32 页版）</span>
-    <span>🌐 English (with Chinese support)</span>
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖授课部分 90 分钟（L1–L5）</span>
+    <span>📚 教材 1.1–1.5</span>
+    <span>🎯 模块一 · AI 应用开发基础（W1–4）</span>
+    <span>🧩 教案编号：LP-W1-A</span>
+    <span>🌐 中文</span>
   </div>
 </div>
 
-<!-- ===== 一、教学目标 ===== -->
-<h2>一、教学目标 <span class="en">Learning Objectives</span></h2>
+<h2>1. 教学目标</h2>
 <div class="grid2">
   <div class="card">
-    <h4>知识目标 · Knowledge</h4>
+    <h4>知识目标</h4>
     <ul>
-      <li>能区分 AI / ML / DL / GenAI 的层级关系与各自定义<span class="en"> — distinguish AI/ML/DL/GenAI</span></li>
-      <li>能说出三大学习范式（监督 / 无监督 / 强化）的区别与典型任务<span class="en"> — three learning paradigms</span></li>
-      <li>能复述 AI 三次发展浪潮、两次寒冬的因果与当前阶段特征<span class="en"> — three waves & two AI winters</span></li>
-      <li>能描述 AI 项目生命周期的六个阶段、80% 法则与工具链地图<span class="en"> — lifecycle, 80% rule & toolchain</span></li>
-      <li>能复述课程结构、16 周日历与考核方式（30/15/35/20）<span class="en"> — course structure, calendar & grading</span></li>
-      <li>能说出 AI 开发中的三类伦理风险与学术诚信红线<span class="en"> — AI ethics risks & academic integrity</span></li>
+      <li>区分传统软件开发与 AI 应用开发，并说明这个区别为什么会影响「怎么测」</li>
+      <li>画出从想法到上线的六步流水线，并说明每一步在做什么</li>
+      <li>把一项技术归入四层技术栈（应用层 / 模型层 / 数据层 / 基础设施层）</li>
+      <li>说出三类核心角色，并对应到本课程实际训练它们的周次</li>
+      <li>说出可复现性三要素（种子 / 配置 / 版本），并解释为什么缺一不可</li>
+      <li>说出本课程允许与禁止的 AI 使用行为，以及必须留下的记录</li>
     </ul>
   </div>
   <div class="card">
-    <h4>技能目标 · Skills</h4>
+    <h4>能力目标</h4>
     <ul>
-      <li>能对现实产品快速归类（属于 ML / DL / GenAI 哪一层）<span class="en"> — classify real products</span></li>
-      <li>能对照职业角色表，说出各方向与课程模块的对应关系<span class="en"> — map careers to modules</span></li>
-      <li>能用生命周期六阶段描述一个已知 AI 应用<span class="en"> — describe an AI app via lifecycle</span></li>
+      <li>读一条 AI 岗位招聘要求，把每条要求翻译成「要交付什么」</li>
+      <li>建立隔离的 conda 环境，并用三行代码验证 PyTorch 版本与计算设备</li>
+      <li>写出覆盖 Python / NumPy / PyTorch / CUDA 四处随机源的 <code class="inline">set_seed()</code></li>
+      <li>起草一份问题定义单：目标用户、待解决问题、可用数据、拟用指标、失败判据</li>
+      <li>维护一份「AI 错在哪、我怎么改」的协同记录，而不是只写「用了 AI」</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
-  <span class="label">素养目标 · Attitudes</span>
-  建立"AI 是工程系统而非魔法"的认知框架；理解软件工程师在 AI 产品中的核心价值（80% 法则）；明确本课程学习契约（出勤、作业、诚信政策）。
+  <span class="label">素养目标（课程思政）</span>
+  从第一周起养成两个习惯：其一，<em>结果不算结果，除非 README 里有一行命令能把它跑出来</em>；其二，
+  <em>用 AI 可以，用 AI 不留痕不行</em>。本周的思政落点是科技报国与职业理想——产业要的不是「会调库的人」，
+  而是「能把模型送进生产、对真实用户负责的人」；把工作台搭稳、把过程留痕，就是把职业操守落在具体交付物上。
 </div>
 
-<!-- ===== 二、重难点 ===== -->
-<h2>二、教学重难点 <span class="en">Key Points & Difficulties</span></h2>
+<h2>2. 重点与难点</h2>
 <table>
-  <tr><th style="width:120px;">类型 / Type</th><th>内容 / Content</th><th>处理策略 / Strategy</th></tr>
-  <tr><td>教学重点<br><span class="en">Key Points</span></td><td>AI 技术谱系嵌套关系与三大学习范式；三次浪潮与两次寒冬时间轴；项目生命周期六阶段框架（含食堂排队案例走查）</td><td>四个视觉框架各讲一次并配现实案例：一张关系图 + 一条范式对照表 + 一条时间轴 + 一个生命周期流程（含案例）</td></tr>
-  <tr><td>教学难点<br><span class="en">Difficulties</span></td><td>AI/ML/DL/GenAI 概念边界模糊、监督与强化学习易混；学生易把"AI 应用开发"误解为纯算法研究；伦理议题容易流于空谈</td><td>用"判断三连问"口诀 + 现实产品归类互动化解；范式用"有没有标准答案"一句话锚定；伦理用三个真实翻车案例落地；反复强调课程定位 = 把模型变成可部署产品</td></tr>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>端到端流水线与模型在其中的位置；四层技术栈；以「能交付什么」定义的岗位能力矩阵；开发环境与工具链；可复现性三要素</td><td>每个概念都配一个屏上实物（流水线板书、版本信息表、真实报错截图）；每段结束做一次「这属于哪一层 / 哪一根支柱」的快问</td></tr>
+  <tr><td>难点</td><td>为什么「我这里能跑」不构成证据；为什么第 1 周多花一小时搭环境能省下后面 15 周；为什么 AI 使用规范要求记录「失败」而不是记录「使用」；为什么可复现需要三要素而不是只固定种子</td><td>可复现：当场跑同一脚本两次，一次固定种子一次不固定，让两次输出在屏幕上真的不同；环境：故意制造导入错误，当场诊断；AI 规范：并排展示一条合格记录与一条不合格记录，问哪条能计分</td></tr>
 </table>
 
-<!-- ===== 三、时间分配 ===== -->
-<h2>三、时间分配 <span class="en">Time Allocation</span></h2>
-<div class="timebar"><div class="lec">Lecture · 理论 90 min（每周 180 min 一体课 · 前半段）</div></div>
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lec">授课部分 · 理论 · 90 min（每周 180 分钟一体课的前半段）</div></div>
 <table>
-  <tr><th style="width:70px;">时段 / Phase</th><th style="width:90px;">时长 / Time</th><th>环节与内容 / Activity</th><th style="width:110px;">课件页 / Slides</th><th style="width:90px;">方法 / Method</th></tr>
-  <tr><td>L1</td><td>15 min</td><td><strong>课程总览</strong>：自我介绍与课程契约；四大模块结构；考核方式 30/15/35/20；<b>16 周课程日历与里程碑</b>（W4/W7/W8/W10/W16）；<b>学术诚信政策</b>（作业协作边界 / AI 工具使用规范）</td><td>p1–p6</td><td>讲授 + 互动提问</td></tr>
-  <tr><td>L2</td><td>25 min</td><td><strong>AI 是什么</strong>：AI/ML/DL/GenAI 嵌套关系图（判断三连问）；<b>三大学习范式（监督 / 无监督 / 强化）与典型任务对照</b>；三次发展浪潮时间轴；<b>两次 AI 寒冬的成因与启示</b>；为什么软件工程师要学 AI</td><td>p7–p12</td><td>讲授 + 关系图可视化</td></tr>
-  <tr><td>L3</td><td>20 min</td><td><strong>应用领域、职业与伦理</strong>：CV / NLP / 语音多模态 / 推荐决策四域；<b>六大标志性突破时间轴（2012–2023+）</b>；四种职业角色对照课程模块；<b>AI 伦理三类风险（偏见 / 隐私 / 滥用）与工程师责任</b></td><td>p13–p17</td><td>讲授 + 职业自评互动</td></tr>
-  <tr><td>L4</td><td>25 min</td><td><strong>AI 项目生命周期</strong>：六阶段详解；<b>食堂排队预测案例全流程走查</b>（问题定义→部署监控）；80% 法则；<b>工具链地图</b>（M1–M4 各模块对应工具一览）</td><td>p18–p22</td><td>讲授 + 流程图 + 案例</td></tr>
-  <tr><td>L5</td><td>5 min</td><td><strong>Lab 衔接与预告</strong>：预告本课后半段 Lab 任务（conda → Jupyter → Git → Iris）；环境前置清单；说明课末随堂小测（3 题，举手投票，计入 Lab 成绩 10%）安排</td><td>p23 起</td><td>预告 + Q&A</td></tr>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>L1</td><td>15 min</td><td><strong>开场 · AI 应用开发是什么</strong>：课程封面与今日五部分地图；传统软件 vs AI 应用；从想法到上线的六步流水线；四层技术栈与两条贯穿线（MLOps、负责任 AI）；产业生态表与两条通用衡量口径（质量 + 工程）</td><td>p1–p7</td><td>讲授 + 板书图示</td></tr>
+  <tr><td>L2</td><td>20 min</td><td><strong>AI 工程师岗位能力模型</strong>：三类核心角色（数据工程 / 模型工程 / 应用部署工程）；能力矩阵与各行的训练周次；「一位 AI 工程师的一周」工作流，以及两条硬规则——先基线后改进、一次只改一个变量</td><td>p8–p11</td><td>讲授 + 招聘要求讨论</td></tr>
+  <tr><td>L3</td><td>20 min</td><td><strong>开发环境与工具链</strong>：为什么要隔离；工具链五件套（Python/conda、PyTorch、GPU/CUDA、Notebook/IDE、Git）；三行环境自检脚本；环境就绪清单，含无 NVIDIA GPU 时的写法</td><td>p12–p15</td><td>现场终端 + 报错诊断</td></tr>
+  <tr><td>L4</td><td>25 min</td><td><strong>可复现性与 AI 使用边界</strong>：三要素（种子 / 配置 / 版本）；不可复现与可复现做法的并排对照；覆盖全部随机源的 <code class="inline">set_seed()</code>；AI 可以用什么、不可以做什么；协同记录模板与「必须写出 AI 错在哪」的要求</td><td>p16–p21</td><td>现场编码 + 文档对照</td></tr>
+  <tr><td>L5</td><td>10 min</td><td><strong>实验衔接与预告</strong>：实验 0 的四个任务；种子演示脚本；记录仓库目录与命名约定；提交清单；四题小测；本周小结与第 2 周预告</td><td>p22–p29</td><td>预告 + 答疑</td></tr>
 </table>
 
-<!-- ===== 四、教学活动 ===== -->
-<h2>四、关键教学活动设计 <span class="en">Activity Design</span></h2>
+<h2>4. 关键活动设计</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 1 · 关系图互动（L2）</h4>
-  <p style="font-size:13.5px;">板书 AI ⊃ ML ⊃ DL ⊃ GenAI 四个同心嵌套圆，逐个问学生"这个系统属于哪一层"，用现实产品举例：ChatGPT = GenAI、照片人脸解锁 = DL、垃圾邮件过滤 = ML、Siri 问答 = 跨层。紧接三大范式快问快答："垃圾邮件过滤有没有标准答案？"（有 → 监督）、"用户分群呢？"（无 → 无监督）、"游戏 AI 打怪呢？"（试错奖励 → 强化）。<span class="en">Nested-circle diagram + real-product classification quiz, then a quick paradigm check.</span></p>
+  <h4>活动 1 · 先自己画一遍流水线（L1，p5）</h4>
+  <p style="font-size:13.5px;">先不给答案，请全班按顺序列出「从有人想到一个 AI 功能，到用户真的拿到结果」中间要发生的事。板书收集后，再展示六步流水线，并圈出学生漏掉的部分。通常漏掉的正是「数据」和「运维」——这恰好是本周的论点：模型只是一环，不是整条链。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 2 · 职业对照自评（L3）</h4>
-  <p style="font-size:13.5px;">发一张四职业对照表（ML Engineer / AI App Engineer / Data Scientist / MLOps Engineer），让学生凭直觉圈出最想去的方向并举手统计，教师说明各方向与本课程四大模块的对应关系。<span class="en">Career-matching self-assessment with show-of-hands tally.</span></p>
+  <h4>活动 2 · 这条要求属于哪类角色？（L2，p10）</h4>
+  <p style="font-size:13.5px;">念五条一句话的岗位要求（「为 2000 万行数据搭数据管道」「把 P95 推理时延从 800 ms 压到 200 ms」「根据公平性审计决定这个模型能不能上线」），学生逐条归类到角色，再对应到课程周次。收尾一句：每一条要求都是用「交付什么」写的，没有一条是「会背算法」。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 3 · 伦理快讨论（L3 末，5 min）</h4>
-  <p style="font-size:13.5px;">抛一个真实场景："如果你们做的食堂排队预测模型持续低估某个窗口的排队时长，导致该窗口阿姨总被投诉——这是模型问题还是伦理问题？"2 人一组讨论 2 分钟，教师收束到三类风险框架：偏见（数据偏）、隐私（采集过）、滥用（用途歪），并落到"工程师在交付前有责任检查"这一结论。<span class="en">A 5-minute ethics micro-discussion anchored on the canteen case.</span></p>
+  <h4>活动 3 · 诊断导入错误（L3，p14）</h4>
+  <p style="font-size:13.5px;">故意在错误的环境里运行自检脚本，让它抛出 <code class="inline">ModuleNotFoundError</code>。前 60 秒不许装任何东西：先回答——这个终端当前用的是哪个解释器，你怎么确认？先读报错、再定位解释器、最后才动手修，这个顺序比修好本身更值钱。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 同一份代码，跑两次（L4，p19）</h4>
+  <p style="font-size:13.5px;">在投影上跑两次种子演示脚本：先带 <code class="inline">set_seed(42)</code>，再去掉它。固定种子的两次输出逐位相同，不固定的两次不同。追问：一个没有写种子的已发表结果，第二次跑不一样说明了什么？让学生自己得出「别人无法复核」这个结论。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 合格记录 vs 不合格记录（L4–L5，p21）</h4>
+  <p style="font-size:13.5px;">并排展示两条协同记录。一条写「AI 帮我写了梯度下降循环，效果不错」；另一条指出 AI 给出的两个具体错误以及自己是怎么发现的。问：哪一条能计分，为什么？落在一句话上：协同记录的价值在于里面的<em>错误</em>，因为那部分只有你能发现。</p>
 </div>
 
-<!-- ===== 五、作业与评估 ===== -->
-<h2>五、作业与评估 <span class="en">Assignment & Assessment</span></h2>
+<h2>5. 作业与考核</h2>
 <table>
-  <tr><th style="width:120px;">项目 / Item</th><th>内容 / Content</th><th style="width:90px;">占比 / Weight</th></tr>
-  <tr><td>随堂小测<br><span class="en">Quiz</span></td><td>本节课末（Lab 结束后）进行 3 题随堂小测（举手投票形式，60 秒一题），覆盖本教案全部知识点，计入 Lab 成绩 10%（详见教案 B）</td><td>—</td></tr>
-  <tr><td>课后任务①<br><span class="en">Reading</span></td><td>阅读教材 Chapter 1.4–1.8（生命周期、伦理与小结），巩固案例走查与伦理框架</td><td>—</td></tr>
-  <tr><td>课后任务②<br><span class="en">Setup</span></td><td>安装 Miniconda（或 Anaconda）；注册 GitHub 与 Google 账号——这是本节课后半段 Lab 的前置条件，未完成的同学提前发邮件说明（用 Google Colab 兜底）</td><td>—</td></tr>
-  <tr><td>课程考核<br><span class="en">Course Grading</span></td><td>平时作业 30% + 期中项目 15% + Capstone 35% + 实验参与 20%（本周 Lab 的交付物计入"实验参与"）</td><td>全学期</td></tr>
+  <tr><th style="width:130px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>课堂小测</td><td>实验后下课前的 4 题小测（概念 / 岗位 / 可复现 / AI 边界），举手作答后讲评，计入随堂实验成绩</td><td>实验 15</td></tr>
+  <tr><td>课间衔接</td><td>授课部分结束后休息 10 分钟，随即进入实验部分（75 min，LP-W1-B）：环境搭建 → GPU 验证 → 固定种子跑两次 → 建记录仓库 → 推 M1</td><td>—</td></tr>
+  <tr><td>阅读</td><td>阅读教材第 1 章（1.1–1.7）；并为第 2 周预习主教材《动手学深度学习（PyTorch 版）》张量与自动求导相关章节</td><td>—</td></tr>
+  <tr><td>课后作业</td><td><strong>《问题定义单草案》</strong>——目标用户、待解决问题、可用数据、拟用指标、失败判据；连同环境验证截图与实验记录仓库地址一并提交（即实验 0 交付物）</td><td>实验 15</td></tr>
+  <tr><td>课程考核</td><td>形成性考核 50（出勤与课堂参与 10 · 随堂实验 15 · 阶段评审 15 · AI 协同记录 10）+ 终结性考核 50（个人项目成果物 90 + 加分 10）。本课程为考查课，无闭卷笔试</td><td>全学期</td></tr>
 </table>
 <div class="callout warn">
-  <span class="label">Next · 后半段 Lab 衔接说明</span>
-  <b>同一节课后半段（约 75 min）</b>将完成：conda 环境搭建 → Jupyter/Colab 验证 → Git 推送 → 第一个 Iris 分类程序 → 交付与评分说明 → 随堂小测与小结。学生在 L5 间隙安装 Miniconda；理论段结束前提醒学生准备好笔记本与电源。
+  <span class="label">课间 · 本环节之后</span>
+  授课部分（90 min）结束后休息 10 分钟，随即开始实验部分（75 min，LP-W1-B）。课间教师巡场确认每位学生都能在
+  <code class="inline">ai-app</code> 环境里 <code class="inline">import torch</code>，并确认实验记录仓库已建好——本周就要推送。
 </div>
 
-<!-- ===== 六、预习与资源 ===== -->
-<h2>六、预习安排与资源 <span class="en">Preparation & Resources</span></h2>
+<h2>6. 课前准备与资源</h2>
 <div class="grid2">
   <div class="card">
-    <h4>课前预习 · Before Class</h4>
+    <h4>课前</h4>
     <ul>
-      <li>阅读教材 Chapter 1.1–1.4（技术谱系与范式、发展历程、应用领域、生命周期）</li>
-      <li>观看 1 个 AI 行业年度回顾视频（任选，10min 内）</li>
-      <li>思考题：你每天使用的产品中，哪个最可能是 AI 驱动的？</li>
+      <li>阅读教材第 1 章（本次课内容）</li>
+      <li>确认教室机器能跑通环境自检，并决定演示跑在 CPU 还是 GPU 上</li>
+      <li>找两条本地在招 AI 岗位的招聘要求，供活动 2 使用</li>
+      <li>反思：上学期你自己有一个结果，别人复现不出来吗？为什么？</li>
     </ul>
   </div>
   <div class="card">
-    <h4>配套资源 · Resources</h4>
+    <h4>资源</h4>
     <ul>
-      <li>课件：Week 1 Lecture <b>32 页版 p1–p22</b>（理论段，随本教案配套）</li>
-      <li>教材 Chapter 1（本套件产出，含 1.7 AI 伦理与负责任开发）</li>
-      <li>补充阅读：Dive into Deep Learning 前言（免费 d2l.ai）</li>
-      <li>课程大纲（Syllabus）全文</li>
+      <li>课件：第 1 周（29 页；p1–p21 对应本授课部分，p22–p29 为实验衔接）</li>
+      <li>教材第 1 章（本套件产出）</li>
+      <li>实验指导书：<code class="inline">labs/week-01/lab-handout.md</code>（实验 0）</li>
+      <li>PyTorch 安装选择器：pytorch.org/get-started/locally/</li>
+      <li>大作业里程碑表：<code class="inline">projects/capstone/milestones.md</code>（W1 · M1）</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 / AI Application Development — Lesson Plan LP-W1-A (Theory, 90 min of a 180-min session)</p>
-  <p>教案由 AI 辅助生成，任课教师可根据班级情况调整。 / Generated with AI assistance; instructor may adapt.</p>
+  <p>AI 应用开发 — 教案 LP-W1-A（授课部分 · 理论 · 90 min）</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 
 </div>

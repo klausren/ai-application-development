@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 04 章 · 模块一 · 第 4 周</div>
+  <h1>神经网络与 nn.Module 建模</h1>
+  <p class="overview">第 2 章用原始张量训练了一个模型，第 3 章为它建好了数据管道。本章给这个模型一个「形状」，为模块一收尾。你要从一个神经元走到多层网络，发现非线性的存在与否决定了「深」这件事是否有意义，学会按 PyTorch 期望的方式写模型，并最终用一张消融对照表而不是凭感觉来决定网络该有多宽、多深。</p>
+</div>
+
+<!-- ========== 4.1 ========== -->
+<div class="section">
+  <h2>4.1 从感知机到多层感知机</h2>
+  <p>一个神经元做的是「加权求和 + 阈值判断」，它就是一个附带了判别规则的线性模型，只能画出唯一的一条直线。</p>
+
+  <h3>4.1.1 三代结构</h3>
+  <div class="terms">
+    <div class="term"><h4>① 感知机（1958）</h4><p>只有一个神经元。能解 AND 与 OR，解不了 XOR——没有任何一条直线能把两类分开。</p></div>
+    <div class="term"><h4>② 多层感知机</h4><p>隐藏层先做特征变换，输出层再做判断。同一批数据在新空间里变得可分。</p></div>
+    <div class="term"><h4>③ 现代深度网络</h4><p>几十到上百层。从结构上看，它仍然是「仿射变换 + 非线性」的堆叠，只是叠加了结构与技巧。</p></div>
+  </div>
+
+  <h3>4.1.2 单层 vs 带隐藏层</h3>
+  <table>
+    <tr><th></th><th>单层（线性）</th><th>隐藏层 + 激活</th></tr>
+    <tr><td>形式</td><td>y = σ(Wx + b)</td><td>h = ReLU(W₁x + b₁); y = W₂h + b₂</td></tr>
+    <tr><td>决策边界</td><td>一条直线（高维是超平面）</td><td>可以弯曲——分段线性拼接</td></tr>
+    <tr><td>能处理</td><td>只有线性可分的数据</td><td>线性不可分的数据</td></tr>
+    <tr><td><code class="inline">make_circles</code>（同心圆环）</td><td>0.473——与瞎猜无异</td><td>0.980（2-8-2，300 轮）</td></tr>
+    <tr><td><code class="inline">make_moons</code>（两个弯月）</td><td>0.890——本身已接近可分</td><td>0.953（2-8-2，300 轮）</td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">常见误解</span>
+    <code class="inline">make_moons</code> 常被说成「线性不可分」，正因为如此它是个很差的演示数据集：在固定协议下实测，线性模型在它上面已经有 <strong>约 0.89</strong>。
+    要展示隐藏层到底带来了什么，请用 <code class="inline">make_circles</code> 或 XOR。<em>线性可分性要测，不能凭散点图形状想当然。</em>
+  </div>
+  <p>关键不是「层多」，而是<strong>层与层之间有非线性</strong>。两个仿射变换之间什么都没有，它们会合并成一个仿射变换，所以叠多少层线性层都还是线性模型。</p>
+
+  <h3>4.1.3 前向传播，逐步走一遍</h3>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>输入</strong>——一批 x，形状 <code class="inline">(N, 2)</code>：N 个样本，每个 2 维特征。</div></div>
+    <div class="step"><div class="body"><strong>线性层 1</strong>——<code class="inline">z1 = x @ W1.T + b1</code>，形状 <code class="inline">(N, 8)</code>：特征被升到新空间。</div></div>
+    <div class="step"><div class="body"><strong>激活</strong>——<code class="inline">h = ReLU(z1)</code>，仍是 <code class="inline">(N, 8)</code>：逐元素，零参数。</div></div>
+    <div class="step"><div class="body"><strong>线性层 2</strong>——<code class="inline">z2 = h @ W2.T + b2</code>，形状 <code class="inline">(N, 2)</code>：这就是 logits。</div></div>
+    <div class="step"><div class="body"><strong>损失</strong>——<code class="inline">CrossEntropyLoss(z2, y)</code>。softmax 已经在里面了，不要再加一次。</div></div>
+  </div>
+
+  <table>
+    <tr><th>部件</th><th>权重形状</th><th>参数量</th><th>说明</th></tr>
+    <tr><td>输入 x</td><td>(4, 2)</td><td>0</td><td>4 个样本，每个 2 维特征</td></tr>
+    <tr><td>nn.Linear(2, 4)</td><td>W (4, 2), b (4,)</td><td>12</td><td>2 → 4：参数 = 2×4 + 4</td></tr>
+    <tr><td>nn.ReLU()</td><td>(4, 4)</td><td>0</td><td>逐元素，形状不变、零参数</td></tr>
+    <tr><td>nn.Linear(4, 2)</td><td>W (2, 4), b (2,)</td><td>10</td><td>4 → 2 类 logits：4×2 + 2</td></tr>
+    <tr><td>合计</td><td>—</td><td>22</td><td>前向 = 两次矩阵乘法 + 一次非线性</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">读法</span>
+    <code class="inline">nn.Linear(in, out)</code> 的参数量永远是 <code class="inline">in × out + out</code>。从本章开始，评估任何一个网络的第一件事就是数它的参数。
+  </div>
+</div>
+
+<!-- ========== 4.2 ========== -->
+<div class="section">
+  <h2>4.2 激活函数与非线性</h2>
+  <p>激活函数是网络中「非线性能力」的唯一来源。去掉它，无论叠多少层，网络都会退化为一个线性模型。</p>
+
+  <h3>4.2.1 四大家族</h3>
+  <div class="terms">
+    <div class="term"><h4>Sigmoid</h4><p>σ(z) = 1/(1+e⁻ᶻ)，输出 (0,1)，可以当概率来读。导数最大只有 0.25，深层里梯度衰减极快。现在主要用于输出层的二分类概率。</p></div>
+    <div class="term"><h4>Tanh</h4><p>输出 (−1,1)，以 0 为中心，比 sigmoid 好训。但它仍然会饱和，梯度消失问题并没有被解决。常见于早期 RNN 与部分 Transformer 变体。</p></div>
+    <div class="term"><h4>ReLU</h4><p>max(0, z)。正区间梯度恒为 1，计算最便宜。负区间输出 0，可能出现「神经元死亡」。隐藏层的默认选项。</p></div>
+    <div class="term"><h4>LeakyReLU</h4><p>max(0.01z, z)。负区间留一点斜率，神经元不会彻底死掉。代价是多一个超参数，收益并不总是明显。</p></div>
+  </div>
+
+  <table>
+    <tr><th>函数</th><th>输出范围</th><th>梯度特性</th><th>推荐用法</th></tr>
+    <tr><td>Sigmoid</td><td>(0, 1)</td><td>最大 0.25，深层衰减极快</td><td>输出层二分类概率；隐藏层避免使用</td></tr>
+    <tr><td>Tanh</td><td>(−1, 1)</td><td>最大 1.0，仍然会饱和</td><td>需要零中心输出时用；深层仍不推荐</td></tr>
+    <tr><td>ReLU</td><td>[0, +∞)</td><td>正区间恒为 1，不衰减</td><td>隐藏层默认选择；配 kaiming 初始化</td></tr>
+    <tr><td>LeakyReLU</td><td>(−∞, +∞)</td><td>负区间有小斜率 0.01</td><td>ReLU 大量神经元不激活时的备选</td></tr>
+  </table>
+
+  <h3>4.2.2 你应该亲手跑一遍的实验</h3>
+  <p>同一套协议、两个数据集，只差一个开关。之所以两个都跑，是因为单个数据集可以把你正要测量的那个效应本身藏起来。</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> make_moons, make_circles
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+<span class="kw">def</span> <span class="fn">load</span>(kind):
+    <span class="kw">if</span> kind == <span class="str">"moons"</span>:
+        X, y = make_moons(n_samples=<span class="num">1000</span>, noise=<span class="num">0.25</span>, random_state=<span class="num">42</span>)
+    <span class="kw">else</span>:
+        X, y = make_circles(n_samples=<span class="num">1000</span>, noise=<span class="num">0.10</span>, factor=<span class="num">0.5</span>,
+                            random_state=<span class="num">42</span>)
+    Xtr, Xva, ytr, yva = train_test_split(X, y, test_size=<span class="num">0.3</span>,
+                                          random_state=<span class="num">42</span>, stratify=y)
+    t = <span class="kw">lambda</span> a, d: torch.tensor(a, dtype=d)
+    <span class="kw">return</span> (t(Xtr, torch.float32), t(Xva, torch.float32),
+            t(ytr, torch.long),    t(yva, torch.long))
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, use_relu=<span class="kw">True</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()
+        self.fc1 = nn.Linear(<span class="num">2</span>, <span class="num">8</span>)
+        self.fc2 = nn.Linear(<span class="num">8</span>, <span class="num">2</span>)
+        self.act = nn.ReLU() <span class="kw">if</span> use_relu <span class="kw">else</span> nn.Identity()
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.fc2(self.act(self.fc1(x)))   <span class="cm"># (N,2) -> (N,8) -> (N,2)</span>
+
+<span class="kw">def</span> <span class="fn">run</span>(data, use_relu, seed=<span class="num">42</span>, epochs=<span class="num">300</span>, lr=<span class="num">1e-2</span>):
+    Xtr, Xva, ytr, yva = data
+    torch.manual_seed(seed)
+    model = <span class="fn">MLP</span>(use_relu)
+    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    crit = nn.CrossEntropyLoss()
+    <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(epochs):
+        opt.zero_grad()
+        loss = <span class="fn">crit</span>(model(Xtr), ytr)
+        loss.backward(); opt.step()
+    model.eval()
+    <span class="kw">with</span> torch.no_grad():
+        acc = (model(Xva).argmax(<span class="num">1</span>) == yva).float().mean().item()
+    <span class="kw">return</span> acc, loss.item()
+
+<span class="kw">for</span> kind <span class="kw">in</span> (<span class="str">"moons"</span>, <span class="str">"circles"</span>):
+    d = <span class="fn">load</span>(kind)
+    a_on,  l_on  = <span class="fn">run</span>(d, <span class="kw">True</span>)
+    a_off, l_off = <span class="fn">run</span>(d, <span class="kw">False</span>)
+    <span class="fn">print</span>(f<span class="str">"{kind:8s} ReLU {a_on:.3f} (loss {l_on:.3f})  "
+          f"none {a_off:.3f} (loss {l_off:.3f})"</span>)</pre>
+  <p>在这套协议下实测得的数：</p>
+  <table>
+    <tr><th>数据集</th><th>2-8-2 · ReLU</th><th>2-8-2 · 无激活</th><th>无激活的最终损失</th></tr>
+    <tr><td><code class="inline">make_moons</code></td><td>0.953</td><td>0.890</td><td>0.322</td></tr>
+    <tr><td><code class="inline">make_circles</code></td><td>0.980</td><td>0.473</td><td><strong>0.693</strong></td></tr>
+  </table>
+  <div class="callout warn">
+    <span class="label">要记住的那个数字</span>
+    在 <code class="inline">make_circles</code> 上，无激活的损失停在 <strong>0.693</strong>，也就是 ln 2——二分类瞎猜的损失。两个 <code class="inline">nn.Linear</code> 之间没有非线性，等价于一个线性层，
+    而线性模型分不开两个同心圆环。那条平线不是 bug，它就是结论。
+  </div>
+  <div class="callout key">
+    <span class="label">为什么由数据集决定</span>
+    在 <code class="inline">make_moons</code> 上，同一个对照得到 0.953 与 0.890，损失曲线也从来不会在 0.693 处变平——因为线性模型在那个数据上本身就有 0.890。
+    同一张表里的两行，同样的 42 个参数，只差一个开关，差距只有约 6 个百分点——而 circles 上是 51 个百分点。如果你只跑了 moons，你会得出一个错误结论：激活函数无关紧要。
+    <strong>一个实验只能检测出数据有能力暴露的效应。</strong>选数据是实验的一部分，不是实验之前的预备动作。
+  </div>
+
+  <h3>4.2.3 把「塌缩」用数值证出来</h3>
+  <p>这种塌缩不只是纸上的论证。把无激活模型拟合好，再把两层折成一个矩阵，比较两者输出：</p>
+  <pre>torch.manual_seed(<span class="num">42</span>)
+m = nn.Sequential(nn.Linear(<span class="num">2</span>, <span class="num">8</span>), nn.Linear(<span class="num">8</span>, <span class="num">2</span>))   <span class="cm"># 无激活</span>
+
+W = m[<span class="num">1</span>].weight @ m[<span class="num">0</span>].weight          <span class="cm"># (2,8) @ (8,2) -> (2,2)</span>
+b = m[<span class="num">1</span>].weight @ m[<span class="num">0</span>].bias + m[<span class="num">1</span>].bias
+
+x = torch.randn(<span class="num">64</span>, <span class="num">2</span>)
+<span class="kw">with</span> torch.no_grad():
+    <span class="fn">print</span>((m(x) - (x @ W.T + b)).abs().max().item())   <span class="cm"># ~2e-7（float32 舍入误差）</span>
+<span class="fn">print</span>(torch.linalg.matrix_rank(W).item())             <span class="cm"># 2，不是 8</span></pre>
+  <p>那 8 个隐藏单元一个都没换来：复合结果只是一个 2×2 的映射。当非线性缺席时，这是击碎「越深越强」这个信念最快的办法。</p>
+</div>
+
+<!-- ========== 4.3 ========== -->
+<div class="section">
+  <h2>4.3 nn.Module 规范建模</h2>
+  <p>从本章开始，你的模型不再是一串散装代码，而是一个可以被复用、打印、保存、搬到设备的类。遵守规范不是形式主义：层建在错误的位置，参数就不会被训练——而你还以为模型在学。</p>
+
+  <h3>4.3.1 四条纪律</h3>
+  <div class="terms">
+    <div class="term"><h4>① 层在 __init__ 里建</h4><p>所有 <code class="inline">nn.Linear</code>、<code class="inline">nn.ReLU</code>、<code class="inline">nn.Dropout</code> 都在 <code class="inline">__init__</code> 里创建并赋给 <code class="inline">self</code>。只有这样它才被注册进模块树，<code class="inline">model.parameters()</code> 才拿得到它。</p></div>
+    <div class="term"><h4>② forward 只写数据流</h4><p><code class="inline">forward</code> 只描述张量如何一步步算过去。它绝不新建层，也不放超参数逻辑或打印语句。</p></div>
+    <div class="term"><h4>③ 形状要说得清</h4><p>把形状注释写出来：<code class="inline">(N, 2) → (N, 8) → (N, 2)</code>。输出是 logits，不要提前接 softmax。</p></div>
+    <div class="term"><h4>④ 让模型可检查</h4><p><code class="inline">print(model)</code> 应该能看出完整结构；参数量应该算得出来；<code class="inline">model.to(device)</code> 应该能一行搬到设备上。</p></div>
+  </div>
+
+  <h3>4.3.2 规范写法与两种「训练不动」的错法</h3>
+  <pre><span class="cm"># A —— 规范写法（照这个写）</span>
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, in_dim=<span class="num">2</span>, hidden=<span class="num">16</span>, n_class=<span class="num">2</span>):
+        <span class="fn">super</span>().<span class="fn">__init__</span>()
+        self.net = nn.Sequential(
+            nn.Linear(in_dim, hidden),
+            nn.ReLU(),
+            nn.Dropout(<span class="num">0.2</span>),
+            nn.Linear(hidden, n_class),
+        )
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x)          <span class="cm"># (N,2) -> (N,16) -> (N,2) logits</span>
+
+<span class="cm"># B —— 这两种写法永远训不动</span>
+fc1 = nn.Linear(<span class="num">2</span>, <span class="num">16</span>)                 <span class="cm"># 错法 1：模块级全局变量</span>
+
+<span class="kw">class</span> <span class="fn">BadA</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> <span class="fn">fc1</span>(x)                 <span class="cm"># 不在 model.parameters() 里</span>
+
+<span class="kw">class</span> <span class="fn">BadB</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        layer = nn.Linear(x.shape[<span class="num">1</span>], <span class="num">2</span>)
+        <span class="kw">return</span> <span class="fn">layer</span>(x)                <span class="cm"># 错法 2：每次调用都是新的随机参数</span></pre>
+  <div class="callout warn">
+    <span class="label">危险的地方在于「不报错」</span>
+    错法 1 的参数永远不会被优化器看到，而程序不会抛任何异常。错法 2 每一步都在用新的随机参数，梯度无处可存。判据很简单：在 <code class="inline">print(model)</code> 里看不到的层，就等于没建。
+  </div>
+
+  <h3>4.3.3 常用层与参数量</h3>
+  <pre>model = nn.Sequential(
+    nn.Linear(<span class="num">2</span>, <span class="num">16</span>),   <span class="cm"># 48 个参数 = 2*16 + 16</span>
+    nn.ReLU(),          <span class="cm"># 形状不变，0 参数</span>
+    nn.Dropout(<span class="num">0.2</span>),    <span class="cm"># 只在 train() 模式下生效</span>
+    nn.Linear(<span class="num">16</span>, <span class="num">2</span>),   <span class="cm"># 34 个参数 = 16*2 + 2 -> logits</span>
+)
+
+n = <span class="fn">sum</span>(p.<span class="fn">numel</span>() <span class="kw">for</span> p <span class="kw">in</span> model.parameters())
+<span class="fn">print</span>(n)               <span class="cm"># 82</span>
+model.eval()           <span class="cm"># 评估前切到 eval：关掉 dropout</span></pre>
+</div>
+
+<!-- ========== 4.4 ========== -->
+<div class="section">
+  <h2>4.4 宽度、深度与模型容量</h2>
+  <p>结构不是越复杂越好——但「越大越差」也不是定律。两个方向都必须量出来，而且量出来的结果取决于数据。下面是同一套协议下（1,000 个样本、7:3 分层划分、<code class="inline">seed=42</code>、Adam <code class="inline">lr=1e-2</code>、300 轮）在两个数据集上的同一张表。</p>
+
+  <h3>4.4.1 消融对照表</h3>
+  <table>
+    <tr><th>配置</th><th>参数量</th><th>验证准确率 · circles</th><th>验证准确率 · moons</th><th>结论</th></tr>
+    <tr><td>2 → 2（线性，第 2 章基线）</td><td>6</td><td>0.473</td><td>0.890</td><td>没有隐藏层，只能画一条直线</td></tr>
+    <tr><td>2-8-2 · 无激活</td><td>42</td><td>0.473</td><td>0.890</td><td>有隐藏层但没有激活，仍然是那条直线</td></tr>
+    <tr><td>2-8-2 · ReLU</td><td>42</td><td><strong>0.980</strong></td><td>0.953</td><td>同样 42 个参数，只加一个非线性：circles 上 +51 点，moons 上 6 点</td></tr>
+    <tr><td>2-64-2 · ReLU</td><td>322</td><td>0.990</td><td>0.960</td><td>加宽有效，但收益已经开始变缓</td></tr>
+    <tr><td>2-64-64-2 · ReLU</td><td>4,482</td><td>0.987</td><td>0.960</td><td>再加一层已经换不来收益——circles 上反而略降</td></tr>
+    <tr><td>2-256-256-2 · ReLU</td><td>67,074</td><td>0.987</td><td>0.960</td><td>参数量是上一行的 15 倍，收益≈0，而训练/验证缺口最大</td></tr>
+  </table>
+  <p>三条读法，每一条都必须带着「哪个数据集」这一列才有意义：</p>
+  <ul>
+    <li><strong>第 2、3 行</strong>——参数量完全相同，只差一个 <code class="inline">nn.ReLU()</code>。在 <code class="inline">make_circles</code> 上是 0.473 对 0.980；在 <code class="inline">make_moons</code> 上是 0.890 对 0.953。circles 上 51 个百分点的落差、moons 上 6 个百分点的落差，是数据集决定的，不是结构决定的。</li>
+    <li><strong>第 4 行往后</strong>——从 322 涨到 4,482 再涨到 67,074 个参数，什么都没换来。容量有用，直到它不再有用。</li>
+    <li><strong>最后一行</strong>——67,074 个参数大约是上一行的 15 倍、2-8-2 那一行的 1,600 倍，但 circles 上的验证准确率没有提升，训练/验证缺口反而最大。这不是「容量有害」，而是<em>这么多容量并不是剩余误差所在的地方</em>。</li>
+  </ul>
+  <div class="callout warn">
+    <span class="label">报数字，也要报数据集</span>
+    一个不带数据集的验证准确率不构成结果。同一个结构、同一个种子、同一个优化器，在一个数据集上做出 51 个百分点的反差，在另一个数据集上做出 6 个百分点的反差。
+    你发表的每一行消融数据都必须写明它跑在哪个数据集上。
+  </div>
+
+  <h3>4.4.2 训练与验证开始分叉</h3>
+  <p>随着容量增大，训练准确率一路爬向 1.00，而验证准确率最终不再提升。两条曲线之间的缺口就是过拟合，并且随容量一起变大。判断额外参数有没有干活，看的是这个缺口，而不是训练集上的那个数字。</p>
+
+  <h3>4.4.3 一次只改一个变量</h3>
+  <pre>CONFIGS = [                          <span class="cm"># 每一行只改一个变量</span>
+    (<span class="str">"2-8-2     ReLU"</span>, [<span class="num">8</span>],      <span class="kw">True</span>),
+    (<span class="str">"2-8-2     none"</span>, [<span class="num">8</span>],      <span class="kw">False</span>),
+    (<span class="str">"2-64-2    ReLU"</span>, [<span class="num">64</span>],     <span class="kw">True</span>),
+    (<span class="str">"2-64-64-2 ReLU"</span>, [<span class="num">64</span>, <span class="num">64</span>], <span class="kw">True</span>),
+]
+
+<span class="kw">def</span> <span class="fn">build</span>(hidden, use_relu, in_dim=<span class="num">2</span>, n_class=<span class="num">2</span>):
+    layers, prev = [], in_dim
+    <span class="kw">for</span> h <span class="kw">in</span> hidden:
+        layers += [nn.Linear(prev, h)]
+        <span class="kw">if</span> use_relu:
+            layers += [nn.ReLU()]
+        prev = h
+    layers += [nn.Linear(prev, n_class)]
+    <span class="kw">return</span> nn.Sequential(*layers)
+
+<span class="kw">for</span> name, hidden, use_relu <span class="kw">in</span> CONFIGS:
+    model = <span class="fn">build</span>(hidden, use_relu)
+    n = <span class="fn">sum</span>(p.<span class="fn">numel</span>() <span class="kw">for</span> p <span class="kw">in</span> model.parameters())
+    <span class="fn">print</span>(f<span class="str">"{name:18s} {n:7d}"</span>)</pre>
+  <p>注意隐藏层宽度和「有没有 ReLU」都是 <code class="inline">build()</code> 的参数：配置一变，网络就变，而训练代码一行都不用改。这就是「模块化」最直接的好处。</p>
+</div>
+
+<!-- ========== 4.5 ========== -->
+<div class="section">
+  <h2>4.5 参数初始化</h2>
+  <p>初始化决定训练从哪里出发。它很容易被忽略，直到你悄悄损失掉一半准确率。</p>
+
+  <pre><span class="cm"># nn.Linear 的默认初始化是 kaiming_uniform，即在</span>
+<span class="cm"># [-1/sqrt(in), 1/sqrt(in)] 上的均匀分布。一次 apply 就能全部改写。</span>
+<span class="kw">def</span> <span class="fn">init_weights</span>(m):
+    <span class="kw">if</span> <span class="fn">isinstance</span>(m, nn.Linear):
+        nn.init.<span class="fn">kaiming_normal_</span>(m.weight)
+        nn.init.<span class="fn">zeros_</span>(m.bias)
+
+torch.manual_seed(<span class="num">42</span>)
+model.<span class="fn">apply</span>(init_weights)</pre>
+
+  <table>
+    <tr><th>初始化方式</th><th>效果</th><th>结论</th></tr>
+    <tr><td>默认（kaiming_uniform）</td><td>多数情况下够用；尺度依赖 fan-in</td><td>可以不动</td></tr>
+    <tr><td>kaiming_normal + 零偏置</td><td>与 ReLU 的方差特性匹配</td><td>ReLU 网络的标准搭配</td></tr>
+    <tr><td>全部初始化为 0</td><td>所有隐藏单元永远算一样的东西</td><td>坏的：每层实际上只有一个有效单元</td></tr>
+    <tr><td>全部初始化为同一常数</td><td>同样的对称问题，只是没那么极端</td><td>同样坏的</td></tr>
+  </table>
+  <div class="callout tip">
+    <span class="label">对称性为什么会被打破不了</span>
+    如果初始权重完全相同，每个隐藏单元收到的梯度也完全相同，于是它们始终同步移动、永远不分化，一层 64 个单元就表现得像 1 个。初始化里的随机性不是要被消除的噪声，而是让单元能够分工的机制。
+  </div>
+</div>
+
+<!-- ========== 4.6 ========== -->
+<div class="section">
+  <h2>4.6 模块一里程碑：三件事凑齐一套</h2>
+  <p>模块一在这里收官，而里程碑刻意是「整个模块」而不是「只有模型」。没有数据的模型是演示，没有模型的数据是表格。</p>
+
+  <div class="terms">
+    <div class="term"><h4>① 问题定义单 <span style="color:#6b7280;font-weight:600;">（自 W1 起）</span></h4><p>目标用户、你要解决的问题、你真正拿得到的数据、一个成功指标与一个失败判据。你必须能用一句话说清自己在做什么。</p></div>
+    <div class="term"><h4>② 数据管道 <span style="color:#6b7280;font-weight:600;">（自 W3 起）</span></h4><p>清洗、划分与 <code class="inline">Dataset</code>/<code class="inline">DataLoader</code> 代码。划分比例写在配置里，泄漏自查做过，换台机器用同一份脚本能重建数据集。</p></div>
+    <div class="term"><h4>③ 模型与对照实验 <span style="color:#6b7280;font-weight:600;">（今天，W4）</span></h4><p>用 <code class="inline">nn.Module</code> 定义的 MLP，参数量算得出来，输出是 logits，并用一张消融对照表说明「为什么是这个配置」。</p></div>
+    <div class="term"><h4>综合小测</h4><p>当堂完成，三部分与上面三件交付一一对应。结构与里程碑完全一致，这正是重点：评审看的是这个模块能不能拼成一体，而不是某一周有没有单独学懂。</p></div>
+  </div>
+
+  <p>评审会问两个问题。第一，三件交付彼此是否自洽——模型吃进去的是不是管道产出的东西？第二，那张消融表是证据还是装饰？四列齐全但每行都没有结论的表，就是装饰。</p>
+</div>
+
+<!-- ========== 4.7 ========== -->
+<div class="section">
+  <h2>4.7 常见误区与调试清单</h2>
+  <div class="callout warn">
+    <span class="label">自查清单</span>
+    <ul>
+      <li><strong><code class="inline">print(model)</code> 里看不到的层，等于没建。</strong>在 <code class="inline">forward</code> 里创建、或存成全局变量的层，优化器根本看不到。</li>
+      <li><strong>层属于 <code class="inline">__init__</code>。</strong>赋给 <code class="inline">self</code> 才会被注册进模块树。</li>
+      <li><strong>输出 logits，不是概率。</strong><code class="inline">CrossEntropyLoss</code> 里已含 softmax；再加一次会把梯度压平。</li>
+      <li><strong>把参数量算出来。</strong><code class="inline">sum(p.numel() for p in model.parameters())</code> 必须与手算一致。</li>
+      <li><strong>评估前 <code class="inline">model.eval()</code>，之后 <code class="inline">model.train()</code>。</strong>否则 Dropout 仍在丢弃，指标偏低且每次不同。</li>
+      <li><strong>绝不初始化为常数。</strong>完全相同的单元会学出完全相同的参数，一层塌缩成一个有效单元。</li>
+      <li><strong>每次对照只改一个变量。</strong>开始之前先把种子、划分、轮数、优化器、学习率全部固定。</li>
+      <li><strong>把平直的损失曲线当成数据。</strong>损失钉在 0.693 是一个发现，不是 bug。</li>
+      <li><strong>交结论，不是数字。</strong>消融表每一行都要有一句「它证明了什么」。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 4.8 ========== -->
+<div class="section">
+  <h2>4.8 小结与练习</h2>
+  <div class="callout key">
+    <span class="label">五条要点</span>
+    <ol>
+      <li>一个神经元只画一条直线；隐藏层做特征变换，让线性不可分的问题变得可分——而一个数据集是否线性可分，是你量出来的数字，不是你看散点图认出来的形状。</li>
+      <li>前向传播 = 矩阵乘法 + 逐元素非线性，重复若干次。去掉激活，网络退化为线性模型——两个仿射变换会合并成一次，可以用数值验证到约 1e-7。</li>
+      <li><code class="inline">nn.Module</code> 规范：层在 <code class="inline">__init__</code> 创建并注册到 <code class="inline">self</code>，<code class="inline">forward</code> 只描述数据流，输出 logits。</li>
+      <li>初始化决定起点：ReLU 配 kaiming；常数初始化会让隐藏单元永远对称、永远不分化。</li>
+      <li>结构不是越大越好，也不是越大越差——它是<em>可测量的</em>，而且逐数据集不同。只有一次只改一个变量的对照实验能告诉你哪个配置胜出，而每一个报出来的数字都必须附上它的数据集。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 形状与参数量（必做）</h4>
+    <ol>
+      <li>构建 <code class="inline">nn.Sequential(nn.Linear(2, 8), nn.ReLU(), nn.Linear(8, 3))</code> 并打印模型。先手算参数量，再用 <code class="inline">sum(p.numel() for p in model.parameters())</code> 核对。</li>
+      <li>喂给它一批形状为 <code class="inline">(5, 2)</code> 的数据。写出每一步之后的形状：线性层、激活、输出。</li>
+      <li>用一句话解释：为什么激活函数不增加参数，也不改变形状。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 2 · 激活函数实验（必做）</h4>
+    <ol>
+      <li>实现 4.2.2 里参数化的 <code class="inline">MLP(use_relu)</code>，用同一种子和同一划分跑两种设置。</li>
+      <li>记录两个准确率与两个最终损失，确认「无激活」的损失约为 <code class="inline">ln 2 = 0.693</code>。</li>
+      <li>再写一遍合并论证：用代数说明 <code class="inline">W2(W1 x + b1) + b2</code> 等于一个仿射变换，并指出哪个矩阵扮演了那个「单一权重」的角色。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 3 · 把模型搞坏三次（必做）</h4>
+    <p>下面每个「坏模型」，先预测会发生什么，再实际运行并记录真正的结果。</p>
+    <ol>
+      <li>把层存成模块级全局变量并在 <code class="inline">forward</code> 里使用。检查 <code class="inline">len(list(model.parameters()))</code>。</li>
+      <li>在 <code class="inline">forward</code> 里每次调用都新建层。训练 50 轮后与正确版本的损失对比。</li>
+      <li>正确模型 + 在 <code class="inline">CrossEntropyLoss</code> 之前多加一个 <code class="inline">nn.Softmax(dim=1)</code>。对比正确版本第一轮的损失，并解释差异。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 4 · 消融对照表（必做）</h4>
+    <ol>
+      <li>用同一随机种子、同一划分、同一优化器与学习率，复现 4.4.1 的六行；报告四列：配置、参数量、验证准确率、结论。</li>
+      <li>再自己加两行（例如换一种激活函数，或加 Dropout）。</li>
+      <li>用三句话回答：哪个变量影响最大？你的表里哪条证据支持这个结论？</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 5 · 初始化与训练曲线（必做）</h4>
+    <ol>
+      <li>用同一个结构训练三次：默认初始化、kaiming normal、全零初始化，记录各自的验证准确率。</li>
+      <li>画出三条训练损失曲线，用对称性论证解释全零初始化的结果。</li>
+      <li>说明你会用哪种初始化交货，以及为什么答案不是「哪次跑得高就用哪个」。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 6 · 审计 AI 的结构建议（选做，+5 加分）</h4>
+    <p>让 AI 为你熟悉的一个数据集推荐网络结构：层数、宽度、激活函数、正则化、训练轮数。然后把它的建议作为你自己对照表中的一行去实测——同一划分、同一种子，与其它行完全一致。提交三样东西：AI 的建议原文、实测结果、以及一段说明「哪些部分被你的数据支持、哪些被证伪」。被证伪的部分写进 <code class="inline">AI_USE.md</code>。</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 — 第 4 章 · 神经网络与 nn.Module 建模</p>
+  <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

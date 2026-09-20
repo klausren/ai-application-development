@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 05 · Module 2 · Week 5</div>
+  <h1>Training Loop, Loss and Optimizer</h1>
+  <p class="overview">Week 4 ended with a number on the board: your baseline. From this week on, every improvement has to be produced by a training loop you wrote and understand. A training loop has exactly three moving parts — <strong>what you optimise</strong> (the loss), <strong>how you walk</strong> (the optimizer), and <strong>how big a step you take</strong> (the learning rate) — wrapped in five lines whose order is not negotiable. This chapter builds all of it, adds logging so the process leaves evidence, and ends with the single most useful professional habit in this course: when a loss looks wrong, know what to check, in what order.</p>
+</div>
+
+<!-- ========== 5.1 ========== -->
+<div class="section">
+  <h2>5.1 What a Training Loop Is Actually Doing</h2>
+  <p>"Training a model" sounds like a vague process of improvement. It is not. It is a loop that repeatedly drives one number down. Everything else — architecture, data, hardware — exists to make that number a good proxy for what you actually care about.</p>
+
+  <div class="callout key">
+    <span class="label">The three questions</span>
+    <strong>What</strong> are we making smaller? That is the loss function. <strong>How</strong> do we move? That is the optimizer. <strong>How far</strong> do we move? That is the learning rate. Every training bug you will ever meet is a defect in one of the three.
+  </div>
+
+  <h3>5.1.1 The Three Parts, and Why They Are Separable</h3>
+  <div class="terms">
+    <div class="term"><h4>Loss · what we optimise</h4><p>A function that turns a prediction and a target into a single scalar. Chosen by the <em>task</em>: multi-class, binary, multi-label or regression. Choosing it wrongly means the model faithfully optimises something you do not care about.</p></div>
+    <div class="term"><h4>Optimizer · how we move</h4><p>A rule that converts gradients into an update. SGD uses the current gradient, momentum accumulates a direction, Adam rescales per parameter. Same model, same data, different optimizer — convergence can differ by an order of magnitude.</p></div>
+    <div class="term"><h4>Learning rate · how far we move</h4><p>A scalar multiplying the update. Too large oscillates or explodes; too small crawls. It is the first hyper-parameter to tune and the first suspect when a loss looks wrong.</p></div>
+    <div class="term"><h4>Loop · when we move</h4><p>Five calls, repeated per batch: zero the gradients, forward, compute the loss, backpropagate, step. The order is fixed, and the first step is the one people forget.</p></div>
+  </div>
+
+  <h3>5.1.2 Batch, Step, Epoch</h3>
+  <p>Three words appear in every log, and mixing them up makes a log unreadable:</p>
+  <ul>
+    <li><strong>Batch</strong> — the samples used for one parameter update. With 1,437 training rows and <code class="inline">batch_size=64</code>, there are 23 batches per epoch.</li>
+    <li><strong>Step (iteration)</strong> — one parameter update, i.e. one pass through the five-step loop.</li>
+    <li><strong>Epoch</strong> — one complete pass over the training set, i.e. every batch seen once.</li>
+  </ul>
+  <p>A "learning rate" is per <em>step</em>, not per epoch. This is why changing the batch size silently changes how much training happens per epoch — a fact Section 5.6 returns to.</p>
+
+  <h3>5.1.3 A Baseline to Work From</h3>
+  <p>Everything in this chapter runs on the 8×8 handwritten-digit dataset that ships with scikit-learn. No download, and the whole 3 × 3 grid of Section 5.5 finishes on a laptop CPU in under a minute.</p>
+  <pre><span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_data</span>():
+    <span class="str">"""1,797 handwritten digits, 64 pixel features each, 10 classes."""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)
+    Xtr, Xva, ytr, yva = train_test_split(
+        X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>, stratify=y)
+    as_t = <span class="kw">lambda</span> a, dt: torch.tensor(a, dtype=dt)
+    <span class="kw">return</span> (as_t(Xtr, torch.float32), as_t(ytr, torch.long),
+            as_t(Xva, torch.float32), as_t(yva, torch.long))
+
+
+<span class="kw">class</span> <span class="fn">Net</span>(nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, n_in=<span class="num">64</span>, n_hidden=<span class="num">64</span>, n_out=<span class="num">10</span>):
+        <span class="fn">super</span>().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(n_in, n_hidden), nn.ReLU(),
+            nn.Linear(n_hidden, n_out))      <span class="cm"># raw logits out</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x)               <span class="cm"># NO softmax here - see 5.2.3</span></pre>
+  <p>Two details matter later. The model returns <strong>raw logits</strong>, not probabilities — Section 5.2.3 explains why. And the held-out 20% is used as a validation set, because we are about to choose a hyper-parameter combination on it; in a real project you would carve out a separate test set and touch it once.</p>
+</div>
+
+<!-- ========== 5.2 ========== -->
+<div class="section">
+  <h2>5.2 Loss Functions: Choosing What to Optimise</h2>
+  <p>A loss function converts "this prediction is bad" into a single number that can be minimised. Choosing it is not a matter of taste: the task type determines it.</p>
+
+  <h3>5.2.1 Three Task Types, Three Losses</h3>
+  <table>
+    <tr><th>Task</th><th>Loss</th><th>What you feed it</th><th>Output layer</th><th>Watch out</th></tr>
+    <tr><td>Multi-class</td><td><code class="inline">nn.CrossEntropyLoss</code></td><td>Raw logits, shape (N, C)</td><td>None — softmax is inside</td><td>A manual softmax means doing it twice</td></tr>
+    <tr><td>Binary</td><td><code class="inline">nn.BCEWithLogitsLoss</code></td><td>Raw logits, shape (N, 1)</td><td>None — sigmoid is inside</td><td>Targets must be <em>float</em></td></tr>
+    <tr><td>Multi-label</td><td><code class="inline">nn.BCEWithLogitsLoss</code></td><td>Raw logits, shape (N, C)</td><td>None</td><td>Classes are independent and can co-occur</td></tr>
+    <tr><td>Regression</td><td><code class="inline">nn.MSELoss</code></td><td>Continuous predictions</td><td>None</td><td>Very sensitive to outliers; L1 is more robust</td></tr>
+    <tr><td>Imbalanced</td><td><code class="inline">CrossEntropyLoss(weight=…)</code></td><td>Logits + per-class weights</td><td>None</td><td>Set weights as inverse class frequency</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <span class="label">One line to remember it</span>
+    Cross-entropy for classification, mean squared error for regression — and any loss with <em>WithLogits</em> in its name already contains the activation, which is exactly why you must not add another.
+  </div>
+
+  <h3>5.2.2 Label Types Are Not Decoration</h3>
+  <p>Cross-entropy expects integer class indices (<code class="inline">torch.long</code>) and will index into the logits with them. BCE expects floats in [0, 1] (<code class="inline">torch.float32</code>). Passing the wrong dtype raises an error — which is the good outcome. The bad outcome is passing a shape that happens to broadcast, training for twenty minutes, and discovering the model learned nothing.</p>
+  <pre><span class="cm"># multi-class: labels are indices, dtype long</span>
+criterion = nn.CrossEntropyLoss()
+loss = criterion(logits, y_long)                    <span class="cm"># y_long.shape == (N,)</span>
+
+<span class="cm"># binary / multi-label: labels are 0.0 / 1.0, dtype float</span>
+criterion = nn.BCEWithLogitsLoss()
+loss = criterion(logits, y_float)                   <span class="cm"># y_float.shape == (N, 1) or (N, C)</span>
+
+<span class="cm"># regression: predictions and targets are continuous</span>
+criterion = nn.MSELoss()
+loss = criterion(pred, y_float)</pre>
+
+  <h3>5.2.3 Misconception: "Softmax First, Then Cross-Entropy"</h3>
+  <p>This is the most common silent bug in the whole course, and it deserves to be reproduced rather than merely described:</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+
+logits = model(x)
+p = torch.softmax(logits, dim=<span class="num">1</span>)
+
+<span class="fn">print</span>(<span class="str">"CE(logits)          ="</span>, nn.CrossEntropyLoss()(logits, y).item())
+<span class="fn">print</span>(<span class="str">"CE(softmax(logits)) ="</span>, nn.CrossEntropyLoss()(p,      y).item())
+
+<span class="cm"># CE(logits)          = 2.2865     <- correct</span>
+<span class="cm"># CE(softmax(logits)) = 2.3002     <- wrong, quietly worse</span></pre>
+  <div class="callout warn">
+    <span class="label">Why silence is worse than a crash</span>
+    <code class="inline">CrossEntropyLoss</code> applies <code class="inline">log_softmax</code> internally. Feed it probabilities and the values are normalised a second time, which compresses the distribution towards uniform and shrinks the gradient. No exception is raised. The only symptom is that the loss falls more slowly and accuracy stalls at a level that never quite reaches what you expect — a bug that costs hours of searching in the wrong place (the architecture, the data, the learning rate) because the code "looks fine".
+  </div>
+  <p>The general rule: <strong>if a loss function's name contains <code class="inline">WithLogits</code>, or it is <code class="inline">CrossEntropyLoss</code>, pass raw model outputs.</strong></p>
+
+  <h3>5.2.4 Class Imbalance</h3>
+  <p>With 4% positives, a model that predicts "negative" for every row achieves 96% accuracy while being useless. Accuracy stops being an informative metric, and the loss can be reweighted so that mistakes on the rare class cost more:</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np, torch
+
+counts = np.bincount(y_train)                       <span class="cm"># samples per class</span>
+w = torch.tensor(<span class="num">1.0</span> / counts, dtype=torch.float32)
+w = w / w.sum() * <span class="fn">len</span>(counts)                      <span class="cm"># keep the mean near 1</span>
+
+criterion = nn.CrossEntropyLoss(weight=w)</pre>
+  <p>Weights are the training-side fix. On the evaluation side the corresponding move is to stop reporting accuracy and start reporting per-class recall or F1 — a Week 6 topic.</p>
+</div>
+
+<!-- ========== 5.3 ========== -->
+<div class="section">
+  <h2>5.3 Optimizers: How We Update</h2>
+  <p>The loss tells you how wrong you are. The optimizer decides which way to move and how far. All three of the optimizers below consume the same gradients; they differ in what they do with them <em>before</em> the update.</p>
+
+  <div class="steps">
+    <div class="step"><h4>SGD · use the gradient you just computed</h4><p><code class="inline">w ← w − lr · g</code>. One hyper-parameter, no memory, extremely sensitive to the learning rate. Plain SGD at <code class="inline">1e-1</code> is often usable; <code class="inline">1e-2</code> to <code class="inline">1e-1</code> is the practical band.</p></div>
+    <div class="step"><h4>SGD + momentum · add inertia</h4><p>Keep a running average of past gradients and step along it. Directions that stay consistent get amplified, so progress accelerates; small saddle points and noisy gradients are smoothed through. The convention is <code class="inline">momentum=0.9</code>. The cost of the amplification: a learning rate that plain SGD survives may now diverge.</p></div>
+    <div class="step"><h4>Adam · adapt per parameter</h4><p>Keep running estimates of the gradient's first and second moments, and divide the step by the square root of the second. Every parameter gets its own effective step size. This removes much of the need to hand-tune one global learning rate — <code class="inline">1e-3</code> usually runs — at the cost of two extra state buffers per parameter.</p></div>
+    <div class="step"><h4>AdamW · decouple the weight decay</h4><p>Identical to Adam except that weight decay is applied directly to the weights rather than folded into the gradient. This is the standard choice for Transformer-style models and for anything where you want regularisation to mean what it says.</p></div>
+  </div>
+
+  <table>
+    <tr><th>Optimizer</th><th>Update rule, in words</th><th>Key hyper-parameters</th><th>Convergence</th><th>Typical use</th></tr>
+    <tr><td>SGD</td><td>One step along the current gradient</td><td><code class="inline">lr</code></td><td>Slow</td><td>A tunable classic baseline</td></tr>
+    <tr><td>SGD + Momentum</td><td>Accumulate past gradients into inertia</td><td><code class="inline">lr</code>, <code class="inline">momentum=0.9</code></td><td>Medium</td><td>Common default in computer vision</td></tr>
+    <tr><td>Adam</td><td>Adaptive per-parameter step + momentum</td><td><code class="inline">lr</code>, <code class="inline">betas</code>, <code class="inline">eps</code></td><td>Fast</td><td>First choice, fast prototyping, sparse gradients</td></tr>
+    <tr><td>AdamW</td><td>Adam with decoupled weight decay</td><td><code class="inline">lr</code>, <code class="inline">weight_decay</code></td><td>Fast</td><td>Standard for Transformer-style models</td></tr>
+  </table>
+
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch <span class="kw">import</span> nn
+
+model = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">64</span>), nn.ReLU(), nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+params = model.parameters()
+
+opt_sgd  = torch.optim.SGD(params, lr=<span class="num">1e-1</span>)
+opt_mom  = torch.optim.SGD(params, lr=<span class="num">1e-1</span>, momentum=<span class="num">0.9</span>)
+opt_adam = torch.optim.Adam(params, lr=<span class="num">1e-3</span>)</pre>
+
+  <div class="callout warn">
+    <span class="label">Misconception: "Adam is just better"</span>
+    Adam is <em>faster to a usable result</em>, which is why it is the default for prototyping. It is not universally better: it costs roughly twice the optimizer-state memory of SGD, and on some vision problems a well-tuned SGD + momentum generalises slightly better. More importantly, "which is better" is a question about <strong>your</strong> data, <strong>your</strong> metric and <strong>your</strong> compute budget — so it must be answered by a controlled run, which is exactly what Lab 04 does.
+  </div>
+
+  <div class="callout warn">
+    <span class="label">Misconception: "optimizers remember nothing"</span>
+    Both momentum and Adam keep state between steps. That state is not reset by <code class="inline">zero_grad()</code>, which clears <code class="inline">.grad</code> only. Creating a fresh optimizer in the middle of a run, or reusing one across two different models, silently changes behaviour. Create a new optimizer together with a new model — which is what the grid below does.
+  </div>
+</div>
+
+<!-- ========== 5.4 ========== -->
+<div class="section">
+  <h2>5.4 Learning Rate: The First Hyper-parameter</h2>
+  <p>The learning rate decides how far each step goes. It is the only hyper-parameter that is worth checking before anything else, because its two failure modes look like completely different problems.</p>
+
+  <table>
+    <tr><th>Symptom in the log</th><th>Diagnosis</th><th>First action</th></tr>
+    <tr><td>Loss oscillates up and down, never descends</td><td>Learning rate too large — the step overshoots the valley</td><td>Divide by 10 and re-run</td></tr>
+    <tr><td>Loss becomes <code class="inline">nan</code> or <code class="inline">inf</code> within an epoch or two</td><td>Learning rate far too large</td><td>Divide by 10 again; check the input scale</td></tr>
+    <tr><td>Loss falls then plateaus high, accuracy stuck near chance</td><td>Learning rate too large for this optimizer (often momentum or Adam)</td><td>Divide by 10; keep the optimizer</td></tr>
+    <tr><td>Loss moves less than 0.05 in ten epochs</td><td>Learning rate too small — it looks like training but is not</td><td>Multiply by 10 once, then compare the two curves</td></tr>
+    <tr><td>Train loss falls steadily, val loss rises</td><td>Not a learning-rate problem — this is overfitting (Week 6)</td><td>Do not touch the learning rate</td></tr>
+  </table>
+
+  <div class="callout key">
+    <span class="label">Reading the curves</span>
+    A healthy run shows a smooth, monotone decline that flattens out. If you sketch the three canonical shapes — a jagged line that never descends, a smooth slide, and a nearly horizontal line — you can diagnose a run from a screenshot. That is precisely the diagnostic skill Lab 04 makes you produce rather than copy.
+  </div>
+
+  <h3>5.4.1 "Too Large" Depends on the Optimizer</h3>
+  <p>Here is the result that surprises most students, and it is why the lab uses a factorial design rather than a one-at-a-time sweep. On this dataset, with the same architecture and the same seed:</p>
+  <table>
+    <tr><th>Optimizer</th><th><code class="inline">lr=1e-1</code></th><th><code class="inline">lr=1e-3</code></th><th><code class="inline">lr=1e-5</code></th></tr>
+    <tr><td>SGD</td><td>converges (0.944 acc)</td><td>converging, slowly (0.906)</td><td>crawls (0.153)</td></tr>
+    <tr><td>SGD + momentum</td><td><strong>diverges</strong> — train loss rises 2.13 → 2.31</td><td>converges well (0.972)</td><td>crawls (0.364)</td></tr>
+    <tr><td>Adam</td><td><strong>unstable</strong> — first loss 7.35, acc 0.361</td><td><strong>best (0.983)</strong></td><td>crawls (0.239)</td></tr>
+  </table>
+  <p>Three conclusions fall out of this one table, and none of them is visible from a one-factor-at-a-time experiment:</p>
+  <ul>
+    <li><strong>"Too large" is not a constant.</strong> Plain SGD survives <code class="inline">1e-1</code>; momentum diverges on it. The threshold is a property of the optimizer, the data scale and the loss surface together.</li>
+    <li><strong>Momentum amplifies.</strong> It helps at <code class="inline">1e-3</code> (0.972 against SGD's 0.906) and destroys at <code class="inline">1e-1</code>. An accumulated direction effectively multiplies the step length.</li>
+    <li><strong>Adaptive beats global here.</strong> Adam at <code class="inline">1e-3</code> wins on both metrics, because per-parameter rescaling removes the need for one global step size to fit 64 features with different variances.</li>
+  </ul>
+
+  <h3>5.4.2 Schedules</h3>
+  <p>A single constant learning rate is rarely optimal for the whole run: large early (to make progress) and small late (to settle). PyTorch implements this in <code class="inline">lr_scheduler</code>, and the scheduler must be stepped once per epoch — not per batch.</p>
+  <pre><span class="kw">from</span> torch.optim.lr_scheduler <span class="kw">import</span> StepLR, CosineAnnealingLR
+
+opt = torch.optim.SGD(model.parameters(), lr=<span class="num">1e-2</span>, momentum=<span class="num">0.9</span>)
+sched = StepLR(opt, step_size=<span class="num">10</span>, gamma=<span class="num">0.1</span>)   <span class="cm"># x0.1 every 10 epochs</span>
+
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+    train_one_epoch(...)
+    sched.step()                                  <span class="cm"># ONCE per epoch</span>
+    <span class="fn">print</span>(f<span class="str">"epoch {epoch}  lr = {opt.param_groups[0]['lr']:.2e}"</span>)</pre>
+  <div class="callout warn">
+    <span class="label">Misconception: "I can just add more epochs"</span>
+    If the loss is flat, adding epochs is the most expensive way to learn nothing. Ten epochs at a too-small learning rate and a hundred epochs at the same rate look identical for the first ten — and the second run wastes ninety. Fix the rate first, then decide how many epochs it needs.
+  </div>
+</div>
+
+<!-- ========== 5.5 ========== -->
+<div class="section">
+  <h2>5.5 The Five-Step Training Loop</h2>
+  <p>However complicated a training script looks, its core is five calls. Learn them and you can read any PyTorch code; forget the order and no amount of architecture will save you.</p>
+
+  <div class="steps">
+    <div class="step"><h4>zero_grad() · clear the previous gradients</h4><p>PyTorch <em>accumulates</em> into <code class="inline">.grad</code>. Without this call, batch 2's gradient is added to batch 1's, and the effective step grows with every batch.</p></div>
+    <div class="step"><h4>Forward · get the prediction</h4><p><code class="inline">logits = model(xb)</code>. Note the name: what comes back are logits, not probabilities.</p></div>
+    <div class="step"><h4>Loss · score the prediction</h4><p><code class="inline">loss = criterion(logits, yb)</code> with the loss chosen in Section 5.2.</p></div>
+    <div class="step"><h4>backward() · compute the gradients</h4><p>Autograd walks the graph built by the forward pass and fills <code class="inline">.grad</code> for every parameter.</p></div>
+    <div class="step"><h4>step() · update the parameters</h4><p>The optimizer reads <code class="inline">.grad</code> and applies its own rule — SGD, momentum or Adam.</p></div>
+  </div>
+
+  <h3>5.5.1 Why Step 1 Comes First</h3>
+  <p>Run three updates without <code class="inline">zero_grad()</code> and watch the summed gradient climb:</p>
+  <pre>net  = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">64</span>), nn.ReLU(), nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+opt  = torch.optim.SGD(net.parameters(), lr=<span class="num">1e-2</span>)
+crit = nn.CrossEntropyLoss()
+
+<span class="kw">for</span> step <span class="kw">in</span> <span class="fn">range</span>(<span class="num">3</span>):
+    loss = crit(net(Xtr[:<span class="num">64</span>]), ytr[:<span class="num">64</span>])
+    loss.backward()                          <span class="cm"># no zero_grad() anywhere</span>
+    total = <span class="fn">sum</span>(p.grad.<span class="fn">abs</span>().<span class="fn">sum</span>().item() <span class="kw">for</span> p <span class="kw">in</span> net.parameters())
+    <span class="fn">print</span>(f<span class="str">"step {step}: |grad| = {total:.2f}"</span>)
+    opt.step()
+
+<span class="cm"># step 0: |grad| = 11.78</span>
+<span class="cm"># step 1: |grad| = 23.58</span>
+<span class="cm"># step 2: |grad| = 35.39</span></pre>
+  <p>The numbers are a straight line upward because the gradients never reset. The optimizer is being handed a gradient roughly <em>n</em> times too large after <em>n</em> batches — so the effective learning rate grows as training proceeds. The symptom in the log is a loss curve that looks random rather than monotone.</p>
+
+  <h3>5.5.2 The Loop, With a Log</h3>
+  <pre><span class="kw">def</span> <span class="fn">train</span>(model, opt, crit, Xtr, ytr, Xva, yva, epochs=<span class="num">30</span>, bs=<span class="num">64</span>):
+    <span class="str">"""The five-step loop per batch; one log row per epoch."""</span>
+    hist = {<span class="str">"train_loss"</span>: [], <span class="str">"val_loss"</span>: [], <span class="str">"val_acc"</span>: []}
+    <span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(epochs):
+        model.<span class="fn">train</span>()                        <span class="cm"># enable dropout / BN updates</span>
+        running, seen = <span class="num">0.0</span>, <span class="num">0</span>
+        <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, Xtr.shape[<span class="num">0</span>], bs):
+            xb, yb = Xtr[i:i + bs], ytr[i:i + bs]
+            opt.<span class="fn">zero_grad</span>()                 <span class="cm"># 1</span>
+            logits = <span class="fn">model</span>(xb)             <span class="cm"># 2</span>
+            loss = <span class="fn">crit</span>(logits, yb)        <span class="cm"># 3</span>
+            loss.<span class="fn">backward</span>()                 <span class="cm"># 4</span>
+            opt.<span class="fn">step</span>()                     <span class="cm"># 5</span>
+            running += loss.<span class="fn">item</span>() * xb.size(<span class="num">0</span>)
+            seen += xb.size(<span class="num">0</span>)
+        hist[<span class="str">"train_loss"</span>].<span class="fn">append</span>(running / seen)
+
+        model.<span class="fn">eval</span>()                         <span class="cm"># eval mode: no dropout / BN updates</span>
+        <span class="kw">with</span> torch.<span class="fn">no_grad</span>():                <span class="cm"># no graph needed for evaluation</span>
+            v = <span class="fn">model</span>(Xva)
+            hist[<span class="str">"val_loss"</span>].<span class="fn">append</span>(<span class="fn">crit</span>(v, yva).item())
+            hist[<span class="str">"val_acc"</span>].<span class="fn">append</span>((v.<span class="fn">argmax</span>(<span class="num">1</span>) == yva).<span class="fn">float</span>().<span class="fn">mean</span>().item())
+    <span class="kw">return</span> hist</pre>
+
+  <p>Note the three calls that surround the loop but are easy to forget: <code class="inline">model.train()</code> before training, <code class="inline">model.eval()</code> and <code class="inline">torch.no_grad()</code> before evaluating. They do nothing on this week's model — which has neither dropout nor batch norm — and they will matter enormously in Weeks 6 and 7, so the habit is worth forming now.</p>
+
+  <h3>5.5.3 A Controlled Comparison</h3>
+  <p>The grid that Lab 04 asks for is one nested loop. Two variables change; everything else — data, split, architecture, batch size, epoch count and initial weights — is pinned:</p>
+  <pre><span class="kw">import</span> json
+
+crit = nn.CrossEntropyLoss()
+results = []
+
+<span class="kw">for</span> name <span class="kw">in</span> [<span class="str">"sgd"</span>, <span class="str">"momentum"</span>, <span class="str">"adam"</span>]:
+    <span class="kw">for</span> lr <span class="kw">in</span> [<span class="num">1e-1</span>, <span class="num">1e-3</span>, <span class="num">1e-5</span>]:
+        torch.<span class="fn">manual_seed</span>(<span class="num">42</span>)             <span class="cm"># identical weights for every run</span>
+        model = <span class="fn">Net</span>()
+        opt = <span class="fn">make_optimizer</span>(name, model, lr)
+        hist = <span class="fn">train</span>(model, opt, crit, Xtr, ytr, Xva, yva, epochs=<span class="num">30</span>)
+
+        results.<span class="fn">append</span>({
+            <span class="str">"optimizer"</span>: name,
+            <span class="str">"lr"</span>: lr,
+            <span class="str">"min_val_loss"</span>: <span class="fn">min</span>(hist[<span class="str">"val_loss"</span>]),
+            <span class="str">"max_val_acc"</span>: <span class="fn">max</span>(hist[<span class="str">"val_acc"</span>]),
+        })
+        r = results[-<span class="num">1</span>]
+        <span class="fn">print</span>(f<span class="str">"{name:9s} lr={lr:&lt;6g} min_val_loss={r['min_val_loss']:.3f} "</span>
+              f<span class="str">"max_val_acc={r['max_val_acc']:.3f}"</span>)
+
+<span class="kw">with</span> <span class="fn">open</span>(<span class="str">"grid_results.json"</span>, <span class="str">"w"</span>) <span class="kw">as</span> f:   <span class="cm"># evidence, not a screenshot</span>
+    json.<span class="fn">dump</span>(results, f, indent=<span class="num">2</span>)</pre>
+  <div class="callout warn">
+    <span class="label">Misconception: "I can reuse the trained model"</span>
+    Look at where <code class="inline">torch.manual_seed(42)</code> and <code class="inline">Net()</code> sit: <em>inside</em> the inner loop. Move them outside and run 2 starts from run 1's already-trained weights — so run 2 measures "further training of run 1", not "a different optimizer". The comparison silently becomes meaningless, and nothing about the output reveals it. Re-seeding and rebuilding is the discipline that makes the whole grid valid.
+  </div>
+</div>
+
+<!-- ========== 5.6 ========== -->
+<div class="section">
+  <h2>5.6 Batch Size, VRAM, Logging and Visualisation</h2>
+
+  <h3>5.6.1 Batch Size and Memory</h3>
+  <table>
+    <tr><th>Batch size</th><th>VRAM</th><th>Gradient</th><th>Trade-off</th></tr>
+    <tr><td>8 – 32</td><td>Low</td><td>Noisy; sometimes helps generalisation</td><td>Small VRAM or small data; usually wants a smaller learning rate</td></tr>
+    <tr><td>64 – 256</td><td>Medium</td><td>Reasonably stable</td><td>The usual default — start here</td></tr>
+    <tr><td>512+</td><td>High</td><td>Very stable, can generalise worse</td><td>Needs a larger learning rate and warmup</td></tr>
+    <tr><td>1 (per sample)</td><td>Lowest, very slow</td><td>Extremely noisy</td><td>Teaching demos, or an extreme memory limit</td></tr>
+  </table>
+  <p>A useful estimate, and the reason Adam costs more than SGD:</p>
+  <pre><span class="cm"># VRAM ~= activations (scales with batch size)</span>
+<span class="cm">#       + parameters</span>
+<span class="cm">#       + optimizer state</span>
+<span class="cm">#</span>
+<span class="cm">#   SGD   : no extra state</span>
+<span class="cm">#   Adam  : ~2 buffers per parameter</span>
+<span class="cm">#   AdamW : ~2 buffers per parameter (decoupled decay)</span></pre>
+  <p>Two rules follow. <strong>When you double the batch size, scale the learning rate up with it</strong> — the same step size now averages over twice as many samples and moves relatively less. And <strong>when you hit "CUDA out of memory", the batch size is the first knob, not the model size.</strong></p>
+
+  <h3>5.6.2 Why the Log Is the Deliverable</h3>
+  <p>One row per epoch, four columns, no exceptions:</p>
+  <pre><span class="cm"># epoch  train_loss  val_loss  val_acc</span>
+<span class="cm">#     0      2.0264    1.2740   0.6306</span>
+<span class="cm">#     5      0.1822    0.1785   0.9583</span>
+<span class="cm">#    10      0.1142    0.1244   0.9722</span>
+<span class="cm">#    20      0.0455    0.0864   0.9778</span>
+<span class="cm">#    29      0.0224    0.0762   0.9778</span></pre>
+  <p>Without both loss columns you cannot tell these three situations apart, and they need different fixes:</p>
+  <ul>
+    <li><strong>Train falling, val falling, small gap</strong> — healthy. More epochs will probably help.</li>
+    <li><strong>Train falling, val rising</strong> — overfitting. Fix with regularisation, not with the learning rate (Week 6).</li>
+    <li><strong>Both flat</strong> — the learning rate is too small, or something is frozen. Adding epochs changes nothing.</li>
+    <li><strong>Both jagged with no trend</strong> — often the missing <code class="inline">zero_grad()</code> from Section 5.5.1.</li>
+  </ul>
+
+  <h3>5.6.3 Plotting: Use Small Multiples</h3>
+  <pre><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+fig, axes = plt.<span class="fn">subplots</span>(<span class="num">1</span>, <span class="num">2</span>, figsize=(<span class="num">13</span>, <span class="num">4.5</span>))
+<span class="kw">for</span> r <span class="kw">in</span> results:
+    label = f<span class="str">"{r['optimizer']} lr={r['lr']:g}"</span>
+    axes[<span class="num">0</span>].<span class="fn">plot</span>(r[<span class="str">"val_loss"</span>], label=label)
+    axes[<span class="num">1</span>].<span class="fn">plot</span>(r[<span class="str">"val_acc"</span>],  label=label)
+axes[<span class="num">0</span>].<span class="fn">set</span>(xlabel=<span class="str">"epoch"</span>, ylabel=<span class="str">"val loss"</span>)
+axes[<span class="num">1</span>].<span class="fn">set</span>(xlabel=<span class="str">"epoch"</span>, ylabel=<span class="str">"val accuracy"</span>)
+<span class="kw">for</span> ax <span class="kw">in</span> axes:
+    ax.<span class="fn">legend</span>(fontsize=<span class="num">8</span>); ax.<span class="fn">grid</span>(alpha=<span class="num">0.3</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">savefig</span>(<span class="str">"curves.png"</span>, dpi=<span class="num">150</span>)</pre>
+  <p>Nine curves on one axes is unreadable, and a figure nobody can read is not evidence. Add a second set of <strong>small multiples</strong> — one panel per optimizer, three learning rates each. That figure separates the learning-rate effect (within a panel) from the optimizer effect (across panels), which is the entire point of a factorial experiment.</p>
+</div>
+
+<!-- ========== 5.7 ========== -->
+<div class="section">
+  <h2>5.7 Pitfalls and a Debugging Checklist</h2>
+  <div class="callout warn">
+    <span class="label">Checklist · when a loss looks wrong, check in this order</span>
+    <ul>
+      <li><strong>Learning rate first.</strong> <code class="inline">nan</code> or oscillation → divide by 10. Flat → multiply by 10. This fixes most cases and costs one run.</li>
+      <li><strong>Then the optimizer.</strong> The same learning rate that plain SGD survives can diverge with momentum or Adam (Section 5.4.1).</li>
+      <li><strong>Then the loss call.</strong> Is a softmax sitting just above it? Is the loss a <em>WithLogits</em> variant being fed probabilities?</li>
+      <li><strong>Then the label dtype and shape.</strong> <code class="inline">long</code> for cross-entropy, <code class="inline">float</code> for BCE. Print <code class="inline">y.shape</code> and <code class="inline">y.dtype</code> rather than assuming.</li>
+      <li><strong>Then the loop order.</strong> Is <code class="inline">zero_grad()</code> the first line? Is <code class="inline">backward()</code> before <code class="inline">step()</code>?</li>
+      <li><strong>Then the data.</strong> Class distribution, feature scale, split leakage. A label-mapping bug looks exactly like a learning-rate bug.</li>
+      <li><strong>Only then the architecture.</strong> It is the most tempting change and the least likely cause.</li>
+    </ul>
+  </div>
+  <p>And the two silent bugs worth memorising as a pair, because neither raises an exception:</p>
+  <table>
+    <tr><th>Bug</th><th>What you see</th><th>One-line fix</th></tr>
+    <tr><td>Softmax applied twice</td><td>Loss falls slowly, accuracy stalls just short of expectations</td><td>Delete the <code class="inline">softmax</code>; pass raw logits</td></tr>
+    <tr><td>Missing <code class="inline">zero_grad()</code></td><td>Gradients climb from batch to batch; the loss curve looks random</td><td>Make it the first line inside the batch loop</td></tr>
+  </table>
+</div>
+
+<!-- ========== 5.8 ========== -->
+<div class="section">
+  <h2>5.8 Summary and Exercises</h2>
+  <div class="callout key">
+    <span class="label">Five Takeaways</span>
+    <ol>
+      <li>Training drives one number down. The <strong>loss</strong> names that number, the <strong>optimizer</strong> decides how to walk, the <strong>learning rate</strong> decides how big a step to take.</li>
+      <li>Pick the loss by task — cross-entropy for classification, MSE for regression — and always feed raw logits to any <em>WithLogits</em> loss or to <code class="inline">CrossEntropyLoss</code>.</li>
+      <li>SGD uses the current gradient, momentum accumulates a direction, Adam adapts per parameter. Adam converges faster and costs more memory; which wins on your data is an experiment, not a fact.</li>
+      <li>The five-step loop is <strong>zero → forward → loss → backward → step</strong>. The order is fixed and step 1 is the one people drop.</li>
+      <li>Log one row per epoch with both train and val loss, and change one variable at a time. An experiment without a control run is an opinion.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · Choose the Loss (Required)</h4>
+    <ol>
+      <li>Name the loss function and the exact output-layer activation for each task: (a) 10-class image classification, (b) a chest X-ray tagged with any subset of 5 findings, (c) predicting tomorrow's temperature, (d) spam / not-spam.</li>
+      <li>For (b), state the expected shape of the logits and the dtype and shape of the targets.</li>
+      <li>For (d) with only 3% spam, write the two lines of code that build a class-weighted loss.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2 · Reproduce the Two Silent Bugs (Required)</h4>
+    <ol>
+      <li>Build the <code class="inline">Net</code> from Section 5.1.3 and train it for 30 epochs on Adam at <code class="inline">1e-3</code>, logging train loss, val loss and val accuracy. Record the final three numbers.</li>
+      <li>Change one thing: compute <code class="inline">torch.softmax(logits, dim=1)</code> and pass that to <code class="inline">CrossEntropyLoss</code>. Re-run and record the same three numbers. Plot both accuracy curves on one figure and write three sentences on what changed and why.</li>
+      <li>Remove <code class="inline">opt.zero_grad()</code>. Re-run, record the same three numbers, and describe the shape of the loss curve in one sentence.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3 · The 3 × 3 Grid (Required)</h4>
+    <ol>
+      <li>Run all nine combinations of {SGD, SGD + momentum 0.9, Adam} × {1e-1, 1e-3, 1e-5} for 30 epochs, rebuilding the model under a fixed seed each time.</li>
+      <li>Tabulate: optimizer, lr, minimum val loss, maximum val accuracy, converged (yes / too slow / diverged).</li>
+      <li>Name the winning combination and justify it with a number, a comparison and a mechanism.</li>
+      <li>Name the diverging combination and explain, in terms of the update rule, why that learning rate is fatal for that optimizer but not for plain SGD.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4 · Diagnose From the Log Alone (Required)</h4>
+    <p>For each log below, name the diagnosis and the single next action. Justify the last one in three sentences.</p>
+    <ol>
+      <li>epoch 0 loss 2.29 → epoch 29 loss 2.24, val accuracy 0.11</li>
+      <li>epoch 0 loss 7.31 → epoch 29 loss 1.79, val accuracy 0.36</li>
+      <li>epoch 0 loss 2.31 → epoch 29 loss 2.60, val accuracy 0.10</li>
+      <li>train loss 0.02, val loss 0.74, val accuracy 0.94 at epoch 29</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5 · Mini-Experiment (Optional, +5 bonus)</h4>
+    <p>Take the winning combination from Exercise 3 and change exactly one further thing: (a) batch size 64 → 256, or (b) add <code class="inline">StepLR(step_size=10, gamma=0.1)</code>, or (c) switch Adam to AdamW with <code class="inline">weight_decay=1e-2</code>. Report the metric delta against the baseline and state in 150 words whether the change was worth it — including the training-time cost, if any.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development — Chapter 5 · Training Loop, Loss and Optimizer</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

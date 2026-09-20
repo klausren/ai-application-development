@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); flex: 100; }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 5 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
+  <h1>实验 4 — 训练循环、损失函数与优化器：3 种优化器 × 3 组学习率对照实验</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 分钟 + 小测与小结 15 分钟</span>
+    <span>📚 教材 5.5–5.7</span>
+    <span>🔧 随堂实验 · 官方编号：实验 4</span>
+    <span>🧩 教案编号：LP-W5-B</span>
+    <span>🖼 课件共 29 页（本部分用到 p20–p29）</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>能默写训练循环五步以及每一步对应的具体方法调用</li>
+      <li>解释漏写 <code class="inline">zero_grad()</code> 时梯度为什么会累加，以及它对「实际步长」的影响</li>
+      <li>解释 <code class="inline">CrossEntropyLoss</code> 为什么要收原始 logits，多做一次 softmax 会对梯度做什么</li>
+      <li>能从损失曲线的形状区分学习率的三种区制：爆炸、收敛、几乎不动</li>
+      <li>解释对照实验为什么必须固定初始权重</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>写出可复用的 <code class="inline">train()</code> 函数与逐轮日志，五步顺序正确</li>
+      <li>完成 3 种优化器 × 3 组学习率的 9 次对照实验，且只改这两个变量</li>
+      <li>绘制损失 / 准确率曲线（同坐标系 + 按优化器分面），并从曲线上读出收敛速度与稳定性</li>
+      <li>用「数字 + 对照 + 机理」而不是偏好，写出最优组合</li>
+      <li>按「现象 → 假设 → 证据 → 结论」四行写出一次不收敛的排查记录</li>
+      <li>下课前推送大作业里程碑 M5（训练循环 + 优化器 × 学习率对照表）</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素质目标</span>
+  把调参当成<strong>实验设计，而不是碰运气</strong>：任何关于超参数的结论都必须能追溯到你自己跑过的一次实验——只改一个变量、其余全部固定。诚实的「这个组合失败了，曲线在这里」比未经检视的成功更值分。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>默写五步循环；可复用的带日志 <code class="inline">train()</code>；3×3 网格作为对照实验；从曲线读收敛速度与稳定性；四行排查记录；M5 推送</td><td>每个环节都以一个必须写进 Markdown 单元格的 checkpoint 收口，写完才允许进入下一环节；教师每段先演示 3–5 分钟，再巡场让学生复现</td></tr>
+  <tr><td>难点</td><td>每次运行必须重建模型（否则第 2 组继承第 1 组的权重）；一张图上看九条曲线；区分「学习率太小」与「模型太弱」；写出把学习率放在第一位的排查记录</td><td>重建：把 <code class="inline">torch.manual_seed(42); model = Net()</code> 放在内层循环里，追问「不写会怎样」；九条曲线：要求按优化器分面；几乎不动：把 30 轮 <code class="inline">1e-5</code> 与 300 轮 <code class="inline">1e-5</code> 并排展示；排查：指导书把四个标签固定死，顺序由模板保证</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>实验 A</td><td>10 min</td><td><strong>先默写五步，再复现两个静默 bug</strong>：动键盘之前先在纸上写循环；复现不清零导致的梯度累加（11.78 → 23.58 → 35.39）并修好；复现两次 softmax 的损失对照（2.2865 与 2.3002）</td><td>p20（回顾 p17–p18）</td><td>先写后做 + 跟做</td></tr>
+  <tr><td>实验 B</td><td>15 min</td><td><strong>一次诚实的训练</strong>：写 <code class="inline">load_data()</code>、<code class="inline">Net</code>、<code class="inline">make_optimizer()</code>、<code class="inline">train()</code>；用 Adam <code class="inline">1e-3</code> 跑 30 轮，每轮一行日志；读训练与验证的差值</td><td>p18</td><td>跟做 + 巡场</td></tr>
+  <tr><td>实验 C</td><td>25 min</td><td><strong>3×3 网格</strong>：9 次运行，3 优化器 × 3 学习率，每次在固定种子下重建模型；结果落 <code class="inline">grid_results.json</code>；填对照表；指出未收敛的组合并说出各自的现象</td><td>p21、p23</td><td>自主练习 + 巡场</td></tr>
+  <tr><td>实验 D</td><td>15 min</td><td><strong>曲线、结论与排查记录</strong>：画损失与准确率曲线（同坐标系 + 分面）；用「数字 + 对照 + 机理」写出最优组合；运行 <code class="inline">diagnose()</code>，为最差的一组写出四行记录</td><td>p22、p24</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>实验 E</td><td>10 min</td><td><strong>收尾与里程碑推送（Part F）</strong>：完成提交清单；写一条 AI 协同记录；把自己项目的数据重跑这张优化器 × 学习率对照表，连同 <code class="inline">src/train.py</code> 与 W5 的 <code class="inline">DEVLOG.md</code> 一起推送</td><td>p25–p26</td><td>清单核对</td></tr>
+  <tr><td>小测</td><td>10 min</td><td><strong>随堂小测</strong>：6 题，覆盖损失选择、两次 softmax 的后果、优化器性质、损失为 nan 的第一反应、五步顺序、批大小与学习率；举手作答后逐题点评</td><td>p27</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>5 min</td><td><strong>小结与预告</strong>：五条要点；课后待办；预告第 6 周（正则化与泛化——把 Dropout、权重衰减与早停加到本周这个循环上）</td><td>p28–p29</td><td>回顾 + 预告</td></tr>
+</table>
+
+<h2>4. 关键活动设计</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 1 · 先写出来，再敲键盘（实验 A，p20）</h4>
+  <p style="font-size:13.5px;">每位学生先在纸上按顺序写出五步，然后才打开 notebook。教师逐桌看纸条；漏掉第 1 步的学生要先复现梯度累加的那段代码（11.78 → 23.58 → 35.39），再解释「大了三倍的梯度」会怎样改变实际步长。先打字不先写，五步法就退化成复制粘贴。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 2 · 一个数字，两次 softmax（实验 A，p20）</h4>
+  <p style="font-size:13.5px;">学生把 <code class="inline">CrossEntropyLoss()(logits, y)</code> 与 <code class="inline">CrossEntropyLoss()(softmax(logits), y)</code> 并排打印。两个值都很「像样」，也都不报错。随后教师投屏把两者各训练 30 轮，让两条准确率曲线自己分开。此后「传原始 logits」这条规则不会有人再记错。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 3 · 先预测，再开跑（实验 C，p21）</h4>
+  <p style="font-size:13.5px;">开跑网格之前，每人在纸上写三条预测：<code class="inline">1e-3</code> 下哪个优化器赢、哪些组合不收敛、<code class="inline">1e-1</code> 是不是对所有优化器都一样致命。然后去跑。把自己的预测与 9 组实测对照，机械的扫描才变成一次「校准」练习——而「动量在 1e-1 反而放大」这个结果几乎每届都能让人意外。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 4 · 十二条曲线，四张图（实验 D，p22）</h4>
+  <p style="font-size:13.5px;">第一次尝试几乎总是「九条曲线挤在一张图上」，而且总是看不清。教师要求改成按优化器分面的小多图：一个优化器一张图、三条学习率。学生立刻能把「同一优化器内的学习率效应」与「优化器之间的更新规则效应」分开——这正是析因实验设计的全部意义。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 5 · 给一次失败写四行（实验 D–E，p24）</h4>
+  <p style="font-size:13.5px;">每位学生用固定标签——<em>现象 / 假设 / 证据 / 结论</em>——为自己的最差那一组写记录，「证据」一行必须引用对照组。教师的标准是：如果第一个假设不是学习率，这份记录要退回去重写。这个格式在后面几周的排查记录中会一直沿用。</p>
+</div>
+
+<h2>5. 作业与考核</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:90px;">权重</th></tr>
+  <tr><td>交付物</td><td><code class="inline">lab-05.ipynb</code> + <code class="inline">train_sweep.py</code>：Restart &amp; Run All 无报错，9 组全部跑出，曲线齐全，结论用自己的话写清，≥ 2 次有效提交，推送到公开仓库</td><td>100 分</td></tr>
+  <tr><td>评分标准</td><td>默写五步 15 · 单次训练与日志 15 · 3×3 网格 30 · 曲线与结论 20 · 排查记录 10 · 课后反思 10</td><td>随堂实验 15 分</td></tr>
+  <tr><td>随堂小测</td><td>实验后 6 题，计入实验成绩的 10%（见课件 p27）</td><td>实验 10%</td></tr>
+  <tr><td>大作业 M5</td><td>Part F（训练循环 + 优化器 × 学习率对照表，需在自己项目数据上重跑）计入大作业（50%），不计入本次实验；漏交扣 2 分项目分，每次迟交扣 2 分，最多扣 20 分</td><td>大作业 50%</td></tr>
+  <tr><td>迟交政策</td><td>实验交付物：每天 −10%，最多 3 天，之后 0 分。时间戳以 commit 为准，不以平台上传时间为准</td><td>—</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">下课前必须确认</span>
+  对每位学生确认三件事：notebook 能从头跑到尾；<code class="inline">grid_results.json</code> 里有 9 行；大作业仓库里已有用自己项目指标跑出的优化器 × 学习率对照表。下周再推的里程碑，等于没有推。
+</div>
+
+<h2>6. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前准备</h4>
+    <ul>
+      <li>第 4 周实验已提交（基线指标已记录、目标值已提交）</li>
+      <li>阅读教材 5.5–5.7</li>
+      <li>自己先在本机跑一遍参考网格，知道「正常长什么样」，才能在巡场时快速识别学生的异常运行</li>
+      <li>笔记本装好 <code class="inline">ai-app</code> 环境，<code class="inline">import torch</code> 可用</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>教学资源</h4>
+    <ul>
+      <li>实验指导书：<code class="inline">labs/week-05/lab-handout.md</code>（Lab 04）</li>
+      <li>课件 p20–p29</li>
+      <li>教材 5.5–5.7</li>
+      <li>数据集随 scikit-learn 提供——<code class="inline">load_digits</code>，无需下载</li>
+      <li>matplotlib 画曲线；整套网格在 CPU 上跑完不到一分钟</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 —— 教案 LP-W5-B（实验部分 · 75 min + 小测与小结 15 min）· 第 5 周 · 模块二</p>
+  <p>本教案借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson Plan W2-A (Lecture Part · Theory · 90 min) — Data Handling Fundamentals</title>
 <style>
   :root {
     --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
@@ -51,120 +50,124 @@
 
 <div class="header">
   <div class="tag">Lesson Plan · Week 2 · Lecture Part (Theory · 90 min)</div>
-  <h1>Data Handling Fundamentals for AI</h1>
+  <h1>PyTorch Fundamentals: Tensors and Autograd</h1>
   <div class="meta">
     <span>⏱ Weekly 180-min integrated session · this plan covers the Lecture Part, 90 min (L1–L5)</span>
-    <span>📚 Chapter 2.1–2.5</span>
-    <span>🎯 Module 1 · AI &amp; ML Foundations</span>
+    <span>📚 Chapter 2.1–2.4</span>
+    <span>🎯 Module 1 · AI Application Development Foundations (W1–4)</span>
     <span>🧩 Lesson Plan ID: LP-W2-A</span>
     <span>🌐 English</span>
   </div>
 </div>
 
-<!-- ===== Learning Objectives ===== -->
 <h2>1. Learning Objectives</h2>
 <div class="grid2">
   <div class="card">
     <h4>Knowledge</h4>
     <ul>
-      <li>State the six data quality dimensions and the GIGO principle</li>
-      <li>Explain why NumPy vectorization is 10-100x faster than loops</li>
-      <li>Describe the four core Pandas operations (load/filter/aggregate/merge)</li>
-      <li>Recall the four key chart types and their use cases, and describe the 5-step EDA workflow and the 6-step cleaning workflow</li>
+      <li>Name the five tensor attributes — <code class="inline">shape</code>, <code class="inline">dtype</code>, <code class="inline">device</code>, <code class="inline">requires_grad</code>, <code class="inline">grad</code> — and say what breaks when each is wrong</li>
+      <li>State the broadcasting rules and explain why they guarantee legality but not intent</li>
+      <li>Explain what a computational graph is, when it is built, and when it is released</li>
+      <li>State the two rules of autograd: only leaves receive <code class="inline">.grad</code>, and <code class="inline">.grad</code> accumulates</li>
+      <li>Explain why a fixed seed is what turns one good run into a repeatable result</li>
     </ul>
   </div>
   <div class="card">
     <h4>Skills</h4>
     <ul>
-      <li>Perform vectorized operations, slicing, and broadcasting with NumPy</li>
-      <li>Perform boolean filtering, <code class="inline">groupby</code> aggregation, and <code class="inline">merge</code> with Pandas — and avoid the chained-indexing trap</li>
-      <li>Create histograms, scatter plots, box plots, and heatmaps with Matplotlib/Seaborn</li>
-      <li>Apply missing-value decision paths and outlier detection methods (IQR / Z-score / domain rules)</li>
+      <li>Report shape, dtype and device for any tensor on sight, and predict the shape of a result before running it</li>
+      <li>Choose correctly between <code class="inline">view</code>, <code class="inline">reshape</code>, <code class="inline">unsqueeze</code>, <code class="inline">squeeze</code> and <code class="inline">permute</code> for a given shape problem</li>
+      <li>Reproduce a shape or broadcast failure deliberately, read the message, and fix it</li>
+      <li>Implement one parameter update with <code class="inline">backward()</code>, a <code class="inline">no_grad()</code> update and a gradient reset</li>
+      <li>Write a training loop that learns <code class="inline">y = 3x + 2</code> using tensors and autograd alone</li>
     </ul>
   </div>
 </div>
 <div class="callout key">
   <span class="label">Attitudes</span>
-  Build the engineering mindset that "data quality determines the model ceiling"; understand why 80% of AI project time goes to data processing; develop the professional habit of "looking at data before touching models".
+  This week's professionalism theme is <em>rigour</em>: a conclusion requires reproducibility.
+  Randomness is part of training, so it must be pinned down; a shape error that raises is a good error,
+  and a wrong answer that does not raise is the one that costs you a week. Read the message before reaching for a fix,
+  and record the failures as carefully as the successes.
 </div>
 
-<!-- ===== Key Points & Difficulties ===== -->
 <h2>2. Key Points &amp; Difficulties</h2>
 <table>
   <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
-  <tr><td>Key Points</td><td>NumPy vectorization and broadcasting; Pandas boolean filtering + groupby aggregation; the 5-step EDA workflow and the 6-step cleaning workflow</td><td>Each concept paired with live coding (Jupyter projection), students follow along → each code segment runs in 3-5 min</td></tr>
-  <tr><td>Difficulties</td><td>Broadcasting shape-matching rules; data leakage concept (split before imputing); multi-level groupby aggregation</td><td>Broadcasting: "shape alignment" mnemonic + 3 contrastive examples; data leakage: draw a data flow diagram; groupby: Titanic survival rate demo</td></tr>
+  <tr><td>Key Points</td><td>The five attributes and their failure modes; the three families of shape operations; the broadcasting rules; the two autograd rules; the four moves of one parameter update, in order</td><td>Every rule is introduced <em>after</em> a live failure: write the wrong line, read the message aloud, then name the rule. Every page ends with "what is the shape here?"</td></tr>
+  <tr><td>Difficulties</td><td>Why <code class="inline">(3,)</code> plus <code class="inline">(3,1)</code> silently gives <code class="inline">(3,3)</code>; why <code class="inline">view</code> fails on a transposed tensor; why forgetting to zero the gradients makes the loss oscillate rather than raise; why the update must sit inside <code class="inline">torch.no_grad()</code></td><td>Broadcast: run <code class="inline">torch.broadcast_shapes((3,1),(3,))</code> and let the class read the answer; contiguity: transpose, then compare <code class="inline">view</code> with <code class="inline">reshape</code>; accumulation: comment out <code class="inline">x.grad = None</code> and show <code class="inline">8 + 6 = 14</code>; tracing: show the graph growing when the update is not wrapped</td></tr>
 </table>
 
-<!-- ===== Time Allocation ===== -->
 <h2>3. Time Allocation</h2>
 <div class="timebar"><div class="lec">Lecture Part · Theory · 90 min (first half of the weekly 180-min integrated session)</div></div>
 <table>
   <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
-  <tr><td>L1</td><td>15 min</td><td><strong>Opening — Data is King</strong>: Week 1 recap (five takeaways + Module 1 four-week roadmap); the role of data in AI and the six quality dimensions; data types and sources; a bad-data case study (AI hiring bias) + six-dimension quick-poll activity</td><td>p1–p7</td><td>Lecture + hand-vote</td></tr>
-  <tr><td>L2</td><td>25 min</td><td><strong>NumPy &amp; Pandas</strong>: division of labor between the two tools; vectorization vs loop speed showdown (<code class="inline">%%timeit</code> live benchmark); indexing, slicing, and three broadcasting-rule examples; the five-step Pandas operation chain; a 9-line practical cheat sheet + the chained-indexing trap</td><td>p8–p13</td><td>Lecture + Live Coding</td></tr>
-  <tr><td>L3</td><td>20 min</td><td><strong>Visualization &amp; EDA</strong>: four chart types answering four questions (histogram/scatter/bar/heatmap) + chart-selection triage activity; the 5-step EDA workflow; Titanic EDA walkthrough (each step executed in turn)</td><td>p14–p17</td><td>Lecture + rapid Q&amp;A</td></tr>
-  <tr><td>L4</td><td>25 min</td><td><strong>Data Cleaning</strong>: the 6-step cleaning workflow; missing-value decision path (ratio tiers + imputation strategies); three outlier methods (IQR / Z-score / domain rules); closing with GIGO — "data quality is the model ceiling"</td><td>p18–p22</td><td>Lecture + case discussion</td></tr>
-  <tr><td>L5</td><td>5 min</td><td><strong>Lab Bridge &amp; Preview</strong>: preview the four Lab segments later today (NumPy warm-up → Pandas exploration → visualization → cleaning practice); environment and data check; announce the end-of-class quiz (see Lesson Plan LP-W2-B)</td><td>p23–p24</td><td>Preview + Q&amp;A</td></tr>
+  <tr><td>L1</td><td>12 min</td><td><strong>Opening — the container</strong>: the five-part map of the day; what a tensor is (0-D to n-D); why not a Python list (speed, shape, device, autograd); the relation to NumPy and the shared-memory trap; GPU tensors and the same-device rule</td><td>p1–p4</td><td>Lecture + board drawing</td></tr>
+  <tr><td>L2</td><td>15 min</td><td><strong>The five attributes</strong>: shape, dtype, device, requires_grad, grad — what each tells you and when it bites; the one habit that finds nine bugs out of ten (<code class="inline">print(x.shape, x.dtype, x.device)</code>); creating tensors and observing dtype defaults (<code class="inline">arange</code> is int64)</td><td>p5–p6</td><td>Live coding</td></tr>
+  <tr><td>L3</td><td>25 min</td><td><strong>Shape operations and broadcasting</strong>: the three families (change shape / add or remove a dimension / swap axes); view vs reshape and contiguity; the broadcast rules read from the right; the seven-expression table of silent-wrong versus loud-error cases; the four classic mistakes and five self-checks</td><td>p7–p11</td><td>Break it on purpose + class diagnosis</td></tr>
+  <tr><td>L4</td><td>22 min</td><td><strong>Computational graphs and autograd</strong>: the graph as a by-product of the forward pass; <code class="inline">requires_grad</code> as the switch; leaves versus non-leaves and <code class="inline">grad_fn</code>; the smallest autograd example; the five moves of one update with the update/zero order fixed; the gradient debugging table</td><td>p12–p16</td><td>Live coding + error reading</td></tr>
+  <tr><td>L5</td><td>16 min</td><td><strong>Gradient descent with tensors</strong>: the hand-written linear-regression loop; the three loss curves (correct / never zeroed / learning rate too large); convergence against the truth, the closed-form OLS solution and the trained solution; the three learning-rate regimes; bridge to the Lab 1 skeleton</td><td>p17–p21</td><td>Live coding + chart reading</td></tr>
 </table>
 
-<!-- ===== Activity Design ===== -->
 <h2>4. Key Activity Design</h2>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 1 · Six Data Quality Dimensions Quick Poll (L1, p7)</h4>
-  <p style="font-size:13.5px;">Project 4 real data problem scenarios (40% of phone numbers missing, ages inconsistent across systems, a 2015 housing-price dataset used to predict 2026, traffic flow collected only during daytime). Students vote on which quality dimension each scenario violates, then reveal one by one. This builds "dimension sense" first; the AI hiring-bias case then shows "defects get amplified systematically".</p>
+  <h4>Activity 1 · Report Four Things (L1–L2, p4)</h4>
+  <p style="font-size:13.5px;">Show a tensor on the projector — <code class="inline">torch.randn(4, 3)</code>, then <code class="inline">torch.arange(6)</code>, then <code class="inline">torch.randn(4,3).to("cuda")</code> — and require four answers before any operation: shape, dtype, device, needs-grad. The <code class="inline">arange</code> case is the trap: int64 cannot require grad, and dividing by it truncates.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 2 · Vectorization vs Loop Speed Showdown (L2, p10)</h4>
-  <p style="font-size:13.5px;">Live code in Jupyter: ① use a <code class="inline">for</code> loop to compute column means of a 1000×1000 matrix; ② use <code class="inline">np.mean(axis=0)</code>. Time with <code class="inline">%%timeit</code> — students witness the 100x gap. At that moment, "vectorization" turns from concept to conviction.</p>
+  <h4>Activity 2 · Read the Error Aloud (L3, p9–p10)</h4>
+  <p style="font-size:13.5px;">Nobody may fix anything for the first two minutes. Run <code class="inline">torch.randn(3,1) + torch.randn(3)</code> — which does not raise — and then <code class="inline">torch.randn(4,3) + torch.randn(4,2)</code> — which does. The class must explain why the silent one is the more dangerous of the two. Seeing one error clearly beats memorising ten rules.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 3 · Titanic Survival Rate Exploration (L2–L3, p12 + p17)</h4>
-  <p style="font-size:13.5px;">One line — <code class="inline">df.groupby(["Sex", "Pclass"])["Survived"].mean()</code> — reveals "female + first-class survival rate 96.8%", more impactful than any text. Later, the EDA walkthrough page (p17) repeats the full reconnaissance process with the five steps; students follow along locally.</p>
+  <h4>Activity 3 · Why Is My Gradient 14? (L4, p14)</h4>
+  <p style="font-size:13.5px;">Run the minimal autograd example, then comment out <code class="inline">x.grad = None</code> and run again. The printed gradient goes from 8 to 14. Ask what "14" would have meant inside a training loop — and connect it directly to the oscillating loss curve that appears later on p19.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 4 · Chart Selection Triage (L3, p15)</h4>
-  <p style="font-size:13.5px;">Give 4 data analysis questions (① What does the age distribution look like? ② Is there a relationship between fare and age? ③ Which class has the highest survival rate? ④ Which features correlate most?), students name the chart type within 30 seconds each. Correct answers: histogram/scatter/bar/heatmap. Reinforces the "question first, chart second" mantra.</p>
+  <h4>Activity 4 · Five Moves, One Order (L4–L5, p15–p16)</h4>
+  <p style="font-size:13.5px;">Put the five steps on the board in a deliberately wrong order — forward, backward, zero, update, loss — and have the class reorder them. Then ask what happens if the update is written outside <code class="inline">with torch.no_grad():</code>. Answer: the update itself enters the graph, and training gets slower every step.</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>Activity 5 · Missing-Value Decision Drill (L4, p20)</h4>
-  <p style="font-size:13.5px;">Present three scenarios (missing &lt;5% / 5–30% / &gt;30%); students walk the decision path aloud, stating the handling plan and the rationale. The instructor probes "why is it missing?" — distinguishing random vs systematic missingness. This is a direct rehearsal for Lab D cleaning practice.</p>
+  <h4>Activity 5 · Read Three Curves (L5, p19)</h4>
+  <p style="font-size:13.5px;">Show the three-curve chart before explaining it. Each student writes one sentence per curve: monotone descent, oscillation, or divergence. Only afterwards are the causes named (zeroing, accumulation, learning rate). The point: a loss curve is a diagnostic before it is a result.</p>
 </div>
 
-<!-- ===== Assignment & Assessment ===== -->
 <h2>5. Assignment &amp; Assessment</h2>
 <table>
-  <tr><th style="width:120px;">Item</th><th>Content</th><th style="width:90px;">Weight</th></tr>
-  <tr><td>Quiz</td><td>At the end of class (after the Lab part): 3-item in-class quiz (2 multiple choice + 1 true/false, hand-vote format), counted as 10% of the Lab grade (see Lesson Plan LP-W2-B and slides p30)</td><td>Lab 10%</td></tr>
-  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the same-day Lab part (Lesson Plan LP-W2-B): NumPy warm-up → Pandas exploration → visualization → cleaning practice → deliverables</td><td>—</td></tr>
-  <tr><td>Reading</td><td>Read textbook Chapter 2.6–2.7 (hands-on data cleaning + summary) to consolidate the cleaning decisions used in the Lab</td><td>—</td></tr>
-  <tr><td>Assignment</td><td>Complete the Lab deliverables: <code class="inline">lab02_eda.ipynb</code> + interpretations of three charts + a hypothesis list (≥3 items), due next Monday 23:59, pushed via Git</td><td>Lab Participation 20%</td></tr>
-  <tr><td>Course Grading</td><td>Assignments 30% + Midterm Project 15% + Capstone 35% + Lab Participation 20% (this week's Lab deliverable counts toward "Lab Participation")</td><td>Full semester</td></tr>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Quiz</td><td>4 items at the end of class (after the Lab part): the shape of a matrix product, the broadcast result of <code class="inline">(3,1)+(3,)</code>, a gradient value, and the first thing to check when the loss oscillates; hand-vote, then debrief</td><td>Lab 15</td></tr>
+  <tr><td>Mid-Class Bridge</td><td>After this Lecture part, a 10-minute break, then the Lab part (75 min, LP-W2-B): data and baseline → training with tensors only → three learning-rate curves → convergence verification → M2 push</td><td>—</td></tr>
+  <tr><td>Reading</td><td>Textbook Chapter 2 (Sections 2.1–2.6); the tensors and autograd chapters of <em>Dive into Deep Learning (PyTorch edition)</em></td><td>—</td></tr>
+  <tr><td>Assignment</td><td><strong>Lab 1 report</strong> — the loss curve for three learning rates, the parameter convergence comparison, the shape pitfall log, and a reproducible command — plus <strong>at least one AI collaboration trace</strong></td><td>Lab 15</td></tr>
+  <tr><td>Course assessment</td><td>Formative 50 (attendance &amp; participation 10 · in-class labs 15 · milestone reviews 15 · AI collaboration traces 10) + summative 50 (individual capstone deliverables 90 + bonus 10). Continuous assessment; no closed-book final examination</td><td>Full semester</td></tr>
 </table>
 <div class="callout warn">
   <span class="label">Mid-Class · Transition After This Session</span>
-  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, Lesson Plan LP-W2-B): NumPy warm-up → Titanic exploration with Pandas → three-chart visualization → cleaning practice → submission and push. During the break, the instructor patrols to confirm every student's <code class="inline">ai-app</code> environment can <code class="inline">import numpy, pandas, matplotlib, seaborn</code>, and keeps a local backup copy of the Titanic CSV (in case of network issues).
+  After the Lecture part (90 min) there is a 10-minute break, then the Lab part begins (75 min, LP-W2-B). During the
+  break the instructor patrols to confirm that every student's Lab 1 script prints the shape of <code class="inline">X</code>,
+  <code class="inline">y</code>, <code class="inline">w</code> and <code class="inline">b</code> before training starts —
+  this single check prevents the majority of the errors the lab would otherwise produce.
 </div>
 
-<!-- ===== Preparation & Resources ===== -->
 <h2>6. Preparation &amp; Resources</h2>
 <div class="grid2">
   <div class="card">
     <h4>Before Class</h4>
     <ul>
-      <li>Review textbook Chapter 1 (Week 1 content, especially the 80% rule and the project lifecycle)</li>
-      <li>Read textbook Chapter 2.1–2.5 (this session's chapters)</li>
-      <li>Reflection: in datasets you have encountered, what was the biggest data quality issue?</li>
+      <li>Read textbook Chapter 2 (this session's chapter)</li>
+      <li>Reproduce every code block yourself, including the two deliberate failures, and note the exact error text</li>
+      <li>Confirm the projector machine can run the training loop to completion in under 30 seconds (CPU is sufficient)</li>
+      <li>Reflection: the last time a program gave a wrong answer without raising, how long did it take you to find it?</li>
     </ul>
   </div>
   <div class="card">
     <h4>Resources</h4>
     <ul>
-      <li>Slides: Week 2 Lecture (32-page edition; p1–p24 correspond to this Lecture part and the Lab bridge)</li>
+      <li>Slides: Week 2 deck (30 pages; p1–p21 cover this part, p22–p30 are the lab bridge)</li>
       <li>Textbook Chapter 2 (produced with this kit)</li>
-      <li>NumPy official quickstart: numpy.org/doc/stable/user/quickstart.html</li>
-      <li>Pandas 10-minute intro: pandas.pydata.org/docs/getting_started/intro_tutorials/</li>
-      <li>Seaborn tutorial: seaborn.pydata.org/tutorial.html</li>
+      <li>Lab handout: <code class="inline">labs/week-02/lab-handout.md</code> (Lab 01)</li>
+      <li>PyTorch broadcasting semantics: pytorch.org/docs/stable/notes/broadcasting.html</li>
+      <li>Autograd mechanics: pytorch.org/docs/stable/notes/autograd.html</li>
+      <li>Capstone milestone table: <code class="inline">projects/capstone/milestones.md</code> (W2 · M2)</li>
     </ul>
   </div>
 </div>

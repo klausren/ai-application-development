@@ -122,226 +122,269 @@
 <!-- ========== CHAPTER HEADER ========== -->
 <div class="chapter-header">
   <div class="chapter-no">Chapter 03 · Module 1 · Week 3</div>
-  <h1>Machine Learning Foundations</h1>
-  <p class="overview">Machine learning infers rules from examples instead of asking you to write them. This chapter builds the mental model that every later model reuses: what is being learned, how error is measured, how parameters are updated, and — most importantly — how to tell whether a score can be trusted. You will finish by turning the Week 1 three-step workflow into an engineering-grade scikit-learn <code class="inline">Pipeline</code>.</p>
+  <h1>Data Preparation and Pipelines</h1>
+  <p class="overview">Chapter 2 built a model out of raw tensors. This chapter deliberately turns away from the model and looks at what feeds it. The claim is blunt: data sets the ceiling and models only approach it. You will build the six-step pipeline — raw data, cleaning, splitting, <code class="inline">Dataset</code>, <code class="inline">DataLoader</code>, batches — in PyTorch, learn to detect and avoid the four shapes of data leakage, handle augmentation and class imbalance without fooling yourself, and finish by writing a Data Card that states where your conclusions stop being valid.</p>
 </div>
 
 <!-- ========== 3.1 ========== -->
 <div class="section">
-  <h2>3.1 What Machine Learning Actually Means</h2>
-  <p>Chapter 1 introduced the six-phase project lifecycle; Chapter 2 covered the data that fuels it. Now we arrive at the phase everyone thinks of first — and the one that matters least if the earlier phases failed: the model.</p>
+  <h2>3.1 Data Sets the Ceiling</h2>
+  <p>Every project that stalls has the same first question: should we improve the model or the data? Chapter 2 showed that parameters are learned from data, which already hints at the answer. This chapter makes it explicit.</p>
 
-  <h3>3.1.1 The Definition</h3>
-  <p>Tom Mitchell's 1997 definition is still the cleanest one sentence in the field:</p>
   <div class="callout key">
-    <span class="label">Definition</span>
-    A computer program is said to <strong>learn</strong> from experience <em>E</em> with respect to some task <em>T</em> and performance measure <em>P</em>, if its performance on <em>T</em>, as measured by <em>P</em>, improves with experience <em>E</em>.
+    <span class="label">Thesis</span>
+    The information and label quality in your dataset determine how low the error can possibly go. A model can only approach that limit. If the ceiling is low, no architecture rescues it — and if the split is wrong, you cannot even tell what the ceiling is.
   </div>
-  <p>Three slots, always. Predicting house prices: <em>T</em> = predict the sale price, <em>P</em> = mean absolute error, <em>E</em> = 10,000 historical sales. If you cannot fill in all three, you do not yet have a machine learning problem — you have a vague wish.</p>
 
-  <h3>3.1.2 Traditional Programming vs Machine Learning</h3>
+  <h3>3.1.1 Three Consequences</h3>
+  <div class="terms">
+    <div class="term"><h4>1 · The ceiling is real</h4><p>How much of the world your data covers, and how accurately it is labelled, bound the achievable error. A feature that was never recorded cannot be recovered by a bigger network.</p></div>
+    <div class="term"><h4>2 · A better model only approaches it</h4><p>Swapping architectures and tuning hyper-parameters moves you along the same ceiling. When progress stops, the next useful action is almost always an inspection of the data.</p></div>
+    <div class="term"><h4>3 · Measurement decides whether you know</h4><p>A wrong split or a leak produces a number that is not merely optimistic — it is meaningless. Everything later in this chapter serves one goal: seeing the true level.</p></div>
+  </div>
+
+  <h3>3.1.2 The Six-Step Pipeline</h3>
+  <div class="steps">
+    <div class="step"><div class="body"><strong>Raw data</strong> — many sources and formats, not yet good or bad.</div></div>
+    <div class="step"><div class="body"><strong>Clean</strong> — missing values, outliers, duplicates and inconsistent units, each handled with an explicit criterion.</div></div>
+    <div class="step"><div class="body"><strong>Split</strong> — train / validation / test, with a fixed seed and a strategy you can justify.</div></div>
+    <div class="step"><div class="body"><strong>Dataset</strong> — wraps the data so that one sample is addressable: <code class="inline">__len__</code> and <code class="inline">__getitem__</code>.</div></div>
+    <div class="step"><div class="body"><strong>DataLoader</strong> — batching, shuffling, parallel loading and batch assembly.</div></div>
+    <div class="step"><div class="body"><strong>Batches</strong> — what the training loop actually consumes.</div></div>
+  </div>
+  <div class="callout warn">
+    <span class="label">The Order Is Not Negotiable</span>
+    Splitting must happen before <em>any</em> step that learns from data — scaling, imputation, feature selection and augmentation all count. Every statistic computed over the whole dataset is a statistic your validation and test rows contributed to.
+  </div>
+
+  <h3>3.1.3 Model-Centric vs Data-Centric</h3>
   <table>
-    <tr><th></th><th>Traditional Programming</th><th>Machine Learning</th></tr>
-    <tr><td>Input</td><td>Rules + data</td><td>Data + answers</td></tr>
-    <tr><td>Output</td><td>Answers</td><td>Rules (a model)</td></tr>
-    <tr><td>Who writes the logic</td><td>The programmer</td><td>The learning algorithm</td></tr>
-    <tr><td>Fails when</td><td>Rules become too complex to write</td><td>Data is scarce, unrepresentative, or mislabelled</td></tr>
+    <tr><th></th><th>Model-centric</th><th>Data-centric</th></tr>
+    <tr><td>Starting move</td><td>Feed the data to a model as it is</td><td>Diagnose quality; settle provenance and compliance</td></tr>
+    <tr><td>Main lever</td><td>Swap architectures, tune hyper-parameters</td><td>Fix splits, labels, duplicates, coverage</td></tr>
+    <tr><td>Typical outcome</td><td>Gains shrink and cannot be explained</td><td>The same model gives steadier, higher metrics</td></tr>
+    <tr><td>When it stalls</td><td>You cannot say why</td><td>Errors are traceable to a concrete data problem</td></tr>
   </table>
-  <p>Spam filtering is the classic illustration. Hand-written rules ("contains <em>free</em>", "sender is unknown") work until someone named Cash emails you about a contract. At that point you stop writing rules and start collecting examples.</p>
-
-  <h3>3.1.3 Three Paradigms</h3>
-  <div class="terms">
-    <div class="term"><h4>Supervised Learning</h4><p>Data arrives as (x, y) pairs with ground-truth answers. Tasks: classification (discrete label) and regression (continuous value). Examples: logistic regression, random forests, SVM. <strong>Weeks 1–6 focus here.</strong></p></div>
-    <div class="term"><h4>Unsupervised Learning</h4><p>Only x, no labels. The algorithm finds structure: clusters, low-dimensional structure, anomalies. Examples: KMeans, PCA, DBSCAN.</p></div>
-    <div class="term"><h4>Reinforcement Learning</h4><p>An agent acts in an environment and receives rewards. Data arrives as (state, action, reward) sequences. Examples: Q-learning, PPO, DQN. Used for control, games, and decision policies.</p></div>
-  </div>
-
-  <h3>3.1.4 Vocabulary You Will See Everywhere</h3>
-  <div class="terms">
-    <div class="term"><h4>Sample</h4><p>One row of the dataset — one house, one image, one customer.</p></div>
-    <div class="term"><h4>Feature (x)</h4><p>An attribute column describing the sample: area, pixel intensity, age. Collectively the feature matrix <code class="inline">X</code>.</p></div>
-    <div class="term"><h4>Label (y)</h4><p>The thing you want to predict. Present in supervised learning, absent in unsupervised.</p></div>
-    <div class="term"><h4>Training Set</h4><p>The portion of data the model is allowed to learn from.</p></div>
-    <div class="term"><h4>Inference</h4><p>Running a trained model on new samples to obtain predictions.</p></div>
-    <div class="term"><h4>Generalization</h4><p>Performing well on data the model has never seen — the only performance that counts.</p></div>
-  </div>
+  <p>The two are not rivals; they are ordered. Do the data first, then the model. In the opposite order you cannot even judge whether the model is good.</p>
 </div>
 
 <!-- ========== 3.2 ========== -->
 <div class="section">
-  <h2>3.2 Models, Parameters and Capacity</h2>
+  <h2>3.2 Acquisition, Cleaning and Provenance</h2>
+  <p>Cleaning is not "making the data look nice". It is turning known problems into an auditable record: for every problem, a criterion that detects it, an action that addresses it, and a note on what the action can break.</p>
 
-  <h3>3.2.1 A Model Is a Family of Functions</h3>
-  <p>Choosing a model means choosing a <strong>hypothesis space</strong> — the set of functions the model is able to represent. Every straight line <code class="inline">y = wx + b</code> is one such family. Training does not create a new family; it selects one member of it by picking specific values of <code class="inline">w</code> and <code class="inline">b</code>.</p>
-  <p>This framing explains most modelling mistakes. If the true relationship is curved and your hypothesis space contains only straight lines, no amount of training data will help — the answer is not in the space you chose.</p>
-
-  <h3>3.2.2 The Linear Model</h3>
-  <pre><span class="cm"># one feature</span>
-y_hat = w * x + b
-
-<span class="cm"># n features — the same idea, written once</span>
-y_hat = w1*x1 + w2*x2 + ... + wn*xn + b
-       = w · x + b</pre>
-  <p><code class="inline">w</code> (weight) says how much each feature matters; <code class="inline">b</code> (bias) shifts the whole prediction up or down. Both start at random values and are corrected during training.</p>
-
-  <h3>3.2.3 Capacity: Three Regimes</h3>
+  <h3>3.2.1 Four Common Problems</h3>
   <div class="terms">
-    <div class="term"><h4>Too Little Capacity → Underfitting</h4><p>The model cannot even fit the training data. Symptom: train and validation scores are both poor. Fix: add features, use a more flexible model, weaken regularisation.</p></div>
-    <div class="term"><h4>Adequate Capacity → Healthy Fit</h4><p>Train and validation scores are both good and close to each other. This is the target.</p></div>
-    <div class="term"><h4>Too Much Capacity → Overfitting</h4><p>The model memorises noise. Symptom: excellent train score, clearly worse validation score. Fix: regularise, early-stop, gather more data, or reduce capacity.</p></div>
+    <div class="term"><h4>Missing values</h4><p>Rank the missing rates, then check whether missingness relates to the label. Imputation statistics (median, mode) may come from the training set only.</p></div>
+    <div class="term"><h4>Outliers</h4><p>Judge with the 1/99 percentiles or the IQR rule, not by "this looks strange". You may clip, transform, or keep them with a flag.</p></div>
+    <div class="term"><h4>Duplicates &amp; inconsistency</h4><p>De-duplicate on named keys; unify units and category codes. A duplicate spanning two splits is direct leakage.</p></div>
+    <div class="term"><h4>Label noise</h4><p>Cross-check, measure annotator agreement, spot-check by hand. A high noise rate cannot be compensated with more data.</p></div>
   </div>
 
-  <h3>3.2.4 Parameters vs Hyperparameters</h3>
-  <p>This single distinction causes more confusion than any other in an introductory course.</p>
   <table>
-    <tr><th></th><th>Parameter</th><th>Hyperparameter</th></tr>
-    <tr><td>Who decides</td><td>The learning algorithm, from data</td><td>You, before training starts</td></tr>
-    <tr><td>Examples</td><td><code class="inline">w</code>, <code class="inline">b</code>, tree split thresholds</td><td>learning rate, <code class="inline">C</code>, <code class="inline">max_depth</code>, <code class="inline">cv</code></td></tr>
-    <tr><td>How obtained</td><td>Updated automatically each step</td><td>Chosen on the validation set by grid or random search</td></tr>
-    <tr><td>In code</td><td><code class="inline">model.coef_</code>, <code class="inline">model.intercept_</code></td><td><code class="inline">clf__C</code> inside a Pipeline grid</td></tr>
+    <tr><th>Problem</th><th>How you detect it</th><th>Action</th><th>Risk</th></tr>
+    <tr><td>Missing</td><td><code class="inline">df.isna().mean()</code> ranked; missingness cross-tabulated with the label</td><td>Drop, median/mode imputation, model-based imputation</td><td>Imputing with full-data statistics is leakage</td></tr>
+    <tr><td>Outliers</td><td>Percentiles, box plots, the IQR rule</td><td>Clip, log-transform, or keep with a flag</td><td>The outlier may be exactly what you must predict</td></tr>
+    <tr><td>Duplicates</td><td>Key counts; checks on unit and code value sets</td><td>De-duplicate; unify units and codes</td><td>One entity across train and test means leakage</td></tr>
+    <tr><td>Label noise</td><td>Agreement warnings, high-confidence errors, manual sampling</td><td>Re-label, remove, or use a robust loss</td><td>Quantify the noise rate before deciding to clean</td></tr>
   </table>
+
+  <h3>3.2.2 Provenance and Privacy Come First</h3>
+  <p>Before the first line of cleaning code, answer two questions: <em>where did this data come from, and under what permission?</em> and <em>does it contain personal information?</em> Undocumented provenance makes a result unreproducible and, in many jurisdictions, unlawful to publish. Personal data must be de-identified before it enters the pipeline, and raw data must never be pasted into a public service. Respecting the source of your data is not a formality — it is the baseline of engineering ethics.</p>
+
+  <h3>3.2.3 Using AI to Explore Without Being Misled</h3>
+  <p>Asking an AI to draft an exploration block is an efficient use of the tool. The discipline is that every statistical claim it produces must be reproducible by you with one assert or one plot:</p>
+  <pre><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="str">"data/raw/defects.csv"</span>)
+<span class="fn">print</span>(<span class="str">"shape:"</span>, df.shape)
+<span class="fn">print</span>(df[<span class="str">"label"</span>].value_counts(normalize=<span class="kw">True</span>).round(<span class="num">3</span>))
+
+<span class="cm"># An AI will happily say: "classes are balanced, train as is."</span>
+<span class="cm"># Settle it instead of believing it:</span>
+share = df[<span class="str">"label"</span>].value_counts(normalize=<span class="kw">True</span>)
+<span class="kw">assert</span> share.<span class="fn">min</span>() &gt; <span class="num">0.20</span>, <span class="str">"minority class is too small for 'balanced'"</span>
+
+<span class="cm"># "There are no missing values."</span>
+<span class="kw">assert</span> df.isna().<span class="fn">sum</span>().<span class="fn">sum</span>() == <span class="num">0</span>, <span class="str">"there are missing values"</span>
+
+<span class="cm"># "Features correlate strongly with the label." -> plot it and recompute</span>
+df.groupby(<span class="str">"label"</span>)[<span class="str">"size"</span>].mean().plot(kind=<span class="str">"bar"</span>)</pre>
   <div class="callout tip">
-    <span class="label">One-liner</span>
-    Parameters are <strong>learned</strong>; hyperparameters are <strong>chosen</strong>. Everything a grid search returns is a hyperparameter — that is precisely why it cannot simply be read off the data.
+    <span class="label">Rule</span>
+    When an AI's statistic disagrees with a plot you produced, trust what you ran. Record the disagreement, the prompt and the corrected conclusion in <code class="inline">AI_USE.md</code>. That log is assessed — it is evidence of verification, not a penalty.
   </div>
 </div>
 
 <!-- ========== 3.3 ========== -->
 <div class="section">
-  <h2>3.3 Loss Functions: Defining What "Wrong" Means</h2>
-  <p>A loss function converts "this prediction is bad" into a single number the optimiser can minimise. Choosing it is choosing the objective — pick the wrong one and the model faithfully optimises the wrong thing.</p>
+  <h2>3.3 Splitting: Ratios and Strategies</h2>
+  <p>The split decides whether every number you see afterwards is trustworthy. It is the single most consequential decision in this chapter.</p>
 
+  <h3>3.3.1 What Each Split Is Allowed to Do</h3>
   <table>
-    <tr><th>Loss</th><th>Formula</th><th>Used for</th><th>Property</th></tr>
-    <tr><td>MSE</td><td>mean((y − ŷ)²)</td><td>Regression (default)</td><td>Punishes large errors heavily; outlier-sensitive</td></tr>
-    <tr><td>MAE</td><td>mean(|y − ŷ|)</td><td>Regression with outliers</td><td>Same unit as the target; robust; kink at zero</td></tr>
-    <tr><td>Cross-Entropy</td><td>−Σ y·log(ŷ)</td><td>Classification</td><td>Punishes confident mistakes; well-calibrated probabilities</td></tr>
-    <tr><td>R² (a metric, not a loss)</td><td>1 − SS<sub>res</sub>/SS<sub>tot</sub></td><td>Reporting regression quality</td><td>1 is perfect, 0 equals guessing the mean, can be negative</td></tr>
+    <tr><th>Split</th><th>Share</th><th>Job</th><th>How often you may use it</th></tr>
+    <tr><td>Training</td><td>~70%</td><td>Fit parameters <em>and</em> all statistics: scaling, imputation, feature selection, augmentation</td><td>Constantly</td></tr>
+    <tr><td>Validation</td><td>~15%</td><td>Choose models and tune hyper-parameters</td><td>Repeatedly — so it is not the final score</td></tr>
+    <tr><td>Test</td><td>~15%</td><td>Final estimate of real-world performance</td><td>Once</td></tr>
   </table>
-
   <div class="callout warn">
-    <span class="label">Trap of the Week</span>
-    For regressors, <code class="inline">model.score()</code> returns <strong>R²</strong>, not accuracy. Reading a regression R² as "percent correct" is the most common mistake in this lab.
+    <span class="label">Iron Rule</span>
+    Once the test set informs tuning, it has silently become a validation set and the reported number stops meaning anything. When data is scarce (under about 10,000 rows), use 5-fold cross-validation on the training portion instead of a fixed validation set.
   </div>
+
+  <h3>3.3.2 Four Strategies — Chosen by the Nature of the Data</h3>
+  <table>
+    <tr><th>Strategy</th><th>Use when</th><th>Fails when</th></tr>
+    <tr><td>Random</td><td>Samples are independent, with no time order and no repeated entity</td><td>Any of the three conditions is violated</td></tr>
+    <tr><td>Stratified</td><td>Classes are imbalanced, especially with few minority samples</td><td>You need entity-level separation instead of class-level</td></tr>
+    <tr><td>Time-based</td><td>There is a real order: time series, streams, logs</td><td>—</td></tr>
+    <tr><td>Group</td><td>One user, device, patient or document has many records</td><td>—</td></tr>
+  </table>
+  <p>A random split on a time series lets the model see the future during training. A random split when one device contributes hundreds of rows puts near-duplicates on both sides of the line — that is leakage, even though no code is wrong.</p>
+
+  <h3>3.3.3 A Seeded, Reproducible Split in PyTorch</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> Subset
+
+<span class="cm"># A torch.Generator keeps the split reproducible without touching global RNG state</span>
+g = torch.Generator().manual_seed(<span class="num">42</span>)
+perm = torch.randperm(<span class="fn">len</span>(ds), generator=g)
+
+i1, i2 = <span class="fn">int</span>(<span class="num">0.70</span> * <span class="fn">len</span>(ds)), <span class="fn">int</span>(<span class="num">0.85</span> * <span class="fn">len</span>(ds))
+train_ds = Subset(ds, perm[:i1])
+val_ds   = Subset(ds, perm[i1:i2])
+test_ds  = Subset(ds, perm[i2:])
+
+<span class="fn">print</span>(<span class="fn">len</span>(train_ds), <span class="fn">len</span>(val_ds), <span class="fn">len</span>(test_ds))</pre>
+  <p>For imbalanced classes, do the permutation <em>within each class</em> and concatenate the parts. The three splits then keep the overall class ratio, and a minority class does not vanish from the validation set by chance.</p>
 </div>
 
 <!-- ========== 3.4 ========== -->
 <div class="section">
-  <h2>3.4 Optimisation: Gradient Descent</h2>
-  <p>Once error is a number, improving the model becomes a search problem: which direction should the parameters move?</p>
+  <h2>3.4 Data Leakage</h2>
+  <p>Leakage means the model is trained on information that will not be available at inference time. The score it produces is not merely optimistic; it does not correspond to any real deployment.</p>
 
-  <h3>3.4.1 The Blindfolded Hill</h3>
-  <div class="steps">
-    <div class="step"><h4>1 · Stand somewhere</h4><p>Parameters start at random values.</p></div>
-    <div class="step"><h4>2 · Feel the slope</h4><p>The gradient tells you which way is downhill and how steep.</p></div>
-    <div class="step"><h4>3 · Take a step</h4><p><code class="inline">w ← w − η · gradient</code>, where η is the learning rate.</p></div>
-    <div class="step"><h4>4 · Repeat</h4><p>Stop when the loss stops improving, or after a fixed budget of epochs.</p></div>
-  </div>
-  <p>Gradient descent guarantees a <em>nearby</em> minimum. For convex problems — linear regression, logistic regression — nearby is global. For neural networks it is not, which is one reason deep learning needs more machinery (better initialisation, adaptive optimisers, schedules).</p>
-
-  <h3>3.4.2 Choosing the Learning Rate</h3>
+  <h3>3.4.1 Four Shapes of Leakage</h3>
   <table>
-    <tr><th>η</th><th>Behaviour</th><th>What the loss curve looks like</th></tr>
-    <tr><td>Too small</td><td>Crawls; may not converge before the time budget ends</td><td>Almost flat</td></tr>
-    <tr><td>About right</td><td>Fast early progress, smooth flattening</td><td>A slide that levels off</td></tr>
-    <tr><td>Too large</td><td>Overshoots and oscillates; can diverge to NaN</td><td>Jumps around or grows</td></tr>
+    <tr><th>Shape</th><th>What it looks like in code</th><th>Why it inflates the score</th></tr>
+    <tr><td>Test rows in training</td><td>Splitting, then concatenating the test set back into the training data</td><td>The model has seen the exam it is being graded on</td></tr>
+    <tr><td>Duplicates across splits</td><td>A de-duplication step that never ran, so one entity appears in two splits</td><td>Near-identical rows make recall trivial</td></tr>
+    <tr><td>Random split on ordered data</td><td><code class="inline">random_split</code> on a time series</td><td>The model interpolates between past and future</td></tr>
+    <tr><td>Statistics from the full dataset</td><td><code class="inline">StandardScaler</code>-style scaling or imputation before the split</td><td>Validation and test rows contribute to the mean the model learns from</td></tr>
   </table>
 
-  <h3>3.4.3 Batch, Epoch, Step</h3>
-  <p>Three words that appear in every training log:</p>
-  <ul>
-    <li><strong>batch</strong> — the number of samples used for one parameter update;</li>
-    <li><strong>step (iteration)</strong> — one parameter update;</li>
-    <li><strong>epoch</strong> — one complete pass over the training set.</li>
-  </ul>
-  <p>You will rarely write the loop yourself. In practice it collapses into two lines:</p>
-  <pre><span class="kw">from</span> sklearn.pipeline <span class="kw">import</span> Pipeline
-<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
-<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LogisticRegression
+  <h3>3.4.2 The One Question That Catches All Four</h3>
+  <div class="callout key">
+    <span class="label">Test</span>
+    Could I obtain this information at inference time? If not, it must not appear in training. Ask it of every column, every statistic and every preprocessing step.
+  </div>
 
-pipe = Pipeline([
-    (<span class="str">'scale'</span>, StandardScaler()),
-    (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>)),
-])
-pipe.fit(X_train, y_train)   <span class="cm"># learn the parameters</span>
-pipe.score(X_test, y_test)   <span class="cm"># evaluate</span></pre>
+  <h3>3.4.3 One Wrong Way, One Right Way</h3>
+  <pre><span class="kw">from</span> torch.utils.data <span class="kw">import</span> random_split
+
+<span class="cm"># WRONG - statistics fitted over everything, then split</span>
+mu = X.<span class="fn">mean</span>(<span class="num">0</span>)
+X_norm = (X - mu) / X.std(<span class="num">0</span>)
+train_ds, val_ds, test_ds = random_split(ds, [<span class="num">0.7</span>, <span class="num">0.15</span>, <span class="num">0.15</span>])
+
+<span class="cm"># RIGHT - split first, statistics from the training rows only</span>
+g = torch.Generator().manual_seed(<span class="num">42</span>)
+train_ds, val_ds, test_ds = random_split(
+    ds, [<span class="num">0.70</span>, <span class="num">0.15</span>, <span class="num">0.15</span>], generator=g)
+
+tr = X[train_ds.indices]                 <span class="cm"># training rows only</span>
+mu, sd = tr.<span class="fn">mean</span>(<span class="num">0</span>), tr.std(<span class="num">0</span>).clamp_min(<span class="num">1e-8</span>)
+X_norm = (X - mu) / sd                   <span class="cm"># apply the same transform to all</span></pre>
+  <p>A real incident makes the cost concrete: a team trained on a frame that still contained the test samples, reported 0.99 offline, and dropped to 0.78 in production. The 21 points were not learning — the model had seen the exam.</p>
 </div>
 
 <!-- ========== 3.5 ========== -->
 <div class="section">
-  <h2>3.5 Generalization: Train, Validation, Test</h2>
-  <p>A great training score proves nothing — a sufficiently flexible model can memorise the training set perfectly and fail on everything else. The only question that matters is performance on unseen data, so we simulate "unseen" by holding data back.</p>
+  <h2>3.5 Dataset and DataLoader</h2>
+  <p>After splitting, the data must reach the training loop as indexable samples. PyTorch does this with two abstractions: a <code class="inline">Dataset</code> defines what one sample is; a <code class="inline">DataLoader</code> defines how batches are formed.</p>
 
-  <h3>3.5.1 The Three Splits</h3>
-  <table>
-    <tr><th>Split</th><th>Typical share</th><th>Job</th><th>How often you may use it</th></tr>
-    <tr><td>Training</td><td>60–80%</td><td>Fit parameters</td><td>Constantly</td></tr>
-    <tr><td>Validation</td><td>10–20%</td><td>Choose hyperparameters, early stopping</td><td>Repeatedly</td></tr>
-    <tr><td>Test</td><td>10–20%</td><td>Final estimate of real-world performance</td><td><strong>Once</strong></td></tr>
-  </table>
+  <h3>3.5.1 The Dataset Contract</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> Dataset
+
+<span class="kw">class</span> <span class="fn">DefectDataset</span>(Dataset):
+    <span class="str">"""DataFrame -> PyTorch dataset: two methods only."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, df, transform=<span class="kw">None</span>):
+        self.y = torch.tensor(df[<span class="str">"label"</span>].values, dtype=torch.long)
+        self.x = torch.tensor(
+            df.drop(columns=[<span class="str">"label"</span>]).values.astype(<span class="str">"float32"</span>))
+        self.transform = transform       <span class="cm"># training split only</span>
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):
+        <span class="kw">return</span> <span class="fn">len</span>(self.y)             <span class="cm"># the batch count is derived from this</span>
+
+    <span class="kw">def</span> <span class="fn">__getitem__</span>(self, i):
+        x = self.x[i]                    <span class="cm"># exactly one sample</span>
+        <span class="kw">if</span> self.transform <span class="kw">is not</span> <span class="kw">None</span>:
+            x = self.transform(x)
+        <span class="kw">return</span> x, self.y[i]              <span class="cm"># (features, label)</span>
+
+ds = DefectDataset(df)
+<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 12480 torch.Size([12])</span></pre>
   <div class="callout warn">
-    <span class="label">Iron Rule</span>
-    Touch the test set once. The moment you tune against it, it has silently become a validation set and your reported number stops meaning anything.
+    <span class="label">Two Disciplines</span>
+    Never compute cross-sample statistics inside <code class="inline">__getitem__</code> — a column mean or a global vocabulary there is fitted over the whole dataset and is a breeding ground for leakage. And pass <code class="inline">transform</code> to the training split only: validation and test must match inference.
   </div>
 
-  <h3>3.5.2 k-Fold Cross-Validation</h3>
-  <p>When data is scarce, one validation split is noisy. k-fold cross-validation splits the training set into k parts, trains k times — each time holding out a different part — and averages the scores. It costs k× training time and buys a much more stable estimate. Use <code class="inline">StratifiedKFold</code> for classification so each fold preserves the class proportions.</p>
+  <h3>3.5.2 The Four Jobs of a DataLoader</h3>
+  <pre><span class="kw">from</span> torch.utils.data <span class="kw">import</span> DataLoader
 
-  <h3>3.5.3 The Diagnostic Table</h3>
+train_loader = DataLoader(train_ds, batch_size=<span class="num">32</span>, shuffle=<span class="kw">True</span>,
+                          num_workers=<span class="num">4</span>, drop_last=<span class="kw">True</span>)
+val_loader   = DataLoader(val_ds,   batch_size=<span class="num">64</span>, shuffle=<span class="kw">False</span>)
+test_loader  = DataLoader(test_ds,  batch_size=<span class="num">64</span>, shuffle=<span class="kw">False</span>)
+
+xb, yb = <span class="fn">next</span>(<span class="fn">iter</span>(train_loader))
+<span class="fn">print</span>(xb.shape, yb.shape, <span class="fn">len</span>(train_loader))   <span class="cm"># (32, 12) (32,) 273</span></pre>
   <table>
-    <tr><th>Train</th><th>Validation</th><th>Diagnosis</th><th>What to do</th></tr>
-    <tr><td>Low</td><td>Low</td><td>Underfitting</td><td>Add features, stronger model, weaker regularisation, train longer</td></tr>
-    <tr><td>High</td><td>Clearly lower</td><td>Overfitting</td><td>Regularise, early-stop, more data, reduce capacity</td></tr>
-    <tr><td>High</td><td>High and close</td><td>Healthy fit</td><td>Proceed to the test set, once</td></tr>
-    <tr><td>Low</td><td>High (suspicious)</td><td>Leakage or a bad split</td><td>Check pre-split imputation/scaling; check time-series splitting</td></tr>
+    <tr><th>Argument</th><th>What it does</th><th>Start with</th><th>Common pitfall</th></tr>
+    <tr><td><code class="inline">batch_size</code></td><td>Number of samples per batch</td><td>32 / 64</td><td>Too large exhausts memory and can generalise worse; too small is noisy and slow</td></tr>
+    <tr><td><code class="inline">shuffle</code></td><td>Whether to reshuffle each epoch</td><td><code class="inline">True</code> for train</td><td>Mutually exclusive with <code class="inline">sampler=</code>; turning it on for val/test makes debugging harder</td></tr>
+    <tr><td><code class="inline">num_workers</code></td><td>Worker processes for loading</td><td>2 – 4</td><td>Too many can slow things down; multiprocessing often breaks in notebooks and on Windows</td></tr>
+    <tr><td><code class="inline">drop_last</code></td><td>Drops the final short batch</td><td><code class="inline">True</code> for train</td><td>A final batch of size 1 crashes BatchNorm</td></tr>
+    <tr><td><code class="inline">collate_fn</code></td><td>Custom batch assembly</td><td>Custom for variable-length sequences</td><td>The default requires equal shapes and fails in NLP tasks</td></tr>
+    <tr><td><code class="inline">generator</code></td><td>Fixes the randomness of shuffling</td><td><code class="inline">torch.Generator</code></td><td>Without it, batch order differs between runs and results cannot be matched</td></tr>
   </table>
-  <p>That fourth row is the dangerous one: the numbers look good and the protocol is broken.</p>
+  <div class="callout tip">
+    <span class="label">First Debugging Move</span>
+    Print <code class="inline">xb.shape</code> and <code class="inline">xb.dtype</code> before anything else. For batch size B and F features, <code class="inline">xb</code> must be <code class="inline">(B, F)</code>. A wrong shape almost always means <code class="inline">__getitem__</code> returned a whole column instead of one sample.
+  </div>
 </div>
 
 <!-- ========== 3.6 ========== -->
 <div class="section">
-  <h2>3.6 The scikit-learn Workflow, Engineering Grade</h2>
+  <h2>3.6 Augmentation and Class Imbalance</h2>
+  <p>Two boundaries govern this section. Augmentation touches the training set only. Any sampling step must report the class distribution before and after it ran.</p>
 
-  <h3>3.6.1 Why Pipeline Exists</h3>
-  <p>Consider standardising features. If you call <code class="inline">scaler.fit(X)</code> on all rows before splitting, information from the test rows (their mean and variance) has entered your preprocessing — that is <strong>data leakage</strong>, and it inflates your score.</p>
-  <pre><span class="cm"># WRONG — the scaler saw the test rows</span>
-X_scaled = StandardScaler().fit_transform(X)
-X_tr, X_te, y_tr, y_te = train_test_split(X_scaled, y, test_size=<span class="num">0.2</span>)
+  <h3>3.6.1 Augmentation Is Training-Only</h3>
+  <p>Images: flip, crop, colour jitter, random erasing. Tabular data: small Gaussian noise, interpolation, feature perturbation. The transform must not change the label semantics — otherwise you are manufacturing noise with a label on it.</p>
 
-<span class="cm"># RIGHT — preprocessing is part of the model, fitted per fold</span>
-pipe = Pipeline([(<span class="str">'scale'</span>, StandardScaler()),
-                 (<span class="str">'clf'</span>, LogisticRegression(max_iter=<span class="num">1000</span>))])
-X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=<span class="num">0.2</span>,
-                                          random_state=<span class="num">42</span>)
-pipe.fit(X_tr, y_tr)</pre>
-  <p>A <code class="inline">Pipeline</code> is not about saving keystrokes. It makes the correct protocol the default: every transformer is fitted only on the training portion of each fold.</p>
+  <h3>3.6.2 Handling Imbalance: Two Options</h3>
+  <pre><span class="kw">import</span> torch
+<span class="kw">from</span> torch.utils.data <span class="kw">import</span> DataLoader, WeightedRandomSampler
 
-  <h3>3.6.2 Tuning with GridSearchCV</h3>
-  <pre><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> GridSearchCV
+<span class="cm"># option 1 - resample: the rarer class gets a larger weight</span>
+y_tr = torch.tensor([ds[i][<span class="num">1</span>] <span class="kw">for</span> i <span class="kw">in</span> train_ds.indices])
+counts = torch.bincount(y_tr)
+w = (<span class="num">1.0</span> / counts.float())[y_tr]
+sampler = WeightedRandomSampler(weights=w, num_samples=<span class="fn">len</span>(w),
+                                replacement=<span class="kw">True</span>)
+train_loader = DataLoader(train_ds, batch_size=<span class="num">32</span>, sampler=sampler)
+<span class="cm"># note: sampler and shuffle=True are mutually exclusive</span>
 
-grid = {<span class="str">'clf__C'</span>: [<span class="num">0.01</span>, <span class="num">0.1</span>, <span class="num">1</span>, <span class="num">10</span>]}
-search = GridSearchCV(pipe, grid, cv=<span class="num">5</span>, n_jobs=-<span class="num">1</span>)
-search.fit(X_tr, y_tr)
+<span class="cm"># option 2 - cost-sensitive loss: the data is untouched</span>
+<span class="kw">import</span> torch.nn <span class="kw">as</span> nn
+criterion = nn.CrossEntropyLoss(weight=<span class="num">1.0</span> / counts.float())</pre>
 
-print(search.best_params_)        <span class="cm"># the CHOSEN hyperparameter</span>
-print(search.best_score_)         <span class="cm"># mean CV score</span>
-print(search.score(X_te, y_te))   <span class="cm"># held-out test score</span></pre>
-  <p>Note the naming convention: <code class="inline">clf__C</code> means "parameter <code class="inline">C</code> of the step named <code class="inline">clf</code>" — two underscores. Inspect <code class="inline">cv_results_</code> to see every candidate, and watch the standard deviation: when two means are within one standard deviation, prefer the simpler model rather than agonising.</p>
-  <div class="callout tip">
-    <span class="label">Why CV &lt; test is normal</span>
-    Each fold trains on only (k−1)/k of the training data, so it usually scores slightly below a model trained on all of it. A small gap is expected; a large one (more than ~5 points) means the protocol deserves a second look.
-  </div>
-
-  <h3>3.6.3 The Same Skeleton for Regression</h3>
-  <pre><span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_diabetes
-<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestRegressor
-<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> mean_absolute_error, r2_score
-
-X, y = load_diabetes(return_X_y=<span class="kw">True</span>)
-reg = RandomForestRegressor(random_state=<span class="num">42</span>).fit(X_tr, y_tr)
-pred = reg.predict(X_te)
-print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
-  <p><code class="inline">fit → predict → evaluate</code> never changes. Only the model and the metric do.</p>
+  <h3>3.6.3 Under Imbalance, Accuracy Is the Wrong Metric</h3>
+  <p>If one class holds 4% of the data, a model that always predicts the majority class reads 0.96 accuracy and has learned nothing. Switch to per-class recall, F1, or AUPRC, and report the class distribution before and after the treatment. Every treatment is a trade-off: if minority recall rises while the majority class collapses, you have paid overall performance for minority performance, and that must be stated rather than hidden.</p>
 </div>
 
 <!-- ========== 3.7 ========== -->
@@ -350,12 +393,16 @@ print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
   <div class="callout warn">
     <span class="label">Checklist</span>
     <ul>
-      <li><strong>Split first, fit preprocessing after.</strong> Imputers and scalers go inside the Pipeline.</li>
-      <li><strong>Parameters ≠ hyperparameters.</strong> <code class="inline">coef_</code> is learned; <code class="inline">C</code> is chosen.</li>
-      <li><strong>Pick the metric for the task.</strong> Accuracy/F1 for classification; MAE/R² for regression.</li>
-      <li><strong>Fix your seeds.</strong> <code class="inline">random_state</code> on both the split and the model, or nothing reproduces.</li>
-      <li><strong>Read warnings before fixing them.</strong> A ConvergenceWarning is telling you to scale features or raise <code class="inline">max_iter</code>.</li>
-      <li><strong>Justify the split strategy.</strong> Stratified for classification, grouped for repeated entities, time-based for time series.</li>
+      <li><strong>Split first.</strong> Every step that learns — scaling, imputation, feature selection, augmentation — comes after the split and touches the training set only.</li>
+      <li><strong>Statistics come from train.</strong> Means, variances, quantiles and vocabularies are computed on the training rows and then applied to val and test.</li>
+      <li><strong>One entity, one split.</strong> All records of a user, device, patient or document stay together.</li>
+      <li><strong>Ordered data gets a time-based split.</strong> Shuffling lets the model see the future.</li>
+      <li><strong>The test set is not reused.</strong> Once it selects a model or a hyper-parameter, it is a validation set.</li>
+      <li><strong>Fix the seeds.</strong> Use <code class="inline">torch.Generator</code> for the split and for <code class="inline">shuffle</code>, and <code class="inline">worker_init_fn</code> for per-worker seeds.</li>
+      <li><strong>Check the batch shape first.</strong> <code class="inline">xb</code> must be <code class="inline">(B, F)</code>; if not, look at <code class="inline">__getitem__</code>.</li>
+      <li><strong>Never augment val/test.</strong> Their numbers must be comparable to inference.</li>
+      <li><strong>Report the distribution before and after sampling.</strong> Otherwise the bias you introduced is invisible.</li>
+      <li><strong>Keep the Data Card current.</strong> A pipeline whose biases are undocumented is not finished.</li>
     </ul>
   </div>
 </div>
@@ -366,54 +413,67 @@ print(mean_absolute_error(y_te, pred), r2_score(y_te, pred))</pre>
   <div class="callout key">
     <span class="label">Five Takeaways</span>
     <ol>
-      <li>Machine learning infers rules from examples; supervised, unsupervised and reinforcement learning are the three paradigms.</li>
-      <li>Parameters are learned from data; hyperparameters are chosen by you and searched on the validation set.</li>
-      <li>The loss defines what "wrong" means; gradient descent decides where to move; the learning rate sets the step size.</li>
-      <li>Train / validation / test — and the test set is touched once. Use k-fold cross-validation when data is scarce.</li>
-      <li>A <code class="inline">Pipeline</code> is a leakage guard: preprocessing is fitted only on training folds.</li>
+      <li>Data sets the ceiling; a model only approaches it. When results are poor, diagnose the data before changing the architecture.</li>
+      <li>Cleaning turns known problems into an auditable record: missing, outliers, duplicates and label noise each get a criterion, an action and a stated risk.</li>
+      <li>Splitting precedes every step that learns; the statistics behind scaling, imputation and feature selection come from the training set only.</li>
+      <li>Leakage means training on information unavailable at inference. Test the pipeline with one question: could I obtain this at inference time?</li>
+      <li>A <code class="inline">Dataset</code> defines one sample and a <code class="inline">DataLoader</code> defines the batches; augmentation is training-only, and imbalance is treated by a sampler or a cost-sensitive loss and re-measured with per-class metrics.</li>
     </ol>
   </div>
 
   <div class="exercise">
-    <h4>Exercise 1 · Paradigms and Vocabulary (Required)</h4>
+    <h4>Exercise 1 · Pipeline Order (Required)</h4>
     <ol>
-      <li>Classify each task as supervised, unsupervised, or reinforcement: (a) predicting tomorrow's temperature, (b) grouping customers by behaviour, (c) training a robot to walk, (d) detecting defective chips from images labelled OK/defective.</li>
-      <li>For one of them, fill in Mitchell's three slots: task <em>T</em>, performance measure <em>P</em>, experience <em>E</em>.</li>
+      <li>List these eight operations in the correct order and mark each as "may cross the split line" or "must not": compute the column median, split into train/val/test, scale features to zero mean, select the top-20 features by mutual information, augment the images, de-duplicate on the primary key, build the <code class="inline">Dataset</code>, wrap in a <code class="inline">DataLoader</code>.</li>
+      <li>For two operations you marked "must not", write the sentence explaining what goes wrong if they cross.</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>Exercise 2 · Parameters vs Hyperparameters (Required)</h4>
+    <h4>Exercise 2 · Diagnose and Clean (Required)</h4>
+    <p>Load a dataset of your own (the lab's <code class="inline">defects.csv</code> or your capstone data) and produce a one-page quality report.</p>
     <ol>
-      <li>Sort into two columns: <code class="inline">w</code>, learning rate, a tree's split threshold, <code class="inline">max_depth</code>, <code class="inline">coef_</code>, <code class="inline">cv</code>, <code class="inline">C</code>, <code class="inline">intercept_</code>.</li>
-      <li>Train a <code class="inline">LogisticRegression</code> on <code class="inline">load_digits</code> and print both <code class="inline">coef_.shape</code> and <code class="inline">best_params_</code> from a grid search. Explain in two sentences why only one of them came from the data.</li>
+      <li>For missing values, outliers, duplicates and label noise: give the numeric criterion you used and the count it found.</li>
+      <li>State the action you took for each and one risk of that action.</li>
+      <li>Back every claim with one assert or one plot. Any claim you cannot back up must be deleted from the report.</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>Exercise 3 · The Leakage Experiment (Required)</h4>
+    <h4>Exercise 3 · Reproduce the Leakage (Required)</h4>
     <ol>
-      <li>Reproduce both versions of Section 3.6.1 on <code class="inline">load_digits</code> and record both accuracies.</li>
-      <li>Add a deliberately useless feature column of random noise, refit, and observe what happens to train vs validation score.</li>
-      <li>Write five sentences: what leaked, why the number looked better, and how a Pipeline prevents it.</li>
+      <li>Implement the seeded 70/15/15 split of Section 3.3.3 and print the sizes and class ratios of all three splits.</li>
+      <li>Now compute the feature mean over the <em>entire</em> dataset, subtract it before splitting, and repeat. Record both validation accuracies.</li>
+      <li>Write five sentences: which statistic crossed the line, why the number looked better, and which line of the right-hand example prevents it.</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>Exercise 4 · Diagnose the Scoreboard (Required)</h4>
-    <p>For each pair, name the diagnosis and the next action; justify the last row in three sentences.</p>
+    <h4>Exercise 4 · Dataset, DataLoader and Imbalance (Required)</h4>
     <ol>
-      <li>train 62%, validation 60%</li>
-      <li>train 98%, validation 72%</li>
-      <li>train 95%, validation 93%</li>
-      <li>train 58%, validation 91%</li>
+      <li>Wrap your cleaned frame in a custom <code class="inline">Dataset</code> and verify the shape and dtype of <code class="inline">ds[0]</code> and of one batch.</li>
+      <li>Build three <code class="inline">DataLoader</code>s and justify <code class="inline">batch_size</code>, <code class="inline">shuffle</code>, <code class="inline">num_workers</code> and the fix for the shuffling seed.</li>
+      <li>Measure the class shares, apply either <code class="inline">WeightedRandomSampler</code> or <code class="inline">CrossEntropyLoss(weight=...)</code>, and report the before/after shares plus the per-class metric you switched to.</li>
     </ol>
   </div>
+
   <div class="exercise">
-    <h4>Exercise 5 · Mini-Project (Optional, +5 bonus)</h4>
-    <p>Pick a dataset of your own (UCI, Kaggle, or your capstone). Run the full protocol: stratified split, a Pipeline with at least two steps, a <code class="inline">GridSearchCV</code> sweep, and a single final test evaluation. Submit a notebook plus a 150-word report stating the metric you chose and why.</p>
+    <h4>Exercise 5 · Audit an AI's Data Claims (Required)</h4>
+    <ol>
+      <li>Ask an AI to produce an exploration report for your dataset. Collect at least four statistical claims.</li>
+      <li>Turn each claim into one assert or one plot. Count how many survive and how many are falsified.</li>
+      <li>Write the falsified ones into <code class="inline">AI_USE.md</code>: the prompt, the claim, your check, the corrected conclusion.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 6 · Mini-Project: The Data Card (Optional, +5 bonus)</h4>
+    <p>For a dataset of your choice, deliver a complete Data Card with all five sections — provenance and compliance, scale and structure, quality and known issues, augmentation and imbalance, and bias and limits of use — plus the runnable pipeline that produced it. A Data Card without a concrete limits-of-use section scores zero.</p>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI Application Development — Chapter 3 · Machine Learning Foundations</p>
+  <p>AI Application Development — Chapter 3 · Data Preparation and Pipelines</p>
   <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
 </div>
 
