@@ -1,6 +1,6 @@
 # DATA.md · 数据文档模板
 
-> Start this in Week 2, update it every week. Graded under team rubric §B (18 pts).
+> Start this in Week 2, update it every week. Graded under project rubric §B (18 pts).
 > **The "Known flaws" section is the one graders read first** — a dataset described
 > without flaws is a dataset you have not looked at.
 >
@@ -96,6 +96,6 @@ Be specific and quantify. This section is worth more than it looks.
 
 | | |
 |---|---|
-| **Owner** | *(Data Lead)* |
+| **Owner** | *(you)* |
 | **Last updated** | |
 | **Next review** | |

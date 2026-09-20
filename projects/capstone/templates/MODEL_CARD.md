@@ -1,6 +1,6 @@
 # MODEL_CARD.md · 模型卡模板
 
-> Start after Week 4 (baseline), update through Week 15. Graded under team rubric §C and §D.
+> Start after Week 4 (baseline), update through Week 15. Graded under project rubric §C and §D.
 > Write it for a reader who is smart but does not know ML. **"Limitations" is not a
 > formality** — it is where the grade is decided.
 >
@@ -19,7 +19,7 @@
 | **Pretrained weights** | *(which, and their licence — or "trained from scratch")* |
 | **Framework & version** | |
 | **Training date** | |
-| **Owner** | *(Model Lead)* |
+| **Owner** | *(you)* |
 
 ## 2. Intended use · 预期用途
 
@@ -65,7 +65,7 @@ variance across seeds if you measured it.*
 
 Link or paste `experiments/ablation.md`. **Which single change bought the most?**
 
-> Answer in one sentence. If you cannot, the team rubric §C caps at "Adequate".
+> Answer in one sentence. If you cannot, the project rubric §C caps at "Adequate".
 
 ## 6. Limitations & failure modes · 局限与失败模式
 
