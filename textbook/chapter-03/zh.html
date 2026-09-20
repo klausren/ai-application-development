@@ -327,7 +327,7 @@ X_norm = (X - mu) / sd                   <span class="cm"># 同一个变换应�
         <span class="kw">return</span> x, self.y[i]              <span class="cm"># (特征, 标签)</span>
 
 ds = DefectDataset(df)
-<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 12480 torch.Size([12])</span></pre>
+<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 11668 torch.Size([10])</span></pre>
   <div class="callout warn">
     <span class="label">两条纪律</span>
     绝不要在 <code class="inline">__getitem__</code> 里计算跨样本统计量——那里的一列均值或全局词表是在全量数据上拟合的，是泄漏的温床。同时，<code class="inline">transform</code> 只传给训练集：验证与测试必须与线上推理保持一致。

@@ -52,10 +52,10 @@
 <div class="container">
 
 <div class="header">
-  <div class="tag">教案 · 第 3 周 · 实验部分（实验 75 min + 小测与小结 15 min）</div>
-  <h1>实验 2 · 自定义 Dataset、DataLoader 与数据卡片</h1>
+  <div class="tag">教案 · 第 3 周 · 实验部分（实验 80 min + 小测与小结 10 min）</div>
+  <h1>实验 2 · 数据清洗、自定义 Dataset、DataLoader 与数据卡片</h1>
   <div class="meta">
-    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 75 min + 小测与小结 15 min</span>
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖实验部分 80 min + 小测与小结 10 min</span>
     <span>📚 教材 3.4–3.7</span>
     <span>🔧 动手实验 · 实验 2</span>
     <span>🧩 教案编号：LP-W3-B</span>
@@ -97,22 +97,23 @@
 <h2>2. 重点与难点</h2>
 <table>
   <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
-  <tr><td>重点</td><td>固定种子的分层划分；<code class="inline">Dataset</code> 契约；<code class="inline">DataLoader</code> 的四件事；增强只加训练集；sampler vs 代价敏感损失；数据卡片五节</td><td>教师先演示每段（3–5 分钟），学生复现；每段以 Checkpoint 收口，写完才能往下走</td></tr>
-  <tr><td>难点</td><td>返回整列而非单条样本导致的形状错误；在 <code class="inline">__getitem__</code> 里算跨样本统计；<code class="inline">shuffle=True</code> 与 <code class="inline">sampler=</code> 冲突；如实报告采样前后的分布</td><td>形状：先打印 <code class="inline">xb.shape</code>；泄漏：指着统计量那一行问「这是在多少条数据上算的」；冲突：让 <code class="inline">ValueError</code> 真的发生并念一遍；不平衡：把 accuracy 0.96 与 per-class recall 并排展示</td></tr>
+  <tr><td>重点</td><td>「逐行规则」与「需统计量」两类清洗动作的分界；固定种子的分层划分；<code class="inline">Dataset</code> 契约；<code class="inline">DataLoader</code> 的四件事；增强只加训练集；sampler vs 代价敏感损失；数据卡片五节</td><td>教师先演示每段（3–5 分钟），学生复现；每段以 Checkpoint 收口，写完才能往下走</td></tr>
+  <tr><td>难点</td><td>把单位错误当成异常值删掉；先填补后划分；返回整列而非单条样本导致的形状错误；在 <code class="inline">__getitem__</code> 里算跨样本统计；<code class="inline">shuffle=True</code> 与 <code class="inline">sampler=</code> 冲突；如实报告采样前后的分布</td><td>形状：先打印 <code class="inline">xb.shape</code>；泄漏：指着统计量那一行问「这是在多少条数据上算的」；冲突：让 <code class="inline">ValueError</code> 真的发生并念一遍；不平衡：把 accuracy 0.96 与 per-class recall 并排展示</td></tr>
 </table>
 
 <h2>3. 时间分配</h2>
-<div class="timebar"><div class="lab">实验部分 · 75 min + 小测与小结 · 15 min（每周 180 分钟一体课的后半段）</div></div>
+<div class="timebar"><div class="lab">实验部分 · 80 min + 小测与小结 · 10 min（每周 180 分钟一体课的后半段）</div></div>
 <table>
   <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
-  <tr><td>Lab A</td><td>10 min</td><td><strong>探索与质量诊断</strong>：载入 <code class="inline">defects.csv</code>，打印形状、类别占比、缺失率、按主键的重复数；每条结论配一行断言或一张图；教师驳回任何「看起来不对」式的判据</td><td>p25</td><td>跟做 + 巡场</td></tr>
-  <tr><td>Lab B</td><td>12 min</td><td><strong>可复现的划分</strong>：在随机/分层/时间/分组中选一种并说明依据；用 <code class="inline">torch.Generator(seed=42)</code> 划分；报告三个集合的规模与类别比例；讨论 <code class="inline">batch_id</code> 重复时随机划分会破坏什么</td><td>p25</td><td>自主练习 + 答疑</td></tr>
-  <tr><td>Lab C</td><td>15 min</td><td><strong>自定义 <code class="inline">Dataset</code></strong>：实现 <code class="inline">__len__</code> 与 <code class="inline">__getitem__</code>；验证 <code class="inline">ds[0]</code>；故意去掉下标索引，观察批次形状的变化；说出批次形状规则</td><td>p25–p26</td><td>演示 → 跟做</td></tr>
-  <tr><td>Lab D</td><td>13 min</td><td><strong><code class="inline">DataLoader</code> 与增强</strong>：设置并说明 <code class="inline">batch_size</code>、<code class="inline">shuffle</code>、<code class="inline">num_workers</code>、<code class="inline">generator</code> 的取值理由；增强只加训练集并给出对照；注意 <code class="inline">shuffle=True</code> 与 <code class="inline">sampler=</code> 互斥</td><td>p26</td><td>自主练习 + 巡场</td></tr>
-  <tr><td>Lab E</td><td>12 min</td><td><strong>类别不平衡</strong>：统计各类数量与占比，选 <code class="inline">WeightedRandomSampler</code> 或 <code class="inline">CrossEntropyLoss(weight=1/counts)</code>；报告处理前后的分布；改用 per-class recall/F1 或 AUPRC</td><td>p26</td><td>自主练习 + 答疑</td></tr>
-  <tr><td>Lab F</td><td>13 min</td><td><strong>数据卡片、隐私与 M3 推送</strong>：写全五节，含「偏差与使用边界」；去除标识信息并确认未上传公网工具；在项目仓库建 <code class="inline">src/data/</code> 与 <code class="inline">src/train.py</code>；固定 <code class="inline">requirements.txt</code>；推送</td><td>p26–p27</td><td>清单核对</td></tr>
-  <tr><td>小测</td><td>10 min</td><td><strong>课堂小测</strong>：4 题（泄漏 / 划分 / Dataset 契约 / 不平衡）投屏；先举手投票，再讲评；答对的同学讲思路</td><td>p28</td><td>投票 + 讲评</td></tr>
-  <tr><td>小结</td><td>5 min</td><td><strong>总结与预告</strong>：五条要点；课后待办（管道代码 + 数据卡片）；预告第 4 周（从张量到 <code class="inline">nn.Module</code>）</td><td>p29–p30</td><td>回顾 + 预告</td></tr>
+  <tr><td>Lab A</td><td>8 min</td><td><strong>探索与质量诊断</strong>：载入 <code class="inline">data/raw/defects.csv</code>，打印形状、类别占比、缺失率、按主键的重复数；指出「最大值无法被其他行解释」的那一列；每条结论配一行断言；教师驳回任何「看起来不对」式的判据</td><td>p25</td><td>跟做 + 巡场</td></tr>
+  <tr><td>Lab B</td><td>12 min</td><td><strong>清洗原始表（不需要统计量）</strong>：按 <code class="inline">batch_id + timestamp</code> 去重，并让「预测删除数」等于「实际删除数」（812）；把 935 条华氏记录换算为摄氏而不是删掉；把 10 种编码写法归并为 5 个编码并数字化</td><td>p25</td><td>演示 → 跟做</td></tr>
+  <tr><td>Lab C</td><td>15 min</td><td><strong>先划分，再只用训练集算统计量</strong>：在 <code class="inline">batch_id</code> 重复的前提下选择并论证划分策略；填补中位数与 1%/99% 截断只在训练集上拟合；实测「全量 vs 训练集」的相对差（0.039%）并说明这么小的泄漏为什么仍然是泄漏</td><td>p25</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>Lab D</td><td>13 min</td><td><strong>自定义 <code class="inline">Dataset</code></strong>：实现 <code class="inline">__len__</code> 与 <code class="inline">__getitem__</code>；验证 <code class="inline">ds[0]</code> 为 <code class="inline">(10,)</code>；故意删掉下标索引，观察批次变成 <code class="inline">(32, 11668, 10)</code>；说出批次形状规则</td><td>p25–p26</td><td>演示 → 跟做</td></tr>
+  <tr><td>Lab E</td><td>11 min</td><td><strong><code class="inline">DataLoader</code> 与增强</strong>：设置并说明 <code class="inline">batch_size</code>、<code class="inline">shuffle</code>、<code class="inline">num_workers</code>、<code class="inline">generator</code> 的取值理由；增强只加训练集并给出对照；注意 <code class="inline">shuffle=True</code> 与 <code class="inline">sampler=</code> 互斥</td><td>p26</td><td>自主练习 + 巡场</td></tr>
+  <tr><td>Lab F</td><td>10 min</td><td><strong>类别不平衡</strong>：统计各类数量（少数类在 8165 条训练样本中仅 335 条）与占比，选 <code class="inline">WeightedRandomSampler</code> 或 <code class="inline">CrossEntropyLoss(weight=1/counts)</code>；报告处理前后的分布；改用 per-class recall/F1 或 AUPRC</td><td>p26</td><td>自主练习 + 答疑</td></tr>
+  <tr><td>Lab G</td><td>11 min</td><td><strong>数据卡片、隐私与 M3 推送</strong>：写全五节，含「偏差与使用边界」；记录 <code class="inline">age</code> 在少数类中缺失 25%、其他类约 2.3% 这一事实；去除标识信息并确认未上传公网工具；推送 <code class="inline">src/data/</code> 与 <code class="inline">src/train.py</code></td><td>p26–p27</td><td>清单核对</td></tr>
+  <tr><td>小测</td><td>6 min</td><td><strong>课堂小测</strong>：4 题（泄漏 / 划分 / <code class="inline">Dataset</code> 契约 / 不平衡）投屏；先举手投票，再讲评；答对的同学讲思路</td><td>p28</td><td>投票 + 讲评</td></tr>
+  <tr><td>小结</td><td>4 min</td><td><strong>总结与预告</strong>：五条要点；课后待办（管道代码 + 数据卡片）；预告第 4 周（从张量到 <code class="inline">nn.Module</code>）</td><td>p29–p30</td><td>回顾 + 预告</td></tr>
 </table>
 
 <h2>4. 关键活动设计</h2>
@@ -125,15 +126,19 @@
   <p style="font-size:13.5px;">投屏一条「看起来合理」的 AI 结论——「类别分布均衡，可以直接训练」——让学生跑 <code class="inline">value_counts(normalize=True)</code>，再写出能定论的那一行断言。若结论被推翻，就把更正后的结论写进 <code class="inline">AI_USE.md</code>。目标不是不信任 AI，而是有一套可重复的核对办法。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 3 · 故意把形状搞坏（Lab C，p25）</h4>
-  <p style="font-size:13.5px;">让学生删掉 <code class="inline">__getitem__</code> 里的 <code class="inline">[i]</code>，使它返回整列，再打印批次形状。看到 <code class="inline">(11, 32)</code> 而不是 <code class="inline">(32, 11)</code>，形状规则就记住了。改回来，并口头复述规则：批次大小 B、特征数 F 时，<code class="inline">xb</code> 必须是 <code class="inline">(B, F)</code>。</p>
+  <h4>活动 3 · 单位错误不是异常值（Lab B，p25）</h4>
+  <p style="font-size:13.5px;">把原始温度最大值 218.25 写在黑板上，问该拿它怎么办。一半学生会说「删掉」。再告诉他们这一列里混了两种单位：935 条是用华氏记录的。删掉等于毁掉 935 个真实测量值并把这个 bug 藏起来；换算则能把它们全部救回来。区分这两种情形的判据是：这个值是不可能出现的，还是只是被标错了单位。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 4 · 两处泄漏，一行代码（Lab B–C，p25）</h4>
+  <h4>活动 4 · 两处泄漏，一行代码（Lab C，p25）</h4>
   <p style="font-size:13.5px;">教师在黑板上写一行：<code class="inline">mu = df.drop(columns="label").mean()</code>，然后在划分之前把它从每一行减掉。问全班：这个均值是在哪些数据上算的？答案必然是「全部」——这就是泄漏。修法要变成学生能指出来的注释：统计量只能来自训练集。</p>
 </div>
 <div class="card" style="margin-bottom:12px;">
-  <h4>活动 5 · 换台电脑跑一遍（Lab F，p26–p27）</h4>
+  <h4>活动 5 · 故意把形状搞坏（Lab D，p25–p26）</h4>
+  <p style="font-size:13.5px;">让学生删掉 <code class="inline">__getitem__</code> 里的 <code class="inline">[i]</code>，使它返回整列，再打印批次形状。看到 <code class="inline">(32, 11668, 10)</code> 而不是 <code class="inline">(32, 10)</code>，形状规则就记住了。改回来，并口头复述规则：批次大小 B、特征数 F 时，<code class="inline">xb</code> 必须是 <code class="inline">(B, F)</code>。</p>
+</div>
+<div class="card" style="margin-bottom:12px;">
+  <h4>活动 6 · 换台电脑跑一遍（Lab G，p26–p27）</h4>
   <p style="font-size:13.5px;">让学生把自己的仓库克隆到一个新目录，在那里运行 <code class="inline">python src/train.py</code>。绝对路径、未固定的依赖、硬编码文件名会在几秒内暴露——比任何清单都管用。</p>
 </div>
 
@@ -141,9 +146,9 @@
 <table>
   <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:90px;">权重</th></tr>
   <tr><td>交付物</td><td><code class="inline">data_pipeline.py</code> + <code class="inline">data_card.md</code>：在干净检出下能端到端运行，每个 Checkpoint 用自己的话回答，≥ 2 次有意义的 commit 推送到公开仓库</td><td>100 分</td></tr>
-  <tr><td>评分标准</td><td>探索与诊断 15 分 · 可复现划分 15 分 · 自定义 <code class="inline">Dataset</code> 20 分 · <code class="inline">DataLoader</code> 与增强 15 分 · 不平衡 15 分 · 数据卡片与泄漏自查 15 分 · 课后反思 5 分</td><td>随堂实验 15 分</td></tr>
+  <tr><td>评分标准</td><td>探索与诊断 12 分 · 数据清洗 18 分 · 划分与训练集统计量 18 分 · 自定义 <code class="inline">Dataset</code> 18 分 · <code class="inline">DataLoader</code> 与增强 12 分 · 不平衡 12 分 · 数据卡片 5 分 · 课后反思 5 分</td><td>随堂实验 15 分</td></tr>
   <tr><td>课堂小测</td><td>实验结束前 4 题，举手作答；计入实验成绩 10%（见课件 p28）</td><td>实验 10%</td></tr>
-  <tr><td>大作业 M3</td><td>Part F 后半段（<code class="inline">src/data/</code> + 可运行的自定义 <code class="inline">Dataset</code>/<code class="inline">DataLoader</code>）计入大作业，不计入本次实验；缺失 −2 项目分；迟交每次 −2，上限 −20</td><td>里程碑评审</td></tr>
+  <tr><td>大作业 M3</td><td>Part G 后半段（<code class="inline">src/data/</code> + 可运行的自定义 <code class="inline">Dataset</code>/<code class="inline">DataLoader</code>）计入大作业，不计入本次实验；缺失 −2 项目分；迟交每次 −2，上限 −20</td><td>里程碑评审</td></tr>
   <tr><td>迟交规则</td><td>实验交付物：每天 −10%，最多 3 天，之后 0 分。以 commit 哈希为时间戳，不是平台上传时间</td><td>—</td></tr>
 </table>
 <div class="callout warn">
@@ -160,7 +165,7 @@
       <li>第 2 周实验已提交（张量 + autograd 的线性模型可运行）</li>
       <li>教材第 3 章已浏览，重点看泄漏自查清单</li>
       <li>大作业仓库已有第 2 周提交；<code class="inline">AI_USE.md</code> 已建立</li>
-      <li>演示环境能载入 <code class="inline">defects.csv</code> 并打印类别占比</li>
+      <li>演示环境能载入 <code class="inline">data/raw/defects.csv</code> 并打印类别占比</li>
     </ul>
   </div>
   <div class="card">
@@ -170,13 +175,13 @@
       <li>课件 p24–p30</li>
       <li>教材 3.4–3.7</li>
       <li>PyTorch <code class="inline">torch.utils.data</code> 参考（Dataset、DataLoader、Subset、WeightedRandomSampler）</li>
-      <li>数据集 <code class="inline">defects.csv</code> 随实验提供，无需下载</li>
+      <li>数据集 <code class="inline">data/raw/defects.csv</code> 随本仓库提供，无需下载</li>
     </ul>
   </div>
 </div>
 
 <div class="footer">
-  <p>AI 应用开发 — 教案 LP-W3-B（实验部分 · 75 min + 小测与小结 15 min）</p>
+  <p>AI 应用开发 — 教案 LP-W3-B（实验部分 · 80 min + 小测与小结 10 min）</p>
   <p>由 AI 辅助生成，教师可按课堂实际情况调整。</p>
 </div>
 

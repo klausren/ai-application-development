@@ -327,7 +327,7 @@ X_norm = (X - mu) / sd                   <span class="cm"># apply the same trans
         <span class="kw">return</span> x, self.y[i]              <span class="cm"># (features, label)</span>
 
 ds = DefectDataset(df)
-<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 12480 torch.Size([12])</span></pre>
+<span class="fn">print</span>(<span class="fn">len</span>(ds), ds[<span class="num">0</span>][<span class="num">0</span>].shape)     <span class="cm"># 11668 torch.Size([10])</span></pre>
   <div class="callout warn">
     <span class="label">Two Disciplines</span>
     Never compute cross-sample statistics inside <code class="inline">__getitem__</code> — a column mean or a global vocabulary there is fitted over the whole dataset and is a breeding ground for leakage. And pass <code class="inline">transform</code> to the training split only: validation and test must match inference.

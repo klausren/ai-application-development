@@ -1,0 +1,268 @@
+{
+  "seed": 42,
+  "raw_shape": [
+    12480,
+    13
+  ],
+  "raw_class_counts": {
+    "0": 4235,
+    "1": 3479,
+    "2": 2753,
+    "3": 512,
+    "4": 1501
+  },
+  "raw_dup_on_key": 812,
+  "dedup_rows_removed": 812,
+  "shape_after_dedup": [
+    11668,
+    13
+  ],
+  "unit_rows_fixed": 935,
+  "temperature_max_before_unify": 214.01,
+  "temperature_max_after_unify": 108.94,
+  "material_codes_before": [
+    "A-2",
+    "A1",
+    "A2",
+    "B-2",
+    "B1",
+    "B2",
+    "C1",
+    "a1",
+    "b1",
+    "c1"
+  ],
+  "material_codes_after": [
+    "A1",
+    "A2",
+    "B1",
+    "B2",
+    "C1"
+  ],
+  "material_code_map": {
+    "A1": 0,
+    "A2": 1,
+    "B1": 2,
+    "B2": 3,
+    "C1": 4
+  },
+  "shape_before_split": [
+    11668,
+    13
+  ],
+  "split_sizes": {
+    "train": 8165,
+    "val": 1747,
+    "test": 1756
+  },
+  "split_class_shares": {
+    "train": {
+      "0": 0.3394,
+      "1": 0.2788,
+      "2": 0.2206,
+      "3": 0.041,
+      "4": 0.1203
+    },
+    "val": {
+      "0": 0.3394,
+      "1": 0.2788,
+      "2": 0.221,
+      "3": 0.0406,
+      "4": 0.1202
+    },
+    "test": {
+      "0": 0.3388,
+      "1": 0.2785,
+      "2": 0.2204,
+      "3": 0.0416,
+      "4": 0.1207
+    }
+  },
+  "rare_class_train_count": 335,
+  "leakage_contrast": {
+    "full_vs_train": {
+      "age": {
+        "median": {
+          "full": 6.4886,
+          "train": 6.4861,
+          "rel_pct": 0.039
+        },
+        "mean": {
+          "full": 6.5679,
+          "train": 6.5809,
+          "rel_pct": 0.198
+        },
+        "p99": {
+          "full": 13.964,
+          "train": 14.0058,
+          "rel_pct": 0.298
+        }
+      },
+      "pressure_kpa": {
+        "median": {
+          "full": 314.0948,
+          "train": 314.3376,
+          "rel_pct": 0.077
+        },
+        "mean": {
+          "full": 313.7367,
+          "train": 313.8783,
+          "rel_pct": 0.045
+        },
+        "p99": {
+          "full": 375.7447,
+          "train": 375.8078,
+          "rel_pct": 0.017
+        }
+      },
+      "humidity_pct": {
+        "median": {
+          "full": 45.8051,
+          "train": 45.7531,
+          "rel_pct": 0.114
+        },
+        "mean": {
+          "full": 45.8573,
+          "train": 45.7947,
+          "rel_pct": 0.137
+        },
+        "p99": {
+          "full": 66.8893,
+          "train": 66.9598,
+          "rel_pct": 0.105
+        }
+      },
+      "thickness_mm": {
+        "median": {
+          "full": 1.8658,
+          "train": 1.8652,
+          "rel_pct": 0.032
+        },
+        "mean": {
+          "full": 2.0787,
+          "train": 2.0817,
+          "rel_pct": 0.144
+        },
+        "p99": {
+          "full": 2.1843,
+          "train": 2.1827,
+          "rel_pct": 0.073
+        }
+      }
+    },
+    "rare_class_3": {
+      "age": {
+        "n_full": 479,
+        "n_train": 335,
+        "median_full": 6.315,
+        "median_train": 6.2543,
+        "median_rel_pct": 0.971,
+        "mean_full": 6.3583,
+        "mean_train": 6.241,
+        "mean_rel_pct": 1.88
+      },
+      "tension_n": {
+        "n_full": 479,
+        "n_train": 335,
+        "median_full": 105.0539,
+        "median_train": 106.3662,
+        "median_rel_pct": 1.234,
+        "mean_full": 104.6777,
+        "mean_train": 105.849,
+        "mean_rel_pct": 1.107
+      },
+      "vibration_mm_s": {
+        "n_full": 479,
+        "n_train": 335,
+        "median_full": 4.0453,
+        "median_train": 4.0632,
+        "median_rel_pct": 0.439,
+        "mean_full": 4.0308,
+        "mean_train": 4.0441,
+        "mean_rel_pct": 0.328
+      }
+    },
+    "test_set_trace": {
+      "age": {
+        "train_scaled_mean": -0.00944,
+        "full_scaled_mean": -0.00532
+      },
+      "pressure_kpa": {
+        "train_scaled_mean": -0.04343,
+        "full_scaled_mean": -0.03834
+      },
+      "temperature_c": {
+        "train_scaled_mean": -0.01801,
+        "full_scaled_mean": -0.015
+      }
+    }
+  },
+  "train_medians": {
+    "age": 6.4861,
+    "pressure_kpa": 314.3376,
+    "humidity_pct": 45.7531
+  },
+  "missing_before_impute": {
+    "age": 372,
+    "pressure_kpa": 129,
+    "humidity_pct": 73
+  },
+  "train_thickness_clip": {
+    "lo": 1.5743,
+    "hi": 2.1827
+  },
+  "outlier_rows_clipped": 35,
+  "full_data_medians_would_be": {
+    "age": 6.4886,
+    "pressure_kpa": 314.0948,
+    "humidity_pct": 45.8051
+  },
+  "missing_after_impute": 0,
+  "thickness_max_after_clip": 2.1827,
+  "feature_columns": [
+    "age",
+    "temperature_c",
+    "pressure_kpa",
+    "line_speed",
+    "tension_n",
+    "thickness_mm",
+    "humidity_pct",
+    "vibration_mm_s",
+    "material_code",
+    "operator_shift"
+  ],
+  "n_features": 10,
+  "len_ds": 11668,
+  "ds0_x_shape": [
+    10
+  ],
+  "ds0_y_dtype": "torch.int64",
+  "batch_shape": [
+    8,
+    10
+  ],
+  "batch_label_shape": [
+    8
+  ],
+  "train_class_counts": [
+    2771,
+    2276,
+    1801,
+    335,
+    982
+  ],
+  "train_class_shares": [
+    0.3394,
+    0.2788,
+    0.2206,
+    0.041,
+    0.1203
+  ],
+  "balanced_weights": [
+    0.000361,
+    0.000439,
+    0.000555,
+    0.002985,
+    0.001018
+  ]
+}
