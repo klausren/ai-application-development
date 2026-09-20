@@ -6,7 +6,7 @@
 
 **A 16-week, 64-hour university course taking software engineering students from zero to shipping AI applications.**
 
-PyTorch-first · Lecture 90 min + Lab 75 min + Quiz 15 min every week · English-taught with Chinese support
+PyTorch-first · Lecture 90 min + Lab 80 min + Wrap-up 10 min every week · English-taught with Chinese support
 
 ![Course](https://img.shields.io/badge/Course-16_Weeks_%C2%B7_64_Hours-blue)
 ![Framework](https://img.shields.io/badge/Stack-PyTorch_%C2%B7_scikit--learn_%C2%B7_HuggingFace_%C2%B7_FastAPI-orange)
@@ -43,56 +43,60 @@ This repository hosts the teaching materials for **AI Application Development**,
 
 > **Theory that holds up, applications that ship.**
 
-- **4 modules in 16 weeks** — ML foundations → deep learning & computer vision → NLP & LLMs → AI application engineering
-- **Every week is a 180-minute integrated session**: 90 min lecture + 75 min hands-on lab + 15 min quiz & wrap-up
-- **PyTorch-first stack**: `torch` → `scikit-learn` → `transformers` (Hugging Face) → `FastAPI` deployment
-- **Assessment built on building**: 3 assignments, a midterm checkpoint, and an individual capstone (35%) — no closed-book final exam grind
+- **4 modules in 16 weeks** — AI application foundations & PyTorch → deep learning core techniques & model training → transfer learning, LLMs & RAG → engineering, deployment & the capstone
+- **Every week is a 180-minute integrated session**: 90 min lecture + 80 min hands-on lab + 10 min wrap-up
+- **PyTorch-first stack**: `torch` → `scikit-learn` → `transformers` (Hugging Face) → serving the model
+- **Assessment built on building**: 14 weekly labs (实验 0–13), four module milestone reviews, an AI-collaboration log, and an **individual capstone worth 50%** — no closed-book final exam
+
+Everything here is traceable to the school's official course documents for course code
+**52015CC3BV** (课程标准 / 教案 / 教学日历 / 考试大纲); [`syllabus.md`](syllabus.md) is the
+single source of truth for this repo's scope and sequencing.
 
 | | |
 |---|---|
-| **Prerequisites** | Python programming, data structures, databases, probability & statistics |
-| **Textbooks** | *Hands-On Machine Learning* (Géron) · *Deep Learning with PyTorch* · *NLP with Transformers* (Hugging Face) |
-| **Assessment** | Assignments ×3 (30%) · Midterm project (15%) · Capstone project (35%) · Labs & quizzes (20%) |
+| **Prerequisites** | Programming fundamentals (Python), data structures, calculus & linear algebra basics, introductory machine learning |
+| **Textbook** | *动手学深度学习* (**Dive into Deep Learning**, PyTorch edition) · 阿斯顿·张、李沐 等，人民邮电出版社 |
+| **Assessment** | Formative 50% — attendance 10 · weekly labs 15 · module milestones 15 · AI-collaboration log 10<br>Summative 50% — the individual capstone project (no closed-book exam) |
 
 ---
 
 ## Curriculum (16 Weeks)
 
-### Module 1 · Machine Learning Foundations (Weeks 1–4)
+### Module 1 · AI Application Foundations & PyTorch (Weeks 1–4) · 基础与 PyTorch 入门
 
-| Week | Topic |
+| Week | CU | Topic |
+|:---:|:---:|---|
+| 1 | CU1 | Introduction to AI Application Development — the pipeline, the job-role competency model, environment & GPU verification, reproducibility and the AI-usage boundary |
+| 2 | CU2 | PyTorch Fundamentals: Tensors and Autograd — shapes, broadcasting, the computation graph, hand-written gradient descent |
+| 3 | CU3 | Data Preparation and Pipelines — splits and data leakage, custom `Dataset` / `DataLoader`, augmentation and imbalanced data |
+| 4 | CU4 | Neural Networks and Modelling with `nn.Module` — depth vs linear models, the canonical module structure, width/depth ablations |
+
+### Module 2 · Deep Learning Core Techniques & Model Training (Weeks 5–8) · 深度学习核心技术与模型训练
+
+| Week | CU | Topic |
 |:---:|---|
-| 1 | Introduction & Development Environment Setup — course tour, Anaconda/Jupyter/Colab, the AI landscape |
-| 2 | Data Handling Fundamentals for AI — data cleaning, feature engineering, the 5-step EDA workflow |
-| 3 | Machine Learning Foundations — supervised learning, the `fit → predict → evaluate` pipeline |
-| 4 | ML Applications & Model Evaluation — metrics, cross-validation, overfitting & regularization |
+| 5 | CU5 | Training Loop, Loss and Optimizer — the five-step loop, three loss functions, SGD / Momentum / Adam × learning rate |
+| 6 | CU6 | Evaluation, Overfitting and Regularization — metrics and confusion matrix, evaluation protocol, bias–variance, early stopping / weight decay / Dropout / augmentation |
+| 7 | CU7 | CNNs for Computer Vision — convolution and pooling, classic architectures, confusion-matrix error analysis |
+| 8 | CU8 | Sequence Models and Text Data — tokenization, vocabulary, embeddings, RNN/LSTM, text classification |
 
-### Module 2 · Deep Learning & Computer Vision (Weeks 5–8)
+### Module 3 · Modern AI Applications: Transfer Learning, LLMs and RAG (Weeks 9–12) · 迁移学习、大模型与 RAG
 
-| Week | Topic |
+| Week | CU | Topic |
 |:---:|---|
-| 5 | Neural Network Fundamentals — perceptrons, backpropagation, activation functions |
-| 6 | Training Deep Networks in Practice — optimizers, batch norm, dropout, learning-rate schedules |
-| 7 | CNNs & Computer Vision — convolution, pooling, classic architectures, transfer learning |
-| 8 | CV Applications & Midterm Project — image classification end-to-end + team project showcase |
+| 9 | CU9 | Transfer Learning and Pretrained Models — fine-tuning vs training from scratch, when pre-training pays off |
+| 10 | CU10 | Attention and Transformers — self-attention, the Transformer block, text classification against the Week 8 LSTM |
+| 11 | CU11 | Large Language Models and Prompt Engineering — LLM APIs, prompting patterns, strict JSON output and retry strategies |
+| 12 | CU12 | Retrieval-Augmented Generation (RAG) — retrieval → generation → citation, and where such pipelines fail |
 
-### Module 3 · NLP & Large Language Models (Weeks 9–12)
+### Module 4 · Engineering, Deployment and the Capstone (Weeks 13–16) · 工程化、部署与综合项目
 
-| Week | Topic |
+| Week | CU | Topic |
 |:---:|---|
-| 9 | NLP Fundamentals — tokenization, bag-of-words, TF-IDF, n-grams, text similarity |
-| 10 | Word Embeddings & Sequence Models — Word2Vec / GloVe / FastText, RNN & LSTM, sentiment analysis |
-| 11 | Transformers & Pre-trained Models — self-attention, the Transformer, BERT/GPT families, fine-tuning |
-| 12 | LLMs, Prompt Engineering & RAG — prompting patterns, retrieval-augmented generation, evaluation |
-
-### Module 4 · AI Application Engineering (Weeks 13–16)
-
-| Week | Topic |
-|:---:|---|
-| 13 | Generative AI Applications & AI Agents — generative models in practice, agents, tool use |
-| 14 | Model Deployment & API Engineering — FastAPI serving, model serialization, containerization |
-| 15 | MLOps & Production Practices — experiment tracking, monitoring, CI for ML, cost & latency |
-| 16 | Capstone Project Presentations — each student demos an end-to-end AI product |
+| 13 | CU13 | Model Deployment and Inference Serving — export, HTTP endpoint, P50/P95 latency |
+| 14 | CU14 | MLOps: Tracking, Versioning and Monitoring — experiment tracking, parameter–metric tables, monitoring and drift |
+| 15 | CU15 | Responsible AI: Fairness, Explainability and Safety — seminar on the *AI Application Ethics & Safety Review Form* |
+| 16 | CU16 | Capstone Acceptance and Course Review — final acceptance and defence of the individual project |
 
 ---
 
@@ -101,24 +105,26 @@ This repository hosts the teaching materials for **AI Application Development**,
 ```
 ai-application-development/
 ├── README.md                  ← you are here
-├── syllabus.md                ← full bilingual syllabus outline
+├── syllabus.md                ← full bilingual syllabus outline — this repo's 口径源
 ├── lectures/                  ← original weekly slide decks (EN + CN), week-XX/lecture-{en,zh}.pptx
-├── lesson-plans/              ← original A/B lesson plans (90-min lecture + 75-min lab), EN + CN
+├── lesson-plans/              ← original lesson plans (90-min lecture + 80-min lab), EN + CN
 ├── textbook/                  ← original bilingual textbook chapters
-├── lecture-scripts/           ← original word-for-word lecture scripts (EN speech + CN reference)
-├── handouts/                  ← printable A4 class handouts (bilingual, with note space)
 ├── labs/                      ← student-facing lab materials
 │   ├── README.md              ← lab index + handout template explained
 │   └── week-XX/
-│       ├── lab-handout.md     ← 16 weekly lab guides (tasks A–F, checkpoints, rubric)
-│       ├── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
+│       ├── lab-handout.md     ← weekly lab guides (Parts A–F, checkpoints, rubric)
+│       └── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
 ├── projects/
-│   └── capstone/              ← individual final project (35%): brief, project &
-│       │                         defence rubrics, 16 weekly milestones, DATA/MODEL_CARD/DEVLOG templates
+│   └── capstone/              ← individual final project: brief, project &
+│       │                         defence rubrics, weekly milestones, DATA/MODEL_CARD/DEVLOG templates
+├── outputs/                   ← the measured experiment results the courseware numbers come from
 ├── slides/
 │   └── mit-6s191/             ← 6 official MIT 6.S191 lecture PDFs (bundled, MIT license)
 ├── cs224n/                    ← Stanford CS224n slot: fetched on demand (not bundled)
 ├── scripts/
+│   ├── build_deck.py          ← deck generator (native shapes only — no image can fail to display)
+│   ├── deck_specs/week-XX.py  ← language-neutral spec, one per week
+│   ├── validate_deck.py       ← page-count / CJK-leak / media-file checker
 │   └── download_cs224n.sh     ← one-click downloader for all 19 CS224n slide PDFs
 ├── THIRD_PARTY_NOTICES.md     ← attribution & redistribution terms for bundled materials
 └── LICENSE                    ← CC BY-NC-SA 4.0 (this repo's own materials)
@@ -134,87 +140,80 @@ The course deliberately leans on the world's best open teaching materials instea
 
 ### Original: weekly courseware authored for this course
 
-Every week ships five assets, each in **English** and **Chinese** (or bilingual):
+Every week ships four assets, each in **English** and **Chinese** (or bilingual):
 
 | Folder | What's inside | Files per week |
 |---|---|---|
-| `lectures/` | the 32-page slide deck students see in class | `lecture-en.pptx`, `lecture-zh.pptx` |
-| `lesson-plans/` | A: 90-min theory plan · B: 75-min lab plan (objectives, timing, activities, rubric) | `lecture-{en,zh}.html`, `lab-{en,zh}.html` |
-| `textbook/` | self-contained bilingual chapter notes | `chapter-XX/{en,zh}.html` |
-| `lecture-scripts/` | word-for-word English delivery script with Chinese reference (ASK/TIP/TIME cues) | `week-XX-bilingual.html` |
-| `labs/` | student-facing starter notebook, environment checker, setup guide with FAQ | `starter-notebook.ipynb`, `env-check.py`, `setup-guide.html` |
+| `lectures/` | the slide deck students see in class (27–30 slides) | `lecture-en.pptx`, `lecture-zh.pptx` |
+| `lesson-plans/` | lecture plan + lab plan (objectives, timing, activities, rubric) | `lecture-{en,zh}.html`, `lab-{en,zh}.html` |
+| `textbook/` | self-contained bilingual chapter notes (8 sections + practice) | `chapter-XX/{en,zh}.html` |
+| `labs/` | the student-facing lab guide | `lab-handout.md` |
 
-**Currently published:**
+**Currently published (Week 1–6 = CU1–CU6, 实验 0–5):**
 
-| Week | Deck (EN+CN) | Lesson plans | Textbook | Lecture script | Starter notebook |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| 1 | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 2 | ✅ | ✅ | ✅ | ✅ | — |
-| 3 | ✅ | ✅ | ✅ | — | — |
-| 4–16 | lab handout only | — | — | — | — |
+| Week | Deck (EN+CN) | Lesson plans | Textbook | Lab handout |
+|:---:|:---:|:---:|:---:|:---:|
+| 1 | ✅ | ✅ | ✅ | ✅ |
+| 2 | ✅ | ✅ | ✅ | ✅ |
+| 3 | ✅ | ✅ | ✅ | ✅ |
+| 4 | ✅ | ✅ | ✅ | ✅ |
+| 5 | ✅ | ✅ | ✅ | ✅ |
+| 6 | ✅ | ✅ | ✅ | ✅ |
+| 7–16 | — | — | — | — (landing weekly) |
 
-Decks are built by `scripts/build_deck.py` from a language-neutral spec (`scripts/deck_specs/week-XX.py`) — every visual is a native PowerPoint shape, table or chart, so no image ever fails to display.
+Decks are built by `scripts/build_deck.py` from a language-neutral spec (`scripts/deck_specs/week-XX.py`) — every visual is a native PowerPoint shape, table or chart, so **no image ever fails to display** (0 media files per deck). `scripts/validate_deck.py` checks the page count, the EN/CN parity and CJK leakage on every build.
 
 ### Lab Handouts 实验指导书 — `labs/week-XX/lab-handout.md`
 
-Every week's second half (课时 3–4, 75 min) is a hands-on lab. All **16** lab guides are published:
+Every week's second half (课时 3–4, **80 min**) is a hands-on lab. Lab numbering follows the
+official calendar — **实验 0–13 across Week 1–14**; Week 15 is the ethics seminar and Week 16 is
+capstone acceptance, so neither carries a lab number.
 
 | Module | Weeks | Labs |
 |---|:---:|---|
-| ML Foundations | 1–4 | environment & first model · EDA/cleaning · sklearn pipeline · evaluation & regularization |
-| Deep Learning & CV | 5–8 | NumPy→PyTorch MLP · training ablations · CNN & transfer learning · project lab |
-| NLP & LLMs | 9–12 | text vectors · embeddings & LSTM · Transformers · prompting & RAG |
-| AI Engineering | 13–16 | agents · FastAPI deployment · MLOps · demo day |
+| 一 · foundations & PyTorch | 1–4 | environment & GPU verification · tensors & autograd · data pipelines · `nn.Module` ablations |
+| 二 · deep learning core | 5–8 | training loop & optimizer grid · overfitting & regularization · CNN error analysis · sequence models |
+| 三 · transfer learning, LLMs & RAG | 9–12 | fine-tuning vs from-scratch · Transformer vs LSTM · LLM JSON output & retries · RAG chain & failure analysis |
+| 四 · engineering & capstone | 13–16 | deployment & latency · MLOps & monitoring · ethics seminar · acceptance defence |
 
-Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → Part F capstone milestone → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks.
+Each handout follows one template: **objectives → pre-lab checklist → tasks A–E (each with time budget, checkpoint and named pitfall) → Part F capstone milestone → deliverables → 100-pt rubric → submission → exit ticket → 中文摘要**. Downloads that may fail in class (torchvision MNIST, CIFAR-10, HuggingFace models) come with documented offline fallbacks — and Week 6 needs no download at all.
 
 **Part F is how the labs connect to the final project** — every lab ends by pushing one milestone (and a `DEVLOG.md` entry) to your capstone repo, so the project is built continuously instead of in a Week-15 panic.
 
 ### Capstone Project 大作业 — `projects/capstone/`
 
-An individual project worth **35%** of the final grade, with the topic agreed with
-the instructor in Week 2 and the scope negotiated as MVP + stretch list. Full brief and rubrics:
+An **individual** project worth **50%** of the final grade, with the topic agreed with the
+instructor in Week 2 and the scope negotiated as an MVP + stretch list. No peer-evaluation
+coefficient: the process portion measures the **git history and weekly `DEVLOG.md`** directly,
+and every student defends their own work one-on-one in Week 16. Full brief and rubrics:
 
 | File | What's in it |
 |---|---|
-| [`README.md`](projects/capstone/README.md) | brief, topic-selection process, roles, AI-usage policy, deliverables |
-| [`rubric-project.md`](projects/capstone/rubric-project.md) | project rubric — 7 dimensions, 100 pts → 70% (the artefact) |
-| [`rubric-defence.md`](projects/capstone/rubric-defence.md) | defence & process rubric — defence, git trace + DEVLOG, retrospective, AI use → 30% |
-| [`milestones.md`](projects/capstone/milestones.md) | all 16 weekly milestones |
-| `templates/` | `DATA.md`, `MODEL_CARD.md`, `RETROSPECTIVE.md` |
-
-```
-Capstone (35 pts) = Project score (100) × 0.70 × 35%
-                  + Defence & process score (100) × 0.30 × 35%
-```
-
-There is no peer-evaluation coefficient — the defence/process portion measures the
-**git history and weekly `DEVLOG.md`** directly, and every student defends their
-own work one-on-one in Week 16.
-
-### Class Handouts 课堂讲义 — `handouts/`
-
-Printable A4 handouts for in-class use: key concepts, code skeletons, vocabulary tables, the lab plan for the day and ruled note space. Bilingual, print-ready (`Cmd+P`). **Week 1** is available now.
+| [`README.md`](projects/capstone/README.md) | brief, topic-selection process, AI-usage policy, deliverables |
+| [`rubric-project.md`](projects/capstone/rubric-project.md) | project rubric — the artefact |
+| [`rubric-defence.md`](projects/capstone/rubric-defence.md) | defence & process rubric — defence, git trace + DEVLOG, retrospective, AI use |
+| [`milestones.md`](projects/capstone/milestones.md) | weekly milestones, one push per week |
+| `templates/` | `DATA.md`, `MODEL_CARD.md`, `RETROSPECTIVE.md`, `DEVLOG.md` |
 
 ### Bundled: MIT 6.S191 (2024) — included in `slides/mit-6s191/`
 
 | File | Lecture | Maps to |
 |---|---|---|
-| `01-deep-learning-basics.pdf` | Intro to Deep Learning | Weeks 5–6 |
-| `02-deep-sequence-modeling.pdf` | Deep Sequence Modeling | Week 10 |
+| `01-deep-learning-basics.pdf` | Intro to Deep Learning | Weeks 2–5 |
+| `02-deep-sequence-modeling.pdf` | Deep Sequence Modeling | Week 8 |
 | `03-deep-computer-vision.pdf` | Deep Computer Vision | Week 7 |
-| `04-deep-generative-modeling.pdf` | Deep Generative Modeling | Week 13 |
-| `05-deep-reinforcement-learning.pdf` | Deep Reinforcement Learning | Week 13 (extension) |
-| `06-new-frontiers.pdf` | New Frontiers | Weeks 13–16 (frontier reading) |
+| `04-deep-generative-modeling.pdf` | Deep Generative Modeling | Weeks 15–16 (frontier reading) |
+| `05-deep-reinforcement-learning.pdf` | Deep Reinforcement Learning | Weeks 15–16 (extension) |
+| `06-new-frontiers.pdf` | New Frontiers | Weeks 15–16 (frontier reading) |
 
 ### On-demand: Stanford CS224n (Spring 2024) — fetched by script
 
 | Lectures | Topic cluster | Maps to |
 |---|---|---|
-| L01–L03 | Word vectors, GloVe, neural net basics | Week 9 |
-| L04–L06, L08 | Dependency parsing, RNNs, attention, **Transformers** | Weeks 10–11 |
-| L09–L12 | Pre-training, prompting & RLHF, evaluation, training | Weeks 11–12 |
-| L14–L19 | Agents, DPO, CNN/TreeRNN, human-centered NLP, deployment, open problems | Weeks 12–13 (extension) |
+| L01–L03 | Word vectors, GloVe, neural net basics | Week 8 |
+| L04–L06, L08 | Dependency parsing, RNNs, attention, **Transformers** | Weeks 8–10 |
+| L09–L12 | Pre-training, prompting & RLHF, evaluation, training | Week 11 |
+| L14–L19 | Agents, DPO, CNN/TreeRNN, human-centered NLP, deployment, open problems | Weeks 12–14 (extension) |
 
 ---
 
@@ -222,18 +221,16 @@ Printable A4 handouts for in-class use: key concepts, code skeletons, vocabulary
 
 This repo grows with the live semester — one week of courseware lands roughly every 7 days:
 
-- [x] **Weeks 1–2** — course intro, environment setup, data handling (all 5 asset types, EN + CN)
 - [x] Curated slide pack: MIT 6.S191 (bundled) + CS224n downloader
-- [x] **All 16 lab handouts** — full lab curriculum published (see `labs/`)
-- [x] **Week 1 class handout** — printable A4, bilingual
-- [x] **Week 3** — ML foundations: paradigms, loss & optimisation, cross-validation, sklearn Pipeline *(deck + lesson plans + textbook chapter)*
-- [ ] **Week 4** — model evaluation: metrics, thresholds, overfitting, Ridge *(next)*
-- [ ] **Weeks 5–8** — deep learning & computer vision module
-- [ ] **Weeks 9–12** — NLP & LLM module (Transformers, RAG)
-- [ ] **Weeks 13–16** — deployment, MLOps, capstone templates
+- [x] **Week 1–6 — module 1 and the first half of module 2** (decks EN+CN, lesson plans, textbook chapters, lab handouts 实验 0–5)
+- [x] Deck generator with zero media files (`scripts/build_deck.py` + `validate_deck.py`)
+- [x] Capstone converted to an **individual** project (brief, rubrics, milestones, templates)
+- [ ] **Week 7 — CNNs & computer vision** (实验 6: CNN classification + confusion-matrix error analysis) *(next)*
+- [ ] **Week 8 — sequence models & text data** (实验 7)
+- [ ] **Weeks 9–12** — transfer learning, Transformers, LLM prompting, RAG
+- [ ] **Weeks 13–16** — deployment, MLOps, responsible AI, capstone acceptance
 - [ ] Starter notebooks for weeks 2–16 (week-01 shipped)
 - [ ] Micro-lesson video series (animated, 1080p)
-- [ ] Assignments ×3 with autograding notebooks
 
 💡 **Want a specific week sooner?** [Open a discussion](https://github.com/klausren/ai-application-development/discussions) — priorities go to what teachers actually ask for.
 
@@ -261,7 +258,7 @@ Instructors: see [Attribution & License](#attribution--license) before reusing a
 - 💬 **Questions & ideas** → [Discussions](https://github.com/klausren/ai-application-development/discussions) — teaching questions welcome, especially "how do you teach X?"
 - 🐛 **Found a typo / broken link / notebook error** → [open an issue](https://github.com/klausren/ai-application-development/issues/new?template=bug_report.md)
 - 🧑‍🏫 **Used this in your own classroom?** → tell us in [Show & Tell](https://github.com/klausren/ai-application-development/discussions/categories/show-and-tell) — real classroom feedback shapes the next weeks
-- 🤝 **Want to contribute?** → read [CONTRIBUTING.md](CONTRIBUTING.md) (PRs for Week 3+ materials are especially welcome)
+- 🤝 **Want to contribute?** → read [CONTRIBUTING.md](CONTRIBUTING.md) (PRs for Week 7+ materials are especially welcome)
 
 ---
 
@@ -300,7 +297,7 @@ If you use these materials in teaching or research, please cite:
 
 | Content | License | Redistribution in this repo |
 |---|---|---|
-| This repo's own materials (syllabus, scripts, README, future lecture notes) | **CC BY-NC-SA 4.0** | — see `LICENSE` |
+| This repo's own materials (syllabus, scripts, README, lecture notes) | **CC BY-NC-SA 4.0** | — see `LICENSE` |
 | MIT 6.S191 slides (2024) | **MIT License** (per the official 6.S191 FAQ) | ✅ bundled in `slides/mit-6s191/` with `LICENSE-MIT.md` |
 | Stanford CS224n slides (2024 Spring) | no explicit open license | ❌ not bundled — fetched from the official source by script |
 
@@ -314,15 +311,27 @@ Full details in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 ## 中文说明
 
-本仓库是《AI 应用开发》课程的教学资源中心，配套大纲与课件包持续更新中。
+本仓库是《AI 应用开发》课程的教学资源中心，配套大纲与课件包持续更新中。课程代码 **52015CC3BV**，开课单位为大连东软信息学院软件学院·软件与大数据技术系，授课对象为软件工程（来华项目）2024 级本科生。
 
-- **课程定位**：大三软件工程专业 · 4 学分 · 64 学时（16 周 × 180 分钟一体课 = 理论 90 min + Lab 75 min + 随堂小测 15 min）
-- **技术栈**：PyTorch 为主线，配合 scikit-learn、Hugging Face Transformers、FastAPI
-- **四大模块**：机器学习基础（W1-4）→ 深度学习与计算机视觉（W5-8）→ NLP 与大语言模型（W9-12）→ AI 应用工程化（W13-16）
-- **课件策略**：不重复造轮子——深度学习部分直接采用 MIT 6.S191 官方课件（已打包入库，MIT 许可），NLP/LLM 部分配套 Stanford CS224n 一键下载脚本（版权原因不入库）
-- **考核方式**：平时作业 ×3（30%）+ 期中团队项目（15%）+ 期末 Capstone（35%）+ 实验与随堂测验（20%），不考闭卷
+- **课程定位**：4 学分 · 64 学时 · 每周一次 180 分钟一体课 = **讲授 90 min + 随堂实验 80 min + 小结 10 min**
+- **技术栈**：PyTorch 为主线，配合 scikit-learn、Hugging Face Transformers，并最终把模型部署成接口
+- **四大模块**：AI 应用开发基础与 PyTorch 入门（W1–4）→ 深度学习核心技术与模型训练（W5–8）→ 现代 AI 应用：迁移学习、大模型与 RAG（W9–12）→ 工程化、部署与综合项目（W13–16）
+- **课件策略**：不重复造轮子——深度学习部分配套 MIT 6.S191 官方课件（已打包入库，MIT 许可），NLP/LLM 部分配套 Stanford CS224n 一键下载脚本（版权原因不入库）
+- **考核方式**：**形成性 50**（出勤与课堂参与 10 + 随堂实验 15 + 阶段评审 15 + AI 协同记录 10）+ **终结性 50**（个人项目成果物），为考查课、**无闭卷笔试**，且大作业是**个人项目**（无同伴评价系数）
 
 详细课程安排见 [`syllabus.md`](syllabus.md)。
+
+### 课程资源导航
+
+| 目录 | 内容 |
+|---|---|
+| [`syllabus.md`](syllabus.md) | 课程大纲（与学校四份官方文档同口径，本仓库的口径源） |
+| `lectures/week-XX/` | 中英双版幻灯片（原生形状，零图片） |
+| `lesson-plans/week-XX/` | 讲授教案与实验教案（中英双版） |
+| `textbook/chapter-XX/` | 双语教材章节（8 节 + 练习） |
+| `labs/week-XX/lab-handout.md` | 实验指导书（实验 0–13） |
+| `projects/capstone/` | 个人大作业：任务书、评分标准、周里程碑、模板 |
+| `outputs/` | 课件中所有实验数字的实测结果（单一真相源） |
 
 ### 关注我 📕
 

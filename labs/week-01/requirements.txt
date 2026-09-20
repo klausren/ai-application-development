@@ -17,7 +17,7 @@ jupyterlab>=4.0
 # Later weeks - install ONLY when the week is announced.
 # Installing everything now makes a 6 GB environment for no reason.
 #
-#   Weeks 5-8   Deep Learning & CV ....... torchvision opencv-python pillow
-#   Weeks 9-12  NLP & LLMs ............... transformers datasets accelerate
-#   Weeks 13-16 AI App Engineering ....... fastapi uvicorn gradio
+#   Weeks 5-8    Module 2 - deep learning core ......... torchvision matplotlib
+#   Weeks 9-12   Module 3 - transfer learning, LLMs & RAG . transformers datasets accelerate
+#   Weeks 13-16  Module 4 - engineering and capstone .... fastapi uvicorn mlflow
 # ---------------------------------------------------------------------------

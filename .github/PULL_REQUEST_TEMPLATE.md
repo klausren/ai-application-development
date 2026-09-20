@@ -14,9 +14,9 @@ Thanks for contributing! Quick checklist before you open this PR:
 - [ ] lectures/ (slide decks)
 - [ ] lesson-plans/
 - [ ] textbook/
-- [ ] lecture-scripts/
-- [ ] labs/ (notebooks, guides)
-- [ ] scripts/ (downloaders, tooling)
+- [ ] labs/ (handouts, notebooks, guides)
+- [ ] projects/ (capstone brief, rubrics, milestones)
+- [ ] scripts/ (deck builder, experiment scripts, downloaders)
 - [ ] README / docs / community files
 - [ ] Other:
 
