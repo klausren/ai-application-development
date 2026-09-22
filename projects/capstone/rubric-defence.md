@@ -1,4 +1,4 @@
-# Defence & Process Rubric · 答辩与过程评分标准（100 分 → 折算 30%）
+# Defence & Process Rubric · 答辩与过程评分标准（100 分 → 个人表现 90 分中占 30%，即 27 分）
 
 > The project rubric grades the artefact. **This one grades you — your defence, your
 > development trace, and how honestly you reported the work.** The artefact lives in

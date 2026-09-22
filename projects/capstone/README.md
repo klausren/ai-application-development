@@ -1,8 +1,8 @@
 # Capstone Project · 期末大作业指导书
 
-> **AI Application Development** · **individual project** · **35% of the final grade**
-> Artefact portion 70% + Defence & process portion 30%
-> 个人项目 · 占期末总评 35% · 作品部分 70% + 答辩与过程部分 30%
+> **AI Application Development** · **individual project** · **50% of the final grade**
+> Summative 100 = Individual performance 90 (artefact 70% + defence & process 30%) + Bonus 10
+> 个人项目 · 占期末总评 50% · 终结性 100 = 个人表现 90（作品 70% + 答辩与过程 30%）+ 加分项 10
 > English with Chinese support · 中英双语
 
 ---
@@ -263,12 +263,18 @@ Submitted by the end of Week 16 — **all ten are yours**:
 
 ---
 
-## 8. How the 35% is calculated · 35 分怎么算
+## 8. How the 50% is calculated · 50 分怎么算
 
-```
-Capstone grade (35 points)
-  = Project score      (out of 100) × 0.70 × 35%     ← the artefact 作品
-  + Defence score      (out of 100) × 0.30 × 35%     ← you, and how you worked 你本人
+终结性考核占课程总评 **50%**，其内部按 100 分量表计 = **个人表现 90 + 加分项 10**：
+
+```text
+Capstone / summative (50 points of the course grade)
+  = Individual performance (90 / 100) × 50%
+  + Bonus                  (10 / 100) × 50%
+
+    Individual performance (90 / 100)
+      = Project score      (out of 100) × 0.70  → 63   ← the artefact 作品
+      + Defence score      (out of 100) × 0.30  → 27   ← you, and how you worked 你本人
 ```
 
 with one modifier:

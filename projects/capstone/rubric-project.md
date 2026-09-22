@@ -1,11 +1,11 @@
-# Project Rubric · 作品评分标准（100 分 → 折算 70%）
+# Project Rubric · 作品评分标准（100 分 → 个人表现 90 分中占 70%，即 63 分）
 
 > Applies to **the artefact you build** — the repo, the model, the interface and the
-> documentation. The other 30% (defence, development trace, retrospective) is in
-> `rubric-defence.md`.
+> documentation. The other 30% of individual performance (defence, development trace,
+> retrospective) is in `rubric-defence.md`.
 >
-> 本表评的是**你做出来的作品**本身：仓库、模型、接口与文档。另外 30%（答辩、开发轨迹、
-> 复盘）见 `rubric-defence.md`。
+> 本表评的是**你做出来的作品**本身：仓库、模型、接口与文档。个人表现的另外 30%（答辩、
+> 开发轨迹、复盘）见 `rubric-defence.md`。
 
 ---
 

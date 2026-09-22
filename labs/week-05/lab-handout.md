@@ -373,7 +373,7 @@ Fill in your own version of the 3 × 3 table in a Markdown cell, answer the exit
 
 Late policy: −10% per day, max 3 days, then 0.
 
-*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (35%). Missing it costs −2 project points there.*
+*Part F (the capstone milestone) is not scored here — it is graded under the Capstone Project (50%). Missing it costs −2 project points there.*
 
 ## 6. Submission · 提交方式
 

@@ -75,9 +75,15 @@ See [`projects/capstone/milestones.md`](projects/capstone/milestones.md).
 | 个人表现 | 本人端到端实现 + 文档 + 开发轨迹（`DEVLOG.md`） | 90 |
 | 加分项 | 超出要求的工作（如额外实验、开源贡献、性能优化） | 10 |
 
-> 具体评分维度与分值见《大作业评分标准》：
-> [`rubric-project.md`](projects/capstone/rubric-project.md)（项目成果物 100 分）与
-> [`rubric-defence.md`](projects/capstone/rubric-defence.md)（答辩 / 开发轨迹 / 复盘 / AI 披露 100 分）。
+> 具体评分维度与分值见《大作业评分标准》。终结性 100 分量表中的**个人表现 90 分**拆成两张
+> 各 100 分的评分表，按 70 / 30 折算：
+>
+> | 评分表 | 权重 | 折合分 |
+> |---|:---:|:---:|
+> | [`rubric-project.md`](projects/capstone/rubric-project.md) — 作品（仓库 / 数据 / 建模 / 评估 / 工程 / 接口 / 演示） | 70% | 63 |
+> | [`rubric-defence.md`](projects/capstone/rubric-defence.md) — 答辩 / 开发轨迹 / 复盘 / AI 使用披露 | 30% | 27 |
+>
+> 另有**加分项 10 分**（课赛融合 / 科创融合成果、软著材料等），加分后总分不超过 100。
 
 ### Capstone 大作业
 
