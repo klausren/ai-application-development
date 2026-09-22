@@ -72,6 +72,11 @@ during the lab; the instructor reviews commits, not promises.
 
 ### 3.1 The process
 
+0. **W1 — read the catalogue first · 先读选题参考库。** [`topic-catalogue.md`](topic-catalogue.md)
+   lists **21 seeds** across five tracks, each with a difficulty badge, a real data lead and a
+   named user. It is a source of leads, not a menu — take the *shape* of a seed and supply your own
+   user. 先读 `topic-catalogue.md`（21 个种子 / 5 个方向 / 标难度 / 附数据线索），
+   取它的**形状**，换成你自己的用户。**照抄种子会在 A 项失分。**
 1. **W1 — brainstorm.** You write **three** candidate topics using the
    [`project-charter-template.md`](project-charter-template.md). Three, not one: the
    first idea is usually unimplementable, and you need fallbacks.
@@ -296,6 +301,7 @@ expectations are in [`milestones.md`](milestones.md).
 
 | File | Use it when | |
 |---|---|---|
+| [`topic-catalogue.md`](topic-catalogue.md) | W1, **before** you brainstorm — 21 seeds, 5 tracks, difficulty + data leads 选题参考库 | 选题参考 |
 | [`project-charter-template.md`](project-charter-template.md) | W1–W2, three copies | 选题提案 |
 | [`project-plan-template.md`](project-plan-template.md) | W1, once | 个人计划与范围 |
 | [`templates/DATA.md`](templates/DATA.md) | W2, updated continuously | 数据文档 |
