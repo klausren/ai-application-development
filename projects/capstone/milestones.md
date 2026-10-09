@@ -21,6 +21,16 @@
 
 **Late penalty:** −2 project points per missed milestone, capped at −20.
 
+> ⚠️ **Scope, effective 2026-10-09 — Weeks 1–4 are superseded.** The W1–W4 milestones were never
+> issued with a deadline anyone acted on, so the −2 penalty does **not** apply to them. Their
+> content is remapped into **W6** (原 W1+W2: proposals + plan, data pipeline) and **W7**
+> (M4: baseline + numeric target). **M8 in W8 and everything from W9 on is unchanged.**
+> See [`PUSH-PLAN-2026F.md`](PUSH-PLAN-2026F.md) §2–§3 and [`START-HERE-W6.md`](START-HERE-W6.md).
+> The 16-week spine below is kept as the official record.
+>
+> 第 1–4 周里程碑**已作废、不追溯扣分**（从未形成有效的到期义务）；内容重映射到 **W6**（原 W1+W2）
+> 与 **W7**（M4）。**M8 及其后不动。** 下表保留为官方记录。
+
 ---
 
 ## Summary table 总表
@@ -49,7 +59,7 @@
 ## W1 · Three ideas + project plan
 
 **Push:** `PROJECT_PLAN.md` + `proposals/01.md`, `02.md`, `03.md` + a stub `DEVLOG.md`
-(one entry per week from W1 onward — start the habit now, while there is almost
+(one entry per week from W6 onward — start the habit now, while there is almost
 nothing to write).
 
 **From this week's lab (实验 0):** you just built an environment, verified the GPU, and pinned
@@ -67,7 +77,7 @@ commit today, and the same three reproducibility facts written down in the proje
 unimplementable — that is the point.
 
 **Trap:** "I'll do something with medical images." Which images? From whom? Under what
-licence? If you cannot answer in W1, you will not have data in W2.
+licence? If you cannot answer in W6, you will not have data in W7.
 
 ---
 
@@ -302,7 +312,7 @@ and a tracked run.
 ## W15 · Responsible AI & documentation freeze
 
 **Push:** `MODEL_CARD.md`, the completed ethics & safety review form, a complete `README.md`,
-`AI_USE.md`, and a complete `DEVLOG.md` (W1–W15).
+`AI_USE.md`, and a complete `DEVLOG.md` (W6–W15).
 
 **From this week's seminar (CU15):** fairness, explainability and safety — the same questions the
 review form asks about your own system. Expect at least one honest "we do not know" in there;
@@ -338,4 +348,5 @@ For each project, every week, three questions:
 3. **Is the scope still survivable?** (is the cut list being honoured, or is it being quietly ignored? — silent scope creep is the most common W14 cause of failure)
 
 Module milestone reviews land in **W4 / W8 / W12 / W16** — 4 points each, 15 points total
-inside the formative assessment (阶段评审 15 分).
+inside the formative assessment (阶段评审 15 分). **M4 is delivered in W7** this run (see the scope
+note at the top); M8 / M12 / M16 keep their official weeks.

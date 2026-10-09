@@ -1,10 +1,10 @@
 # MODEL_CARD.md · 模型卡模板
 
-> Start after Week 4 (baseline), update through Week 15. Graded under project rubric §C and §D.
+> Start after Week 7 (baseline), update through Week 15. Graded under project rubric §C and §D.
 > Write it for a reader who is smart but does not know ML. **"Limitations" is not a
 > formality** — it is where the grade is decided.
 >
-> W4 基线出来后开始写，持续更新到 W15。写给「聪明但不懂机器学习」的人看。
+> W7 基线出来后开始写，持续更新到 W15。写给「聪明但不懂机器学习」的人看。
 > **「局限性」不是走过场** —— 分数主要在这里拉开。
 
 ---
@@ -45,9 +45,9 @@
 | Model | Metric | Δ vs previous | Notes |
 |---|---|---|---|
 | Dumb baseline | | — | |
-| Simple baseline (W4) | | | |
-| v1 (W5) | | | |
-| + change X (W6 ablation) | | | |
+| Simple baseline (W7) | | | |
+| v1 (W8) | | | |
+| + change X (W8 ablation) | | | |
 | **Final** | | | |
 
 *Report on the **held-out test set**, touched once. Note the confidence interval or

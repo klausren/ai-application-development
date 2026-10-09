@@ -15,19 +15,19 @@
 >
 > 个人开发日志。我写给我自己，也写给评审人——他们靠这个判断项目是不是在真正推进。
 
-## W1 (2026-MM-DD)
+## W6 (2026-MM-DD)
 - Did:
 - Result:
 - Next:
 - Blocked:
 
-## W2 (2026-MM-DD)
+## W7 (2026-MM-DD)
 - Did:
 - Result:
 - Next:
 - Blocked:
 
-## W3 (2026-MM-DD)
+## W8 (2026-MM-DD)
 ...
 ```
 

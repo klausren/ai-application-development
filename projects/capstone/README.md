@@ -54,11 +54,8 @@ Not "did you use a Transformer". The grade rewards:
 
 | Week | Milestone | Due |
 |:---:|---|---|
-| 1 | Three topic ideas + `PROJECT_PLAN.md` | End of W1 lab |
-| 2 | Topic approved by instructor; dataset verified & profiled | End of W2 lab |
-| 3 | Repo scaffolded; data pipeline + first baseline | End of W3 lab |
-| 4 | Baseline model + metrics + numeric target locked | End of W4 lab |
-| 5–7 | Modelling iterations (see your track) | Weekly |
+| **6** | Three topic ideas + `PROJECT_PLAN.md` + `DATA.md` v0 + `DEVLOG.md` + first working `src/data/` *(supersedes the old W1–W2 milestones)* | End of **W6** lab |
+| **7** | **M4 · 4 pts** *(moved from W4)* — baseline model + metrics + numeric target locked | End of **W7** lab |
 | **8** | **Midterm checkpoint — working prototype + `DATA.md` + 3-slide deck** | **W8 demo** |
 | 9–12 | Representation / architecture improvements | Weekly |
 | 13 | Usable interface (CLI / Gradio / API) | End of W13 |
@@ -76,19 +73,19 @@ during the lab; the instructor reviews commits, not promises.
 
 ### 3.1 The process
 
-0. **W1 — read the catalogue first · 先读选题参考库。** [`topic-catalogue.md`](topic-catalogue.md)
+0. **Before W6 — read the catalogue first · 先读选题参考库。** [`topic-catalogue.md`](topic-catalogue.md)
    lists **21 seeds** across five tracks, each with a difficulty badge, a real data lead and a
    named user. It is a source of leads, not a menu — take the *shape* of a seed and supply your own
    user. 先读 `topic-catalogue.md`（21 个种子 / 5 个方向 / 标难度 / 附数据线索），
    取它的**形状**，换成你自己的用户。**照抄种子会在 A 项失分。**
-1. **W1 — brainstorm.** You write **three** candidate topics using the
+1. **Before W6 — brainstorm.** You write **three** candidate topics using the
    [`project-charter-template.md`](project-charter-template.md). Three, not one: the
    first idea is usually unimplementable, and you need fallbacks.
-2. **W2 — 15-minute meeting with the instructor.** Bring the three charters. The
+2. **W6 — 15-minute in-class sign-off.** Bring the three charters. The
    instructor will point at the one that is feasible and tell you why the others are
-   traps. You leave the meeting with **one approved topic, a stated scope, and a cut
+   traps. You leave the sign-off with **one approved topic, a stated scope, and a cut
    list** (the things you have agreed *not* to build).
-3. **W2–W3 — dataset verification.** Before any modelling, prove the data exists and is
+3. **W6–W7 — dataset verification.** Before any modelling, prove the data exists and is
    accessible. A topic without data is not a topic.
 
 ### 3.2 Hard requirements · 硬性要求
@@ -117,17 +114,17 @@ A topic is only acceptable if all six are true:
 ### 3.4 Topics that will be rejected · 会被打回的选题
 
 - "I will train a model on ImageNet" — no engineering, no problem, no data work.
-- Anything requiring data you do not have and cannot get by W3.
+- Anything requiring data you do not have and cannot get by W7.
 - Anything requiring labelling 100 000 samples by hand in one semester.
 - A Kaggle competition where the leaderboard is the goal and the code is somebody else's notebook.
 - Anything involving scraping personal data, faces of real people, or medical records without an explicit plan for consent and deletion.
-- Anything that needs a GPU cluster you do not have. Check your compute before W2.
+- Anything that needs a GPU cluster you do not have. Check your compute before W6.
 
 ### 3.5 Scope: MVP and stretch · 范围：必做与加分
 
 You are one person with roughly **4–6 hours a week** alongside other courses. The brief
 is therefore split in two. **The MVP is what passing looks like; the stretch is what
-excellence looks like.** Agree the split with the instructor in W2 and write it into
+excellence looks like.** Agree the split with the instructor at the W6 sign-off and write it into
 your `PROJECT_PLAN.md`.
 
 | Layer | Contents | Where it is graded |
@@ -138,7 +135,7 @@ your `PROJECT_PLAN.md`.
 **The cut list is part of the plan, not a confession.** A project that ships the MVP and
 documents three things it deliberately did not build scores higher than a project that
 half-builds seven things. Scope collapse in W14 is the most common way individual
-projects fail — plan the cut in W2, not in W14.
+projects fail — plan the cut in W6, not in W14.
 
 ---
 
@@ -164,7 +161,7 @@ area on purpose.
 | Mechanism | When | Replaces |
 |---|---|---|
 | **`DEVLOG.md`, one entry per week** | every week, committed with the milestone | the "is anyone invisible?" check — it makes your own progress visible to you and to me |
-| **Instructor review #1** | W4 — metric choice and numeric target | a second opinion before you commit to a metric |
+| **Instructor review #1** | W7 — metric choice and numeric target | a second opinion before you commit to a metric |
 | **Instructor review #2 ★** | W8 — midterm checkpoint demo | the biggest course-correction point of the semester |
 | **Instructor review #3** | W12 — scope check and cut-list revision | the "is this still survivable?" conversation |
 | **Classmate demo feedback (optional)** | W16 demo day | peer perspective; not graded, but the written feedback is yours to keep |
@@ -191,7 +188,7 @@ Weekly `DEVLOG.md` entry — three lines, not an essay:
 
 ### 4.3 Your plan document · 计划文档
 
-Fill in [`project-plan-template.md`](project-plan-template.md) in Week 1 and commit it.
+Fill in [`project-plan-template.md`](project-plan-template.md) before the W6 lab and commit it.
 It is the conversation you would otherwise have with yourself in Week 14 at midnight:
 
 - Your weekly working slot (repeating, realistic, in your calendar)
@@ -212,7 +209,7 @@ your-project/
 ├── requirements.txt       # or environment.yml — pinned versions
 ├── DATA.md                # provenance, licence, size, splits, known flaws  [template]
 ├── MODEL_CARD.md          # intended use, metrics, limitations, failure modes  [template]
-├── DEVLOG.md              # one entry per week, W1–W16                      (see §4.2)
+├── DEVLOG.md              # one entry per week, W6–W16                      (see §4.2)
 ├── RETROSPECTIVE.md       # what worked, what didn't, what you'd do differently
 ├── AI_USE.md              # which AI tools you used and for what  (see §6)
 ├── src/
@@ -268,7 +265,7 @@ Submitted by the end of Week 16 — **all ten are yours**:
 | 7 | 5-minute demo + 6-slide deck | Demo Day |
 | 8 | `RETROSPECTIVE.md` | file |
 | 9 | `AI_USE.md` | file |
-| 10 | Weekly milestone commits + `DEVLOG.md` entries, W1–W16 | git history |
+| 10 | Weekly milestone commits + `DEVLOG.md` entries, W6–W16 | git history |
 
 ---
 
@@ -309,14 +306,14 @@ expectations are in [`milestones.md`](milestones.md).
 | [`PUSH-PLAN-2026F.md`](PUSH-PLAN-2026F.md) | instructor only — compressed timeline, in-class sign-off, late policy 教师用推动方案 | 教师用 |
 | [`review-log-W6.md`](review-log-W6.md) · [`.docx`](review-log-W6.docx) | instructor only — the W6 15-minute sign-off sheet; fill it in the room 立项审定记录表 | 教师用 · W6 · 有打印版 |
 | [`standup-log.md`](standup-log.md) · [`.docx`](standup-log.docx) | instructor only — the weekly 60-second standup log, W7 → W16 每周站会记录表 | 教师用 · 每周 · 有打印版 |
-| [`立项卡-2026F.csv`](立项卡-2026F.csv) | paste into the shared online sheet so students can see each other's status 共享进度看板 | 教师用 · 共享 |
-| [`topic-catalogue.md`](topic-catalogue.md) | W1, **before** you brainstorm — 21 seeds, 5 tracks, difficulty + data leads 选题参考库 | 选题参考 |
-| [`project-charter-template.md`](project-charter-template.md) | W1–W2, three copies | 选题提案 |
-| [`project-plan-template.md`](project-plan-template.md) | W1, once | 个人计划与范围 |
-| [`templates/DATA.md`](templates/DATA.md) | W2, updated continuously | 数据文档 |
-| [`templates/MODEL_CARD.md`](templates/MODEL_CARD.md) | W4 onward | 模型卡 |
+| [`立项卡-2026F.csv`](立项卡-2026F.csv) | offline snapshot of the online sheet's 「进度看板」 page — students edit the sheet, not this file 共享进度看板（离线快照） | 教师用 · 共享 |
+| [`topic-catalogue.md`](topic-catalogue.md) | Before W6, **before** you brainstorm — 21 seeds, 5 tracks, difficulty + data leads 选题参考库 | 选题参考 |
+| [`project-charter-template.md`](project-charter-template.md) | Before W6, three copies | 选题提案 |
+| [`project-plan-template.md`](project-plan-template.md) | Before W6, once | 个人计划与范围 |
+| [`templates/DATA.md`](templates/DATA.md) | W6, updated continuously | 数据文档 |
+| [`templates/MODEL_CARD.md`](templates/MODEL_CARD.md) | W7 onward | 模型卡 |
 | [`templates/RETROSPECTIVE.md`](templates/RETROSPECTIVE.md) | W16 | 个人复盘 |
-| [`templates/DEVLOG.md`](templates/DEVLOG.md) | W1 onward, weekly | 每周开发日志 |
+| [`templates/DEVLOG.md`](templates/DEVLOG.md) | W6 onward, weekly | 每周开发日志 |
 
 **打印版与分发 · printable copies.** `START-HERE-W6.docx`、`review-log-W6.docx`、`standup-log.docx`
 由同名 `.md` 生成（`scripts/md_to_docx.py`），内容逐行一致。**发给学生、带进教室的是 `.docx`**，

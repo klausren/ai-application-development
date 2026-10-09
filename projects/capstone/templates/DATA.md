@@ -1,10 +1,10 @@
 # DATA.md · 数据文档模板
 
-> Start this in Week 2, update it every week. Graded under project rubric §B (18 pts).
+> Start this in Week 6, update it every week. Graded under project rubric §B (18 pts).
 > **The "Known flaws" section is the one graders read first** — a dataset described
 > without flaws is a dataset you have not looked at.
 >
-> W2 起填写，每周更新。**「已知缺陷」是评分人最先看的一节** —— 一份没有缺陷描述的数据
+> W6 起填写，每周更新。**「已知缺陷」是评分人最先看的一节** —— 一份没有缺陷描述的数据
 > 说明，只能说明你还没认真看过数据。
 
 ---

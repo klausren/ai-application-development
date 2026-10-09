@@ -1,10 +1,10 @@
 # Project Plan · 个人项目计划
 
-> Fill in during the Week 1 lab, commit it, and **mean it**. This is the conversation
+> Fill in before the W6 lab, commit it, and **mean it**. This is the conversation
 > you would otherwise have with yourself in Week 14 at midnight — have it now, when
 > it is cheap.
 >
-> W1 实验课上写完并提交。这份文件的意义在于：把尴尬和重要的对话放在第一周（那时还便宜），
+> W6 课前写完并提交。这份文件的意义在于：把尴尬和重要的对话放在第一周（那时还便宜），
 > 而不是第十四周（那时已经很贵）。所有问题都要**你自己回答**——这恰恰是个人项目最难的
 > 地方：没有队友逼你诚实。
 
@@ -120,7 +120,7 @@ no one is watching.
 
 ---
 
-## 8. Instructor sign-off · 教师意见（W2 面談后填写）
+## 8. Instructor sign-off · 教师意见（W6 课内审定后填写）
 
 ☐ **Approved** ☐ Approved with changes: ______________ ☐ Topic rejected — use proposal __
 

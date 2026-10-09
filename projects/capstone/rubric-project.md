@@ -37,13 +37,13 @@ and explained beats a bigger one that is half-built — every time.
 
 | Band | Pts | Description |
 |---|:---:|---|
-| **Excellent** | 11–12 | A specific user and a specific pain. Success is defined with a **numeric target agreed before modelling** (e.g. "≥ 0.80 macro-F1 on held-out set, < 300 ms per request"). Scope boundaries are explicit: what the system does *not* do. There is evidence of talking to a real user or of a well-constructed proxy user. The cut list from W2 matches what was actually built. |
+| **Excellent** | 11–12 | A specific user and a specific pain. Success is defined with a **numeric target agreed before modelling** (e.g. "≥ 0.80 macro-F1 on held-out set, < 300 ms per request"). Scope boundaries are explicit: what the system does *not* do. There is evidence of talking to a real user or of a well-constructed proxy user. The cut list from W6 matches what was actually built. |
 | **Good** | 9–10 | Clear problem and user, quantitative success criterion present, but the boundary between in-scope and out-of-scope is fuzzy, or the target was written after seeing results. |
 | **Adequate** | 7–8 | Problem is understandable, but success is defined only as "high accuracy" or "works well". No user beyond "people who need this". |
 | **Insufficient** | 0–6 | No stated user or success metric. The README opens with the model architecture instead of the problem. "I wanted to learn CNNs" is not a problem statement. |
 
 **Common trap:** writing the success metric *after* you see the results. The metric is a
-promise you make in W2; changing it later is allowed only if you document why.
+promise you make in W6; changing it later is allowed only if you document why.
 
 ---
 

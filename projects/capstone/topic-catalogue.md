@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | **Who this is for** | 2026-2027 学年第 1 学期 · `52015CC3BV` AI Application Development · 留软工 24401 · 约 50 人 |
-| **When you use it** | Week 1, *before* you write `proposals/01.md … 03.md` |
+| **When you use it** | Before W6, *before* you write `proposals/01.md … 03.md` |
 | **What it does not do** | It does not choose for you, and it does not replace your three proposals. |
 | **Companion files** | [`project-charter-template.md`](project-charter-template.md) · [`milestones.md`](milestones.md) · [`rubric-project.md`](rubric-project.md) |
 
@@ -19,7 +19,7 @@
 
 **① Copying a seed verbatim loses you marks.** Dimension A (12 pts) asks for *a specific user and
 a specific pain*. If your canteen-recognition proposal says "visually impaired students" but you
-never talked to one, the instructor will find out in the W2 meeting. Take the **shape** of a seed;
+never talked to one, the instructor will find out in the W6 sign-off. Take the **shape** of a seed;
 supply **your own** user, your own interview, your own numbers.
 **逐字照抄种子 = A 项直接掉分。**「目标用户」必须是你能说出访谈对象的人。
 
@@ -33,7 +33,7 @@ supply **your own** user, your own interview, your own numbers.
 
 **③ Your three proposals must be three different bets.** Do not submit "image classification",
 "image classification with a different dataset", "image classification but bigger". A good trio:
-one vision (or audio) + one text + one tabular. That way, when W2 kills your first choice, you
+one vision (or audio) + one text + one tabular. That way, when the W6 sign-off kills your first choice, you
 still have two live options.
 **三份提案必须是三个方向**，理想组合 = 一个视觉/音频 + 一个文本 + 一个表格。
 
@@ -54,7 +54,7 @@ here means: *one person can finish it in 16 weeks and still write an honest test
 |:---:|---|---|
 | **★☆☆** | Data ready-made, standard task, one improvement axis. · 数据现成、任务标准、一个改进轴。 | Fast to start — but **easy projects score low on C and D** unless you buy depth with rigour (better splits, better failure analysis), not with a bigger model. |
 | **★★☆** | **The recommended band.** Data ready-made or self-collectable, 1–2 improvement axes, a clear baseline, and a failure mode you can actually analyse. · **推荐区间。** | Normal. This is what the brief is written for. |
-| **★★★** | Requires a self-built dataset, external annotation, or designing the *evaluation* itself. · 需自建数据集／外部标注，或评价方案本身要设计。 | Doable, but **you must have the data in hand by W2** and your cut list must be written in W1. |
+| **★★★** | Requires a self-built dataset, external annotation, or designing the *evaluation* itself. · 需自建数据集／外部标注，或评价方案本身要设计。 | Doable, but **you must have the data in hand by W6** and your cut list must be written in W6. |
 
 **Distribution of the 21 seeds:** ★☆☆ 3 · **★★☆ 13** · ★★★ 5. Thirteen of twenty-one sit in the
 moderate band — that is deliberate.
@@ -150,7 +150,7 @@ paste the source link yourself** · `[?]` licence unclear or research-only → t
 | **Dumb baseline** | Always predict "other" (majority class) ≈ 33% |
 | **Metric & target** | macro-F1 ≥ 0.75 (4 classes, imbalanced) **＋** P95 latency < 300 ms on phone-sized input |
 | **Spine fit** | W7 CNN → W9 fine-tune → W10 backbone swap → W12 abstention → W13 serving |
-| **Top risk** | 自采照片背景单一（都在白墙前）→ 现场照片分布不一致。**在 W3 就补拍 150 张"真实场景"照专门做域外测试**。 |
+| **Top risk** | 自采照片背景单一（都在白墙前）→ 现场照片分布不一致。**在 W7 就补拍 150 张"真实场景"照专门做域外测试**。 |
 | **Out of scope** | 不做语音播报；不做投放点导航；不做有害垃圾分类细则 |
 | **Stretch** | 量化导出 + 部署 URL；对不确定样本返回"不确定，请询问楼管" |
 
@@ -182,7 +182,7 @@ paste the source link yourself** · `[?]` licence unclear or research-only → t
 | **Dumb baseline** | Always output the middle of the range (or 7-segment template matching) — report its MAE |
 | **Metric & target** | MAE ≤ 2% of full scale **and** 完全正确率 ≥ 0.85（两个数字，因为"接近"和"正确"是两件事） |
 | **Spine fit** | W7 CNN regression → W8 sequence (CRNN) → W10 attention → W12 confidence threshold |
-| **Top risk** | 数据要自己造 → 必须在 W1 就拍完第一批 300 张，否则换 V1/V2 |
+| **Top risk** | 数据要自己造 → 必须在 W6 就拍完第一批 300 张，否则换 V1/V2 |
 | **Out of scope** | 不做实时视频流；不做跨表数据关联；不做读数入库 |
 | **Stretch** | 低置信度样本返回"看不清，请重拍"并记录拒识率 |
 
@@ -481,7 +481,7 @@ paste the source link yourself** · `[?]` licence unclear or research-only → t
 | **Dumb baseline** | 每 200 字切一段、句末统一加句号（**真的不比它差多少，先报它的分数**） |
 | **Metric & target** | 分段边界 F1 ≥ 0.70 **＋** 标点准确率 ≥ 0.85（人工评 30 段；**评测集由你自己标注 30 段，这本身是交付物**） |
 | **Spine fit** | W8 序列标注 → W10 Transformer → W11 LLM 后处理对照 → W12 失效分析 |
-| **Top risk** | 没有黄金分段。**先在 W3 手工分 30 段**，否则到 W12 你无法证明任何数字。 |
+| **Top risk** | 没有黄金分段。**先在 W7 手工分 30 段**，否则到 W12 你无法证明任何数字。 |
 | **Out of scope** | 不做实时字幕；不做翻译；不做说话人分离 |
 | **Stretch** | 对照"LLM 后处理"与"小模型序列标注"两条路线，把成本与时延也报出来 |
 
@@ -510,7 +510,7 @@ paste the source link yourself** · `[?]` licence unclear or research-only → t
 | **"Train a model on ImageNet"** | 无用户、无问题、无数据工作。README §3.4 明确打回。 | 换成上述任一种子，把"用户"两个字补上。 |
 | **人脸 / 声纹 / 步态识别考勤** | README §3.4 明确打回：真实人脸、生物特征、无同意方案。 | 换 **A4 异常声检测**——同样解决"夜间安全"，但**不采集人脸与语音内容**，且隐私论证本身就是加分点。 |
 | **"做一个疾病诊断 AI"** | 医学影像需伦理审查与授权数据，本课程无此通道。 | 换 V2 植物病害：**同一个技术骨架（细粒度图像分类 + 域外测试）**，数据合规、还有现成的"已知缺陷"可写。 |
-| **中文谣言/假新闻检测（CHEF、THUNLP 等）** | CHEF 仓库 **[?] 未声明开源许可**；这类语料多数许可不明 → 直接踩 README §3.4「无许可」红线。 | 想保留任务形态，就换 **T2/T4**（有明确许可或自建 + 写清采集同意）；把"许可不明导致换题"这件事写进 W1 的 `DEVLOG.md`——它是一段真实的过程记录。 |
+| **中文谣言/假新闻检测（CHEF、THUNLP 等）** | CHEF 仓库 **[?] 未声明开源许可**；这类语料多数许可不明 → 直接踩 README §3.4「无许可」红线。 | 想保留任务形态，就换 **T2/T4**（有明确许可或自建 + 写清采集同意）；把"许可不明导致换题"这件事写进 W6 的 `DEVLOG.md`——它是一段真实的过程记录。 |
 | **"用大模型做一个聊天机器人"** | 无法评价（没有对错标准），D 项直接垮掉。 | 加三个约束：**检索 + 引用 + 可拒答** → 立刻变成 C1，评测集也自然产生了。 |
 | **爬取某网站的评论/岗位数据** | 违反站点条款或 `robots.txt`，且许可无法写进 `DATA.md`。 | 先看条款；不行就改用公开数据集，或自采（你自己生成的数据许可最清楚）。**T3 用的是学校官网公开通知，来源可写、可引用。** |
 | **钢材表面缺陷（照抄 `milestones.md` 的示例）** | ① 撞车率极高（每届都有人选）② NEU-DET **[?] 无明确开源许可**。 | 若真要选：**必须**拿到自己的产线照片，或改用 **D1**（课程自带的表格版，零许可风险），并在提案里说明数据来源差异。 |
@@ -523,7 +523,7 @@ paste the source link yourself** · `[?]` licence unclear or research-only → t
 ## 6. Dataset leads · 数据集线索
 
 **Hard rule before you use this table:** a licence claim in this table is a *lead*, not a fact.
-Your `DATA.md` must contain **the licence name + the URL where you read it**. In W2 the instructor
+Your `DATA.md` must contain **the licence name + the URL where you read it**. In W6 the instructor
 will spot-check three of them at random.
 
 | Dataset | Task | Size | Licence (as declared) | Get it | Verified? |
@@ -532,7 +532,7 @@ will spot-check three of them at random.
 | OULAD | tabular / learning analytics | 32 593 students | **CC BY 4.0** | analyse.kmi.open.ac.uk/open_dataset · UCI 349 | ✅ |
 | PlantVillage | image, 38 classes | 54 303 | **CC0 1.0** | `spMohanty/PlantVillage-Dataset` · Kaggle mirrors | ✅ |
 | TrashNet | image, 6 classes | 2 527 | repo **MIT** (code); dataset per citation request | `github.com/garythung/trashnet` | ✅ |
-| Food-101 | image, 101 classes | 101 000 | **the official page states no licence** — mirrors claim CC BY 4.0 | ETH `data.vision.ee.ethz.ch/cvl/food-101` | ❌ |
+| Food-101 | image, 101 classes | 101 000 | **licence unknown** — official page states none; ETH's HF card says `unknown`; mirrors claim CC BY 4.0 | ETH `data.vision.ee.ethz.ch/cvl/food-101` | ❌ |
 | CLINC150 | intent classification | 23 700 | CC BY 3.0 | `github.com/clinc/oos-eval` | ⚠️ |
 | Banking77 | intent classification | 13 083 | CC BY 4.0 | HF `PolyAI/banking77` | ⚠️ |
 | SQuAD 2.0 | extractive QA | 150 000 | CC BY-SA 4.0 | `rajpurkar.github.io/SQuAD-explorer` | ⚠️ |
@@ -552,16 +552,26 @@ will spot-check three of them at random.
 
 > **A live example of why "a mirror is not a source".** This table originally listed Food-101 as
 > CC BY 4.0, because that is what several dataset mirrors (including Hugging Face and Kaggle
-> re-uploads) declare. We then opened the **official** ETH page: it gives a citation format and a
-> download link, and **no licence at all**. Same dataset, two answers — and only one of them is the
-> source. This is exactly the check dimension B (18 pts) is asking you to perform, and it is why
-> "公开数据" is not an acceptable answer in the licence box.
-> **这就是为什么「镜像站写的许可」不算许可。** 本表初稿把 Food-101 标成 CC BY 4.0（因为多个镜像站
-> 这么写），打开 ETH 官方页后发现**官方根本没给许可**。同一个数据集两个答案，只有一个算数。
+> re-uploads) declare. Checked against the sources themselves on **2026-10-09**:
 >
-> **If you use Food-101 anyway**, note two things in `DATA.md`: (a) the licence is not stated at the
-> source, so say so honestly and cite the paper; (b) the authors state the 750 training images per
-> class **were deliberately not cleaned** and contain label noise — an ideal "known flaw" to write up.
+> | Where you look | What it says |
+> |---|---|
+> | ETH landing page | a citation format and a download link — **no licence** |
+> | ETH's own dataset card on Hugging Face (`ethz/food101`) | **`license: unknown`** |
+> | mirrors / re-uploads | "CC BY 4.0" — supported by neither of the above |
+> | the HF `datasets` loader script | carries a *LICENSE AGREEMENT* text naming Foodspotting and "scientific fair use" — but that text is **not on the landing page** |
+>
+> Same dataset, four answers — and only the first two are the source. **The licence is unknown:
+> treat it as a risk.** This is exactly the check dimension B (18 pts) is asking you to perform,
+> and it is why "公开数据" is not an acceptable answer in the licence box.
+> **这就是为什么「镜像站写的许可」不算许可。** 本表初稿把 Food-101 标成 CC BY 4.0（因为多个镜像站
+> 这么写）；2026-10-09 逐处核对：ETH 官方页**没写许可**，ETH 自己的数据集卡写的是
+> **`license: unknown`**。同一个数据集四个答案，只有前两个算数——**许可未知，按风险处理**。
+>
+> **If you use Food-101 anyway**, note two things in `DATA.md`: (a) the licence is unknown at the
+> source — say so honestly instead of picking a name you found on a mirror, and keep it out of
+> anything you republish; (b) the authors state the 750 training images per class **were
+> deliberately not cleaned** and contain label noise — an ideal "known flaw" to write up.
 
 **Getting datasets from inside China · 校内网络获取通道**
 
@@ -574,7 +584,7 @@ will spot-check three of them at random.
 
 ---
 
-## 7. Your Week-1 checklist · 第 1 周动作清单
+## 7. Your Week-6 checklist · 第 6 周动作清单
 
 Do these in order. The last three are the milestone.
 
@@ -587,9 +597,9 @@ Do these in order. The last three are the milestone.
 - [ ] Write `PROJECT_PLAN.md`: weekly slot, MVP vs stretch, three risks, **the cut list**. 写下计划与砍单。
 - [ ] Write `DEVLOG.md` v0 — one entry, even if it says "spent the lab reading a topic list". 建 `DEVLOG.md`。
 
-**What the instructor checks at the end of the W1 lab:** three genuinely different proposals,
+**What the instructor checks at the W6 sign-off:** three genuinely different proposals,
 a plan with a realistic weekly slot, and a cut list. Nothing else — but nothing less.
-**W1 实验课结束时教师只查三件事**：三份真正不同的提案、一个现实的每周时间槽、一份砍单。
+**W6 课内审定后教师只查三件事**：三份真正不同的提案、一个现实的每周时间槽、一份砍单。
 
 ---
 
