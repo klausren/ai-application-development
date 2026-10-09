@@ -48,6 +48,10 @@ Not "did you use a Transformer". The grade rewards:
 
 ## 2. Timeline · 时间线
 
+> ⭐ **Starting in Week 6 the clock restarts.** The W1–W4 milestones are not penalised, M4 moves
+> to W7, and M8 does not move. Read [`START-HERE-W6.md`](START-HERE-W6.md) first — it is the
+> one-page version of what is due and when. 自第 6 周重新起算；先读 `START-HERE-W6.md`。
+
 | Week | Milestone | Due |
 |:---:|---|---|
 | 1 | Three topic ideas + `PROJECT_PLAN.md` | End of W1 lab |
@@ -301,6 +305,11 @@ expectations are in [`milestones.md`](milestones.md).
 
 | File | Use it when | |
 |---|---|---|
+| [`START-HERE-W6.md`](START-HERE-W6.md) · [`.docx`](START-HERE-W6.docx) | **W6 — read this first.** What is due, when, and how it is collected 启动一页纸 | 本周必读 · 有打印版 |
+| [`PUSH-PLAN-2026F.md`](PUSH-PLAN-2026F.md) | instructor only — compressed timeline, in-class sign-off, late policy 教师用推动方案 | 教师用 |
+| [`review-log-W6.md`](review-log-W6.md) · [`.docx`](review-log-W6.docx) | instructor only — the W6 15-minute sign-off sheet; fill it in the room 立项审定记录表 | 教师用 · W6 · 有打印版 |
+| [`standup-log.md`](standup-log.md) · [`.docx`](standup-log.docx) | instructor only — the weekly 60-second standup log, W7 → W16 每周站会记录表 | 教师用 · 每周 · 有打印版 |
+| [`立项卡-2026F.csv`](立项卡-2026F.csv) | paste into the shared online sheet so students can see each other's status 共享进度看板 | 教师用 · 共享 |
 | [`topic-catalogue.md`](topic-catalogue.md) | W1, **before** you brainstorm — 21 seeds, 5 tracks, difficulty + data leads 选题参考库 | 选题参考 |
 | [`project-charter-template.md`](project-charter-template.md) | W1–W2, three copies | 选题提案 |
 | [`project-plan-template.md`](project-plan-template.md) | W1, once | 个人计划与范围 |
@@ -308,3 +317,12 @@ expectations are in [`milestones.md`](milestones.md).
 | [`templates/MODEL_CARD.md`](templates/MODEL_CARD.md) | W4 onward | 模型卡 |
 | [`templates/RETROSPECTIVE.md`](templates/RETROSPECTIVE.md) | W16 | 个人复盘 |
 | [`templates/DEVLOG.md`](templates/DEVLOG.md) | W1 onward, weekly | 每周开发日志 |
+
+**打印版与分发 · printable copies.** `START-HERE-W6.docx`、`review-log-W6.docx`、`standup-log.docx`
+由同名 `.md` 生成（`scripts/md_to_docx.py`），内容逐行一致。**发给学生、带进教室的是 `.docx`**，
+`.md` 只用于版本管理与在线浏览（前者在 W6 课后才发；后两者是教师用，不发给学生）。
+要改内容请改 `.md` 再重跑转换脚本——直接编辑 `.docx` 会在下次转换时被覆盖。
+
+> ⚠️ **表单里的填空线一律写成全角下划线 `＿`，且与前面的中文标签之间隔一个全角空格。**
+> 转换引擎会把「中文＋冒号＋连续 `_ ＿ — -`」误判成 Word 表单域，**删掉填空线并吞掉同行其余文字**；
+> `md_to_docx.py` 的校验会拦住这种写法，但根源是源码本身。见 `scripts/md_to_docx.py` §3a。
