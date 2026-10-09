@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 08 章 · 模块 2 · 第 8 周</div>
+  <h1>序列模型与文本数据处理</h1>
+  <p class="overview">第 7 章选了一个架构，并算清了它的代价。这一章讲的是任何文本模型底下那套管线，以及藏在管手里的一个 bug——它几乎从不声张。任务小到可以拿在手里：给一段英文段落，判断它出自本课程的第几周（6 分类）。语料是本课程自有的第 1–6 周材料，748 段，在 262 处清掉了周次标识，使任务不是一眼可解，全程零下载、零第三方许可。本周的主线不是“这个 LSTM 得分高”——它并不高。主线是：一行决定 <code class="inline">(B, T, 96)</code> 张量如何压成 <code class="inline">(B, 96)</code> 向量的代码，把结果从 <strong>0.2407</strong> 拉到 <strong>0.5027</strong>，差距 <strong>0.2620</strong>，而其余一切保持不变。沿途本章量化了掩码的价值（<strong>+11.0 个点</strong>），说明最差那一臂的宏 F1（<strong>0.0711</strong>）为何<em>低于</em> 1/6 的随机基线，并得出本周最诚实的结论：当训练段只有 <strong>523</strong> 个时，真正的瓶颈是数据，于是第 6 周有效的正则化，在这里反而把成绩从 <strong>0.5027</strong> 拉低到 <strong>0.4672</strong>。同一种手段，相反的答案，因为瓶颈换了。</p>
+</div>
+
+<!-- ========== 8.1 ========== -->
+<div class="section">
+  <h2>8.1 从文本到张量：完整链路</h2>
+  <p><code class="inline">nn.Embedding</code> 是一张以整数为下标的查表。循环层在第 <em>t</em> 步消费一个整数，并从这张表里读出一行。两者都放不下 Python 字符串，也都没有“词”这个概念。正是这一条事实，决定了任何文本任务——无论上面叠的模型多精巧——都要先走一遍同样的四步转换，也决定了四步里任何一步出错，都要等结果出来才发现。</p>
+
+  <h3>8.1.1 为什么模型只认整数</h3>
+  <p>两层定义了这份契约。<code class="inline">nn.Embedding(V, D)</code> 存一个 <code class="inline">(V, D)</code> 形状的矩阵，给定一个整数下标张量，返回对应的行。<code class="inline">nn.LSTM(input_size, hidden_size)</code> 接收 <code class="inline">(B, T, input_size)</code> 形状的浮点张量，在 <em>T</em> 轴上逐步推进。所以整数不是分词器的一个细节，它是索引到一张可学习表的钥匙，而一个“词”的含义，完全在训练最终写进那一行的数值里。改变从 token 到整数的映射，就改变了哪一行学到哪个词。这就是为什么词表必须在训练开始前建好并冻结，也是为什么“用错了数据建词表”不是无关痛痒的小错。</p>
+
+  <h3>8.1.2 四步链路，以及每一步最典型的错误</h3>
+  <div class="steps">
+    <div class="step"><h4>分词（tokenisation）</h4><p>把一个字符串切成 token 列表。英文：小写后用正则切分；中文：这一步会让一个朴素实现悄悄毁掉输入（见 8.2 节）。<strong>典型错误：</strong>对中文按空白切分，结果是每句一个 token，得到一个永不迁移的词表。</p></div>
+    <div class="step"><h4>词表（vocabulary）</h4><p>给每个 token 分配稳定的整数 id，保留 <code class="inline">0</code> 给填充、<code class="inline">1</code> 给未知词。<strong>典型错误：</strong>在全量语料上统计词频，而不是只在训练集上——这就是数据泄漏，报出来的 OOV 率随之变成一句空话（见 8.3 节）。</p></div>
+    <div class="step"><h4>编码（encoding）</h4><p>把每个 token 换成它的 id，没见过的映射到 <code class="inline">&lt;unk&gt;=1</code>。<strong>典型错误：</strong>忘了未知词分支，于是一个词表外的词让整批崩掉——或者更糟，让一个空文档产生一个空张量。</p></div>
+    <div class="step"><h4>填充与掩码（padding &amp; masking）</h4><p>给每个文档追加 <code class="inline">&lt;pad&gt;=0</code>，让一批长度一致，同时把真实长度带上，好让模型忽略填充。<strong>典型错误：</strong>把填充当成内容来读。这正是本章后文的那个 bug（见 8.4、8.5 节）。</p></div>
+  </div>
+
+  <h3>8.1.3 分词与建词表，写成代码</h3>
+  <p>下面两个函数就是英文那半条管线的全部。它们被写成让真正要紧的那个决定——词表到底在哪些文档上统计——是一个看得见的参数，而不是一个埋在默认值里的隐患。</p>
+  <pre><span class="kw">import</span> re
+<span class="kw">import</span> torch
+
+<span class="cm"># token 以字母开头，后续是字母、撇号或连字符，于是 "don't" 与</span>
+<span class="cm"># "state-of-the-art" 各是一个 token。</span>
+WORD = re.compile(<span class="str">r"[a-z][a-z'-]*"</span>)
+
+
+<span class="kw">def</span> <span class="fn">tokenise</span>(text):
+    <span class="str">"""小写，然后只保留以字母开头的 token。"""</span>
+    <span class="kw">return</span> WORD.<span class="fn">findall</span>(text.lower())
+
+
+<span class="kw">def</span> <span class="fn">build_vocab</span>(train_docs, min_freq=<span class="num">2</span>, max_vocab=<span class="num">6000</span>):
+    <span class="str">"""只在训练集上统计 token。
+
+    在全量语料上统计就是数据泄漏：测试集的稀有词会提前出现在词表里，报告里
+    引用的 OOV 率被低估，而准确率是在一个比部署时更简单的任务上测出来的。
+    """</span>
+    freq = {}
+    <span class="kw">for</span> doc <span class="kw">in</span> train_docs:
+        <span class="kw">for</span> t <span class="kw">in</span> <span class="fn">tokenise</span>(doc):
+            freq[t] = freq.get(t, <span class="num">0</span>) + <span class="num">1</span>
+    kept = [t <span class="kw">for</span> t, c <span class="kw">in</span> freq.items() <span class="kw">if</span> c &gt;= min_freq]   <span class="cm"># 丢掉低频词</span>
+    kept.sort(key=<span class="kw">lambda</span> t: (-freq[t], t))          <span class="cm"># 高频在前，同频按字母序</span>
+    kept = kept[:max_vocab - <span class="num">2</span>]                          <span class="cm"># 给 0 和 1 留位</span>
+    <span class="kw">return</span> {t: i + <span class="num">2</span> <span class="kw">for</span> i, t <span class="kw">in</span> <span class="fn">enumerate</span>(kept)}          <span class="cm"># &lt;pad&gt;=0, &lt;unk&gt;=1</span>
+
+
+<span class="kw">def</span> <span class="fn">encode</span>(doc, vocab, max_len):
+    ids = [vocab.get(t, <span class="num">1</span>) <span class="kw">for</span> t <span class="kw">in</span> <span class="fn">tokenise</span>(doc)]   <span class="cm"># 未见词 -&gt; &lt;unk&gt;=1</span>
+    ids = ids[:max_len]                                 <span class="cm"># 超长文档截断</span>
+    <span class="kw">return</span> ids <span class="kw">or</span> [<span class="num">1</span>]                                  <span class="cm"># 绝不返回空列表</span></pre>
+
+  <div class="callout warn">
+    <span class="label">泄漏只是一个词的改动，所以它反复发生</span>
+    把 <code class="inline">train_docs</code> 换成 <code class="inline">all_docs</code>，代码照样跑，模型照样训，而且准确率往往<em>更高</em>。没有崩溃，没有任何警告。词表只是提前被告知了一批它要到测试时才会遇到的词，于是你测到的 OOV 率低于你实际会遇到的 OOV 率。本章会在 8.9 节带着一个实测数字回到这个陷阱，因为那个“修复”看起来像一次退步。
+  </div>
+
+  <h3>8.1.4 填充与掩码，写成代码</h3>
+  <p>填充让一批变成长方形，而长度向量才是阻止填充被当成内容的那个东西。掩码均值是本章最优那一臂用的归约，它的正确性完全落在两行上：掩码在哪一步进入求和，除数选的是谁。</p>
+  <pre><span class="kw">def</span> <span class="fn">pad_batch</span>(docs, vocab, max_len):
+    <span class="str">"""右侧补 &lt;pad&gt;=0，返回 (ids, lengths)。
+
+    `lengths` 不是装饰品。它是让模型分辨真实 token 与填充 token 的唯一依据，
+    也是 pack_padded_sequence 需要的输入。
+    """</span>
+    enc = [<span class="fn">encode</span>(d, vocab, max_len) <span class="kw">for</span> d <span class="kw">in</span> docs]
+    lengths = torch.<span class="fn">tensor</span>([<span class="fn">len</span>(e) <span class="kw">for</span> e <span class="kw">in</span> enc])
+    T = <span class="fn">int</span>(lengths.<span class="fn">max</span>())            <span class="cm"># 这一批的宽度，不是全局的 max_len</span>
+    x = torch.<span class="fn">zeros</span>(<span class="fn">len</span>(enc), T, dtype=torch.long)
+    <span class="kw">for</span> i, e <span class="kw">in</span> <span class="fn">enumerate</span>(enc):
+        x[i, :<span class="fn">len</span>(e)] = torch.<span class="fn">tensor</span>(e)
+    <span class="kw">return</span> x, lengths
+
+
+<span class="kw">def</span> <span class="fn">masked_mean</span>(out, x):
+    <span class="str">"""只在真实时间步上求均值。
+
+    out: (B, T, H) 隐状态   x: (B, T) token id，填充处为 0。
+    掩码必须在求和之前乘进去，除数必须是真实步数而不是 T。两半都要对；只对一半就是错的。
+    """</span>
+    mask = (x != <span class="num">0</span>).unsqueeze(-<span class="num">1</span>).float()                <span class="cm"># (B, T, 1)，1 = 真实 token</span>
+    <span class="kw">return</span> (out * mask).<span class="fn">sum</span>(<span class="num">1</span>) / mask.<span class="fn">sum</span>(<span class="num">1</span>).clamp(min=<span class="num">1</span>)     <span class="cm"># (B, H)</span></pre>
+
+  <div class="callout tip">
+    <span class="label">冻结的协议，精确复述</span>
+    本章后面出现的所有数字都来自同一套固定配方，这样数字的变化就只能来自被检验的那个改动。
+    <ul>
+      <li><strong>任务。</strong>给一段英文段落，判断它出自第 1–6 周中的哪一周：6 分类。</li>
+      <li><strong>语料。</strong>本仓库自有的第 1–6 周材料——<code class="inline">lesson-plans/week-XX/lecture-en.html</code>、<code class="inline">lab-en.html</code>、<code class="inline">textbook/chapter-XX/en.html</code>、<code class="inline">labs/week-XX/lab-handout.md</code>。<strong>748 段</strong>英文段落、6 类，许可 <strong>CC BY-NC-SA 4.0</strong>，由 <code class="inline">scripts/build_text_corpus.py</code> 构建。整个运行<strong>完全离线、不下载任何东西</strong>：这是刻意设计，它排除了对第三方数据及其许可的依赖。</li>
+      <li><strong>反泄漏清洗。</strong>所有字面的周次、实验、单元标识（<code class="inline">Week 3</code>、<code class="inline">W3</code>、<code class="inline">CU(3)</code>、<code class="inline">Lab 3</code>、日期）都替换为 <code class="inline">&lt;WEEK&gt;</code>、<code class="inline">&lt;UNIT&gt;</code>、<code class="inline">&lt;LAB&gt;</code>、<code class="inline">&lt;DATE&gt;</code>——共替换 <strong>262</strong> 处。没有这一步，标签就明摆在文本里，一切准确率都失去意义。替换次数被计入报告，使清洗本身可被审计，而不是靠信任。</li>
+      <li><strong>划分。</strong>70 / 15 / 15，<strong>按周分层</strong>，<code class="inline">random_state = seed</code>；种子 42 即 523 / 112 / 113。</li>
+      <li><strong>分词。</strong>小写 + 正则 <code class="inline">[a-z][a-z'-]*</code>。</li>
+      <li><strong>词表。</strong><strong>只从训练集</strong>统计，<code class="inline">min_freq = 2</code>，上限 6000，<code class="inline">&lt;pad&gt;=0</code>、<code class="inline">&lt;unk&gt;=1</code>。</li>
+      <li><strong>模型。</strong><code class="inline">Embedding(64, padding_idx=0)</code> → <code class="inline">LSTM(96, batch_first=True)</code> → <code class="inline">Linear(6)</code>。</li>
+      <li><strong>优化。</strong><code class="inline">Adam(lr = 1e-3)</code>，批 64，<strong>30 轮</strong>，<code class="inline">max_len = 96</code>。</li>
+      <li><strong>重复。</strong>五个种子（42、43、44、45、46）；每个数字都是<strong>五种子的均值 ± 1 个标准差</strong>。</li>
+    </ul>
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>token</strong>——模型看到的单位：英文是像词一样的字符串，中文是一个词片段或一个字。</li>
+      <li><strong>词表（vocabulary）</strong>——从 token 到整数 id 的冻结映射，其中 <code class="inline">0</code> 留给填充、<code class="inline">1</code> 留给未知词。</li>
+      <li><strong>编码（encoding）</strong>——把 token 列表变成 id 列表，所有未见 token 换成 <code class="inline">&lt;unk&gt;</code>。</li>
+      <li><strong>填充（padding）</strong>——追加 <code class="inline">&lt;pad&gt;</code>，让一批中的每个文档等长。</li>
+      <li><strong>数据泄漏（data leakage）</strong>——测试集的信息进入了模型或预处理；这里指用超过训练集的数据建词表。</li>
+      <li><strong>文本到张量链路（text-to-tensor pipeline）</strong>——从原始字符串到“填充后的整数张量 + 长度”的四步。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.2 ========== -->
+<div class="section">
+  <h2>8.2 分词：英文，以及中文的陷阱</h2>
+  <p>分词看起来是最没意思的一步，却是唯一能错到 39 倍的一步。英文那套配方毫无争议；中文那套，则是一个从未处理过“不用空格分界的语言”的学生最容易踩进去的地方——他会写出一条看起来能跑、却得到一个永不迁移的词表的管线。</p>
+
+  <h3>8.2.1 英文：先小写，再一条正则</h3>
+  <p>本章全程使用的规则是：把文本小写，然后抽取每一段<em>以字母开头</em>、后续为字母、撇号或连字符的串。模式 <code class="inline">[a-z][a-z'-]*</code> 有三个后果值得明说，因为每一个都是一个选择。</p>
+  <ul>
+    <li><strong>大小写是被有意丢掉的。</strong><code class="inline">LSTM</code> 与 <code class="inline">lstm</code> 成为同一个 token。词表变小，模型不必为同一个词学两行——代价是丢掉了“大写词常常是一个句子的开头或一个专名”这条线索。</li>
+    <li><strong>缩写与连字符词保持完整。</strong><code class="inline">don't</code> 是一个 token，不是两个；<code class="inline">state-of-the-art</code> 是一个 token，不是四个。对一个小语料来说这通常正是你要的，因为拆开只会用几乎不带信号的碎片把词表撑大。</li>
+    <li><strong>数字与标点会消失。</strong>一段含 <code class="inline">17,226</code> 的文本，对它一个 token 也不贡献，因为那里没有任何一段以字母开头。如果你真正在意的信号是数字，那这条正则就是错的分词器，你必须明说。</li>
+  </ul>
+  <p>在这份语料上，配方的结果是稳定的：全量 748 段的词表有 <strong>3142</strong> 个词型，段落长度的中位数是 <strong>35</strong> 个词 token（p25 为 26，p75 为 50，p95 为 87，最大 285）。一个不大的词表，配上不长的段落——这两个数字正是让任务因 8.10 节所述原因而变难的关键。</p>
+
+  <h3>8.2.2 中文：按空白分词就是错的</h3>
+  <p>中文书写时词与词之间不加空格，所以英文那套配方没有对应物。一个诱人的捷径是：照样按空白切。这条捷径行不通，而在这里它是被量出来的，不是被断言的。在本仓库自有的中文教材文本上跑两种方案（750 段，切 375 段建词表、375 段做测试）：</p>
+  <table>
+    <tr><th>方案</th><th>词表</th><th>单例占比</th><th>测试 token</th><th>OOV 率</th></tr>
+    <tr><td>按空白切分（错）</td><td>372</td><td><strong>0.9946</strong></td><td>375</td><td><strong>0.9973</strong></td></tr>
+    <tr><td>字符级（对）</td><td>880</td><td>0.2170</td><td>14,860</td><td><strong>0.0254</strong></td></tr>
+  </table>
+  <p>把两行合起来读，失败是彻底的。按空白切分时，测试集对 <strong>375</strong> 个片段只贡献了 <strong>375</strong> 个 token——每段一个“词”，因为一整段没有空格的中文就是一个字符串。OOV 率是 <strong>0.9973</strong>，这不是“高”的意思，而是<strong>整段只被识别成一个 <code class="inline">&lt;unk&gt;</code></strong>。词表几乎全是单例（<strong>0.9946</strong>），因为没有任何两个片段恰好相同，什么也共享不了，什么也学不到。相形之下，字符级从同样的片段里产出 <strong>14,860</strong> 个测试 token，OOV 率 <strong>0.0254</strong>，单例占比 <strong>0.2170</strong>。</p>
+  <p>OOV 率从 <strong>0.9973</strong> 降到 <strong>0.0254</strong>——差了 <strong>39 倍</strong>。这就是那个错误的量级，而避开它只需要一行代码。</p>
+  <div class="callout tip">
+    <span class="label">对“没有空格的语言”的工程规则</span>
+    先用真正的分词器——常见的是 <code class="inline">jieba</code>——它把句子切成词一级的单位。如果拿不到分词器，就退到<strong>字符级</strong>：它粗糙但正确，每个片段变成一串字符，OOV 低，模型仍能从字符模式里学。你<em>绝不能</em>做的，是退回按空白切分——那是唯一保证“每句一个长度为一的词表”的选项。
+  </div>
+  <pre><span class="cm"># 正确：用分词器，拿不到就退到字符级。绝不按空白切。</span>
+<span class="kw">def</span> <span class="fn">tokenise_zh</span>(s, use_jieba=<span class="kw">True</span>):
+    <span class="kw">if</span> use_jieba:
+        <span class="kw">try</span>:
+            <span class="kw">import</span> jieba
+            <span class="kw">return</span> [t <span class="kw">for</span> t <span class="kw">in</span> jieba.lcut(s) <span class="kw">if</span> t.strip()]
+        <span class="kw">except</span> ImportError:
+            <span class="kw">pass</span>
+    <span class="kw">return</span> <span class="fn">list</span>(s)          <span class="cm"># 字符级：粗糙，但 OOV = 0.0254，不是 0.9973</span>
+    <span class="cm"># return s.split()    # &lt;- bug：每句一个 token，OOV = 0.9973</span></pre>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>分词（tokenisation）</strong>——把字符串切成词表将持有的单位。</li>
+      <li><strong>词切分（word segmentation）</strong>——在不用空格标记边界的语言里恢复词边界；这是中文需要、英文不需要的一步。</li>
+      <li><strong>字符级分词（character-level tokenisation）</strong>——每个字符一个 token；拿不到分词器时的正确兜底。</li>
+      <li><strong>OOV 率</strong>——测试 token 中不在训练词表里的比例；这里是 0.9973 对 0.0254。</li>
+      <li><strong>单例（singleton）</strong>——在训练词表中恰好出现一次的 token；单例占比高说明词表不可复用。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.3 ========== -->
+<div class="section">
+  <h2>8.3 词表与编码</h2>
+  <p>词表是分词器与嵌入表之间的一份契约，它在训练开始前就被冻结。本章用三个参数定义它，每一个都有可以辩护的理由。</p>
+
+  <h3>8.3.1 三个设置，以及为什么这样设</h3>
+  <table>
+    <tr><th>设置</th><th>取值</th><th>理由</th></tr>
+    <tr><td>最小词频</td><td><code class="inline">min_freq = 2</code></td><td>训练里只出现一次的词学不到东西，它只会变成一行几乎不更新的参数。丢掉它能让 <code class="inline">&lt;unk&gt;</code> 保持有意义，也缩小了表。</td></tr>
+    <tr><td>词表上限</td><td><code class="inline">6000</code></td><td>嵌入表的一个上界。这份语料远够不到它，但一旦语料变大，这个上限能约束参数量与内存。</td></tr>
+    <tr><td>保留 id</td><td><code class="inline">&lt;pad&gt;=0</code>、<code class="inline">&lt;unk&gt;=1</code></td><td>填充需要一个固定 id，掩码 <code class="inline">x != 0</code> 才能成立；未知词也需要一个固定 id，编码才不会崩。</td></tr>
+  </table>
+  <p>词表只在训练文档上统计，且统计与 id 分配在同一步完成，所以词频与 id 不可能对不上。种子 42 的结果是 <strong>1617</strong> 个条目；五个种子平均，模型实际看到 <strong>1592</strong>。若把每段都算进来，全语料有 <strong>3142</strong> 个词型——而第二个数字正是模型<em>不该</em>被给到的。</p>
+
+  <h3>8.3.2 只从训练集统计</h3>
+  <p>两个词表，两个故事。诚实的那个只在 523 个训练段上统计 token，于是模型在测试时第一次遇到的词是真的未知、也真的映射到 <code class="inline">&lt;unk&gt;</code>。泄漏的那个在全部 748 段上统计，这意味着测试集的稀有词早已带着 id 坐在表里，模型被考的是一道被悄悄放水的题。</p>
+  <div class="callout warn">
+    <span class="label">为什么这是文本建模里最常见的泄漏</span>
+    “把数组切开”是容易记住的；“把预处理也切开”不是。token 已经躺在一个列表里了，统计它只是一个两行的循环，看上去不明确属于切分的哪一边。纪律与第 3 章、第 6 章相同：<strong>任何被“拟合”的东西——一个 scaler、一个 imputer、一张词表——都在训练切分上拟合，测试切分只被 transform，永远不被 fit。</strong>词表就是被拟合的东西。8.9 节会量出忘掉这一点的后果。
+  </div>
+
+  <h3>8.3.3 <code class="inline">padding_idx=0</code>：一份永远送不到的梯度</h3>
+  <p>给 <code class="inline">nn.Embedding</code> 传 <code class="inline">padding_idx=0</code>，不只是记录了哪一行是填充。在每一次反向传播中，PyTorch 都会把这一行的梯度贡献置零，于是 <code class="inline">&lt;pad&gt;</code> 的嵌入向量<strong>永远收不到更新</strong>。它从零出发，一路保持为零。这一点重要，是因为忽略掩码的池化仍会把真实隐状态乘上一个零向量；那一行不动并不能救你，但它至少意味着填充行不会带着被学出来的信号去别处误导优化器。</p>
+  <pre>emb = nn.Embedding(<span class="num">1617</span>, <span class="num">64</span>, padding_idx=<span class="num">0</span>)
+
+ids = torch.<span class="fn">tensor</span>([[<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">0</span>, <span class="num">0</span>]])
+out = emb(ids)                       <span class="cm"># (1, 5, 64)；第 3、4 行来自第 0 行</span>
+out.<span class="fn">sum</span>().<span class="fn">backward</span>()                  <span class="cm"># 用一个非零损失逼出梯度</span>
+<span class="fn">print</span>(emb.weight.grad[<span class="num">0</span>].<span class="fn">abs</span>().<span class="fn">sum</span>())     <span class="cm"># tensor(0.)——填充行永不学习</span></pre>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>词表大小（vocabulary size）</strong>——含两个保留 id 在内的不同 id 数；种子 42 为 1617，平均 1592。</li>
+      <li><strong><code class="inline">&lt;pad&gt;</code> / <code class="inline">&lt;unk&gt;</code></strong>——两个保留 id：<code class="inline">0</code> 用于填充，<code class="inline">1</code> 用于一切词表外 token。</li>
+      <li><strong><code class="inline">padding_idx</code></strong>——告诉嵌入层哪一行是填充，其梯度在每一步都被强制置零。</li>
+      <li><strong>冻结词表（frozen vocabulary）</strong>——从训练切分建一次，训练与评估期间不再更新。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.4 ========== -->
+<div class="section">
+  <h2>8.4 填充与掩码</h2>
+  <p>LSTM 在一个固定的 <em>T</em> 轴上推进，但文档长度不一。填充是这场调和——而掩码，才是阻止这场调和污染答案的东西。本节是本章的核心，因为后文每一次失败，都是同一个掩码失败换了一顶帽子。</p>
+
+  <h3>8.4.1 变长到定长</h3>
+  <p>一批 64 个文档，数组必须是长方形的：形状 <code class="inline">(64, T)</code>。<em>T</em> 要么是这一批里最长的文档，要么是全局上限 <code class="inline">max_len = 96</code>，取较小者。每个更短的文档都在右侧填上 <code class="inline">&lt;pad&gt;=0</code>。长度向量记录每一行的真实长度，而那是这条信息唯一存活的地方。</p>
+  <p>填充的规模不小。在种子 42 的测试集上，<strong>95.58%</strong> 的文档短于 <code class="inline">max_len = 96</code>。换句话说，几乎每一批里几乎每一个文档都带着一条填充尾巴，任何读尾巴的代码，几乎在每个样本上都读到了填充。正是这一个百分比，决定了 8.5 节那个 bug 的杀伤力有多大。</p>
+  <table>
+    <tr><th>段落长度（词 token）</th><th>本语料上的统计量</th></tr>
+    <tr><td>最小值</td><td>20</td></tr>
+    <tr><td>25 分位</td><td>26</td></tr>
+    <tr><td>中位数</td><td>35</td></tr>
+    <tr><td>75 分位</td><td>50</td></tr>
+    <tr><td>95 分位</td><td>87</td></tr>
+    <tr><td>最大值</td><td>285</td></tr>
+    <tr><td>均值</td><td>42.1</td></tr>
+  </table>
+  <p>分布本身就是要点：段落长度中位数是 35，而上限是 96，于是典型的一行还不到一半是真实内容。填充在这里不是边角情况，它是张量的大部分。</p>
+
+  <h3>8.4.2 掩码，以及正确的掩码均值</h3>
+  <p>掩码是一个张量，在真实 token 处为 1，在填充处为 0。直接由 id 本身构造，<code class="inline">(x != 0)</code> 已经正好是这个——不需要额外的记账，因为 <code class="inline">&lt;pad&gt;</code> 就是 id 0。接着把掩码的形状调整到能与隐状态广播相乘，在归约之前施用。</p>
+  <pre>out, _ = rnn(emb(x))                    <span class="cm"># out: (B, T, H)</span>
+
+mask = (x != <span class="num">0</span>).unsqueeze(-<span class="num">1</span>).float()     <span class="cm"># (B, T, 1) -&gt; 在 H 上广播</span>
+
+<span class="cm"># 正确：在真实位置求和，除以真实位置的个数</span>
+z = (out * mask).<span class="fn">sum</span>(<span class="num">1</span>) / mask.<span class="fn">sum</span>(<span class="num">1</span>).clamp(min=<span class="num">1</span>)      <span class="cm"># (B, H)</span>
+
+<span class="cm"># 安静的 bug：除以 T，于是每个填充位置都把均值往 0 拖</span>
+z_wrong = out.<span class="fn">mean</span>(<span class="num">1</span>)                      <span class="cm"># (B, H)——把填充也平均进去了</span></pre>
+  <p>两行都能跑，都返回正确的形状，都不给任何警告。差别只在除数和掩码，而它们的效果在 8.8 节被量了出来：正确的掩码均值 <strong>0.5027</strong>，未掩码均值 <strong>0.3929</strong>，差 <strong>0.1098</strong>——约 <strong>11.0 个点</strong>——只因为少乘了一个掩码。</p>
+
+  <div class="callout warn">
+    <span class="label">掩码必须在求和前进入，除数必须与之匹配</span>
+    有两种写法会出错，而它们不是同一个错误。如果在求均值之后再掩码（<code class="inline">out.mean(1) * something</code>），填充位置早已贡献过了。如果掩码进了求和、却仍除以 <em>T</em>，那么每个短文档都被它真实 token 的占比缩小了：一个 35 词的文档被除以 96，它的向量被悄悄缩到大约三分之一。掩码必须进入求和，除数必须是掩码自己的计数。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>填充（padding）</strong>——追加 <code class="inline">&lt;pad&gt;</code> 使一批成为长方形；95.58% 的测试文档短于上限。</li>
+      <li><strong>掩码（mask）</strong>——标记真实位置的 0/1 张量；这里是 <code class="inline">(x != 0)</code>，无需单独记账。</li>
+      <li><strong>掩码均值（masked mean）</strong>——只在真实位置上求和、除以它们的个数，<code class="inline">(h * mask).sum(1) / mask.sum(1)</code>。</li>
+      <li><strong>变长序列（variable-length sequence）</strong>——真实长度与批宽不等的文档；填充正是为了解决它。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.5 ========== -->
+<div class="section">
+  <h2>8.5 <code class="inline">out[:, -1, :]</code> 这个 bug 的完整解剖</h2>
+  <p>这是本周围绕的 bug，值得完整解剖一次，因为它具备一个能上线的 bug 的全部特征：它只有一行，写法很地道，运行不报错，输出形状正确，而它的伤害恰恰集中在没人会去检查的那批样本上。</p>
+
+  <h3>8.5.1 错的那一行，和对的那一行</h3>
+  <p>LSTM 之后，<code class="inline">out</code> 的形状是 <code class="inline">(B, T, H)</code>。意图是“模型对文档的读法”——每个样本一个长度为 <em>H</em> 的向量。错的那一行取的是最后一<em>列</em>：</p>
+  <pre><span class="cm"># ---- 错的：out[:, -1, :] --------------------------------------------------</span>
+<span class="cm"># 第 T-1 列，是 LSTM 消费完“最后一个位置”之后的状态。对短于批宽的文档，</span>
+<span class="cm"># 那些位置就是 &lt;pad&gt;=0。所以这里读到的向量，是读完填充之后的隐状态——不是</span>
+<span class="cm"># 这份文档的。95.58% 的测试文档短于 max_len = 96，于是几乎每个样本都读错了地方。</span>
+out, _ = rnn(emb(x))
+z_bad = out[:, -<span class="num">1</span>, :]                     <span class="cm"># (B, H)——最后一列</span>
+
+<span class="cm"># ---- 对的：打包，然后取“最后一个真实”隐状态 ------------------------------</span>
+<span class="cm"># pack_padded_sequence 丢掉每一个填充时间步，于是 LSTM 在每个文档的真实长度处</span>
+<span class="cm"># 停下。它要求批按长度降序，或者 enforce_sorted=False——后者在内部排序，回程</span>
+<span class="cm"># 再恢复原顺序。此时 h[-1] 就是顶层每个样本在各自最后一个真实 token 处的隐状态。</span>
+packed = nn.utils.rnn.<span class="fn">pack_padded_sequence</span>(
+    emb(x), lengths, batch_first=<span class="kw">True</span>, enforce_sorted=<span class="kw">False</span>)
+_, (h, _) = rnn(packed)
+z_ok = h[-<span class="num">1</span>]                                <span class="cm"># (B, H)——最后一个真实 token</span></pre>
+  <p>一批里只有一份文档会被错的那一行读对：最长的那份，因为它的最后一个位置恰好是真实 token。其余每一份，都在一个仅仅因为填充才存在的位置上被读取。文档越短，隔在它的真实末尾与模型实际读取的位置之间的填充就越多。</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+
+torch.<span class="fn">manual_seed</span>(<span class="num">0</span>)
+B, T, H, V = <span class="num">4</span>, <span class="num">8</span>, <span class="num">96</span>, <span class="num">100</span>
+emb = nn.<span class="fn">Embedding</span>(V, H, padding_idx=<span class="num">0</span>)
+rnn = nn.<span class="fn">LSTM</span>(H, H, batch_first=<span class="kw">True</span>)
+
+x = torch.<span class="fn">tensor</span>([[<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>],     <span class="cm"># 长度 3</span>
+                  [<span class="num">8</span>, <span class="num">9</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">0</span>],     <span class="cm"># 长度 7</span>
+                  [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>],     <span class="cm"># 长度 3</span>
+                  [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>, <span class="num">10</span>, <span class="num">11</span>, <span class="num">12</span>, <span class="num">13</span>, <span class="num">14</span>]])  <span class="cm"># 长度 8（满）</span>
+lengths = (x != <span class="num">0</span>).<span class="fn">sum</span>(<span class="num">1</span>)                        <span class="cm"># tensor([3, 7, 3, 8])</span>
+
+e = emb(x)
+out, _ = rnn(e)
+
+z_bad = out[:, -<span class="num">1</span>, :]                              <span class="cm"># 读到填充</span>
+packed = nn.utils.rnn.<span class="fn">pack_padded_sequence</span>(
+    e, lengths, batch_first=<span class="kw">True</span>, enforce_sorted=<span class="kw">False</span>)
+_, (h, _) = rnn(packed)
+z_ok = h[-<span class="num">1</span>]                                    <span class="cm"># 读到最后一个真实 token</span>
+
+<span class="fn">print</span>(torch.<span class="fn">allclose</span>(z_bad[<span class="num">3</span>], z_ok[<span class="num">3</span>]))              <span class="cm"># True——第 3 行是满长</span>
+<span class="fn">print</span>(torch.<span class="fn">allclose</span>(z_bad[<span class="num">0</span>], z_ok[<span class="num">0</span>]))              <span class="cm"># False——第 0 行有填充</span></pre>
+
+  <h3>8.5.2 三类证据，说明这个诊断是对的</h3>
+  <p>只说“错的那一行读到了填充”是不够的；一个诊断必须对它之外的数字作出预测，而且预测要成立。三项实测做到了，每一项都排除掉一个竞争性的解释。</p>
+  <p><strong>证据一——伤害落在短文档上。</strong>如果 bug 是“读填充”，那它应该更伤一篇 20 词的文档，而不是 100 词的，因为文档越短、隔在它与最后一列之间的填充就越多。把种子 42 的测试集按真实长度分桶，结果正是如此，而且只有错的那一行如此：</p>
+  <table>
+    <tr><th>桶（词数）</th><th>n</th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th></tr>
+    <tr><td>20–29</td><td>38</td><td>0.4211</td><td><strong>0.1579</strong></td></tr>
+    <tr><td>30–49</td><td>41</td><td>0.3902</td><td><strong>0.1707</strong></td></tr>
+    <tr><td>50–99</td><td>29</td><td>0.4483</td><td>0.4138</td></tr>
+    <tr><td>100–max</td><td>5</td><td>0.6000</td><td>0.4000</td></tr>
+  </table>
+  <p>正确那一臂在各桶之间是平的——0.39 到 0.60 之间，大致就是类别先验的水平。错的那一臂不是：它在短桶上塌到 <strong>0.1579</strong> 与 <strong>0.1707</strong>，直到文档长到填充只占整行一小部分，才恢复到 <strong>0.4138</strong>。伤害紧跟着填充走，这正是诊断所预测的。</p>
+  <p><strong>证据二——<code class="inline">max_len</code> 处的那条硬边界。</strong>预测在上限处变得更锐利。长度达到或超过 <code class="inline">max_len = 96</code> 的文档<em>完全没有填充</em>，于是 <code class="inline">out[:, -1, :]</code> 真的指向它的末尾；短于上限的文档则不然。在种子 42 的测试集上：</p>
+  <ul>
+    <li>长度<strong>不小于 96</strong>的文档：<strong>5 篇</strong>，错臂准确率 <strong>0.4000</strong>。</li>
+    <li>长度<strong>小于 96</strong>的文档：<strong>108 篇</strong>，错臂准确率 <strong>0.2315</strong>。</li>
+  </ul>
+  <p>这五篇满长文档被读对了，得分与正确那一臂相当；108 篇带填充的塌了。这条证据排除了一个诱人的替代解释——“任务本来就太难”——因为如果难在任务，满长文档不会做得更好。</p>
+  <p><strong>证据三——改 <code class="inline">max_len</code> 救不了错的那一臂。</strong>如果 bug 与填充所在的位置有关，那么少填一点、或多填一点，应该能移动错臂，而对正确那一臂几乎不该有影响。把上限在三个种子（42、43、44）上扫描：</p>
+  <table>
+    <tr><th><code class="inline">max_len</code></th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th></tr>
+    <tr><td>48</td><td>0.4572（sd 0.0135）</td><td>0.2891</td></tr>
+    <tr><td>96</td><td>0.4454（sd 0.0285）</td><td>0.2389</td></tr>
+    <tr><td>192</td><td>0.4454（sd 0.0357）</td><td>0.2478</td></tr>
+  </table>
+  <p>正确那一臂整个扫描只动了 0.0118，完全落在它自己的标准差里，所以<strong>调上限不是杠杆</strong>。错的那一臂上上下下，却始终追不上。教训正是这一节存在的理由：<strong>池化方式错了，任何长度设置都白搭。</strong></p>
+
+  <div class="callout key">
+    <span class="label">机制一句话，以及这个错误的通用形状</span>
+    <code class="inline">out[:, -1, :]</code> 假定填充张量里的最后一个位置就是文档的最后一个位置；<code class="inline">pack_padded_sequence</code> 加 <code class="inline">h[-1]</code>（或掩码均值）用真实长度，在文档结束处停下。这个错误的通用形状是<strong>在变长轴上的固定归约</strong>：只要一个张量带有填充轴，任何把每个位置都当成真实的操作——取最后一位、不带掩码的均值、不带掩码的最大值——都是错的，唯一的差别只是代价有多大。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong><code class="inline">pack_padded_sequence</code></strong>——PyTorch 的辅助函数，丢掉填充时间步，让循环层在每个文档的真实长度处停下。</li>
+      <li><strong><code class="inline">enforce_sorted</code></strong>——为 <code class="inline">False</code> 时，打包会在内部按长度排序并在回程恢复原顺序；为 <code class="inline">True</code> 时你必须预先排好。</li>
+      <li><strong>最后一个真实隐状态（last real hidden state）</strong>——最终一个非填充 token 之后的状态；最后一步读取的正确目标。</li>
+      <li><strong>池化（pooling）</strong>——把隐状态序列归约成每个文档一个向量的操作。</li>
+      <li><strong>变长轴上的固定归约</strong>——这个 bug 的模式；把填充当内容读，不报错，藏在短样本里。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.6 ========== -->
+<div class="section">
+  <h2>8.6 RNN 与梯度消失</h2>
+  <p>循环层继承了每个深层网络都有的问题，但形态更糟、也更具体。递归是序列模型“看得远”的来源，也是它梯度死掉的地方。</p>
+
+  <h3>8.6.1 递推式</h3>
+  <p>一个朴素的循环层维护一个长度为 <em>H</em> 的隐状态，每个 token 更新一次：</p>
+  <p style="text-align:center; font-size:16px;"><strong>h<sub>t</sub> = tanh(W x<sub>t</sub> + U h<sub>t-1</sub> + b)</strong></p>
+  <p>其中 <em>x<sub>t</sub></em> 是第 <em>t</em> 步 token 的嵌入，<code class="inline">W</code>、<code class="inline">U</code>、<code class="inline">b</code> 在每一步之间共享。共享不是一种优化，它就是定义本身。它让同一个层能同时接受一份 20 词的文档和一份 285 词的文档，也让整个东西能靠一套参数训练。</p>
+  <pre><span class="kw">import</span> torch
+
+H, T = <span class="num">96</span>, <span class="num">5</span>
+W = torch.<span class="fn">randn</span>(H, H) * <span class="num">0.1</span>
+U = torch.<span class="fn">randn</span>(H, H) * <span class="num">0.1</span>
+b = torch.<span class="fn">zeros</span>(H)
+
+h = torch.<span class="fn">zeros</span>(H)                          <span class="cm"># 初始状态</span>
+xs = torch.<span class="fn">randn</span>(T, H)                      <span class="cm"># 每步一个嵌入</span>
+<span class="kw">for</span> t <span class="kw">in</span> <span class="fn">range</span>(T):
+    h = torch.<span class="fn">tanh</span>(xs[t] @ W.T + h @ U.T + b)   <span class="cm"># 把递推式写开</span></pre>
+  <p>训练一个循环网络就是普通的沿时间反向传播：最后一步的损失要对每一个更早的步求导，于是到达第 <em>k</em> 步的梯度，是每一步一个雅可比矩阵的连乘。麻烦就在这个连乘里。</p>
+
+  <h3>8.6.2 梯度为什么消失，或者爆炸</h3>
+  <p>对递推式求导，转移因子就出现了：</p>
+  <p style="text-align:center; font-size:16px;"><strong>dh<sub>t</sub> / dh<sub>t-1</sub> = diag(1 - tanh<sup>2</sup>(...)) U</strong></p>
+  <p>于是，对过去第 <em>k</em> 步的梯度，被大约 <em>T</em> 个这样的因子连乘。这条链上会发生两件事。</p>
+  <ul>
+    <li><strong>消失。</strong><code class="inline">tanh</code> 的导数最大为 1，通常远小于 1，而 <code class="inline">U</code> 的元素在初始化后也很小。许多小于 1 的数连乘会指数级缩小：等梯度回溯跨过 50 步，它已经小到与零无法区分，塑造序列前段的那些参数就不再学习。</li>
+    <li><strong>爆炸。</strong>如果 <code class="inline">U</code> 的元素恰好很大，连乘就会放大，梯度溢出。典型症状是损失跳成 <code class="inline">nan</code>；典型对策是梯度裁剪，在优化器步之前把梯度的范数截住。</li>
+  </ul>
+  <p>在这份语料上，这个问题存在，但不是那个真正的瓶颈：段落长度中位数是 35，上限是 96，短到梯度消失更像是噪声，而不是成绩低的原因。成绩低的真正原因，是 8.9 节量出来的那件事——数据太少——两者要分清楚，因为它们对应的修法不同。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>隐状态（hidden state）</strong>——循环层跨步携带的向量，长度为 <em>H</em>。</li>
+      <li><strong>权值共享（shared weights）</strong>——每一步都用同一个 <code class="inline">W</code> 与 <code class="inline">U</code>，这是变长输入得以成立的原因。</li>
+      <li><strong>沿时间反向传播（BPTT）</strong>——在展开的递归上做反向传播。</li>
+      <li><strong>梯度消失（vanishing gradient）</strong>——梯度在很多步上指数衰减，导致前段停止学习。</li>
+      <li><strong>梯度爆炸（exploding gradient）</strong>——相反的情形；梯度溢出，通常靠裁剪其范数解决。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.7 ========== -->
+<div class="section">
+  <h2>8.7 LSTM 与 GRU：门控，以及它并没有解决的问题</h2>
+  <p>长短期记忆（LSTM）单元被发明出来，是为了给梯度一条不必再穿过一长串 <code class="inline">tanh</code> 导数的通路。它靠门控做到这一点，而把门一个一个地看作对某个具体问题的回答，是最好理解的。</p>
+
+  <h3>8.7.1 三个门，三个问题</h3>
+  <table>
+    <tr><th>门</th><th>它回答的问题</th><th>它控制什么</th></tr>
+    <tr><td>遗忘门 <code class="inline">f<sub>t</sub></code></td><td>旧记忆里有多少该活下来？</td><td>缩放上一时刻的细胞状态 <code class="inline">C<sub>t-1</sub></code>；接近 0 抹除，接近 1 保留。</td></tr>
+    <tr><td>输入门 <code class="inline">i<sub>t</sub></code></td><td>新候选里有多少该被写进去？</td><td>缩放候选更新；决定这个 token 里有什么值得记住。</td></tr>
+    <tr><td>输出门 <code class="inline">o<sub>t</sub></code></td><td>此刻该暴露多少记忆？</td><td>缩放细胞状态到隐状态 <code class="inline">h<sub>t</sub></code> 的通路。</td></tr>
+  </table>
+  <p>对梯度真正要紧的机制是<strong>细胞状态</strong> <code class="inline">C<sub>t</sub></code>，其更新为 <code class="inline">C<sub>t</sub> = f<sub>t</sub> * C<sub>t-1</sub> + i<sub>t</sub> * candidate</code>。在细胞状态这条通路上，转移是乘以遗忘门，而不是乘以一个权重矩阵再乘一个 <code class="inline">tanh</code> 导数。当遗忘门接近 1 时，这条通路接近恒等，梯度可以跨很多步流动而不像原来那样迅速缩小。这就是“LSTM 解决梯度消失”的真正含义——不是说问题没了，而是说现在有了一条让问题轻得多的路径。</p>
+
+  <h3>8.7.2 代价：它仍然是顺序计算的</h3>
+  <p>门控买来了一条更好的梯度通路，在正确性上没有代价，但它改变不了一个结构性事实：递归仍然是一个循环。第 <em>t</em> 步需要 <code class="inline">h<sub>t-1</sub></code>，所以一份文档的 <em>T</em> 个步无论有多少核都不能并行。GRU 是同一思想的更廉价的变体——它把遗忘门与输入门合并成一个更新门、去掉了独立的细胞状态，两个门代替三个——而它同样顺序。</p>
+  <div class="callout tip">
+    <span class="label">通往模块三的桥</span>
+    正是这个顺序依赖，让这个领域继续往前走。注意力机制，以及由它搭起的 Transformer，一次性从所有其他位置算出每个位置的表示，完全没有递归——于是整条序列可并行，沿链的梯度消失问题也随之消失。第 10 章会直接讲它，而它会把本周的 LSTM 当对照：同一个任务、同一份数据，对“一个位置怎样看到其他位置”给出不同的答案。请记住本周的数字，因为它们是 Transformer 必须超过的基线。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>门（gate）</strong>——一个输出在 0 到 1 之间的 sigmoid 层，用来缩放某个信号；门是单元决定保留什么的方式。</li>
+      <li><strong>遗忘门（forget gate）</strong>——缩放上一时刻的细胞状态；接近 0 忘记，接近 1 保留。</li>
+      <li><strong>输入门（input gate）</strong>——缩放写入细胞状态的新候选。</li>
+      <li><strong>输出门（output gate）</strong>——缩放细胞状态到隐状态的输出。</li>
+      <li><strong>细胞状态（cell state）</strong>——LSTM 的长期记忆通路；因为它的转移是乘以遗忘门，它为梯度提供了更轻松的一条路。</li>
+      <li><strong>GRU</strong>——LSTM 的双门简化版；更廉价，也同样顺序。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.8 ========== -->
+<div class="section">
+  <h2>8.8 池化的总账：一行代码，26 个点</h2>
+  <p>五套配置，每套五个种子，一套冻结的协议。四个池化臂只差一件事：<code class="inline">(B, T, 96)</code> 的隐状态张量，如何变成每个文档一个 <code class="inline">(B, 96)</code> 向量。其余一切——数据、切分、分词器、建词表规则、嵌入维、隐层维、优化器、轮数——完全相同。结果是本章最严的一次对照，而且它令人不适。</p>
+
+  <table>
+    <tr><th>臂</th><th><code class="inline">(B, T, 96)</code> 如何变成 <code class="inline">(B, 96)</code></th><th>测试准确率</th><th>宏 F1</th></tr>
+    <tr><td><code class="inline">mean_masked</code></td><td>只在真实时间步上求均值</td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td></tr>
+    <tr><td><code class="inline">packed</code></td><td><code class="inline">pack_padded_sequence</code>，再取最后一个真实隐状态</td><td>0.4248 ± 0.0360</td><td>0.3843 ± 0.0422</td></tr>
+    <tr><td><code class="inline">mean_unmasked</code></td><td>在所有位置（含填充）上求均值</td><td>0.3929 ± 0.0684</td><td>0.3315 ± 0.0935</td></tr>
+    <tr><td><code class="inline">last_step</code></td><td><code class="inline">out[:, -1, :]</code>，不打包</td><td><strong>0.2407 ± 0.0040</strong></td><td><strong>0.0711 ± 0.0095</strong></td></tr>
+    <tr><td><code class="inline">mean_masked_reg</code></td><td><code class="inline">mean_masked</code> + Dropout 0.3 + 权重衰减 1e-3</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td></tr>
+  </table>
+
+  <h3>8.8.1 读这本账</h3>
+  <p>最优的臂是 <code class="inline">mean_masked</code>，<strong>0.5027</strong>；最差的是 <code class="inline">last_step</code>，<strong>0.2407</strong>。差 <strong>0.2620</strong>——<strong>26.2 个点</strong>——而最好与最差配置的全部差别，就是<em>一行归约代码</em>。产出这两个数字的是同一个模型、同一套参数（种子 42 为 166 278，五种子的均值 164 691），训练在同一份数据上。</p>
+  <p>三个差距值得分开命名，因为它们各自是一个不同的教训：</p>
+  <ul>
+    <li><strong>掩码值约 11.0 个点。</strong>未掩码均值到 0.3929；掩码均值到 0.5027，增益 <strong>0.1098</strong>。这是本章最便宜的修复——给一个本来就在算的均值加一个掩码。</li>
+    <li><strong>用打包修 <code class="inline">[-1]</code> 值约 18.4 个点。</strong>从 0.2407 到 0.4248，增益 <strong>0.1841</strong>。这是“不读填充”的价值。</li>
+    <li><strong>用掩码均值修 <code class="inline">[-1]</code> 值 26.2 个点。</strong>从 0.2407 到 0.5027，增益 <strong>0.2620</strong>。在这份数据上，对真实时间步求均值胜过取最后隐状态——这一点事先并不显然，也正是当初要跑这几个臂的原因。</li>
+  </ul>
+
+  <h3>8.8.2 诚实的基线：最差那一臂低于随机</h3>
+  <p>6 个大致均衡的类，随机猜测在准确率上达到 <strong>1/6 ≈ 0.1667</strong>。这是每一臂在“做了任何事”之前必须先超过的数。<code class="inline">last_step</code> 的准确率是 0.2407，过了 0.1667——但它的<strong>宏 F1 是 0.0711</strong>，<em>低于</em>随机基线。原因在 8.10 节的混淆矩阵一摆出来就清楚了：错的那一臂几乎总是预测最大的类，于是它单靠先验就收到准确率，却几乎找不到任何小类的样本。宏 F1 对每个类等权，一眼看穿它。</p>
+  <div class="callout warn">
+    <span class="label">0.5027 是真实成绩，不是好成绩</span>
+    它是<strong>随机基线的三倍</strong>，而每个种子 113 篇测试文档的样本量小到 ±0.0449 的离散度不容忽视。本章任何一句话都不该读成“这个 LSTM 文本分类做得好”。正确的说法是：<em>在这份语料、这些数据量下，最优配置到 0.5027，而配置之间的差距，比任何一个配置的绝对水平都大。</em>本章讲的是那个差距，因为差距才是你控制得了的东西。</p>
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>方案（arm）</strong>——被检验的一种配置，其余所有因素保持不变。</li>
+      <li><strong>池化（pooling）</strong>——从隐状态序列到单个向量的归约；这里是唯一变化的量。</li>
+      <li><strong>随机基线（random baseline）</strong>——瞎猜的得分；6 分类下约为 1/6 ≈ 0.1667。</li>
+      <li><strong>宏 F1（macro F1）</strong>——各类 F1 的等权均值；它是能把“靠类别先验”的臂照出来的指标。</li>
+      <li><strong>种子重复（seed replication）</strong>——在多个随机种子上重复同一方案，使离散度而不是单次运行成为测量结果。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.9 ========== -->
+<div class="section">
+  <h2>8.9 过拟合、正则化，与认错的瓶颈</h2>
+  <p>每一臂都在过拟合。有意思的问题不是“它是否过拟合”——523 个训练段，模型在上面到了 0.9885，当然过拟合——而是这是哪一种过拟合，因此什么能修它。本节用两次实测回答这个问题，并得出本周最重要的诚实结论。</p>
+
+  <h3>8.9.1 训练曲线，单种子</h3>
+  <p>对种子 42 的 <code class="inline">packed</code>，每 3 轮记一次、共 11 点，训练准确率从 <strong>0.2849</strong> 爬到 <strong>0.9885</strong>，验证准确率从 <strong>0.2143</strong> 爬到 <strong>0.4196</strong>。第 30 轮差距是 <strong>0.9885 - 0.4196 = 0.5689</strong>。模型背下了训练集，而验证分停在与其测试分大致相当的水平。</p>
+  <table>
+    <tr><th>记录点</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr>
+    <tr><td>训练准确率</td><td>0.2849</td><td>0.2696</td><td>0.4857</td><td>0.6386</td><td>0.7400</td><td>0.8375</td><td>0.8853</td><td>0.8967</td><td>0.9675</td><td>0.9866</td><td><strong>0.9885</strong></td></tr>
+    <tr><td>验证准确率</td><td>0.2143</td><td>0.2411</td><td>0.2589</td><td>0.2500</td><td>0.3036</td><td>0.3393</td><td>0.3571</td><td>0.3036</td><td>0.3661</td><td>0.4196</td><td><strong>0.4196</strong></td></tr>
+  </table>
+  <p>看验证那一列，注意它<em>没有</em>做什么：它从未下降。没有峰值，也没有向下的转折——曲线在最后那个记录点还在往上爬。这一点决定了诊断的走向。如果问题只是“训太久”，验证曲线本该掉头向下，早停就是答案。一条从未下滑过的验证曲线，并不是训过头的特征；它是一条模型“已经学完数据能教的一切、正把剩下的容量拿去装噪声”的特征。</p>
+
+  <h3>8.9.2 加上第 6 周的正则化，反而更差</h3>
+  <p>第 6 章教过两种在那里有效的正则化：对隐表示做 Dropout，对优化器加权重衰减。把两者都加到最优那一臂上——<code class="inline">mean_masked</code> 配 Dropout 0.3 与权重衰减 1e-3——就是对瓶颈假设的一次受控检验：</p>
+  <table>
+    <tr><th>臂</th><th>测试准确率</th><th>宏 F1</th></tr>
+    <tr><td><code class="inline">mean_masked</code></td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td></tr>
+    <tr><td><code class="inline">mean_masked_reg</code>（Dropout 0.3，wd 1e-3）</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td></tr>
+  </table>
+  <p>成绩从 <strong>0.5027</strong> 掉到 <strong>0.4672</strong>——下降 <strong>0.0355</strong>，约 <strong>3.6 个百分点</strong>——宏 F1 下降 <strong>0.0341</strong>，约 3.4 个点。比下降更糟的是离散度的变化：种子间标准差从 <strong>±0.0449</strong> 扩大到 <strong>±0.0595</strong>，于是正则化那一臂既更低、也更不稳。在这个任务上，两个“帮数据充足、容量过剩的模型”的工具起到了反作用：它们拿掉了模型仍然需要的容量。</p>
+  <div class="callout key">
+    <span class="label">结论，直说</span>
+    <strong>本周绑住结果的约束是数据，不是容量。</strong>训练段只有 <strong>523</strong> 个。0.5689 的训练-验证差距看着像过拟合，但它是发生在一个容量并非限制因素的模型上的过拟合——所以去约束那个容量（Dropout、权重衰减）只会把它仅有的那点信号也拿掉。能撬动这个数字的杠杆是更多段落，或者一个不同的任务定义；正则化不是这里的杠杆。
+  </div>
+  <div class="callout warn">
+    <span class="label">同一个手段，两个相反的答案</span>
+    在第 6 周，同样的两种正则化<em>提高</em>了成绩：那里数据充足、模型偏大，容量是瓶颈，约束它有帮助。在这里数据稀缺、容量不是瓶颈，于是完全相同的手段造成伤害。这不是工具自相矛盾，而是一个提醒：<strong>一项技术不是一条规则，它是对一个被诊断出来的瓶颈的回应。</strong>流程永远一样：先量出哪条约束在绑着结果，再选工具。把上次奏效的工具直接套用、不做测量，正是一个能用的模型在工程师自以为改进了它的同时变坏的原因。
+  </div>
+
+  <h3>8.9.3 在全量数据上建词表带来的“假提升”</h3>
+  <p>另一个诱人的“修复”是：在全部 748 段而不是 523 个训练段上统计 token，从而把词表撑大。它把词表从 <strong>1592</strong>（五种子的均值）推向全语料的 <strong>3142</strong>，而且通常会把成绩抬高。它同时是泄漏，而那个抬升是假的：词表里现在装着测试集的稀有词，于是报告量到的 OOV 率低于模型在真正新文本上会遇到的 OOV 率。测出来的抬升<em>正是因为</em>任务被改简单了，任何诚实的报告都不能把它当作改进来引用。练习 2 会让你亲手跑一遍，看清这个假增益的形状。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>过拟合（overfitting）</strong>——模型在训练集上远好于未见数据；这里训练-验证差距是 0.5689。</li>
+      <li><strong>Dropout</strong>——训练时随机置零隐单元，以降低有效容量。</li>
+      <li><strong>权重衰减（weight decay）</strong>——对权重的 L2 惩罚，把它们往零收缩。</li>
+      <li><strong>瓶颈（binding constraint）</strong>——真正限制成绩的因素；这里是 523 个训练段，不是模型的大小。</li>
+      <li><strong>假提升（false improvement）</strong>——来自泄漏测试信息、而非来自更好模型的增益。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.10 ========== -->
+<div class="section">
+  <h2>8.10 错分分析与指标的选择</h2>
+  <p>一个准确率数字，是一句把要紧部分省略掉的话。本节打开混淆矩阵，逐类读召回列，并展示那个决定模型能否上线的信号：准确率与宏 F1 的分裂。</p>
+
+  <h3>8.10.1 混淆矩阵，五种子的合计</h3>
+  <p>行是真实周次，列是预测周次，<code class="inline">packed</code> 臂五个种子合计——共 <strong>565</strong> 个测试预测。</p>
+  <table>
+    <tr><th>真 / 判</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>召回</th></tr>
+    <tr><td>W1 (n=80)</td><td><strong>14</strong></td><td>12</td><td>10</td><td>22</td><td>8</td><td>14</td><td>0.1750</td></tr>
+    <tr><td>W2 (n=75)</td><td>16</td><td><strong>14</strong></td><td>13</td><td>11</td><td>13</td><td>8</td><td>0.1867</td></tr>
+    <tr><td>W3 (n=85)</td><td>12</td><td>4</td><td><strong>36</strong></td><td>13</td><td>7</td><td>13</td><td>0.4235</td></tr>
+    <tr><td>W4 (n=90)</td><td>7</td><td>4</td><td>16</td><td><strong>43</strong></td><td>10</td><td>10</td><td>0.4778</td></tr>
+    <tr><td>W5 (n=95)</td><td>6</td><td>10</td><td>9</td><td>11</td><td><strong>40</strong></td><td>19</td><td>0.4211</td></tr>
+    <tr><td>W6 (n=140)</td><td>8</td><td>8</td><td>11</td><td>11</td><td>9</td><td><strong>93</strong></td><td><strong>0.6643</strong></td></tr>
+  </table>
+  <p>矩阵合计 <strong>565</strong>，其中对角线上 <strong>240</strong> 个——准确率 <strong>0.4248</strong>。有两个特征很突出，而它们就是全部的故事。</p>
+  <p><strong>非对角几乎是平的。</strong>每个非对角格子都在 <strong>4</strong> 到 <strong>22</strong> 之间。没有任何一对周次比别的更容易被混淆——没有这个任务里的“8 与 1”。对角线上唯一突出的是 <strong>W6 的 93</strong>，而那不是模型擅长第 6 周，是第 6 周本来就是最大的类（140 篇测试样本，对第 1 周的 80 篇）。</p>
+  <p><strong>召回随类别大小总体上升（Spearman ρ = 0.77）。</strong>召回应为：W1 <strong>0.1750</strong>、W2 <strong>0.1867</strong>、W3 <strong>0.4235</strong>、W4 <strong>0.4778</strong>、W5 <strong>0.4211</strong>、W6 <strong>0.6643</strong>。序列里有两处小逆序（W2 略高于 W1、W5 略低于 W4），但趋势一目了然：类越大，模型找得越好。W6 的召回是 W1 的 <strong>3.80 倍</strong>。一个把大类找得好、把小类找得差的模型，学的不是内容——它学的是先验，更频繁地预测那个常见的周。这正是“非对角是平的”背后的直接证据：既然没有任何一对周次比别的更可分，那么按频率预测，就是模型找到的最好策略。</p>
+
+  <h3>8.10.2 准确率与宏 F1 的分裂：那个阻止坏模型上线的信号</h3>
+  <p>对 <code class="inline">last_step</code> 臂，两个指标分歧很大：</p>
+  <table>
+    <tr><th>臂</th><th>测试准确率</th><th>宏 F1</th><th>随机基线</th></tr>
+    <tr><td><code class="inline">last_step</code></td><td>0.2407 ± 0.0040</td><td><strong>0.0711 ± 0.0095</strong></td><td>1/6 ≈ 0.1667</td></tr>
+  </table>
+  <p>准确率 <strong>0.2407</strong>；宏 F1 <strong>0.0711</strong>。差距 <strong>0.1696</strong>——约 <strong>17 个点</strong>——而且方向要紧：准确率高于随机基线，而宏 F1 低于它。一份只报准确率的报告，会把一个看起来比抛硬币好的模型描述出来，并把它送进生产。宏 F1 对每个类等权，照出一个“学会了说最大那个类、别的几乎什么都不会”的模型。<strong>指标不是形式；它是“一个能用的模型”与“一个自信的模型”之间的差别。</strong></p>
+  <div class="callout warn">
+    <span class="label">指标由“错要付什么代价”决定</span>
+    当类别不均衡、而漏掉一个小类的代价与漏掉一个大类一样高时，准确率是错的工具，宏 F1 才对。当代价确实与类大小成比例时，准确率是站得住的。这个选择是对“一次错误值多少”的陈述——所以它属于那些承担后果的人，而不属于一个默认值。这是本周的思政落点：<strong>选指标，就是在选你愿意接受谁的错。</strong>
+  </div>
+
+  <h3>8.10.3 十四篇错分，当成文本读</h3>
+  <p>种子 42 的 <code class="inline">packed</code> 臂在 113 篇测试段里错 14 篇。当成文本、而不是当成格子来读，它们分三类，而三类都不是模型的失败。</p>
+  <div class="steps">
+    <div class="step"><h4>短句，词表能借力的地方最少（20 词）——真 W4，判 W3</h4><p><em>"Hidden layers transform the features first; the output layer decides afterwards. The same data becomes separable in the new space."</em> 20 词是语料允许的最小长度，而它讲的是通用概念，没有多少 token 能把它锚定到某一周。</p></div>
+    <div class="step"><h4>通用工程句，哪一周都成立（26 词）——真 W1，判 W2</h4><p><em>"Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary - not scattered through the code and not in your memory."</em> 这句话在第 1 周是好建议，第 6 周也是；它完全不带周次特定的词汇，所以任何分类器都无法靠内容给它定位。</p></div>
+    <div class="step"><h4>术语跨周复用（22 词）——真 W6，判 W4</h4><p><em>"Explain how a training set of 80 samples against 17,226 parameters produces overfitting on purpose, and why that is the point of the lab."</em> 这一段里出现 17,226，而这个数字在第 4 周的材料里也出现过；模型拿到了那个词，但那个词并不专属于某一周。</p></div>
+  </div>
+  <div class="callout key">
+    <span class="label">这三篇里没有一篇是“模型看错了”</span>
+    三种情况下，模型的预测都能从段落里的词得到辩护：这些句子本身就属于不止一周。<strong>对一段复用了另一周词汇的段落，“它出自哪一周”本来就没有唯一答案</strong>——标签是这段文字被归档在哪里的属性，不是它说了什么的属性。那不是靠更大的模型能修好的失败；那是任务定义的边界。诚实的回应是在报告里点明它，并考虑该不该重新定义任务（预测主题、接受多标签），而不是该不该重训模型。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>混淆矩阵（confusion matrix）</strong>——行是真类、列是预测类；对角线统计判对，每个非对角格子是一次具体的混淆。</li>
+      <li><strong>召回率（recall）</strong>——某一类真实样本中被找出的比例；这里从 W1 的 0.1750 到 W6 的 0.6643。</li>
+      <li><strong>类别先验（class prior）</strong>——某一类的基础比例；一个预测最大类的模型就是在利用它。</li>
+      <li><strong>准确率 / 宏 F1 分裂</strong>——准确率高于基线而宏 F1 低于基线；这是模型只预测先验的信号。</li>
+      <li><strong>错分分析（error analysis）</strong>——把错分样本当文本读，找出聚合数字藏起来的东西。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.11 ========== -->
+<div class="section">
+  <h2>8.11 本章小结与练习</h2>
+
+  <div class="callout key">
+    <span class="label">六条要点</span>
+    <ol>
+      <li>文本模型永远看不到字符串。四步把文本变成张量——分词、建词表、编码、填充与掩码——而<strong>词表只从训练切分构建</strong>。别的做法都是泄漏，8.9 节说明了为什么由此得到的增益是假的。</li>
+      <li>分词不是化妆。在中文文本上，按空白切分得到 OOV 率 <strong>0.9973</strong>——每句一个 token，等于每段一个 <code class="inline">&lt;unk&gt;</code>——而字符级是 <strong>0.0254</strong>，差 <strong>39 倍</strong>。先分词，退到字符级，绝不退到空白。</li>
+      <li>填充是张量的大部分：<strong>95.58%</strong> 的测试文档短于 <code class="inline">max_len = 96</code>。掩码必须在归约前进入求和，除数必须是掩码自己的计数；掩码均值比未掩码均值值约 <strong>11.0 个点</strong>。</li>
+      <li><code class="inline">out[:, -1, :]</code> 在每个短文档上都读填充。它的签名是伤害紧跟文档长度——20–29 词上 0.1579，短于 <code class="inline">max_len</code> 为 0.2315，而达到或超过则为 0.4000——而正确那一臂是平的。修正归约能把成绩移动 <strong>26.2 个点</strong>，而且任何 <code class="inline">max_len</code> 设置都替代不了它。</li>
+      <li>正则化是对瓶颈的回应，不是规则。本周瓶颈是 <strong>523 个训练段</strong>：Dropout 与权重衰减把成绩从 <strong>0.5027</strong> 拉到 <strong>0.4672</strong>，并把离散度从 ±0.0449 扩大到 ±0.0595。在第 6 周同样的工具帮助很大，因为那里的瓶颈是容量。先诊断。</li>
+      <li>报告与“错的代价”匹配的那个指标。<code class="inline">last_step</code> 臂准确率 <strong>0.2407</strong>、宏 F1 <strong>0.0711</strong>——一个高于随机、一个低于随机。而那 14 篇错分不是模型错误：那些段落属于不止一周，任务对它们本就没有唯一答案。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 读懂池化的总账（必做）</h4>
+    <ol>
+      <li>给出最优与最差臂的测试准确率，以及差值。<em>（0.5027 与 0.2407；0.2620，即 26.2 个点。）</em></li>
+      <li>用一句话说明这两臂之间唯一不同的东西。<em>（(B, T, 96) 的隐状态张量如何压成 (B, 96)——一行池化代码。）</em></li>
+      <li>算出掩码带来的增益（未掩码均值到掩码均值），以及打包带来的增益（最后一步到 packed）。<em>（0.5027 − 0.3929 = 0.1098，约 11.0 个点；0.4248 − 0.2407 = 0.1841，约 18.4 个点。）</em></li>
+      <li>随机基线是 1/6。哪一臂的宏 F1 低于它，差多少？<em>（<code class="inline">last_step</code>，0.0711，比 0.1667 低 0.0956。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 2 · 在全量数据上建词表，看假提升（必做，动手改代码）</h4>
+    <ol>
+      <li>只在训练文档上跑 <code class="inline">build_vocab</code>，记录词表大小；再在全部 748 段上跑一次，记录新的大小。<em>（只从训练的均值是 1592；全语料词表是 3142。）</em></li>
+      <li>用同一个种子，把 <code class="inline">mean_masked</code> 两种方式各训一次，对比测试准确率与测得的 OOV 率。<em>（全语料词表通常抬高准确率、并降低测得的 OOV 率——两者都出于错误的原因。）</em></li>
+      <li>用三句话解释为什么更高的那个数不是改进，并说明什么能把它暴露出来。<em>（词表里现在装着只在测试切分里出现过的词，模型被考的是一个比部署更简单的任务。在一个“建词表时从未拿到过”的段落上量 OOV 就能暴露它：OOV 率会回到只从训练统计时的值。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 3 · 把 <code class="inline">[-1]</code> 换成掩码均值（必做，动手改代码）</h4>
+    <ol>
+      <li>把 <code class="inline">last_step</code> 分支改成不做 <code class="inline">out[:, -1, :]</code>，而是用 <code class="inline">mask = (x != 0).unsqueeze(-1).float()</code> 计算 <code class="inline">(out * mask).sum(1) / mask.sum(1).clamp(min=1)</code>。训一个种子，报告变化。<em>（种子 42 从 0.2389 到 0.5133——约 27 个点。）</em></li>
+      <li>现在只从求和中去掉掩码、但除数仍用掩码计数；再改为掩码留在求和里、但除以 <em>T</em>。报告两个成绩。<em>（两者都远低于正确的 0.5133——前者把填充加了进去，后者把每个短文档按真实占比缩小了。）</em></li>
+      <li>说明这两个“半修复”里哪一个更危险，为什么。<em>（除以 T 那个：它跑得干净、给出一个看似合理的成绩，而缩小是随长度系统性的，于是它藏在与 <code class="inline">[-1]</code> bug 相同的短文档里。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 4 · 读懂训练曲线（必做）</h4>
+    <ol>
+      <li>给出首末两点的训练与验证准确率，以及末点的差距。<em>（0.2849 到 0.9885 与 0.2143 到 0.4196；差距 0.5689。）</em></li>
+      <li>验证曲线下降过吗？这排除了哪个诊断？<em>（从未下降；它排除了“训太久”——早停不是解法。）</em></li>
+      <li>加上 Dropout 0.3 与权重衰减 1e-3，成绩从 0.5027 变成多少，离散度从 ±0.0449 变成多少？<em>（变成 0.4672；离散度扩大到 ±0.0595。）</em></li>
+      <li>用一句话说清瓶颈，并与第 6 周对照。<em>（是 523 个训练段，不是模型容量；第 6 周数据充足、容量是瓶颈，所以同样的正则化在那里有帮助、在这里造成伤害。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 5 · 混淆矩阵与召回（必做）</h4>
+    <ol>
+      <li>从矩阵里给出总预测数、正确数与准确率。<em>（565、240、0.4248。）</em></li>
+      <li>列出六个逐类召回。最大、最小各是多少，比值多少？<em>（0.1750、0.1867、0.4235、0.4778、0.4211、0.6643；最大 0.6643 属 W6，最小 0.1750 属 W1，比值 3.80。）</em></li>
+      <li>描述非对角。有多少格子超过 22，这个答案说明“最差类对”是否存在？<em>（没有——每个非对角格子都在 4 到 22 之间，所以不存在占主导的混淆对；模型不是在混淆某两个特定的周，而是在靠类别先验。）</em></li>
+      <li>对 <code class="inline">last_step</code> 臂，给出准确率、宏 F1 与随机基线。你会把哪个指标报给产品负责人，为什么？<em>（0.2407、0.0711、1/6 ≈ 0.1667。报宏 F1：准确率高于基线，会让一个低于随机的模型上线。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 6 · 解释一篇错分（必做）</h4>
+    <ol>
+      <li>取段落 <em>"Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary..."</em>，真 W1、判 W2。指出它属于三类错分里的哪一类，为什么。<em>（通用工程句，哪一周都成立——它不带周次特定的词汇。）</em></li>
+      <li>取段落 <em>"Explain how a training set of 80 samples against 17,226 parameters produces overfitting..."</em>，真 W6、判 W4。属于哪一类，破绽是什么？<em>（术语跨周复用；数字 17,226 在第 4 周材料里也出现过。）</em></li>
+      <li>用一句话论证这两篇都不是模型的失败，再用一句话说明它对任务定义意味着什么。<em>（两段本身就属于不止一周，所以预测能从文本得到辩护。它意味着“说出是哪一周”这个任务，对复用了另一周词汇的段落没有唯一答案，可能需要重新定义而不是重训。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 7 · 中文的 OOV 鸿沟（必做）</h4>
+    <ol>
+      <li>在中文文本上，给出按空白切分的 OOV 率、单例占比与词表大小，以及字符级的同样三项。<em>（空白：0.9973、0.9946、372。字符级：0.0254、0.2170、880，测试 token 14,860。）</em></li>
+      <li>算出两个 OOV 率的比值。<em>（0.9973 / 0.0254 约为 39。）</em></li>
+      <li>解释为什么按空白切分时，375 个测试片段只贡献 375 个 token，这对模型意味着什么。<em>（一个中文片段没有空格，按空白切分就把整段当成一个 token；模型每段只看到一个 <code class="inline">&lt;unk&gt;</code>，什么都学不到。）</em></li>
+      <li>说出对“没有空格的语言”的工程规则。<em>（先用真正的分词器；拿不到就退到字符级；绝不按空白切。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 8 · 打包与 <code class="inline">enforce_sorted</code>（必做，动手改代码）</h4>
+    <ol>
+      <li>构造一批长度为 <code class="inline">[3, 7, 3, 8]</code> 的四行。不排序，直接以 <code class="inline">enforce_sorted=True</code> 调 <code class="inline">pack_padded_sequence</code>，读出报错。<em>（PyTorch 抛 <code class="inline">RuntimeError</code>，告诉你长度必须按降序排。）</em></li>
+      <li>设为 <code class="inline">enforce_sorted=False</code> 再跑。确认打包结果与正确的逐样本最后隐状态一致，且保持原来的行序。<em>（一致——打包在内部排序，回程再恢复输入顺序。）</em></li>
+      <li>现在对同一批，把 <code class="inline">out[:, -1, :]</code> 与打包后的最后隐状态作对比。哪些行一致，为什么只有它们一致？<em>（只有长度等于批宽的那些行一致，因为对它们来说最后一个位置是真实 token 而不是填充。）</em></li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <span class="label">本周这些数字的来源</span>
+    本章所有数字都由 <code class="inline">scripts/w8_sequence_experiment.py</code> 产出并写入 <code class="inline">outputs/w8_sequence.json</code>：五个池化臂 × 五个种子、按长度分桶与长文档拆分、<code class="inline">max_len</code> 扫描、种子 42 的训练曲线、五种子的混淆矩阵、错分段落，以及中文分词对比。语料由 <code class="inline">scripts/build_text_corpus.py</code> 产出，写入 <code class="inline">data/raw/course-text-corpus.jsonl</code> 与 <code class="inline">outputs/w8_corpus_facts.json</code>（748 段，SHA-256 <code class="inline">87e41aac89ef59903abca15eea4250e68eb9d29537c1cd78d251ad497a16b4b1</code>）。数据是本课程自有的第 1–6 周材料，整个实验<strong>完全离线、无任何外部下载</strong>。
+  </div>
+</div>
+
+<div class="footer">
+  <p>软件学院 · AI 应用开发 —— 第 8 章 · 序列模型与文本数据处理</p>
+  <p>本章借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

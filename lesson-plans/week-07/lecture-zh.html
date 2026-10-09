@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 7 周 · 授课部分（理论 · 90 min，含于 180 分钟一体课）</div>
+  <h1>卷积神经网络与计算机视觉应用</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖复习与导入 10 分钟 + 新课讲授 80 分钟（L1–L5）；实验部分另立教案</span>
+    <span>📚 教材第 7 章（卷积、池化、感受野、经典 CNN、数据增强、GPU 显存）</span>
+    <span>🎯 模块二 · 深度学习核心技术与模型训练（W5–8）</span>
+    <span>🧩 教案编号：LP-W7-A · 单元 CU(7) · Week 7 · 4 学时</span>
+    <span>🖼 课件共 29 页（本部分用到 Part 1 至 Part 5）</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>理解<strong>卷积 Convolution</strong>与<strong>池化 Pooling</strong>：说清局部连接与<strong>权值共享 Weight Sharing</strong>，并说明卷积层相对全连接层的优势<em>以及</em>它为此付出的代价</li>
+      <li>会逐层读出一个网络的参数量，并在同一份 digits 数据上把 17,226 个参数与 1,898 个参数对清楚</li>
+      <li>会用输出尺寸公式 <code class="inline">out = (in + 2p - k)/s + 1</code> 计算 <code class="inline">nn.Conv2d</code> 与 <code class="inline">nn.MaxPool2d</code> 的输出，并沿着特征图 8×8 → 8×8 → 4×4 → 4×4 → 2×2 走一遍</li>
+      <li>描述经典 CNN 结构（LeNet / AlexNet / VGG / ResNet 的思想）以及它们所服务的图像分类任务</li>
+      <li>说清每种<strong>数据增强 Data Augmentation</strong> 策略的机理与代价，并能把五架构对照表读成「5 个种子的均值 ± 标准差」</li>
+      <li>说清 GPU 显存、梯度累积与混合精度，足以在实验里处理显存不足（OOM）</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>能用 <code class="inline">nn.Conv2d</code>、<code class="inline">nn.MaxPool2d</code> 与 <code class="inline">nn.Linear</code> 搭出 CNN，并在训练前把每一层的形状与公式对齐（用断言，不靠感觉）</li>
+      <li>能按递推 <code class="inline">rf = rf + (k - 1) × jump</code> 算出<strong>感受野 Receptive Field</strong>，并判断一个任务到底需要几层</li>
+      <li>能训练 CNN 完成图像分类，记录训练曲线与<strong>混淆矩阵 Confusion Matrix</strong>，并写出点名最差类对的<strong>错分分析 Error Analysis</strong></li>
+      <li>能按正确顺序处置 OOM：先降 batch，再用梯度累积买回等效 batch，最后才考虑硬件</li>
+      <li>能向 AI 询问显存优化方案，在本机逐条实测，并标注哪条有效、哪条无效</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素质目标 · 思政</span>
+  <strong>绿色计算：算力是有限资源，职业习惯是用更少的成本达成目标。</strong>本周这条不是口号，而是当堂实测：17,226 个参数拿到 0.9785，1,898 个参数拿到 0.9808——少 9.07 倍参数，测试准确率相差 0.0023，小于一个标准差（0.0084）。多出来的 15,328 个参数，在训练和推理里都要算、要传、要供电。在把模型做大之前，先问一句：这个规模是必要的吗？
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>知识点群</td><td>KT13 · 卷积、池化、步长、填充与感受野——认知层次「理解」。KT14 · CNN 的搭建、视觉应用、数据增强、GPU 训练与显存管理——认知层次「运用」。官方任务线：<em>能搭建并训练 CNN 完成图像分类；能处理显存问题</em></td><td>课程地图把本单元拆为 7.1 卷积、池化与感受野（1.5 学时，讲课）、7.2 经典 CNN 结构与视觉应用任务（1.5 学时，讲课）、7.3 实验 6（1.0 学时，课内实践）</td></tr>
+  <tr><td>重点</td><td>卷积与池化的作用；卷积层相对全连接层的优势及其代价；CNN 结构的搭建；输出尺寸公式与感受野；池化的选择；如何读一份 5 种子结果；混淆矩阵；GPU 显存管理与训练技巧</td><td>每个结论都锚在本机实测、并已落盘到 <code class="inline">outputs/w7_cnn.json</code> 的数字上；按官方教学实施建议，先用「参数量对比」（17,226 对 1,898）让权值共享看得见</td></tr>
+  <tr><td>难点</td><td>为什么减少参数不等于模型更好（0.9808 对 0.9785 只能写「未观察到显著差异」）；为什么池化函数是设计选择而非默认值（最大 0.9808 对平均 0.9400，差 4.1 个点）；为什么增强会主动压低干净测试分（0.9808 掉到 0.9504）；为什么「98%」不是结果、26 个错误里有 12 个与数字 8 有关；为什么 OOM 几乎从来不是硬件问题</td><td>池化：摆出两个逐字节相同的架构，让班级自己找出唯一的差异（p12）；增强：先把平移曲线画出来再解释这笔买卖（p16–p17）；错分分析：把混淆矩阵摆上来，问准确率到底盖住了什么（p19）；显存：先量峰值，再谈硬件（p23）</td></tr>
+</table>
+
+<h2>3. 教学进程安排</h2>
+<div class="timebar">
+  <div class="lec" style="flex:10">复习导入 10</div>
+  <div style="background:var(--accent);flex:80">新课讲授 80</div>
+  <div style="background:var(--green);flex:80">随堂实验 80</div>
+  <div style="background:var(--orange);flex:10">小结作业 10</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">官方教学进程为：一、复习与导入 10 min → 二、新课讲授 80 min → 三、随堂实验 80 min（实验 6）→ 四、小结与作业布置 10 min。合计 180 min = 4 学时。本教案（LP-W7-A）给出完整进程并主讲前两段；第三段由实验部分（LP-W7-B）承担。</p>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>一</td><td>10 min</td><td><strong>复习与导入</strong>：第 6 周回顾（验证损失是过拟合的信号）；检查上次课的正则化报告；导入——本周实验要撞上的问题：全连接网处理图像时参数太多、又不抗平移</td><td>p1–p4</td><td>讲授 + 举手投票</td></tr>
+  <tr><td>二 · 7.1</td><td>40 min</td><td><strong>7.1 卷积、池化与感受野</strong>：为什么图像不能直接铺平；参数量对账（17,226 对 1,898）；把滑动点积写成代码；形状的算术与感受野 3 → 4 → 8 → 10；池化在做什么、代价是什么（4.1 个点）</td><td>p3–p12</td><td>讲授 + 代码走读 + 读表</td></tr>
+  <tr><td>二 · 7.2</td><td>40 min</td><td><strong>7.2 经典 CNN 结构与视觉应用任务</strong>：LeNet / AlexNet / VGG / ResNet 的思想；图像分类；5 架构 × 5 种子的总账；平移探针与增强的账本（+29 / −3）；读混淆矩阵与错分分析；GPU 训练、显存与梯度累积</td><td>p13–p26</td><td>读图 + 先猜后揭</td></tr>
+  <tr><td>三</td><td>80 min</td><td><strong>随堂实验 实验 6（LP-W7-B）</strong>：搭建 CNN、带数据增强训练、记录训练曲线 / 混淆矩阵 / ≥3 个错分案例；参数量对账表；显存优化的 AI 协同环节</td><td>p22–p26</td><td>自主练习 + 巡场 + 清单核对</td></tr>
+  <tr><td>四</td><td>10 min</td><td><strong>小结与作业布置</strong>：随堂小测（4 题）；归纳本次课的知识与技能要点；布置课后任务与提交时点</td><td>p27–p29</td><td>投票 + 讲评 + 布置作业</td></tr>
+</table>
+
+<h2>4. 讲授内容详解</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">与 29 页课件的 Part 1 至 Part 5 对齐。下列每个数字都来自 <code class="inline">scripts/w7_cnn_experiment.py</code> 并经 <code class="inline">outputs/w7_cnn.json</code> 落盘。</p>
+
+<h3>4.1 Part 1 · 卷积：从全连接到权值共享（p3–p7，KT13）</h3>
+<p style="font-size:14px;">卷积就是一次滑动点积：取一块、逐元素相乘、求和，在每个位置重复一遍。由此得到三个性质——局部连接、权值共享，以及与图宽无关的参数量。课堂先手写朴素版 <code class="inline">conv2d_naive</code>，再用断言把它与 <code class="inline">nn.Conv2d</code> 对齐，而不是「相信它对」（p5）。</p>
+<table>
+  <tr><th>层 Layer</th><th>形状 Shape</th><th>参数 Params</th><th>累计 Running</th></tr>
+  <tr><td>输入 Input</td><td>1×8×8</td><td>0</td><td>0</td></tr>
+  <tr><td>全连接 64→128</td><td>64→128</td><td>8,320</td><td>8,320</td></tr>
+  <tr><td>全连接 128→64</td><td>128→64</td><td>8,256</td><td>16,576</td></tr>
+  <tr><td>全连接 64→10</td><td>64→10</td><td>650</td><td><strong>17,226</strong></td></tr>
+  <tr><td>卷积 1→8，3×3</td><td>8×8×8</td><td>3·3·1·8 + 8 = 80</td><td>80</td></tr>
+  <tr><td>卷积 8→16，3×3</td><td>16×4×4</td><td>3·3·8·16 + 16 = 1,168</td><td>1,248</td></tr>
+  <tr><td>线性 64→10</td><td>64→10</td><td>64·10 + 10 = 650</td><td><strong>1,898</strong></td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">上半是本周对照用的全连接网，下半是两层卷积加一个线性头。17,226 → 1,898，少 9.07 倍；两者的测试准确率是 0.9785 与 0.9808——差 0.0023，小于一个标准差（0.0084）。要写「未观察到显著差异」，不写「卷积更好」。卷积真正买到的，是平移容忍：把测试图右移一列，全连接掉到 0.5089，卷积还有 0.6504。</p>
+<div class="callout warn">
+  <span class="label">它付出的代价</span>
+  局部性是<em>假设</em>，不是真理。如果你的有用模式是全局的（比如整张图的亮度分布），这个假设就是错的，卷积网会比全连接更差。感受野也是有限的：这里的最后一层卷积已经看到整张 8×8，再叠深度也不会增加平移不变性。池化会丢位置信息，而有些任务恰恰需要位置。
+</div>
+
+<h3>4.2 Part 2 · 形状的算术（p8–p12，KT13）</h3>
+<p style="font-size:14px;">课堂先用 <code class="inline">out = (in + 2p - k)/s + 1</code> 推出输出尺寸，再把四个阶段与模型真实前向逐项核对——这是脚本里的断言，不是口头说法。</p>
+<table>
+  <tr><th>阶段 Stage</th><th>k</th><th>s</th><th>特征图 Feature map</th><th>感受野 Receptive field</th><th>jump</th></tr>
+  <tr><td>输入 Input</td><td>-</td><td>-</td><td>8×8</td><td>1</td><td>1</td></tr>
+  <tr><td>卷积 1 Conv 1</td><td>3</td><td>1</td><td>8×8</td><td>3</td><td>1</td></tr>
+  <tr><td>最大池化 MaxPool</td><td>2</td><td>2</td><td>4×4</td><td>4</td><td>2</td></tr>
+  <tr><td>卷积 2 Conv 2</td><td>3</td><td>1</td><td>4×4</td><td><strong>8</strong></td><td>2</td></tr>
+  <tr><td>最大池化 MaxPool</td><td>2</td><td>2</td><td>2×2</td><td>10</td><td>4</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">形状链路：8×8 → conv+P → 8×8 → pool → 4×4 → conv+P → 4×4 → pool → 2×2 → flatten 64 → FC 10。感受野递推得到 3 → 4 → 8 → 10。关键一行是「卷积 2」：感受野 8，正好等于整张图。在本周这个 8×8 数据上，第二层卷积已经能看到全图，网络再叠也拿不到更多平移不变性——这不是模型不好，是数据太小。</p>
+<table>
+  <tr><th>架构 Architecture</th><th>池化 Pooling</th><th>参数量 Params</th><th>训练 acc</th><th>验证 acc</th><th>测试 acc</th></tr>
+  <tr><td>CNN 小</td><td>最大池化 Max</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+  <tr><td>CNN 小</td><td>平均池化 Average</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+</table>
+<div class="callout key">
+  <span class="label">池化的选择，值 4.1 个点</span>
+  除池化方式外，两个架构逐字节相同：同样的通道数、同样的核、同样的学习率与轮数。平均池化比最大池化低 4.1 个点（0.9400 对 0.9808），是标准差的 5 倍——这不是噪声。最大池化保留了「最强的那个响应」，而手写数字的判别信息恰恰在笔画最密集的地方。选池化函数，就是在选择你愿意保留什么。
+</div>
+
+<h3>4.3 Part 3 · 训练起来：曲线、增强与代价（p13–p17）</h3>
+<p style="font-size:14px;">本周 5 个架构、每个 5 个随机种子（42–46），同一套协议：<code class="inline">load_digits</code> 8×8 · 70/15/15 分层划分 · 训练集 n ≈ 1258 · Adam 1e-3 · batch 64 · 120 轮。所有差异都写成「均值 ± 标准差」。</p>
+<table>
+  <tr><th>架构 Architecture</th><th>参数量 Params</th><th>训练 acc</th><th>验证 acc</th><th>测试 acc</th></tr>
+  <tr><td>全连接 64-128-64-10</td><td>17,226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td>0.9785 ± 0.0084</td></tr>
+  <tr><td>CNN 8/16（基准，MaxPool2d）</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+  <tr><td>CNN 宽 16/32（含 FC 128）</td><td>21,312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td>0.9867 ± 0.0081</td></tr>
+  <tr><td>CNN + 平均池化</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+  <tr><td>CNN + ±1px 增强</td><td>1,898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td>0.9504 ± 0.0217</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">三条诚实的结论。① 卷积与全连接的测试差 0.0023，小于一个标准差 0.0084 → 写<em>未观察到显著差异</em>。② 变宽（21,312 个参数，是基准的 11.2 倍）只到 0.9867，比基准高 0.6 个点，而它已经比全连接网还大——收益远小于参数代价。③ 增强单独看是变差的：0.9808 → 0.9504。</p>
+<table>
+  <tr><th>架构 Arm</th><th>dx = -2</th><th>dx = -1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+  <tr><td>全连接 Dense</td><td>0.1667</td><td>0.4555</td><td><strong>0.9785</strong></td><td>0.5089</td><td>0.1822</td></tr>
+  <tr><td>CNN 8/16</td><td>0.2348</td><td>0.6481</td><td><strong>0.9808</strong></td><td>0.6504</td><td>0.2778</td></tr>
+  <tr><td>CNN + ±1px 增强</td><td>0.5170</td><td><strong>0.9415</strong></td><td><strong>0.9504</strong></td><td><strong>0.9526</strong></td><td>0.5518</td></tr>
+</table>
+<div class="callout tip">
+  <span class="label">增强的账本：买 +29 个点，付 −3 个点</span>
+  dx = −1 时，CNN 是 0.6481、增强 CNN 是 0.9415——<strong>买到了 +29 个点的鲁棒性</strong>。dx = 0 时，CNN 是 0.9808、增强 CNN 是 0.9504——<strong>付掉了 3.0 个点的干净精度</strong>，而且增强那条在 dx = 0 时是三条里最低的。增强没有提升上限，它把曲线压平了。它的训练准确率也不再冲上 1.000（第 115 轮 0.9292），过拟合被压住。要不要买，取决于一个产品问题：你的模型会遇到平移过的输入吗？如果用户是拿手机拍的——会，那就买；如果输入已被裁齐对齐——不会，那你只是白买。
+</div>
+
+<h3>4.4 Part 4 · 看它错在哪（p18–p21）</h3>
+<p style="font-size:14px;">「98%」不是一个结果，是一个不完整的句子。混淆矩阵才是把「98%」翻译成「它在哪两类之间犹豫」的那张表。行＝真实标签，列＝模型判断；对角是正确，非对角是错误。</p>
+<table>
+  <tr><th>真 ↓ / 判 →</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+  <tr><td>0</td><td><strong>135</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>1</td><td>0</td><td><strong>132</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>2</td><td>2</td></tr>
+  <tr><td>2</td><td>0</td><td>0</td><td><strong>131</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+  <tr><td>3</td><td>0</td><td>1</td><td>0</td><td><strong>134</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+  <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+  <tr><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>136</strong></td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+  <tr><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>2</td><td>0</td></tr>
+  <tr><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>1</td></tr>
+  <tr><td>8</td><td>0</td><td><strong>3</strong></td><td><strong>1</strong></td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td><td><strong>1</strong></td><td><strong>124</strong></td><td>0</td></tr>
+  <tr><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong>133</strong></td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">测试预测总数 1,350（5 个种子合计），正确 1,324（0.9807），非对角错误 26 个。<strong>这 26 个错误里有 12 个与数字 8 有关</strong>（占非对角错误的 46.2%）。最差的类对是 <strong>8 → 1，出现 3 次</strong>。数字 0 是满分（135/135）；数字 8 最差（124/130，召回 0.9538）。</p>
+<div class="callout tip">
+  <span class="label">把错分的那个数字本身画出来</span>
+  两个真实的 seed-42 测试样本：<em>真 8，被判成 7，置信 0.9829</em>——下半环被写断，上部只剩一撇，人眼看也像 7；真类概率只有 0.0144。以及<em>真 6，被判成 8，置信 0.8852</em>——这个 6 的下半环是闭合的，而 6 的下半环不该闭合；真类概率 0.0271。这才是错分分析：不是「模型还不够好」，而是「它在一个下半环闭合的 6 上会把 8 叫出来」——后者是可以修的。完整的交付标准有五条：打印混淆矩阵；点名最差的类对并给出次数；至少 3 个具体错分样本并附模型概率；每条错误配一个可检验的假设；写出下一步以及如何判断有没有用。
+</div>
+
+<h3>4.5 Part 5 · 显存与绿色计算（p22–p26，KT14）</h3>
+<p style="font-size:14px;">显存不足（OOM）是本周实验最常见的卡点，但它几乎从来不是硬件问题——是 batch size 的问题。课堂用独立子进程测峰值，而不是靠猜。</p>
+<table>
+  <tr><th>batch size</th><th>32</th><th>64</th><th>128</th><th>256</th><th>512</th><th>1,024</th></tr>
+  <tr><td>超出基线的峰值内存（MB）</td><td>83.6</td><td>91.3</td><td>104.3</td><td>129.7</td><td>176.5</td><td>275.5</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">基线（只导入 torch、不训练）是 306.5 MB。输入用最近邻上采样到 32×32，使激活体量达到真实视觉模型的量级。从 batch 32 到 1,024，增量从 83.6 涨到 275.5 MB（3.3 倍），因此<strong>峰值内存随 batch size 近似线性增长</strong>。batch = 1,024 时峰值 582.0 MB。macOS 上 <code class="inline">ru_maxrss</code> 单位是字节（Linux 是 KB），脚本内已用 <code class="inline">/1024**2</code> 处理。降低 batch 是唯一一个「不改变数学、只改变内存」的旋钮——所以它是第一件要做的事。</p>
+<table>
+  <tr><th>累积梯度的权重写法</th><th>与「真 batch 128 单次前向」的逐位一致率</th></tr>
+  <tr><td><code class="inline">exact</code>：w = 本微批样本数 / 组内样本数</td><td><strong>5 / 5 完全一致</strong></td></tr>
+  <tr><td><code class="inline">naive</code>：w = 1 / 累积步数</td><td>3 / 5</td></tr>
+  <tr><td><code class="inline">none</code>：不做缩放，梯度直接累加</td><td>2 / 5</td></tr>
+  <tr><td><code class="inline">unscaled</code>：不做缩放且不归约</td><td>2 / 5</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">差异来自每个 epoch 最后一组的微批大小不等（<code class="inline">n_train</code> = 1258 不能被 64 × 累积步数整除）。只有按「组内实际样本占比」加权才逐位等价。配套一句诚实说明：Adam 对整体梯度缩放不敏感，所以 <code class="inline">naive</code> 也能大致收敛；若换 SGD，差异会显著放大。</p>
+<div class="callout warn">
+  <span class="label">OOM 的处置顺序</span>
+  <strong>1 · 免费：</strong>先把 batch size 减半（不改变数学，只改变内存；副作用是梯度更吵）。<strong>2 · 免费：</strong>梯度累积——4×32 用对权重时与真 batch 128 逐项一致（5/5），代价是时间，不是精度。<strong>3 · 便宜：</strong>混合精度（<code class="inline">torch.amp.autocast</code> + <code class="inline">GradScaler</code>）；它改变数值，所以要重新确认指标没漂。<strong>4 · 有代价：</strong>梯度检查点或更小的输入，通常慢 20–30%；缩小输入会改变任务本身。<strong>5 · 最后：</strong>降模型规模，或者承认这个任务本机做不了——加显存是最后一条，不是第一条。本周实测这个模型永远不会 OOM，batch 1,024 的峰值也只有 582.0 MB。
+</div>
+<div class="callout tip">
+  <span class="label">绿色计算</span>
+  同一份数据、同一个准确率、参数量差 9.07 倍——这是实测，不是口号。17,226 参数的全连接网拿 0.9785，1,898 参数的卷积网拿 0.9808。用更少的成本达成目标，先问一句：这个规模是必要的吗？在申请算力之前先把峰值量出来，因为大多数「我需要更大的机子」其实是「我把输入搞太大了」。
+</div>
+
+<h2>5. 思政与 AI 赋能</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>【思政】绿色计算</h4>
+    <ul>
+      <li>算力是有限资源，要学会用更少的成本达成目标</li>
+      <li>实测依据：17,226 参数拿 0.9785，1,898 参数拿 0.9808——多出来的 15,328 个参数在训练和推理里都要算、要传、要供电，却没有换到可测量的准确率</li>
+      <li>先把峰值量出来（基线 306.5 MB；batch 1,024 时 582.0 MB），再决定要不要加硬件</li>
+      <li>无效的优化要如实写：增强让干净精度掉了 3.0 个点，只报平移那 29 个点就是选择性汇报</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>【AI 赋能】显存优化，逐条实测</h4>
+    <ul>
+      <li>第 1 步：向 AI 询问「怎么降低本周模型的显存占用」</li>
+      <li>第 2 步：把每条建议在本机实测——降 batch、梯度累积、混合精度</li>
+      <li>第 3 步：逐条标注<strong>有效</strong>或<strong>无效</strong>，并把代价（时间、数值、任务改变）写在旁边</li>
+      <li>必须核查的典型 AI 回答：「一定要用混合精度」「梯度累积总能省显存」——后者只有在权重写对时才成立</li>
+      <li>交付物：实测后留下的建议清单，每条附一行证据；同时列出没有生效的那几条</li>
+    </ul>
+  </div>
+</div>
+
+<h2>6. 课后学习任务、考核与主要参考资料</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:100px;">权重</th></tr>
+  <tr><td>课后学习任务</td><td>提交 CNN 实验报告（含错分案例分析）：训练曲线、混淆矩阵、至少 3 个错分样本及其模型概率与可检验假设、参数量对账表。并说明<em>为什么模型在某些类别上表现更差</em>——本周 26 个错误里有 12 个与数字 8 有关，最差类对是 8 → 1</td><td>实验 6 · 4 学时</td></tr>
+  <tr><td>考核对应</td><td>课程考核表对应行：<em>CNN 与序列模型的搭建与调优</em> · <strong>非重点 · 是难点 · 6%</strong> · 以实验报告考核（运用）。实验下课前的小测为 4 题</td><td>6%</td></tr>
+  <tr><td>课中衔接</td><td>授课部分（90 min）后进入实验部分（LP-W7-B，实验 6，80 min + 小结 10 min）：协议核对 → 搭建 CNN → 训练并读曲线 → 混淆矩阵与错分分析 → 显存与梯度累积（含 AI 协同）</td><td>—</td></tr>
+</table>
+<h3>主要参考资料</h3>
+<ul>
+  <li>《动手学深度学习（PyTorch 版）》对应章节及 d2l 配套代码</li>
+  <li>PyTorch 官方文档与教程：https://pytorch.org/docs/</li>
+  <li>课程双语课件 W07 与实验/项目实践包相关模板</li>
+</ul>
+
+<h2>7. 课后总结分析</h2>
+<div class="callout key">
+  <span class="label">课后总结分析 Reflection</span>
+  关注点：卷积与池化的作用；CNN 结构搭建；GPU 显存管理与训练技巧。课后根据随堂实验的完成质量与常见报错，在下一次课的复习导入环节做针对性补救；同时记录学生在 AI 协同环节暴露的典型问题（如直接采信 AI 生成的代码、未核查 AI 结论），纳入课程持续改进清单。
+</div>
+
+<h2>8. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前准备</h4>
+    <ul>
+      <li>回顾第 6 周（验证损失作为过拟合信号，从现在起视为已知）</li>
+      <li>阅读教材对应章节（卷积、池化、经典 CNN、GPU 训练）</li>
+      <li>自己先跑一遍 <code class="inline">scripts/w7_cnn_experiment.py</code>，并打开 <code class="inline">outputs/w7_cnn.json</code>，把五架构对照表在讲授前先看熟</li>
+      <li>确认环境可离线运行：<code class="inline">load_digits</code> 随 scikit-learn 提供，8×8、10 类、1797 张，无需下载；5 架构 × 5 种子的全流程只用 CPU</li>
+      <li>反思：你有没有在把模型做大之前，先问过小模型是不是已经够用？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>教学资源</h4>
+    <ul>
+      <li>课件：第 7 周，共 29 页（p1–p21 为本部分详解；p22–p26 为实验，p27–p29 为小测、小结与结语）</li>
+      <li>教材第 7 章</li>
+      <li>实测数据：<code class="inline">outputs/w7_cnn.json</code>（5 架构 × 5 种子，外加平移探针、混淆矩阵、梯度累积探针与内存扫描）与 <code class="inline">scripts/w7_cnn_experiment.py</code></li>
+      <li>实验指导书：<code class="inline">labs/week-07/lab-handout.md</code>（实验 6）</li>
+      <li>d2l 配套代码；PyTorch 官方文档：pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发（课程代码 52015CC3BV）—— 教案 LP-W7-A（授课部分 · 理论 · 第 7 周 · 4 学时）· 模块二</p>
+  <p>大连东软信息学院 软件学院 · 软件与大数据技术系 · 授课教师 任政 · 授课班级 留软工 24401（来华项目）· 2026-2027 学年第 1 学期</p>
+  <p>本教案借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -4,5 +4,7 @@ __pycache__/
 .venv/
 # downloaded third-party slides (never committed)
 cs224n/*.pdf
+# third-party datasets fetched at run time (never committed — see THIRD_PARTY_NOTICES.md)
+data/external/
 ~$*
 *.bak

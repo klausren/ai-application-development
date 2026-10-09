@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 07 · Module 2 · Week 7</div>
+  <h1>Convolutional Neural Networks for Computer Vision</h1>
+  <p class="overview">Chapter 5 built a training loop and Chapter 6 taught you to distrust a single number. This chapter is about a different kind of decision: not which optimiser, but <strong>which architecture</strong>, and what that architecture costs. The spine of the week is deliberately not "the CNN is more accurate" — on this data the numbers do not say that. They say something narrower and more useful: a two-layer convolution with <strong>1,898 parameters</strong> reaches <strong>0.9808</strong>, while a fully connected network with <strong>17,226 parameters</strong> reaches <strong>0.9785</strong>, and the 0.0023 gap is smaller than one standard deviation. So we spend the chapter on the arithmetic that makes that possible — the sliding dot product, the output-size formula checked against real tensors, the receptive field recurrence <strong>3 → 4 → 8 → 10</strong> — and then on the two places where the honest answer is not the convenient one: pooling is a design choice worth <strong>4.1 points</strong>, and augmentation <em>buys 29 points of robustness and pays 3 points of clean accuracy</em>. The chapter closes with a confusion matrix over <strong>1,350 test predictions</strong>, a measurement of peak memory against batch size, and the four gradient-accumulation weightings that do and do not reproduce a true large batch.</p>
+</div>
+
+<!-- ========== 7.1 ========== -->
+<div class="section">
+  <h2>7.1 From Dense Layers to Convolution</h2>
+  <p>The natural first idea is the one Chapter 5 already used: take the image, flatten it into a vector, and hand it to a multilayer perceptron. On an 8x8 digit that vector has 64 entries and the idea works fine. On a photograph it does not, and the reason is arithmetic rather than philosophical — so it can be counted.</p>
+
+  <h3>7.1.1 Why an Image Cannot Simply Be Flattened</h3>
+  <p>Three separate things go wrong the moment the pixels are laid out in a single row, and each of them has a number attached in this week's experiment.</p>
+  <div class="steps">
+    <div class="step"><h4>The parameter count explodes</h4><p>A dense layer that maps 64 inputs to 128 outputs already holds 64 x 128 + 128 = 8,320 weights. The full network used as this week's control has <strong>17,226 parameters</strong>. Scale the input to a real photograph — 224 x 224 x 3 pixels is 150,528 inputs — and a single hidden layer of the same width needs more than 19 million weights before the first ReLU. The growth is quadratic in the image side, and it is the input <em>dimension</em>, not the number of classes, that drives it.</p></div>
+    <div class="step"><h4>Flattening destroys the layout</h4><p>Once the 8x8 grid is a 64-long vector, two pixels that were neighbours and two pixels on opposite sides of the image are the same kind of object: two indices. Nothing in a dense layer's weight matrix knows that index 8 and index 9 were adjacent on the same row and that index 0 was a whole row away. The spatial structure that actually carries the information in an image is thrown away before learning begins.</p></div>
+    <div class="step"><h4>A shift is treated as a brand-new object</h4><p>A dense network has to learn every pattern once per position. This is not a theoretical complaint; it is measured. Shifting the test images by one column costs the dense network heavily: its accuracy falls from <strong>0.9785</strong> at zero shift to <strong>0.5089</strong> at one column, while the convolution falls only to <strong>0.6481</strong>. The same digit, moved one pixel, is half a new problem for the network that cannot share weights across positions.</p></div>
+  </div>
+
+  <h3>7.1.2 Local Connectivity and Weight Sharing</h3>
+  <p>A convolution layer answers all three problems with two structural assumptions. <strong>Local connectivity</strong> says that one output value is computed from a small patch of the input — a 3x3 window, not the whole image — so the number of weights per output does not grow with the image size. <strong>Weight sharing</strong> says that the <em>same</em> small kernel is applied at every position, so the total number of weights depends only on the kernel size and the channel counts, not on how wide the image is.</p>
+  <p>Those two decisions are what turn "learn a detector for every position" into "learn one detector and slide it". The price is an assumption: that a useful pattern is local and that the same pattern is useful wherever it appears. When that assumption holds — as it does for the stroke of a handwritten digit — the saving is enormous. When it does not, a convolution can be worse than a dense layer, and that is a real cost, not a footnote.</p>
+
+  <h3>7.1.3 The Parameter Ledger: 17,226 to 1,898</h3>
+  <p>The official teaching plan asks for the parameter comparison explicitly, because it is the cleanest way to see what weight sharing buys. Both architectures below are trained on exactly the same data, with the same split and the same optimiser.</p>
+  <table>
+    <tr><th>Layer</th><th>Shape</th><th>Parameters</th><th>Running total</th></tr>
+    <tr><td>Dense 64 to 128</td><td>64 to 128</td><td>8,320</td><td>8,320</td></tr>
+    <tr><td>Dense 128 to 64</td><td>128 to 64</td><td>8,256</td><td>16,576</td></tr>
+    <tr><td>Dense 64 to 10</td><td>64 to 10</td><td>650</td><td><strong>17,226</strong></td></tr>
+    <tr><td>Conv 1 to 8, 3x3 (k*k*C_in*C_out + C_out)</td><td>8x8x8</td><td>3*3*1*8 + 8 = 80</td><td>80</td></tr>
+    <tr><td>Conv 8 to 16, 3x3</td><td>16x4x4</td><td>3*3*8*16 + 16 = 1,168</td><td>1,248</td></tr>
+    <tr><td>Dense 64 to 10</td><td>64 to 10</td><td>64*10 + 10 = 650</td><td><strong>1,898</strong></td></tr>
+  </table>
+  <p>The two convolutions together hold 1,248 weights; the linear head holds 650. The dense control holds <strong>17,226</strong>. The ratio is <strong>9.07x</strong> fewer parameters for the convolution, and — this is the number the whole week turns on — the two test accuracies are <strong>0.9785</strong> and <strong>0.9808</strong>. The difference is <strong>0.0023</strong>, which is smaller than one standard deviation (<strong>0.0084</strong>), so the honest report is <strong>"no significant difference was observed"</strong>, not "the CNN is better".</p>
+
+  <div class="callout tip">
+    <span class="label">Frozen protocol, restated exactly</span>
+    Everything measured in this chapter comes from one fixed recipe, so that a change in the numbers can only come from the change under test.
+    <ul>
+      <li><strong>Data.</strong> <code class="inline">sklearn.datasets.load_digits</code> — 8x8 greyscale handwritten digits, 10 classes, <strong>1,797</strong> images, shipped with scikit-learn. The whole experiment runs <strong>fully offline and downloads nothing</strong>, which is a deliberate design choice: it removes any dependency on third-party data sources and their licences. Pixels are scaled to 0-1.</li>
+      <li><strong>Split.</strong> 70 / 15 / 15, <strong>stratified</strong>, <code class="inline">random_state = seed</code>, leaving <strong>n_train = 1258</strong> and about 270 images for validation and 270 for the test set.</li>
+      <li><strong>Optimisation.</strong> <code class="inline">Adam(lr = 1e-3)</code>, batch size 64, <strong>120 epochs</strong>, no weight decay.</li>
+      <li><strong>Replication.</strong> Five random seeds (42, 43, 44, 45, 46); every figure is the <strong>mean ± 1 standard deviation over the five seeds</strong>, never a single run.</li>
+    </ul>
+  </div>
+
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_split</span>(seed=<span class="num">42</span>):
+    <span class="str">"""1797 digits, 8x8, scaled to [0, 1]; stratified 70 / 15 / 15."""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)          <span class="cm"># 8x8 pixels, 10 classes</span>
+    X = (X / <span class="num">16.0</span>).astype(<span class="str">"float32"</span>)              <span class="cm"># pixel range 0..16 -> 0..1</span>
+    Xtr, Xrest, ytr, yrest = train_test_split(
+        X, y, test_size=<span class="num">0.30</span>, stratify=y, random_state=seed)
+    Xva, Xte, yva, yte = train_test_split(
+        Xrest, yrest, test_size=<span class="num">0.50</span>, stratify=yrest, random_state=seed)
+    t = <span class="kw">lambda</span> a: torch.tensor(a)
+    <span class="kw">return</span> (t(Xtr), t(ytr), t(Xva), t(yva), t(Xte), t(yte))
+
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="str">"""Flatten 64 -> 128 -> 64 -> 10  =  17,226 parameters."""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="fn">super</span>().__init__()
+        self.net = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">128</span>), nn.ReLU(),
+                                 nn.Linear(<span class="num">128</span>, <span class="num">64</span>), nn.ReLU(),
+                                 nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x.view(x.shape[<span class="num">0</span>], -<span class="num">1</span>))
+
+
+<span class="kw">class</span> <span class="fn">CNN</span>(nn.Module):
+    <span class="str">"""conv(1->8,3,pad1) ReLU maxpool2 -> conv(8->16,3,pad1) ReLU maxpool2 -> FC 10
+    = 1,898 parameters. `pool` is a constructor argument so the average-pooling
+    arm can share exactly this code."""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, pool=nn.MaxPool2d, in_size=<span class="num">8</span>):
+        <span class="fn">super</span>().__init__()
+        self.in_size = in_size
+        self.body = nn.Sequential(
+            nn.Conv2d(<span class="num">1</span>, <span class="num">8</span>, <span class="num">3</span>, padding=<span class="num">1</span>), nn.ReLU(), pool(<span class="num">2</span>, stride=<span class="num">2</span>),
+            nn.Conv2d(<span class="num">8</span>, <span class="num">16</span>, <span class="num">3</span>, padding=<span class="num">1</span>), nn.ReLU(), pool(<span class="num">2</span>, stride=<span class="num">2</span>))
+        self.head = nn.Linear(<span class="num">16</span> * <span class="num">2</span> * <span class="num">2</span>, <span class="num">10</span>)      <span class="cm"># flatten 64 -> 10</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        x = self.body(x.view(-<span class="num">1</span>, <span class="num">1</span>, self.in_size, self.in_size))
+        <span class="kw">return</span> self.head(x.view(x.shape[<span class="num">0</span>], -<span class="num">1</span>))
+
+
+<span class="kw">for</span> m <span class="kw">in</span> (MLP(), CNN()):
+    <span class="fn">print</span>(<span class="fn">sum</span>(p.numel() <span class="kw">for</span> p <span class="kw">in</span> m.parameters()))   <span class="cm"># 17226, then 1898</span></pre>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Convolution</strong> — a layer that computes each output from a local patch, using one shared kernel across all positions.</li>
+      <li><strong>Feature map</strong> — the 2-D array a convolution produces; one map per output channel.</li>
+      <li><strong>Local connectivity</strong> — each output depends on a small neighbourhood of the input.</li>
+      <li><strong>Weight sharing</strong> — the same kernel weights are reused at every spatial position, which is what makes the parameter count independent of image width.</li>
+      <li><strong>Translation equivariance</strong> — shifting the input shifts the feature map by the same amount; the property a dense layer must learn from scratch at every position; the word here is equivariance, not invariance, because the response moves with the input.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.2 ========== -->
+<div class="section">
+  <h2>7.2 The Convolution Operation</h2>
+  <p>All of the arithmetic in a convolution is one sentence: take a patch, multiply it element-wise by the kernel, and sum. Everything else — stride, padding, channels, groups — is bookkeeping around that sentence. Writing the sentence once by hand is what makes the vocabulary concrete.</p>
+
+  <h3>7.2.1 A Sliding Dot Product</h3>
+  <p>The hand-written version below is not the code you will ship; it is the code that makes <em>feature map</em>, <em>stride</em> and <em>padding</em> mean something. It is checked against <code class="inline">nn.Conv2d</code> with an assertion, so that "the hand-written version matches PyTorch" is a fact the program verifies, not a claim in a textbook.</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">import</span> torch.nn.functional <span class="kw">as</span> F
+
+
+<span class="kw">def</span> <span class="fn">conv2d_naive</span>(img, kernel, stride=<span class="num">1</span>, pad=<span class="num">0</span>):
+    <span class="str">"""img: (H, W)  kernel: (kh, kw)  ->  one sliding dot product."""</span>
+    H, W = img.shape
+    kh, kw = kernel.shape
+    <span class="kw">if</span> pad:
+        img = F.pad(img, (pad,) * <span class="num">4</span>)
+        H, W = H + <span class="num">2</span> * pad, W + <span class="num">2</span> * pad
+    oh = (H - kh) // stride + <span class="num">1</span>
+    ow = (W - kw) // stride + <span class="num">1</span>
+    out = torch.zeros(oh, ow)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(oh):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(ow):
+            patch = img[i * stride:i * stride + kh,
+                        j * stride:j * stride + kw]
+            out[i, j] = (patch * kernel).<span class="fn">sum</span>()
+    <span class="kw">return</span> out
+
+
+torch.manual_seed(<span class="num">0</span>)
+img, kernel = torch.randn(<span class="num">8</span>, <span class="num">8</span>), torch.randn(<span class="num">3</span>, <span class="num">3</span>)
+mine = <span class="fn">conv2d_naive</span>(img, kernel, stride=<span class="num">1</span>, pad=<span class="num">1</span>)
+
+conv = nn.Conv2d(<span class="num">1</span>, <span class="num">1</span>, <span class="num">3</span>, stride=<span class="num">1</span>, padding=<span class="num">1</span>, bias=<span class="kw">False</span>)
+conv.weight.data = kernel.view(<span class="num">1</span>, <span class="num">1</span>, <span class="num">3</span>, <span class="num">3</span>)
+ref = conv(img.view(<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>))[<span class="num">0</span>, <span class="num">0</span>]
+
+<span class="kw">assert</span> mine.shape == ref.shape == (<span class="num">8</span>, <span class="num">8</span>)          <span class="cm"># padding=1 keeps the size</span>
+<span class="kw">assert</span> torch.<span class="fn">allclose</span>(mine, ref, atol=<span class="num">1e-5</span>)
+<span class="fn">print</span>(<span class="str">"hand-written == nn.Conv2d"</span>)</pre>
+
+  <h3>7.2.2 Many Inputs, Many Kernels, Many Outputs</h3>
+  <p>A real layer is not one kernel over one channel. With <em>C_in</em> input channels and <em>C_out</em> kernels, each output channel is produced by its own kernel that spans <strong>all</strong> input channels. The layer's parameter count is therefore <code class="inline">k * k * C_in * C_out + C_out</code>, the first term covering the weights and the second the bias.</p>
+  <pre><span class="cm"># 3 input channels, 16 filters of size 3x3, padding 1 -> 16 output channels</span>
+conv = nn.Conv2d(in_channels=<span class="num">3</span>, out_channels=<span class="num">16</span>, kernel_size=<span class="num">3</span>, padding=<span class="num">1</span>)
+x = torch.randn(<span class="num">4</span>, <span class="num">3</span>, <span class="num">8</span>, <span class="num">8</span>)                       <span class="cm"># a batch of 4 images</span>
+y = conv(x)
+<span class="fn">print</span>(y.shape)                                     <span class="cm"># torch.Size([4, 16, 8, 8])</span>
+<span class="fn">print</span>(<span class="fn">sum</span>(p.numel() <span class="kw">for</span> p <span class="kw">in</span> conv.parameters()))    <span class="cm"># 3*3*3*16 + 16 = 448</span></pre>
+  <p>This is the exact formula that produced the 80 and 1,168 in Section 7.1.3: <code class="inline">conv1 = 3*3*1*8 + 8 = 80</code> and <code class="inline">conv2 = 3*3*8*16 + 16 = 1,168</code>.</p>
+
+  <h3>7.2.3 What an Output Channel Means</h3>
+  <p>Each output channel is one learned feature detector applied across the whole image, and its feature map says <em>where</em> that detector fired strongly. With 8 output channels you get 8 maps, each 8x8; with 16 you get 16. The number of channels is thus the number of distinct patterns the layer is allowed to look for, and it is independent of the image size — the same 3x3 kernel is used whether the input is 8x8 or 1024x1024.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Kernel (filter)</strong> — the small weight tensor that is slid over the input; one kernel produces one output channel.</li>
+      <li><strong>Sliding dot product</strong> — the operation itself: element-wise multiply the patch by the kernel, then sum to one number.</li>
+      <li><strong>Input / output channel</strong> — the depth of the input volume, against the number of kernels, which becomes the depth of the output.</li>
+      <li><strong>Bias</strong> — one learned scalar per output channel, added to every position of that channel's map.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.3 ========== -->
+<div class="section">
+  <h2>7.3 Stride, Padding, and the Output-Size Formula</h2>
+  <p>Shape errors are the most common failure in deep learning, and they are also the cheapest to eliminate, because they are pure arithmetic. One formula covers a convolution, a pooling layer and a strided convolution alike:</p>
+  <p style="text-align:center; font-size:16px;"><strong>out = (in + 2p - k) / s + 1</strong></p>
+  <p>where <em>in</em> is the input side, <em>k</em> the kernel size, <em>s</em> the stride and <em>p</em> the padding on each side (integer division). The same four common cases cover almost everything you will write:</p>
+  <table>
+    <tr><th>k</th><th>s</th><th>p</th><th>Output from an 8x8 input</th><th>When you use it</th></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>8</td><td>Same-size convolution; the workhorse of every CNN.</td></tr>
+    <tr><td>3</td><td>1</td><td>0</td><td>6</td><td>Valid convolution; shrinks by k - 1.</td></tr>
+    <tr><td>2</td><td>2</td><td>0</td><td>4</td><td>Pooling: halve the map, double the receptive-field jump.</td></tr>
+    <tr><td>3</td><td>2</td><td>1</td><td>4</td><td>Strided convolution: a learned downsample.</td></tr>
+  </table>
+
+  <h3>7.3.1 The Formula, Checked Against Real Tensors</h3>
+  <p>The script does not estimate these shapes; it computes them and then compares against the actual forward pass, asserting equality at every stage. The result is the shape chain of this week's CNN: <code class="inline">8x8 -> conv+P -> 8x8 -> pool -> 4x4 -> conv+P -> 4x4 -> pool -> 2x2 -> flatten 64 -> FC 10</code>.</p>
+  <pre><span class="kw">def</span> <span class="fn">out_size</span>(size, k, s, p):
+    <span class="kw">return</span> (size + <span class="num">2</span> * p - k) // s + <span class="num">1</span>
+
+
+stages = [(<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>),
+          (<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>)]
+size = <span class="num">8</span>
+<span class="kw">for</span> kind, k, s, p <span class="kw">in</span> stages:
+    size = <span class="fn">out_size</span>(size, k, s, p)
+    <span class="fn">print</span>(kind, <span class="str">"->"</span>, size)          <span class="cm"># conv -> 8, pool -> 4, conv -> 4, pool -> 2</span>
+<span class="fn">print</span>(<span class="str">"flatten ="</span>, <span class="num">16</span> * <span class="num">2</span> * <span class="num">2</span>)       <span class="cm"># 64</span>
+
+<span class="cm"># the same numbers, read off a real forward pass instead of the formula</span>
+h = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>)
+<span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+    <span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">CNN</span>().body:
+        h = <span class="fn">layer</span>(h)
+        <span class="fn">print</span>(<span class="fn">tuple</span>(h.shape[<span class="num">1</span>:]))     <span class="cm"># (8,8,8) (8,8,8) (8,4,4) (16,4,4) (16,2,2)</span></pre>
+  <p>All four formula checks match the forward pass exactly. When a <em>shape mismatch</em> error fires, the productive first move is to run this arithmetic by hand rather than to edit the code — most shape errors are located here in one minute.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Stride</strong> — how far the kernel moves between positions; a stride of 2 halves the output side.</li>
+      <li><strong>Padding</strong> — zeros added around the border so that the kernel can centre on edge pixels; padding 1 with a 3x3 kernel keeps the size unchanged.</li>
+      <li><strong>Output-size formula</strong> — <code class="inline">out = (in + 2p - k)/s + 1</code>, shared by convolution and pooling.</li>
+      <li><strong>Flatten dimension</strong> — channels x height x width at the end of the convolutional body, 64 here, which becomes the input width of the linear head.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.4 ========== -->
+<div class="section">
+  <h2>7.4 Receptive Field</h2>
+  <p>The receptive field of a unit is how much of the original input it can see. It is the number that tells you whether your network is even capable of relating two distant parts of the image, and it grows faster than intuition suggests once pooling is involved.</p>
+
+  <h3>7.4.1 The Recurrence</h3>
+  <p>Track two quantities stage by stage: the receptive field <em>rf</em> and the <em>jump</em>, which is the effective distance in input pixels between two neighbouring outputs. Each stage updates them as</p>
+  <p style="text-align:center; font-size:16px;"><strong>rf = rf + (k - 1) * jump</strong> &nbsp;&nbsp; and &nbsp;&nbsp; <strong>jump = jump * s</strong></p>
+  <p>starting from rf = 1 and jump = 1. A stride-2 pooling layer doubles the jump, which is why the layer after it gains receptive field twice as fast.</p>
+  <table>
+    <tr><th>Stage</th><th>k</th><th>s</th><th>Feature map</th><th>Receptive field</th><th>jump</th></tr>
+    <tr><td>Input</td><td>-</td><td>-</td><td>8x8</td><td>1</td><td>1</td></tr>
+    <tr><td>Conv 1</td><td>3</td><td>1</td><td>8x8</td><td>3</td><td>1</td></tr>
+    <tr><td>MaxPool</td><td>2</td><td>2</td><td>4x4</td><td>4</td><td>2</td></tr>
+    <tr><td>Conv 2</td><td>3</td><td>1</td><td>4x4</td><td><strong>8</strong></td><td>2</td></tr>
+    <tr><td>MaxPool</td><td>2</td><td>2</td><td>2x2</td><td>10</td><td>4</td></tr>
+  </table>
+  <p>The receptive field follows the sequence <strong>3 -> 4 -> 8 -> 10</strong>. The row that carries the lesson is <strong>Conv 2: receptive field 8, exactly the side of the whole image.</strong> On this 8x8 data the second convolution already sees everything there is to see. No amount of extra depth could add translation invariance here, because there is no unexplored region left — that is the data being small, not the model being weak.</p>
+  <pre><span class="kw">def</span> <span class="fn">receptive_field</span>(stages, size=<span class="num">8</span>):
+    rf, jump = <span class="num">1</span>, <span class="num">1</span>
+    <span class="kw">for</span> kind, k, s, p <span class="kw">in</span> stages:
+        size = (size + <span class="num">2</span> * p - k) // s + <span class="num">1</span>
+        rf = rf + (k - <span class="num">1</span>) * jump
+        jump = jump * s
+        <span class="fn">print</span>(f<span class="str">"{kind:<4} k={k} s={s}  map {size}x{size}  RF={rf}  jump={jump}"</span>)
+
+
+<span class="fn">receptive_field</span>([(<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>),
+                 (<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>)])
+<span class="cm"># conv k=3 s=1  map 8x8  RF=3   jump=1</span>
+<span class="cm"># pool k=2 s=2  map 4x4  RF=4   jump=2</span>
+<span class="cm"># conv k=3 s=1  map 4x4  RF=8   jump=2</span>
+<span class="cm"># pool k=2 s=2  map 2x2  RF=10  jump=4</span></pre>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Receptive field</strong> — the region of the input that influences one unit's value.</li>
+      <li><strong>Jump</strong> — the input-space distance between two adjacent outputs of a feature map; multiplied by the stride at each stage.</li>
+      <li><strong>Effective receptive field</strong> — the region that actually contributes in practice, which is narrower at the edges of the field than at the centre.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.5 ========== -->
+<div class="section">
+  <h2>7.5 Pooling</h2>
+  <p>Pooling is usually taught as "downsampling", which is only one of the three jobs it does and the least interesting of them. It also grows the receptive field and it buys tolerance to small shifts — and, crucially, it is a <strong>choice with a measured price</strong>.</p>
+
+  <h3>7.5.1 Three Jobs, One Cost</h3>
+  <table>
+    <tr><th>Job</th><th>What it does</th><th>Without it</th></tr>
+    <tr><td>Shrink the map</td><td>8x8 -> 4x4 -> 2x2; compute and memory in later layers fall with the area</td><td>Every later layer pays full spatial cost</td></tr>
+    <tr><td>Grow the receptive field</td><td>A stride-2 pool doubles the jump, so the next conv sees twice as far</td><td>Stacked 3x3 convolutions only reach 3, 5, 7 ...</td></tr>
+    <tr><td>Tolerate small shifts</td><td>"A strong response somewhere in this patch" is steadier than "exactly at row 3, column 5"</td><td>The output moves when the input moves by one pixel</td></tr>
+  </table>
+  <p>The cost is that pooling throws away position. For a task that needs to know <em>where</em> — segmentation, detection, keypoint localisation — that information has to be restored later. And the choice of <em>which</em> pooling function is not a matter of taste that averages out.</p>
+
+  <h3>7.5.2 The Pooling Choice Is Worth 4.1 Points</h3>
+  <p>Two architectures below differ in exactly one respect: the pooling function. The channels, kernels, learning rate and epochs are identical, and the parameter count is the same. The result is the clearest "this is a design decision" measurement of the week.</p>
+  <table>
+    <tr><th>Architecture</th><th>Pooling</th><th>Parameters</th><th>Train acc</th><th>Val acc</th><th>Test acc</th></tr>
+    <tr><td>CNN small</td><td>Max pooling</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+    <tr><td>CNN small</td><td>Average pooling</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td><strong>0.9400 ± 0.0081</strong></td></tr>
+  </table>
+  <p>Max pooling reaches <strong>0.9808</strong> and average pooling reaches <strong>0.9400</strong>. The gap is <strong>4.1 points</strong>, several times the standard deviation of either arm, and the two networks have the <strong>same number of parameters</strong>. Average pooling smooths away the strongest response, and for handwritten digits the discriminative information is exactly where the stroke is densest. Choosing a pooling function is choosing what to keep — and it can be worth more than any amount of hyper-parameter tuning on top of a wrong choice.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Pooling</strong> — a fixed, parameter-free reduction over a small window, used to shrink maps and grow the receptive field.</li>
+      <li><strong>Max pooling</strong> — keeps the largest value in each window; preserves the strongest response, at the cost of position detail.</li>
+      <li><strong>Average pooling</strong> — keeps the mean of each window; smoother, but it dilutes a single strong response.</li>
+      <li><strong>Global average pooling</strong> — averaging each channel to one number, a common replacement for a flatten-plus-dense head.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.6 ========== -->
+<div class="section">
+  <h2>7.6 What the Classic Architectures Solved</h2>
+  <p>The history of CNN design is a sequence of specific bottlenecks, each fixed by one idea. Read as a list of dates it is trivia; read as a list of problems it is a design vocabulary you will reuse.</p>
+  <table>
+    <tr><th>Architecture</th><th>The problem it addressed</th><th>The idea it introduced</th></tr>
+    <tr><td>LeNet</td><td>Can a network read a digit at all?</td><td>The template itself: alternating convolution and pooling, then a small dense head. Small, and enough for 8x8-to-32x32 digits; it is essentially this week's model.</td></tr>
+    <tr><td>AlexNet</td><td>Real, high-resolution colour images with many classes; training was too slow and overfitted.</td><td>Go deep and wide, use ReLU instead of saturating activations, and use dropout and data augmentation to hold overfitting back — plus GPUs to make it affordable.</td></tr>
+    <tr><td>VGG</td><td>Ad-hoc kernel sizes made architectures hard to reason about or reproduce.</td><td>A uniform recipe: stack only 3x3 convolutions, with pooling between blocks. Depth with a simple, repeatable pattern, and small kernels that keep the parameter cost low.</td></tr>
+    <tr><td>ResNet</td><td>Beyond a certain depth, adding layers made training <em>worse</em>, not better.</td><td>Skip connections: let a block learn a residual around the identity, so gradients can flow through very deep stacks. Depth became usable instead of self-defeating.</td></tr>
+  </table>
+  <p>Only the <em>ideas</em> are the point here. The graded material of this week is not "implement ResNet"; it is recognizing that each of these four answered a bottleneck that the previous one created, and that the bottleneck is what you look for when a model will not train.</p>
+</div>
+
+<!-- ========== 7.7 ========== -->
+<div class="section">
+  <h2>7.7 Data Augmentation</h2>
+  <p>Augmentation presents the model with transformed copies of the training inputs and relies on the label surviving the transform. The precondition is precise and easy to miss: <strong>the transform must preserve the label.</strong> Flipping a digit horizontally turns a 6 towards a 9; flipping it vertically destroys a 9. A transform that does not preserve the label does not add information — it manufactures incorrectly labelled examples while looking like a sophisticated regulariser.</p>
+
+  <h3>7.7.1 What This Experiment Augments With</h3>
+  <p>The augmented arm applies a random shift of at most one pixel in each axis, <strong>to the training batch only</strong>; at test time the images are untouched. The same function is used as the training augmentation and as the test-time probe, so the two are guaranteed comparable.</p>
+  <pre><span class="kw">def</span> <span class="fn">shift_batch</span>(imgs, dx, dy):
+    <span class="str">"""Zero-filled translation of an (n, 1, 8, 8) batch. Used both as the
+    training augmentation and as the test-time perturbation."""</span>
+    out = torch.<span class="fn">roll</span>(imgs, shifts=(dy, dx), dims=(<span class="num">2</span>, <span class="num">3</span>))
+    <span class="kw">if</span> dy &gt; <span class="num">0</span>:   out[:, :, :dy, :] = <span class="num">0</span>
+    <span class="kw">elif</span> dy &lt; <span class="num">0</span>: out[:, :, dy:, :] = <span class="num">0</span>
+    <span class="kw">if</span> dx &gt; <span class="num">0</span>:   out[:, :, :, :dx] = <span class="num">0</span>
+    <span class="kw">elif</span> dx &lt; <span class="num">0</span>: out[:, :, :, dx:] = <span class="num">0</span>
+    <span class="kw">return</span> out
+
+
+<span class="cm"># inside the training loop, for the augmented arm only</span>
+<span class="kw">if</span> arm == <span class="str">"cnn_aug"</span>:
+    dx = <span class="fn">int</span>(torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">1</span>,), generator=g))   <span class="cm"># in {-1, 0, +1}</span>
+    dy = <span class="fn">int</span>(torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">1</span>,), generator=g))
+    xb = <span class="fn">shift_batch</span>(xb.view(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>), dx, dy).view(-<span class="num">1</span>, <span class="num">64</span>)</pre>
+
+  <h3>7.7.2 The Ledger: Plus 29 Points Bought, Minus 3 Points Paid</h3>
+  <p>Translate the test images at test time, without retraining anything, and measure how each model holds up. The three-seed-averaged (five-seed-averaged, in fact) curves separate sharply.</p>
+  <table>
+    <tr><th>Arm</th><th>dx = -2</th><th>dx = -1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+    <tr><td>MLP</td><td>0.1667</td><td>0.4555</td><td><strong>0.9785</strong></td><td>0.5089</td><td>0.1822</td></tr>
+    <tr><td>CNN</td><td>0.2348</td><td>0.6481</td><td><strong>0.9808</strong></td><td>0.6504</td><td>0.2778</td></tr>
+    <tr><td>CNN + augmentation</td><td>0.5170</td><td><strong>0.9415</strong></td><td><strong>0.9504</strong></td><td><strong>0.9526</strong></td><td>0.5518</td></tr>
+  </table>
+  <p>Read the middle rows and the ledger writes itself. At dx = -1 the plain CNN drops to <strong>0.6481</strong> while the augmented CNN holds at <strong>0.9415</strong> — augmentation <strong>buys about 29 points</strong> of robustness. But look at dx = 0, the clean test set: the augmented model's <strong>0.9504</strong> is the <em>lowest of the three</em>, below the MLP's 0.9785 and the plain CNN's 0.9808 — augmentation <strong>pays about 3 points</strong> of clean accuracy.</p>
+  <div class="callout key">
+    <span class="label">The augmentation ledger</span>
+    <strong>Bought:</strong> +29 points at dx = -1 (0.6481 to 0.9415), and the training curve no longer runs to 1.000 (it sits at 0.9292 at epoch 115), so overfitting is held back.
+    <br><strong>Paid:</strong> -3 points at dx = 0 (0.9808 to 0.9504).
+    <br><strong>The lesson:</strong> augmentation did not raise the ceiling; it <em>flattened the curve</em>. It trades peak clean accuracy for robustness to shifts, and whether that trade is good is a question about your inputs, not about the model. If your users photograph the digit — buy the robustness. If the input is already cropped and aligned — you are paying for nothing.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Data augmentation</strong> — producing transformed copies of the training inputs whose labels are unchanged.</li>
+      <li><strong>Label-preserving transform</strong> — a transform the correct label survives; the precondition for augmentation to help.</li>
+      <li><strong>Test-time perturbation</strong> — a transformation applied only when measuring, to probe robustness rather than to train.</li>
+      <li><strong>Robustness / clean accuracy trade-off</strong> — the measured exchange of accuracy on the untouched test set for accuracy under perturbation.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.8 ========== -->
+<div class="section">
+  <h2>7.8 Training and Evaluation: The Five Architectures</h2>
+  <p>Five architectures, five seeds each, one frozen protocol. Every difference in this chapter is a mean over the five seeds, and a difference smaller than one standard deviation is written up as "not observed" — that rule is what keeps the results honest.</p>
+
+  <h3>7.8.1 The Five-Arm Ledger</h3>
+  <table>
+    <tr><th>Arm</th><th>Parameters</th><th>Train acc</th><th>Val acc</th><th>Test acc</th></tr>
+    <tr><td>MLP 64-128-64-10</td><td>17,226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td><strong>0.9785 ± 0.0084</strong></td></tr>
+    <tr><td>CNN 8/16 (max pool)</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+    <tr><td>CNN 8/16 (average pool)</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td><strong>0.9400 ± 0.0081</strong></td></tr>
+    <tr><td>CNN wide 16/32 (+ FC 128)</td><td>21,312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td><strong>0.9867 ± 0.0081</strong></td></tr>
+    <tr><td>CNN 8/16 + ±1px augmentation</td><td>1,898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td><strong>0.9504 ± 0.0217</strong></td></tr>
+  </table>
+  <p>Three conclusions, each stated no more strongly than the numbers allow:</p>
+  <div class="callout key">
+    <span class="label">1 · The CNN matches the MLP with 9.07x fewer parameters</span>
+    The CNN reaches <strong>0.9808</strong> on <strong>1,898</strong> parameters; the MLP reaches <strong>0.9785</strong> on <strong>17,226</strong>. The gap is <strong>0.0023</strong>, smaller than one standard deviation (<strong>0.0084</strong>), so the correct sentence is <strong>"no significant difference was observed"</strong> — not "the CNN is more accurate". The achievement is the parameter count, not the score.
+  </div>
+  <div class="callout key">
+    <span class="label">2 · Going wide helps, but not cheaply</span>
+    The wide CNN uses <strong>21,312</strong> parameters, about <strong>11.2x</strong> the small CNN, and reaches <strong>0.9867</strong> — about <strong>0.6 points</strong> above the small CNN, against a standard deviation of roughly 0.008. The gain is real but modest, and the price is parameters.
+  </div>
+  <div class="callout key">
+    <span class="label">3 · Augmentation on its own is worse on the clean test set</span>
+    The augmented arm reaches <strong>0.9504</strong> against the plain CNN's <strong>0.9808</strong>. That is not a failure of the method; Section 7.7 showed it is the price paid for the robustness shown under translation. Read the two sections together.
+  </div>
+
+  <h3>7.8.2 The Curves, for One Seed</h3>
+  <p>Sampled every 24 epochs for seed 42, the validation curves tell the same story the table does. The CNN starts slower than the MLP and overtakes it; the augmented arm stays lower and steadier throughout — it is solving a harder objective.</p>
+  <table>
+    <tr><th>Sampled epoch</th><th>1</th><th>25</th><th>49</th><th>73</th><th>97</th><th>115</th></tr>
+    <tr><td>MLP val acc</td><td>0.7037</td><td>0.9556</td><td>0.9593</td><td>0.9704</td><td>0.9741</td><td>0.9741</td></tr>
+    <tr><td>CNN val acc</td><td>0.3111</td><td>0.9407</td><td>0.9667</td><td>0.9704</td><td>0.9667</td><td>0.9741</td></tr>
+    <tr><td>CNN + aug val acc</td><td>0.1889</td><td>0.7519</td><td>0.8481</td><td>0.8667</td><td>0.8667</td><td>0.9000</td></tr>
+  </table>
+
+  <h3>7.8.3 The Confusion Matrix</h3>
+  <p>A single accuracy figure is an incomplete sentence. The confusion matrix, summed over all five seeds, is what turns "98%" into "which two classes it hesitates between". Rows are the true label, columns the prediction; the diagonal is correct and every other cell is a specific confusion.</p>
+  <table>
+    <tr><th>true / pred</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+    <tr><td>0</td><td><strong>135</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>1</td><td>0</td><td><strong>132</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>2</td><td>2</td></tr>
+    <tr><td>2</td><td>0</td><td>0</td><td><strong>131</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><td>3</td><td>0</td><td>1</td><td>0</td><td><strong>134</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>136</strong></td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>2</td><td>0</td></tr>
+    <tr><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>1</td></tr>
+    <tr><td>8</td><td>0</td><td><strong>3</strong></td><td><strong>1</strong></td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td><td><strong>1</strong></td><td><strong>124</strong></td><td>0</td></tr>
+    <tr><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong>133</strong></td></tr>
+  </table>
+  <p>The matrix sums to <strong>1,350</strong> test predictions (270 x 5), of which <strong>1,324</strong> are correct — an accuracy of <strong>0.9807</strong> — leaving <strong>26</strong> off-diagonal errors. Reading it is a single rule: <strong>look off the diagonal.</strong> Digit 0 is perfect (135/135); digit 8 is the worst class (124/130, recall 0.9538). Of the 26 errors, <strong>12 involve the digit 8</strong> — about <strong>46.2%</strong> of all mistakes — and the worst single class pair is <strong>8 -> 1</strong>, which occurs <strong>3 times</strong>. Every one of the 26 errors sits on a class pair that is visually close (8 with 1, 8 with 9, 3 with 8); none is a random misread.</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix
+
+model.<span class="fn">eval</span>()
+<span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+    y_pred = model(Xte).argmax(<span class="num">1</span>).numpy()
+
+cm = <span class="fn">confusion_matrix</span>(yte.numpy(), y_pred)     <span class="cm"># rows true, columns predicted</span>
+off = cm.copy()
+np.<span class="fn">fill_diagonal</span>(off, <span class="num">0</span>)                       <span class="cm"># keep only the mistakes</span>
+<span class="fn">print</span>(<span class="str">"errors:"</span>, off.<span class="fn">sum</span>(), <span class="str">"accuracy:"</span>, cm.<span class="fn">trace</span>() / cm.<span class="fn">sum</span>())</pre>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Arm</strong> — one configuration under test, with every other factor of the protocol held fixed.</li>
+      <li><strong>Seed replication</strong> — repeating an arm over several seeds so the spread, not one run, is the measurement.</li>
+      <li><strong>Mean ± standard deviation</strong> — the reporting form used for every figure here; a single-run value is not a result.</li>
+      <li><strong>Confusion matrix</strong> — the table of true class against predicted class; the diagonal counts correct decisions and every off-diagonal cell is a specific confusion.</li>
+      <li><strong>Recall</strong> — of the true examples of a class, the fraction the model found; 0.9538 for the worst class here.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.9 ========== -->
+<div class="section">
+  <h2>7.9 Error Analysis: From the Matrix to the Samples</h2>
+  <p>"Accuracy is 0.98" is not a finding; it is a starting point. Error analysis is the discipline of getting from an aggregate number down to the specific samples the model gets wrong, and then to a hypothesis about <em>why</em> — one that can be tested. It is the deliverable the course's teaching plan asks for explicitly: <em>look at which class of samples the model is actually wrong on</em>.</p>
+
+  <h3>7.9.1 The Method, in Five Moves</h3>
+  <div class="steps">
+    <div class="step"><h4>Print the matrix, not just the accuracy</h4><p>0.9807 hides 26 errors, 12 of which involve the digit 8. The accuracy number mentions none of this; the matrix is where the work starts.</p></div>
+    <div class="step"><h4>Name the worst class pair, with a count</h4><p>"8 is read as 1, three times" is a hundred times more useful than "the model does worse on some classes". The count matters because a single occurrence may be noise and three may be a pattern.</p></div>
+    <div class="step"><h4>Pull out concrete cases, with model probabilities</h4><p>Not "it got some 8s wrong" but "true 8, predicted 7, confidence 0.9829, probability on the true class 0.0144". The probabilities separate hesitation from a confident error, and the two call for different fixes.</p></div>
+    <div class="step"><h4>Attach one testable hypothesis per case</h4><p>"This 6 has a closed lower loop" is a hypothesis, and it is checkable: collect the 6s with closed lower loops and see whether they all become 8. That turns a story into an experiment.</p></div>
+    <div class="step"><h4>State the next step and how you will judge it</h4><p>Same split, same metric, one change at a time — the rule that does not change all semester.</p></div>
+  </div>
+
+  <h3>7.9.2 Two Errors From This Run, As Pictures</h3>
+  <p>The digits below are the real test pixels of seed 42, grey levels rendered as characters (space = 0, @ = brightest). These are not illustrations; they are the samples the model got wrong.</p>
+  <pre><span class="cm">true 8, predicted 7 (confidence 0.9829, true-class probability 0.0144)</span>
+   +@*  
+  .#+#: 
+   * *. 
+   ++@: 
+ .@@@=  
+ .@-*   
+  %:#   
+  .%+   
+
+<span class="cm">true 6, predicted 8 (confidence 0.8852, true-class probability 0.0271)</span>
+   *@#  
+  -@*@: 
+ .@* +  
+ -@+    
+ +@@+   
+ .@*@-  
+  *@@=  
+   +%   </pre>
+  <p>In the first case the lower loop of the 8 is broken and only the upper stroke survives, so the digit reads like a 7 — a human eye would agree. In the second, the 6 has a <em>closed</em> lower loop, which a 6 should not, and the model calls it an 8. Both are specific, both are explainable in terms of the stroke, and both suggest a concrete remedy: add samples of that shape, or re-weight the loss. That is the difference between "the model is not good enough" — which is not actionable — and "it calls 8 on a 6 whose lower loop closes" — which is.</p>
+
+  <div class="callout tip">
+    <span class="label">The delivery standard for a complete error analysis</span>
+    A report that carries only one aggregate number has not done the work. A complete one contains all of: (1) the confusion matrix itself, printed; (2) the worst class pair, named, with its count; (3) at least three concrete misclassified cases, each with the model's probability on the predicted and true classes; (4) a testable hypothesis for each; and (5) the next experiment and the criterion by which it will be judged. Missing any one of these is the most common way this week's report loses marks.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Error analysis</strong> — moving from an aggregate metric to the specific failures and their causes.</li>
+      <li><strong>Class pair</strong> — an ordered (true, predicted) pair; the unit in which confusions are counted.</li>
+      <li><strong>Confidence vs true-class probability</strong> — how sure the model was of its (wrong) answer, against how little probability mass the correct class received.</li>
+      <li><strong>Testable hypothesis</strong> — a proposed cause stated so that a further measurement could confirm or refute it.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.10 ========== -->
+<div class="section">
+  <h2>7.10 GPU Memory Management and Green Computing</h2>
+  <p>Running out of memory is the most common blocker in this week's lab, and it is almost never a hardware problem — it is a batch-size problem. The right response is a measurement followed by a specific order of operations, not a purchase order.</p>
+
+  <h3>7.10.1 Peak Memory Grows with Batch Size</h3>
+  <p>Peak resident memory was measured in a separate process for each batch size, with the input nearest-neighbour upsampled to 32x32 so the effect is measurable at all. The baseline — importing torch and building the model, without training — is <strong>306.5 MB</strong>, and everything below is reported as the increment above that baseline.</p>
+  <table>
+    <tr><th>Batch size</th><th>Peak RSS (MB)</th><th>Increment over baseline (MB)</th></tr>
+    <tr><td>0 (baseline only)</td><td>306.5</td><td>0.0</td></tr>
+    <tr><td>32</td><td>390.1</td><td>83.6</td></tr>
+    <tr><td>64</td><td>397.8</td><td>91.3</td></tr>
+    <tr><td>128</td><td>410.8</td><td>104.3</td></tr>
+    <tr><td>256</td><td>436.2</td><td>129.7</td></tr>
+    <tr><td>512</td><td>483.0</td><td>176.5</td></tr>
+    <tr><td>1024</td><td>582.0</td><td>275.5</td></tr>
+  </table>
+  <p>The increment grows roughly linearly with the batch size — from 83.6 MB at batch 32 to 275.5 MB at batch 1024, a factor of 3.3 — and at batch 1024 the whole process peaks at <strong>582.0 MB</strong>. Reducing the batch is the only knob that changes memory without changing the mathematics of the update.</p>
+  <div class="callout warn">
+    <span class="label">A measurement trap worth knowing</span>
+    On macOS, <code class="inline">ru_maxrss</code> is reported in <strong>bytes</strong>; on Linux it is in <strong>kilobytes</strong>. Dividing by the wrong constant silently reports megabytes that are off by a factor of 1024. The probe handles this with <code class="inline">/ 1024 ** 2</code>, and the raw numbers above were produced with that divisor on macOS.
+  </div>
+
+  <h3>7.10.2 What to Do When You Run Out of Memory</h3>
+  <p>Work down this list. Each step down costs more; the last two are no longer tuning, they are new hardware or a new plan.</p>
+  <div class="steps">
+    <div class="step"><h4>Halve the batch size (free)</h4><p>Changes memory, not maths. The side effect is noisier gradients, compensated with more steps or a higher learning rate. Do this before suspecting the hardware.</p></div>
+    <div class="step"><h4>Gradient accumulation (free)</h4><p>Buy the effective batch back without the memory. Measured below: 4 x 32 with the right weighting reproduces a true batch of 128 exactly. You pay in time, not accuracy.</p></div>
+    <div class="step"><h4>Mixed precision (cheap, not free)</h4><p><code class="inline">torch.amp.autocast</code> with a <code class="inline">GradScaler</code> halve the activation cost. It changes the numerics, so re-confirm that the metric has not drifted.</p></div>
+    <div class="step"><h4>Gradient checkpointing or a smaller input (costs)</h4><p>Trades time for memory, typically 20-30% slower. Shrinking the input resolution changes the task itself, so decide what you are measuring before you change it.</p></div>
+    <div class="step"><h4>Shrink the model, or admit the task does not fit (last)</h4><p>Buying a bigger GPU is the last option, not the first. This week's model peaks at <strong>582.0 MB</strong> even at batch 1024 and will never run out of memory — measure what you actually need before shopping.</p></div>
+  </div>
+
+  <h3>7.10.3 Gradient Accumulation: Buying the Batch Back at the Right Price</h3>
+  <p>Gradient accumulation splits a large effective batch into several small micro-batches, accumulates their gradients, and takes one optimiser step. The effective batch is the micro-batch size times the number of accumulation steps — here 4 x 32 = 128. The test is whether each weighting reproduces a true batch of 128 <em>seed by seed</em>.</p>
+  <table>
+    <tr><th>Weighting</th><th>Exact form</th><th>Agreement with the true batch-128 run</th></tr>
+    <tr><td>exact</td><td><code class="inline">w = len(sel) / group_size</code></td><td><strong>5 / 5 identical</strong></td></tr>
+    <tr><td>naive</td><td><code class="inline">w = 1 / accum_steps</code></td><td>3 / 5</td></tr>
+    <tr><td>unscaled</td><td>no scaling, no reduction</td><td>2 / 5</td></tr>
+    <tr><td>none</td><td>no scaling, gradients summed directly</td><td>2 / 5</td></tr>
+  </table>
+  <p>Only the <strong>exact</strong> weighting matches on all five seeds. The reason is specific and is worth stating precisely: the difference comes from <strong>the last micro-batch group of each epoch having a different size</strong> (n_train = 1258 is not divisible by 64 x accum, and in the probe not by 32 x 4 either). Weighting each micro-batch by its <em>share of the group</em> — <code class="inline">len(sel)/group_size</code> — is what makes the accumulated gradient equal the group mean; the naive <code class="inline">1/accum_steps</code> form is correct only while every micro-batch has the same size.</p>
+  <div class="callout warn">
+    <span class="label">An honest boundary on this result</span>
+    The <code class="inline">naive</code> and <code class="inline">unscaled</code> variants still converge reasonably here because <strong>Adam is insensitive to a uniform scaling of the gradient</strong> — it normalises by the second moment, so multiplying every gradient by a constant is largely absorbed. That is a property of the optimiser, not a licence to skip the weighting. <strong>With SGD the differences would be substantially larger</strong>, so the correct conclusion is not "the weighting does not matter", but "with Adam the misweighting is forgiving, and grading it on a different optimiser would expose it".
+  </div>
+  <pre><span class="cm"># a group of `size` samples split into micro-batches of len(sel)</span>
+<span class="kw">if</span> accum_mode == <span class="str">"exact"</span>:
+    w = <span class="fn">len</span>(sel) / size          <span class="cm"># this micro-batch's SHARE of the group</span>
+<span class="kw">elif</span> accum_mode == <span class="str">"naive"</span>:
+    w = <span class="num">1.0</span> / accum_steps        <span class="cm"># correct only while every micro-batch is equal</span>
+<span class="kw">else</span>:                            <span class="cm"># none / unscaled</span>
+    w = <span class="num">1.0</span>
+(loss * w).<span class="fn">backward</span>()</pre>
+
+  <div class="callout tip">
+    <span class="label">Green computing: compute is a finite resource</span>
+    The same data and the same accuracy are reachable with 9.07x fewer parameters, and this chapter measured it rather than asserting it. Parameters are a bill: 17,226 parameters reach 0.9785 and 1,898 reach 0.9808, and the extra 15,328 weights must be computed, moved and powered in training and at inference. "Reaching the goal with less" is not piety; it starts with one question — was this size necessary? Measure the peak memory before requesting compute, and <strong>report the optimisations that did not work</strong>: this week's augmentation cost 3 points of clean accuracy, and reporting only the 29-point robustness gain would be selective reporting.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>GPU memory</strong> — the memory held by activations, gradients and parameters during training; the thing batch size scales.</li>
+      <li><strong>Out of memory (OOM)</strong> — the error raised when an allocation exceeds available memory; the most common lab blocker.</li>
+      <li><strong>Gradient accumulation</strong> — summing gradients over several micro-batches before one optimiser step, to reach a larger effective batch without the memory.</li>
+      <li><strong>Effective batch</strong> — micro-batch size times accumulation steps; the batch the update sees.</li>
+      <li><strong>Mixed precision</strong> — using lower-precision arithmetic for most activations, with a loss scale to keep gradients usable.</li>
+      <li><strong>Green computing</strong> — designing for the smallest compute that reaches the goal, and reporting the optimisations that did not pay off.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.11 ========== -->
+<div class="section">
+  <h2>7.11 Summary and Exercises</h2>
+
+  <div class="callout key">
+    <span class="label">Six takeaways</span>
+    <ol>
+      <li>A convolution is not a stronger layer; it trades a <strong>locality assumption</strong> for parameter efficiency. On the same data the parameter count differs by <strong>9.07x</strong> and the accuracy by <strong>0.0023</strong> — smaller than one standard deviation, so "no significant difference was observed".</li>
+      <li>Do the shape arithmetic before writing the code. The output-size formula <code class="inline">(in + 2p - k)/s + 1</code> matches the real forward pass at every stage, and the receptive field follows <strong>3 -> 4 -> 8 -> 10</strong>, with the second convolution already covering the whole 8x8 image.</li>
+      <li>The pooling function is a <strong>choice</strong>, not a default. Max against average is worth <strong>4.1 points</strong> at identical parameter count — several standard deviations.</li>
+      <li>Augmentation buys robustness and pays clean accuracy: <strong>+29 points</strong> at dx = -1 for <strong>-3 points</strong> at dx = 0. Whether to buy is a question about whether your inputs are ever translated — a product question, not a model question.</li>
+      <li>"98%" is not a result. A complete error analysis has four parts: the confusion matrix, the worst class pair with its count, concrete cases with probabilities, and a testable hypothesis. Here 26 errors remain, <strong>12 involve the digit 8</strong>, and the worst pair is <strong>8 -> 1 (three times)</strong>.</li>
+      <li>When you run out of memory, drop the batch first and buy the effective batch back with accumulation; with the share-of-group weighting it reproduces the true batch exactly (<strong>5/5</strong>). Report the optimisations that did not work.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · Parameter Counts by Hand (Required)</h4>
+    <ol>
+      <li>Using <code class="inline">k*k*C_in*C_out + C_out</code>, compute the parameters of <code class="inline">conv(1->8, 3x3)</code> and <code class="inline">conv(8->16, 3x3)</code>. <em>(80 and 1,168.)</em></li>
+      <li>Add the linear head <code class="inline">64 -> 10</code> and give the total for the CNN. <em>(80 + 1,168 + 650 = 1,898.)</em></li>
+      <li>Compute the MLP's total for 64-128-64-10 and give the ratio to the CNN. <em>(17,226; ratio 17,226 / 1,898 = 9.07x.)</em></li>
+      <li>The MLP scores 0.9785 and the CNN 0.9808 with a per-seed standard deviation of 0.0084. Write the one-sentence conclusion the data supports. <em>(No significant difference was observed; the achievement is the 9.07x reduction in parameters, not the score.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2 · The Shape Chain and the Receptive Field (Required)</h4>
+    <ol>
+      <li>An 8x8 input passes through conv(3x3, s=1, p=1), MaxPool(2, s=2), conv(3x3, s=1, p=1), MaxPool(2, s=2). Give the feature-map size after each stage. <em>(8, 4, 4, 2.)</em></li>
+      <li>Using <code class="inline">rf = rf + (k - 1) * jump</code> and <code class="inline">jump = jump * s</code>, compute the receptive field after each stage. <em>(3, 4, 8, 10.)</em></li>
+      <li>What is the receptive field of the last convolution, and what does it mean for this 8x8 data? <em>(8 — it already covers the whole image, so extra depth cannot add translation invariance here.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3 · Verify the Formula in Code (Required, hands-on)</h4>
+    <ol>
+      <li>Write <code class="inline">out_size(size, k, s, p)</code> and print the output for the four stages above. Then build the CNN and print <code class="inline">tuple(h.shape[1:])</code> after each layer of <code class="inline">model.body</code>. Confirm the formula and the forward pass agree at every stage.</li>
+      <li>Change the first convolution to <code class="inline">padding=0</code> and predict, before running, what the four feature-map sizes and the flatten dimension become. Then run it and check. <em>(6, 3, 3, 1; the flatten dimension becomes 16 x 1 x 1 = 16, and the head must be rebuilt to match.)</em></li>
+      <li>Now switch the pooling from <code class="inline">MaxPool2d</code> to <code class="inline">AvgPool2d</code> and leave everything else identical. State, before training, which arm's test accuracy you expect and why. <em>(The average-pooling arm's 0.9400 — it smooths away the strongest response, worth 4.1 points.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4 · Read the Augmentation Ledger (Required)</h4>
+    <ol>
+      <li>At dx = -1, give the plain CNN and the augmented CNN test accuracies, and the change. <em>(0.6481 and 0.9415, about +29 points.)</em></li>
+      <li>At dx = 0, give the same two, and the change. <em>(0.9808 and 0.9504, about -3 points.)</em></li>
+      <li>"Augmentation improved the model" — is that a correct summary? Explain in two sentences, and state the question that actually decides whether to use it. <em>(No: it did not raise the ceiling, it flattened the curve, trading clean accuracy for robustness. The deciding question is whether real inputs are ever translated.)</em></li>
+      <li>At dx = 0 which of the three arms is lowest, and what does that say about the cost of robustness? <em>(The augmented arm, 0.9504 — the robustness is paid for out of clean accuracy.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5 · Reach an Actionable Error Analysis (Required)</h4>
+    <ol>
+      <li>From the confusion matrix, name the worst class pair and its count, and state how many of the 26 errors involve the digit 8. <em>(8 -> 1, three times; 12 of the 26 errors involve the digit 8, 46.2%.)</em></li>
+      <li>For the case "true 8, predicted 7, confidence 0.9829, true-class probability 0.0144", write a hypothesis in one sentence. <em>(The lower loop is broken so the digit reads as a 7.)</em></li>
+      <li>Turn that hypothesis into a check you could run. <em>(Collect test 8s whose lower loop is broken and measure whether they are disproportionately predicted as 7; or synthesise such 8s and measure the error rate on them.)</em></li>
+      <li>List the five items a complete error-analysis report must contain. <em>(Confusion matrix; worst pair with count; at least three cases with probabilities; a testable hypothesis each; the next experiment and its criterion.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 6 · Reproduce, Then Misweight, Gradient Accumulation (Required, hands-on)</h4>
+    <ol>
+      <li>Train the CNN once with a true batch of 128, and record the test accuracy for each of the five seeds. Then train with 4 x 32 accumulation using <code class="inline">w = len(sel) / group_size</code> and compare seed by seed. <em>(All five match exactly — 5 / 5.)</em></li>
+      <li>Change the weighting to <code class="inline">w = 1 / accum_steps</code> and re-run. How many seeds still match, and why do the others not? <em>(3 / 5; the last micro-batch group of an epoch has a different size, so the naive mean is biased on that group.)</em></li>
+      <li>Now remove the weighting entirely (<code class="inline">w = 1</code>) and re-run. How many match? <em>(2 / 5.)</em></li>
+      <li>Explain in three sentences why the misweighted runs still converge reasonably under Adam, and what would change that. <em>(Adam normalises by the second moment, so a uniform gradient scaling is largely absorbed; with SGD the difference would be substantially larger, so this forgiveness is a property of the optimiser, not a licence to skip the weighting.)</em></li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <span class="label">Where this week's numbers come from</span>
+    Every figure in this chapter was produced by <code class="inline">scripts/w7_cnn_experiment.py</code> writing <code class="inline">outputs/w7_cnn.json</code>: five architectures across five seeds, plus the translation probe, the confusion matrix over all seeds, the receptive-field and shape assertions, the four gradient-accumulation weightings and the memory sweep. The data is <code class="inline">sklearn.datasets.load_digits</code>, and the entire experiment runs <strong>fully offline with no external download</strong>.
+  </div>
+</div>
+
+<div class="footer">
+  <p>School of Software · AI Application Development — Chapter 7 · Convolutional Neural Networks for Computer Vision</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

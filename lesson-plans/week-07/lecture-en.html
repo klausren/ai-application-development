@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 7 · Lecture Part (Theory · 90 min, inside a 180-min session)</div>
+  <h1>Convolutional Neural Networks and Computer Vision Applications</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers Review + Introduction 10 min and New Content 80 min (L1-L5); the Lab Part is a separate plan</span>
+    <span>📚 Course textbook Chapter 7 (convolution, pooling, receptive field, classic CNNs, augmentation, GPU memory)</span>
+    <span>🎯 Module 2 · Core Deep Learning and Model Training (Week 5-8)</span>
+    <span>🧩 Lesson Plan ID: LP-W7-A · Unit CU(7) · Week 7 · 4 class hours</span>
+    <span>🖼 Deck: 29 pages (this part covers p1-p5 of Part 1 through Part 5)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>Understand <strong>convolution</strong> and <strong>pooling</strong>: explain local connectivity and <strong>weight sharing</strong>, and state the advantage a convolutional layer has over a fully connected layer <em>and</em> the price it pays for it</li>
+      <li>Read the parameter count of a network layer by layer, and reconcile 17,226 parameters against 1,898 on the same digits data</li>
+      <li>Apply the output-size formula <code class="inline">out = (in + 2p - k)/s + 1</code> to <code class="inline">nn.Conv2d</code> and <code class="inline">nn.MaxPool2d</code>, and trace a feature map from 8×8 to 8×8, 4×4, 4×4, 2×2</li>
+      <li>Describe the classic CNN structures (the ideas of LeNet / AlexNet / VGG / ResNet) and the vision classification task they serve</li>
+      <li>State the mechanism and the cost of each Data Augmentation strategy, and read a five-architecture table as mean ± standard deviation over five seeds</li>
+      <li>Explain GPU memory use, gradient accumulation and mixed precision well enough to handle an out-of-memory (OOM) error in a lab</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Build a CNN with <code class="inline">nn.Conv2d</code>, <code class="inline">nn.MaxPool2d</code> and <code class="inline">nn.Linear</code>, and assert every layer shape against the formula before training</li>
+      <li>Compute a receptive field by the recurrence <code class="inline">rf = rf + (k - 1) × jump</code> and decide how many layers a task actually needs</li>
+      <li>Train a CNN for image classification, record the training curves and the confusion matrix, and write an error analysis that names the worst class pair</li>
+      <li>Diagnose OOM in the right order: halve the batch, then buy the effective batch back with gradient accumulation, before touching the hardware</li>
+      <li>Ask an AI for GPU-memory optimisations, test each suggestion on the machine, and label which ones worked and which ones did not</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes · Civic Education</span>
+  <strong>Green computing: compute is a finite resource, and the professional habit is to reach the goal at a lower cost.</strong> This week the class measures it rather than asserting it — 17,226 parameters reach 0.9785 and 1,898 parameters reach 0.9808, a 9.07x parameter saving for a test-accuracy difference of 0.0023 that is smaller than one standard deviation (0.0084). The extra 15,328 parameters still have to be computed, moved and powered, in training and at inference. Before scaling a model up, ask whether the size was necessary.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Knowledge Units</td><td>KT13 · convolution, pooling, stride, padding and receptive field — cognitive level <em>understand</em>. KT14 · building a CNN, vision applications, data augmentation, GPU training and memory management — cognitive level <em>apply</em>. Official task line: <em>build and train a CNN for image classification; handle GPU memory issues</em></td><td>The course map splits the unit into 7.1 Convolution, pooling and receptive field (1.5 class hours, lecture), 7.2 Classic CNN structures and vision tasks (1.5 class hours, lecture), 7.3 Lab 6 (1.0 class hour, in-class practice)</td></tr>
+  <tr><td>Key Points</td><td>The role of convolution and pooling; the advantage of a convolutional layer over a fully connected one and its cost; building a CNN; the output-size formula and the receptive field; the pooling choice; reading a five-seed table; the confusion matrix; GPU memory and training technique</td><td>Every claim lands on a number measured on this machine and stored in <code class="inline">outputs/w7_cnn.json</code>; the parameter comparison (17,226 against 1,898) is used first to make weight sharing visible, exactly as the official teaching note suggests</td></tr>
+  <tr><td>Difficulties</td><td>Why subtracting parameters does not automatically mean a better model (0.9808 against 0.9785 is <em>not observed</em>); why the pooling function is a design choice, not a default (max 0.9808 against average 0.9400, a 4.1-point gap); why augmentation lowers the clean test score on purpose (0.9808 to 0.9504); why "98%" is not a result and 12 of the 26 errors involve the digit 8; why OOM is almost never a hardware problem</td><td>Pooling: show the two byte-for-byte identical architectures and let the class find the only difference (p12); augmentation: draw the shift curves before explaining the trade (p16-p17); error analysis: put the confusion matrix up and ask what the accuracy number hid (p19); memory: measure the peak first, then talk about hardware (p23)</td></tr>
+</table>
+
+<h2>3. Teaching Process</h2>
+<div class="timebar">
+  <div class="lec" style="flex:10">Review 10</div>
+  <div style="background:var(--accent);flex:80">Lecture 80</div>
+  <div style="background:var(--green);flex:80">Lab 80</div>
+  <div style="background:var(--orange);flex:10">Wrap 10</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">The official process is: 1 Review and introduction 10 min → 2 New content 80 min → 3 In-class lab 80 min (Lab 6) → 4 Summary and assignment 10 min. That is 180 min = 4 class hours. This lesson plan (LP-W7-A) details the whole process and teaches the first two phases; the Lab Part (LP-W7-B) handles phase 3.</p>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity &amp; Content</th><th style="width:80px;">Slides</th><th style="width:90px;">Method</th></tr>
+  <tr><td>1</td><td>10 min</td><td><strong>Review and Introduction</strong>: Week 6 recap (validation loss as the overfitting signal); check the post-class regularisation reports; the lead-in — a problem this week's lab will hit: a dense net on images has too many parameters and no translation tolerance</td><td>p1-p4</td><td>Lecture + hand-vote</td></tr>
+  <tr><td>2.1</td><td>40 min</td><td><strong>7.1 Convolution, pooling and receptive field</strong>: why images are not simply flattened; the parameter reconciliation (17,226 vs 1,898); the sliding dot product written as code; the shape arithmetic and the receptive field 3 → 4 → 8 → 10; what pooling does and what it costs (4.1 points)</td><td>p3-p12</td><td>Lecture + code trace + table reading</td></tr>
+  <tr><td>2.2</td><td>40 min</td><td><strong>7.2 Classic CNN structures and vision applications</strong>: the ideas of LeNet / AlexNet / VGG / ResNet; image classification; the five-architecture ledger over five seeds; the translation probe and the augmentation ledger (+29 / −3); reading the confusion matrix and misclassification; GPU training, memory and gradient accumulation</td><td>p13-p26</td><td>Chart reading + predict-then-reveal</td></tr>
+  <tr><td>3</td><td>80 min</td><td><strong>In-class Lab 6 (LP-W7-B)</strong>: build a CNN, train with augmentation, record the training curves, the confusion matrix and 3 or more misclassified cases; the parameter reconciliation table; the AI collaboration step on GPU memory</td><td>p22-p26</td><td>Self practice + patrol + checklist</td></tr>
+  <tr><td>4</td><td>10 min</td><td><strong>Summary and assignment</strong>: quiz (4 items); summarise the knowledge and skill points; assign the post-class task and the submission deadline</td><td>p27-p29</td><td>Vote + debrief + assignment</td></tr>
+</table>
+
+<h2>4. Teaching Content in Detail</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">Aligned with the 29-page deck, Part 1 to Part 5. Every figure below comes from <code class="inline">scripts/w7_cnn_experiment.py</code> via <code class="inline">outputs/w7_cnn.json</code>.</p>
+
+<h3>4.1 Part 1 · Convolution: from dense layers to weight sharing (p3-p7, KT13)</h3>
+<p style="font-size:14px;">A convolution is one sliding dot product: take a patch, multiply element-wise, and sum, repeated at every position. Three properties follow — local connectivity, weight sharing, and a parameter count that does not grow with image width. The class first writes the naive <code class="inline">conv2d_naive</code> and then <em>asserts</em> it against <code class="inline">nn.Conv2d</code> rather than trusting it (p5).</p>
+<table>
+  <tr><th>Layer</th><th>Shape</th><th>Params</th><th>Running</th></tr>
+  <tr><td>Input</td><td>1×8×8</td><td>0</td><td>0</td></tr>
+  <tr><td>Dense 64→128</td><td>64→128</td><td>8,320</td><td>8,320</td></tr>
+  <tr><td>Dense 128→64</td><td>128→64</td><td>8,256</td><td>16,576</td></tr>
+  <tr><td>Dense 64→10</td><td>64→10</td><td>650</td><td><strong>17,226</strong></td></tr>
+  <tr><td>Conv 1→8, 3×3</td><td>8×8×8</td><td>3·3·1·8 + 8 = 80</td><td>80</td></tr>
+  <tr><td>Conv 8→16, 3×3</td><td>16×4×4</td><td>3·3·8·16 + 16 = 1,168</td><td>1,248</td></tr>
+  <tr><td>Linear 64→10</td><td>64→10</td><td>64·10 + 10 = 650</td><td><strong>1,898</strong></td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Top block is the dense control; bottom block is two conv layers plus a linear head. 17,226 → 1,898 is 9.07x fewer parameters, and the two test accuracies are 0.9785 and 0.9808 — a 0.0023 gap, smaller than one standard deviation (0.0084). Write <em>no significant difference was observed</em>, not "the CNN is better". The real thing the CNN buys is translation tolerance: shift the test images by one column and the dense net is at 0.5089 while the CNN is at 0.6504.</p>
+<div class="callout warn">
+  <span class="label">What it costs</span>
+  Locality is an <em>assumption</em>, not a fact. If the useful pattern is global (say, the overall brightness distribution), the assumption is wrong and the conv net is worse than dense. The receptive field is finite: the last conv here already sees the whole 8×8, so extra depth adds nothing on this data. Pooling throws away position, and some tasks need position.
+</div>
+
+<h3>4.2 Part 2 · The arithmetic of shapes (p8-p12, KT13)</h3>
+<p style="font-size:14px;">The class derives the output size with <code class="inline">out = (in + 2p - k)/s + 1</code> and then checks all four stages against the model's real forward pass — an assertion in the script, not a claim.</p>
+<table>
+  <tr><th>Stage</th><th>k</th><th>s</th><th>Feature map</th><th>Receptive field</th><th>jump</th></tr>
+  <tr><td>Input</td><td>-</td><td>-</td><td>8×8</td><td>1</td><td>1</td></tr>
+  <tr><td>Conv 1</td><td>3</td><td>1</td><td>8×8</td><td>3</td><td>1</td></tr>
+  <tr><td>MaxPool</td><td>2</td><td>2</td><td>4×4</td><td>4</td><td>2</td></tr>
+  <tr><td>Conv 2</td><td>3</td><td>1</td><td>4×4</td><td><strong>8</strong></td><td>2</td></tr>
+  <tr><td>MaxPool</td><td>2</td><td>2</td><td>2×2</td><td>10</td><td>4</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">The shape chain is 8×8 → conv+P → 8×8 → pool → 4×4 → conv+P → 4×4 → pool → 2×2 → flatten 64 → FC 10. The receptive field recurrence gives 3 → 4 → 8 → 10. The row that matters is Conv 2: receptive field 8, exactly the whole image. On 8×8 data the second conv already sees everything, so no amount of extra depth adds translation invariance — that is the data being small, not the model being weak.</p>
+<table>
+  <tr><th>Architecture</th><th>Pooling</th><th>Params</th><th>Train acc</th><th>Val acc</th><th>Test acc</th></tr>
+  <tr><td>CNN small</td><td>Max</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+  <tr><td>CNN small</td><td>Average</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+</table>
+<div class="callout key">
+  <span class="label">The pooling choice is worth 4.1 points</span>
+  Apart from the pooling function the two architectures are byte-for-byte identical: same channels, same kernels, same learning rate and epochs. Average pooling is 4.1 points below max pooling (0.9400 against 0.9808), which is five times the standard deviation — not noise. Max pooling keeps the strongest response, and for handwritten digits the discriminative information is exactly where the stroke is densest. Choosing a pooling function is choosing what to keep.
+</div>
+
+<h3>4.3 Part 3 · Training it: curves, augmentation and the price (p13-p17)</h3>
+<p style="font-size:14px;">Five architectures, five seeds each (42-46), all on one protocol: <code class="inline">load_digits</code> 8×8 · 70/15/15 stratified split · n_train ≈ 1258 · Adam 1e-3 · batch 64 · 120 epochs. Every difference is reported as mean ± standard deviation.</p>
+<table>
+  <tr><th>Architecture</th><th>Params</th><th>Train acc</th><th>Val acc</th><th>Test acc</th></tr>
+  <tr><td>Dense 64-128-64-10</td><td>17,226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td>0.9785 ± 0.0084</td></tr>
+  <tr><td>CNN 8/16 (baseline, MaxPool2d)</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+  <tr><td>CNN wide 16/32 (+ FC 128)</td><td>21,312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td>0.9867 ± 0.0081</td></tr>
+  <tr><td>CNN + average pooling</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+  <tr><td>CNN + ±1 px augmentation</td><td>1,898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td>0.9504 ± 0.0217</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Three honest conclusions. (1) Conv against dense is a 0.0023 gap against a 0.0084 standard deviation, so we write <em>not observed</em>. (2) Going wide (21,312 parameters, 11.2x the baseline) reaches 0.9867 — 0.6 points above the baseline — and it is now larger than the dense net; the gain is far smaller than the parameter cost. (3) Augmentation on its own is worse: 0.9808 → 0.9504.</p>
+<table>
+  <tr><th>Arm</th><th>dx = -2</th><th>dx = -1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+  <tr><td>Dense</td><td>0.1667</td><td>0.4555</td><td><strong>0.9785</strong></td><td>0.5089</td><td>0.1822</td></tr>
+  <tr><td>CNN 8/16</td><td>0.2348</td><td>0.6481</td><td><strong>0.9808</strong></td><td>0.6504</td><td>0.2778</td></tr>
+  <tr><td>CNN + ±1 px augmentation</td><td>0.5170</td><td><strong>0.9415</strong></td><td><strong>0.9504</strong></td><td><strong>0.9526</strong></td><td>0.5518</td></tr>
+</table>
+<div class="callout tip">
+  <span class="label">The augmentation ledger: +29 bought, −3 paid</span>
+  At dx = -1 the CNN is 0.6481 and the augmented CNN is 0.9415 — <strong>+29 points of robustness</strong>. At dx = 0 the CNN is 0.9808 and the augmented CNN is 0.9504 — <strong>−3 points of clean accuracy</strong>, and the augmented curve is the lowest of the three at dx = 0. Augmentation did not raise the ceiling; it flattened the curve. Its training accuracy no longer runs to 1.000 (0.9292 at epoch 115), so overfitting is held back. Whether to buy depends on one product question: will the model meet translated inputs? If users photograph the thing, yes; if inputs are already cropped and aligned, you are buying nothing.
+</div>
+
+<h3>4.4 Part 4 · Where it fails (p18-p21)</h3>
+<p style="font-size:14px;">"98%" is not a result, it is an unfinished sentence. The confusion matrix is the table that turns it into "which two classes it hesitates between". Row = true label, column = prediction; diagonal is correct, off-diagonal is wrong.</p>
+<table>
+  <tr><th>true ↓ / pred →</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+  <tr><td>0</td><td><strong>135</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>1</td><td>0</td><td><strong>132</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>2</td><td>2</td></tr>
+  <tr><td>2</td><td>0</td><td>0</td><td><strong>131</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+  <tr><td>3</td><td>0</td><td>1</td><td>0</td><td><strong>134</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+  <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+  <tr><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>136</strong></td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+  <tr><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>2</td><td>0</td></tr>
+  <tr><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>1</td></tr>
+  <tr><td>8</td><td>0</td><td><strong>3</strong></td><td><strong>1</strong></td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td><td><strong>1</strong></td><td><strong>124</strong></td><td>0</td></tr>
+  <tr><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong>133</strong></td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Total 1,350 test predictions over 5 seeds; correct 1,324 (0.9807); off-diagonal errors 26. <strong>12 of those 26 involve the digit 8</strong> (46.2% of all errors). The worst class pair is <strong>8 → 1, three times</strong>. Digit 0 is perfect (135/135); digit 8 is worst (124/130, recall 0.9538).</p>
+<div class="callout tip">
+  <span class="label">Draw the misclassified digit itself</span>
+  Two real seed-42 test samples: <em>true 8, predicted 7, confidence 0.9829</em> — the lower loop is broken and only the upper stroke survives, so it reads like a 7; true-class probability 0.0144. And <em>true 6, predicted 8, confidence 0.8852</em> — this 6 has a closed lower loop, which a 6 should not; true-class probability 0.0271. This is error analysis: not "the model is not good enough" but "it calls 8 on a 6 whose lower loop closes", which is fixable. The complete deliverable has five items: the printed confusion matrix, the worst class pair with its count, at least 3 concrete cases with probabilities, a testable hypothesis per case, and the next step with its success criterion.
+</div>
+
+<h3>4.5 Part 5 · Memory and green computing (p22-p26, KT14)</h3>
+<p style="font-size:14px;">Out-of-memory is the most common blocker in this week's lab, and it is almost never a hardware problem — it is a batch-size problem. The class measures the peak of an independent subprocess instead of guessing.</p>
+<table>
+  <tr><th>batch size</th><th>32</th><th>64</th><th>128</th><th>256</th><th>512</th><th>1,024</th></tr>
+  <tr><td>Peak memory over baseline (MB)</td><td>83.6</td><td>91.3</td><td>104.3</td><td>129.7</td><td>176.5</td><td>275.5</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Baseline (torch imported, nothing running) is 306.5 MB. The input is nearest-neighbour upsampled to 32×32 to give the activation volume the order of a real vision model. From batch 32 to 1,024 the increment grows 83.6 → 275.5 MB (3.3x), so <strong>peak memory grows approximately linearly with batch size</strong>. At batch 1,024 the peak is 582.0 MB. On macOS the <code class="inline">ru_maxrss</code> unit is bytes, not kilobytes; the script already divides by 1024². Dropping the batch is the only knob that changes memory without changing the maths — so it is the first thing to try.</p>
+<table>
+  <tr><th>Weighting of the accumulated gradient</th><th>Bit-for-bit match with the true batch-128 run</th></tr>
+  <tr><td><code class="inline">exact</code>: w = (size of this micro-batch) / (group size)</td><td><strong>5 / 5 seeds identical</strong></td></tr>
+  <tr><td><code class="inline">naive</code>: w = 1 / accumulation steps</td><td>3 / 5</td></tr>
+  <tr><td><code class="inline">none</code>: no scaling, gradients added directly</td><td>2 / 5</td></tr>
+  <tr><td><code class="inline">unscaled</code>: no scaling and no reduction</td><td>2 / 5</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">The mismatch comes from the fact that the last group of each epoch has an unequal micro-batch size (<code class="inline">n_train</code> = 1258 is not divisible by 64 × accumulation). Only weighting each micro-batch by its real share of the group is bit-for-bit equivalent. An honest note alongside it: Adam is largely insensitive to a uniform scaling of the gradient, so <code class="inline">naive</code> still roughly converges; with SGD the difference would be far larger.</p>
+<div class="callout warn">
+  <span class="label">What to do when you run out of memory — in this order</span>
+  <strong>1. Free:</strong> halve the batch size (changes memory, not maths; side effect is noisier gradients). <strong>2. Free:</strong> gradient accumulation — 4×32 with the share-of-group weighting reproduces true batch 128 exactly (5/5); you pay in time, not accuracy. <strong>3. Cheap:</strong> mixed precision (<code class="inline">torch.amp.autocast</code> + <code class="inline">GradScaler</code>); it changes the numerics, so re-confirm the metric. <strong>4. Costs:</strong> gradient checkpointing or a smaller input, typically 20-30% slower; shrinking the input changes the task itself. <strong>5. Last:</strong> shrink the model, or admit the task does not fit — buying a GPU is last, not first. Measured this week, this model never OOMs; the peak at batch 1,024 is only 582.0 MB.
+</div>
+<div class="callout tip">
+  <span class="label">Green computing</span>
+  Same data, same accuracy, 9.07x fewer parameters — this is measured, not a slogan. The 17,226-parameter dense net reaches 0.9785 and the 1,898-parameter CNN reaches 0.9808. Reaching the goal with less starts with one question: was this size necessary? Measure the peak before requesting compute, because most "I need a bigger machine" is really "I made the input too big".
+</div>
+
+<h2>5. Civic Education &amp; AI Empowerment</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>[Civic Education] Green computing</h4>
+    <ul>
+      <li>Compute is a finite resource; reach the goal at a lower cost</li>
+      <li>The measured basis: 17,226 parameters at 0.9785 against 1,898 parameters at 0.9808 — the 15,328 extra parameters are computed, moved and powered in training and at inference for no measured accuracy gain</li>
+      <li>Measure the peak (306.5 MB baseline; 582.0 MB at batch 1,024) before asking for hardware</li>
+      <li>Report the optimisation that did not work, not only the one that did — augmentation cost 3 points of clean accuracy</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>[AI Empowerment] Memory optimisation, tested</h4>
+    <ul>
+      <li>Step 1: ask the AI for ways to reduce GPU memory for this week's model</li>
+      <li>Step 2: test each suggestion on the machine — halve the batch, gradient accumulation, mixed precision</li>
+      <li>Step 3: label each suggestion <strong>valid</strong> or <strong>invalid</strong>, with the measured evidence and its cost (time, numerics, or task change) beside it</li>
+      <li>Typical AI answers that must be checked: "always use mixed precision" and "gradient accumulation always saves memory" — the second is only true when the weighting is right</li>
+      <li>Deliverable: the shortened list of suggestions that survived measurement, each with one line of evidence, plus the ones that did not work</li>
+    </ul>
+  </div>
+</div>
+
+<h2>6. Assignment, Assessment &amp; References</h2>
+<table>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:100px;">Weight</th></tr>
+  <tr><td>Post-class task</td><td>Submit the CNN experiment report (with the misclassification case analysis): the training curves, the confusion matrix, at least 3 misclassified cases with model probabilities and a testable hypothesis, and the parameter reconciliation table. Explain <em>why the model is worse on some classes</em> — this week, 12 of the 26 errors involve the digit 8, and the worst class pair is 8 → 1</td><td>Lab 6 · 4 class hours</td></tr>
+  <tr><td>Assessment</td><td>Course assessment table line: <em>building and tuning CNNs and sequence models</em> · <strong>not a key topic · is a difficulty · 6%</strong> · assessed by the experiment report (apply level). The quiz at the end of the lab is 4 items</td><td>6%</td></tr>
+  <tr><td>Lab bridge</td><td>After this Lecture Part (90 min) the Lab Part begins (LP-W7-B, Lab 6, 80 min + wrap 10 min): protocol → build the CNN → train and read curves → confusion matrix and error analysis → memory and gradient accumulation with the AI step</td><td>—</td></tr>
+</table>
+<h3>References</h3>
+<ul>
+  <li>Dive into Deep Learning (PyTorch edition): the corresponding chapters and the d2l companion code</li>
+  <li>PyTorch official documentation and tutorials: https://pytorch.org/docs/</li>
+  <li>The bilingual course deck W07 and the templates of the lab and project practice pack</li>
+</ul>
+
+<h2>7. Reflection</h2>
+<div class="callout key">
+  <span class="label">Post-class analysis</span>
+  Focus points: the role of convolution and pooling; building a CNN; GPU memory management and training technique. After class, use the quality of the in-class lab and the common errors to plan a targeted remedy in the review phase of the next session. Also record the typical problems students show in the AI collaboration step — for example, accepting AI-generated code without checking it, or adopting an AI conclusion without verifying it — and add them to the continuous-improvement list of the course.
+</div>
+
+<h2>8. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Review Week 6 (validation loss as the overfitting signal is assumed from here on)</li>
+      <li>Read the textbook sections on convolution, pooling, classic CNNs and GPU training</li>
+      <li>Run <code class="inline">scripts/w7_cnn_experiment.py</code> once yourself and open <code class="inline">outputs/w7_cnn.json</code>, so the five-architecture table is familiar before you teach it</li>
+      <li>Confirm the environment works offline: <code class="inline">load_digits</code> ships with scikit-learn, 8×8, 10 classes, 1797 samples, and needs no download; the whole five-architecture, five-seed sweep runs on CPU</li>
+      <li>Reflection: have you ever scaled a model up before checking whether the smaller one was already sufficient?</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Slides: Week 7 deck, 29 pages (p1-p21 cover this part in detail; p22-p26 are the lab, p27-p29 the quiz, summary and closing)</li>
+      <li>Course textbook Chapter 7</li>
+      <li>Measured data: <code class="inline">outputs/w7_cnn.json</code> (5 architectures × 5 seeds, plus the shift probe, the confusion matrix, the accumulation probe and the memory sweep) and <code class="inline">scripts/w7_cnn_experiment.py</code></li>
+      <li>Lab handout: <code class="inline">labs/week-07/lab-handout.md</code> (Lab 6)</li>
+      <li>d2l companion code for the corresponding chapters; PyTorch documentation: pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development (52015CC3BV) — Lesson Plan LP-W7-A (Lecture Part · Theory · Week 7 · 4 class hours) · Module 2</p>
+  <p>School of Software, Dalian Neusoft University of Information · Department of Software and Big Data Technology · Instructor: Ren Zheng · Class: International Software Engineering 24401 (2026-2027 Semester 1)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+{
+ "task": "given one English passage, name the course week it came from",
+ "classes": [
+  "week-01",
+  "week-02",
+  "week-03",
+  "week-04",
+  "week-05",
+  "week-06"
+ ],
+ "n_passages": 748,
+ "per_class": {
+  "week-01": 105,
+  "week-02": 97,
+  "week-03": 114,
+  "week-04": 119,
+  "week-05": 128,
+  "week-06": 185
+ },
+ "passages_by_source": {
+  "lecture": 151,
+  "lab-plan": 134,
+  "textbook": 331,
+  "lab": 132
+ },
+ "min_word_tokens": 20,
+ "max_word_tokens": 400,
+ "token_length": {
+  "min": 20,
+  "p25": 26,
+  "median": 35,
+  "p75": 50,
+  "p95": 87,
+  "max": 285,
+  "mean": 42.1
+ },
+ "vocab_full": 3142,
+ "scrub_counters": {
+  "scrubbed": 262,
+  "dropped_cjk": 96,
+  "dropped_symbolic": 9482,
+  "dropped_short": 2928,
+  "truncated": 0,
+  "dropped_dupe": 7
+ },
+ "note_on_scrub": "week / lab / CU identifiers are replaced with <WEEK>, <LAB>, <UNIT> before the corpus is written; without this the label is literally in the text and accuracy is meaningless. Counted above so the scrub is auditable.",
+ "sha256": "87e41aac89ef59903abca15eea4250e68eb9d29537c1cd78d251ad497a16b4b1",
+ "source_note": "built from this repository's own Week 1-6 materials (CC BY-NC-SA 4.0); regenerate with python scripts/build_text_corpus.py"
+}

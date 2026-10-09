@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 7 周 · 实验部分（随堂实验 80 min + 小结与作业 10 min）</div>
+  <h1>实验 6 — 搭建 CNN 完成图像分类：曲线、混淆矩阵、错分分析</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖随堂实验 80 分钟与小结与作业 10 分钟</span>
+    <span>📚 教材第 7 章（卷积、池化、数据增强、GPU 显存）</span>
+    <span>🔧 随堂实验 · 官方编号：实验 6 · 课程地图计 1.0 学时，课后报告另行计入</span>
+    <span>🧩 教案编号：LP-W7-B · 单元 CU(7) · Week 7</span>
+    <span>🖼 课件共 29 页（本部分用到 p22–p26；对照表见 p12、p15、p16、p19）</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li>说出实验协议中被固定的各项设置，并解释每一项为什么必须固定</li>
+      <li>逐层对账 CNN（1,898）与全连接对照网（17,226）的参数量</li>
+      <li>解释为什么 CNN 与 9.07 倍大的全连接网只差 0.0023 的测试准确率，以及为什么这要写成<em>未观察到显著差异</em></li>
+      <li>解释为什么 4.1 个点的测试准确率只取决于池化函数的选择</li>
+      <li>解释为什么数据增强用 3.0 个点的干净精度换到了 29 个点的平移鲁棒性</li>
+      <li>解释为什么混淆矩阵里 26 个错误中有 12 个与数字 8 有关</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>能用 <code class="inline">nn.Conv2d</code>、<code class="inline">nn.MaxPool2d</code> 与 <code class="inline">nn.Linear</code> 搭出 CNN，并在训练前用断言把每一层的形状与公式对齐</li>
+      <li>能用一小段脚本数出参数量，而不是估算</li>
+      <li>能训练 CNN、画出训练与验证曲线，并把五架构对照表读成「均值 ± 标准差」</li>
+      <li>能打印混淆矩阵、点名最差类对及其次数，并给出至少 3 个错分样本及其概率</li>
+      <li>能实测峰值内存随 batch 的变化，并用梯度累积复现等效 batch</li>
+      <li>能向 AI 询问显存优化方案，逐条实测，并标注有效或无效</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素质目标 · 思政</span>
+  <strong>如实报告不成功的实验，也如实报告没帮上忙的优化。</strong>本实验里数据增强是故意压低干净分数的（0.9808 掉到 0.9504），而 AI 给的显存建议里会有一条经不起实测。两者都要留在报告里并被解释。这也是绿色计算的落地习惯：1,898 参数的 CNN 已经追平 17,226 参数的全连接网，所以先算清参数预算再加参数，先量出内存峰值再谈加硬件。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>重点</td><td>固定协议；CNN 的搭建；逐层参数量对账；形状链路与感受野；训练曲线；五架构对照表；混淆矩阵与最差类对；峰值内存随 batch 的变化；写对权重的梯度累积；AI 优化记录</td><td>每个环节都以一个必须写进 Markdown 单元格的 checkpoint 收口，写完才允许进入下一环节；教师每段先演示 3–5 分钟，再巡场让学生复现</td></tr>
+  <tr><td>难点</td><td>在训练之前用断言对齐形状，而不是等运行报错；看懂 1,898 参数的模型并不更差（0.9808 对 0.9785）并写成<em>未观察到显著差异</em>；接受增强在干净精度上可能是净亏；把真实的错误模式（8 被当成 1，3 次）和一句空泛的说法区分开；把梯度累积的权重写对，才能与真 batch 一致</td><td>形状：要求每个 <code class="inline">assert</code> 在训练循环开始前先打印通过；参数：用 <code class="inline">sum(p.numel() ...)</code> 数出来，把 1,898 与 17,226 两行并排贴出；增强：先看增强臂的训练准确率（0.9535）再谈测试数字；累积：跑 <code class="inline">exact</code> 写法并确认与真 batch 128 一致（5/5）</td></tr>
+</table>
+
+<h2>3. 时间分配</h2>
+<div class="timebar">
+  <div class="lab" style="flex:10">A 10</div>
+  <div style="background:var(--accent);flex:20">B 20</div>
+  <div style="background:var(--blue);flex:20">C 20</div>
+  <div style="background:var(--orange);flex:15">D 15</div>
+  <div style="background:var(--accent-bright);flex:15">E 15</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">随堂实验共 80 分钟（实验 A–E），之后接小结与作业 10 分钟；课后报告另行提交。</p>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动、checkpoint 与页码</th></tr>
+  <tr><td>实验 A</td><td>10 min</td><td><strong>核对协议，写下一条预注册预测</strong>（p22–p23）。固定协议：<code class="inline">load_digits</code> 8×8 灰度、10 类、1797 张，归一化到 0–1，70/15/15 分层划分且 <code class="inline">random_state = seed</code>，n_train ≈ 1258，Adam <code class="inline">1e-3</code>、batch 64、120 轮、种子 42、43、44、45、46。每人写一条预测：哪一臂的测试准确率会最低。<em>Checkpoint：协议表 + 预测句，均写入 notebook。</em></td></tr>
+  <tr><td>实验 B</td><td>20 min</td><td><strong>搭建 CNN 并对账参数</strong>（p5–p6）。按代码骨架实例化模型，断言形状链路 8×8 → 8×8 → 4×4 → 4×4 → 2×2 → flatten 64 → FC 10，再数参数：conv1 3·3·1·8 + 8 = 80、conv2 3·3·8·16 + 16 = 1,168、FC 64·10 + 10 = 650，合计 1,898；全连接对照为 8,320 + 8,256 + 650 = 17,226。<em>Checkpoint：全部形状断言通过，对账表里出现 1,898 与 17,226 两行。</em></td></tr>
+  <tr><td>实验 C</td><td>20 min</td><td><strong>训练并读曲线</strong>（p14–p15）。训练 CNN，画训练与验证曲线，记录测试准确率；复现五架构对照表的关键行：全连接 17,226 → 0.9785、CNN 1,898 → 0.9808、CNN 宽 21,312 → 0.9867、平均池化 1,898 → 0.9400、±1px 增强臂 1,898 → 0.9504（训练准确率 0.9535）。<em>Checkpoint：逐臂曲线齐全，五行都填上「均值 ± 标准差」。</em></td></tr>
+  <tr><td>实验 D</td><td>15 min</td><td><strong>混淆矩阵与错分分析</strong>（p19–p21）。打印测试预测的混淆矩阵，确认总数 1,350、正确 1,324（0.9807）、非对角错误 26，且 26 个错误里有 12 个与数字 8 有关；点名最差类对 8 → 1（3 次）。画出至少 3 个错分样本并附模型概率。<em>Checkpoint：四个数字（1,350 / 1,324 / 26 / 15）与 3 个错分样本（含概率）已写入 notebook。</em></td></tr>
+  <tr><td>实验 E</td><td>15 min</td><td><strong>显存、梯度累积与 AI 记录</strong>（p23–p24）。实测 batch 扫描下的峰值内存（基线 306.5 MB；增量 83.6、91.3、104.3、129.7、176.5、275.5 MB；batch 1024 峰值 582.0 MB）。用 4×32 梯度累积与「按组内占比」权重复现等效 batch，并确认与真 batch 128 逐位一致（5/5）。随后进行 AI 环节：询问显存优化方案，逐条标注有效或无效。<em>Checkpoint：内存表，以及 AI 建议清单（每条附有效/无效与一行证据）。</em></td></tr>
+  <tr><td>小结</td><td>10 min</td><td><strong>随堂小测、小结与作业</strong>（p27–p29）。随堂小测 4 题；举手作答后逐题点评；布置课后任务（CNN 实验报告）与提交时点；本周要点与下周预告。</td></tr>
+</table>
+
+<h2>4. 交付物清单与验收标准</h2>
+<table>
+  <tr><th style="width:120px;">交付物</th><th>必须包含</th><th style="width:130px;">验收</th></tr>
+  <tr><td>训练曲线</td><td>CNN 与增强臂的训练 / 验证曲线，画在同一组坐标里；标注末点轮次与臂名；用一句话把曲线形状读出来</td><td>曲线可渲染；两臂齐全；有文字解读，而不只是一张图</td></tr>
+  <tr><td>混淆矩阵</td><td>打印 10×10 矩阵（行＝真实、列＝判断），给出总数 1,350、正确 1,324、非对角错误 26</td><td>矩阵已打印且三个总数已写明；只有准确率不算通过</td></tr>
+  <tr><td>错分案例分析</td><td>最差类对 8 → 1 及其次数（3 次）；26 个错误里 12 个与数字 8 有关；至少 3 个错分样本及其模型概率，每条配一个可检验假设；下一步与成功判据</td><td>五条齐全；样本要带概率，不能只有标签</td></tr>
+  <tr><td>参数量对账表</td><td>conv1 80、conv2 1,168、FC 650，合计 1,898；全连接 8,320 + 8,256 + 650 = 17,226；比值 9.07 倍；测试差 0.0023 对标准差 0.0084</td><td>数字由代码数出、不得估算；比值与差距都要写明</td></tr>
+  <tr><td>内存表与 AI 记录</td><td>batch 扫描的超出基线峰值；梯度累积的一致率（「按组内占比」权重为 5/5）；AI 建议清单，每条标注有效或无效</td><td>AI 清单里至少有一条是经实测未通过的</td></tr>
+</table>
+<div class="callout info">
+  <span class="label">完全离线</span>
+  数据集是 <code class="inline">sklearn.datasets.load_digits</code>：8×8 灰度、10 类、1797 样本，随 scikit-learn 安装提供。<strong>本实验全程无任何外部下载。</strong>整套流程在本机运行，只用 CPU。这是本课程的有意设计：避免依赖第三方数据源与许可风险。在本实验里看到联网请求的学生，是环境坏了，不是机器慢。
+</div>
+
+<h2>5. 代码骨架</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">把三种层补进去；形状链路是 <code class="inline">8×8 → conv+P → 8×8 → pool → 4×4 → conv+P → 4×4 → pool → 2×2 → flatten 64 → FC 10</code>。断言必须在任何训练开始前通过。</p>
+<pre>import torch, torch.nn as nn, torch.nn.functional as F
+
+class CNN(nn.Module):
+    def __init__(self, channels=(8, 16), n_classes=10):
+        super().__init__()
+        c1, c2 = channels
+        self.conv1 = nn.Conv2d(1,  c1, kernel_size=3, stride=1, padding=1)  # 1x8x8 -> c1x8x8
+        self.conv2 = nn.Conv2d(c1, c2, kernel_size=3, stride=1, padding=1)  # c1x4x4 -> c2x4x4
+        self.pool  = nn.MaxPool2d(2)                                        # stride 2, halves the map
+        self.fc    = nn.Linear(c2 * 2 * 2, n_classes)                       # flatten 16*2*2 = 64
+
+    def forward(self, x):                      # x: (B, 1, 8, 8)
+        x = self.pool(F.relu(self.conv1(x)))   # (B, 8, 4, 4)
+        x = self.pool(F.relu(self.conv2(x)))   # (B, 16, 2, 2)
+        x = x.flatten(1)                       # (B, 64)
+        return self.fc(x)                      # (B, 10)
+
+# 1) shapes: assert the formula against the real forward
+def out_size(size, k, s, p):
+    return (size + 2 * p - k) // s + 1
+assert out_size(8, 3, 1, 1) == 8   # conv + padding keeps the size
+assert out_size(8, 2, 2, 0) == 4   # pooling halves it
+
+# 2) parameters: count them, do not estimate
+n_conv = sum(p.numel() for p in CNN().parameters())
+# conv1 = 3*3*1*8 + 8 = 80 ; conv2 = 3*3*8*16 + 16 = 1168 ; fc = 64*10 + 10 = 650
+assert n_conv == 80 + 1168 + 650 == 1898</pre>
+<p style="font-size:13.5px;color:var(--text-sec);">全连接对照网沿用第 4 周的 MLP：<code class="inline">nn.Linear(64, 128)</code> → <code class="inline">nn.Linear(128, 64)</code> → <code class="inline">nn.Linear(64, 10)</code>，共 17,226 个参数。增强臂只对<em>训练</em>批做随机 ±1 像素平移，测试批不平移。平均池化变体就是把 <code class="inline">nn.MaxPool2d(2)</code> 换成 <code class="inline">nn.AvgPool2d(2)</code>，其余逐字节相同。</p>
+
+<h2>6. AI 协同操作规程</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>先问、再实测、后标注</h4>
+  <ol style="font-size:13.5px;">
+    <li><strong>问：</strong>提示 AI 给出「降低本周模型显存占用」的办法。预期会得到「把 batch 减半」「用梯度累积」「用 <code class="inline">torch.amp.autocast</code> + <code class="inline">GradScaler</code> 做混合精度」「缩小输入」这类清单。</li>
+    <li><strong>实测：</strong>在本机逐条运行并测量。batch 减半只改变内存；梯度累积用「按组内占比」权重时与真 batch 128 逐位一致（5/5），代价是时间、不是精度；混合精度会改变数值，必须重新确认指标没漂。</li>
+    <li><strong>标注：</strong>每条建议标注<strong>有效</strong>或<strong>无效</strong>，并在旁边写上实测证据与代价。一条建议可以「在一般情况下成立」却在「这个任务上无效」——本周实测：这个模型永远不会 OOM（batch 1024 峰值仅 582.0 MB），所以「把输入缩到 16×16」只有代价、没有收益。</li>
+    <li><strong>留痕：</strong>把记录留在报告里——提问、建议、实测、结论。用自己的实测删掉 AI 的建议，正是本环节要考核的能力。</li>
+  </ol>
+</div>
+<div class="callout warn">
+  <span class="label">必须核查的典型 AI 说法</span>
+  「梯度累积总能省显存」只有在累积梯度被正确加权时才成立；用 <code class="inline">none</code> 与 <code class="inline">unscaled</code> 两种写法时，结果都不再与真 batch 一致（2/5 种子）。「一定要用混合精度」是用数值换内存，必须拿指标去核实。两条结论都来自学生自己的实测，不是来自 AI 的原文。
+</div>
+
+<h2>7. 作业与考核</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:110px;">权重</th></tr>
+  <tr><td>参考结果</td><td>教师侧的 5 种子基准，本机实测并落盘在 <code class="inline">outputs/w7_cnn.json</code>——只用于判断学生的运行是否落在合理区间，不作为照抄的目标。五架构与平移探针见下方参考表</td><td>—</td></tr>
+  <tr><td>交付物</td><td><code class="inline">lab-07.ipynb</code> + <code class="inline">cnn.py</code>：Restart &amp; Run All 无报错，形状断言全部通过，参数量对账表填满，训练曲线齐全，混淆矩阵已打印，错分分析至少 3 个样本并附概率，内存表与 AI 记录齐全，≥ 2 次有效提交并推送到公开仓库</td><td>100 分</td></tr>
+  <tr><td>评分标准</td><td>协议核对 10 · 搭建与参数对账 20 · 训练曲线与五架构对照 20 · 混淆矩阵与错分分析 20 · 显存、梯度累积与 AI 记录 20 · 课后反思 10</td><td>100 分</td></tr>
+  <tr><td>课程考核</td><td>本实验对应考核行：<em>CNN 与序列模型的搭建与调优</em>——<strong>非重点、是难点，占 6%</strong>，以实验报告考核（运用）。这 6% 由课后报告承载，其中包含错分案例分析与「为什么某些类别更差」的说明</td><td>6%</td></tr>
+  <tr><td>课后任务</td><td>提交 CNN 实验报告：训练曲线、混淆矩阵、参数量对账表，以及至少 3 个错分样本及其概率。说明<em>为什么模型在某些类别上表现更差</em>——本周 26 个错误里有 12 个与数字 8 有关，最差类对是 8 → 1</td><td>实验 6 报告</td></tr>
+  <tr><td>迟交政策</td><td>实验交付物：每天 −10%，最多 3 天，之后 0 分。时间戳以 commit 为准，不以平台上传时间为准</td><td>—</td></tr>
+</table>
+
+<h3>参考表 · 五架构 × 5 个种子（本机实测）</h3>
+<table>
+  <tr><th>架构</th><th>参数量</th><th>训练 acc</th><th>验证 acc</th><th>测试 acc</th></tr>
+  <tr><td>全连接 64-128-64-10</td><td>17,226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td>0.9785 ± 0.0084</td></tr>
+  <tr><td>CNN 8/16（基准，MaxPool2d）</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td>0.9808 ± 0.0084</td></tr>
+  <tr><td>CNN 宽 16/32（含 FC 128）</td><td>21,312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td>0.9867 ± 0.0081</td></tr>
+  <tr><td>CNN + 平均池化</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+  <tr><td>CNN + ±1px 增强</td><td>1,898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td>0.9504 ± 0.0217</td></tr>
+</table>
+<table>
+  <tr><th>架构</th><th>dx = -2</th><th>dx = -1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+  <tr><td>全连接</td><td>0.1667</td><td>0.4555</td><td>0.9785</td><td>0.5089</td><td>0.1822</td></tr>
+  <tr><td>CNN 8/16</td><td>0.2348</td><td>0.6481</td><td>0.9808</td><td>0.6504</td><td>0.2778</td></tr>
+  <tr><td>CNN + ±1px 增强</td><td>0.5170</td><td>0.9415</td><td>0.9504</td><td>0.9526</td><td>0.5518</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">所有臂的协议一致：<code class="inline">load_digits</code>（8×8 灰度、10 类、1797 张）→ 归一化到 0–1 → 70/15/15 分层划分、<code class="inline">random_state = seed</code>、n_train ≈ 1258 → Adam <code class="inline">1e-3</code>、batch 64、120 轮 → 5 个种子（42、43、44、45、46），报均值 ± 标准差。全程离线、只用 CPU。</p>
+<div class="callout info">
+  <span class="label">怎么读这张实测表 · 三条诚实的结论</span>
+  <strong>1.</strong> CNN 追平了 9.07 倍大的全连接网：0.9808 对 0.9785 只差 0.0023，小于 0.0084 的标准差，唯一站得住的句子是<em>未观察到显著差异</em>。 <strong>2.</strong> 池化函数是设计选择：最大 0.9808 对平均 0.9400，参数量完全相同，差 4.1 个点。 <strong>3.</strong> 增强是一笔买卖、不是白赚：它买到 29 个点的平移鲁棒性（dx = −1 时 0.6481 → 0.9415），付掉 3.0 个点的干净精度（dx = 0 时 0.9808 → 0.9504）。
+</div>
+<div class="callout warn">
+  <span class="label">下课前必须确认</span>
+  对每位学生确认五件事：notebook 能从头跑到尾；每一条形状断言都通过；参数量对账表里同时有 1,898 与 17,226；混淆矩阵与四个数字（1,350 / 1,324 / 26 / 15）已写入 notebook，且至少有 3 个错分样本；AI 建议清单里至少标注了一条无效。失败的实验，也是被测量过的实验。
+</div>
+
+<h2>8. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前准备</h4>
+    <ul>
+      <li>第 6 周实验已提交（训练循环与逐轮日志将原样复用）</li>
+      <li>阅读教材对应章节（卷积、池化、经典 CNN、GPU 训练）</li>
+      <li>自己先在本机跑一遍五架构 × 5 种子的参考实验，才能把学生的异常运行与「种子碰巧偏高」区分开</li>
+      <li>笔记本装好 <code class="inline">ai-app</code> 环境，<code class="inline">torch</code> 与 matplotlib 可用，scikit-learn 可离线取到数据</li>
+      <li>确认运行时间：整套扫描只用 CPU，能塞进 80 分钟的随堂实验</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>教学资源</h4>
+    <ul>
+      <li>实验指导书：<code class="inline">labs/week-07/lab-handout.md</code>（实验 6）</li>
+      <li>课件 p22–p26；对照表见 p12、p15、p16、p19</li>
+      <li>教材第 7 章</li>
+      <li>实验脚本：<code class="inline">scripts/w7_cnn_experiment.py</code>；实测输出：<code class="inline">outputs/w7_cnn.json</code></li>
+      <li>数据集随 scikit-learn 提供——<code class="inline">load_digits</code>，8×8、10 类、1797 张，无需下载</li>
+      <li>PyTorch 官方文档：pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发（课程代码 52015CC3BV）—— 教案 LP-W7-B（实验部分 · 随堂实验 80 min + 小结与作业 10 min）· 第 7 周 · 模块二</p>
+  <p>大连东软信息学院 软件学院 · 软件与大数据技术系 · 授课教师 任政 · 授课班级 留软工 24401（来华项目）· 2026-2027 学年第 1 学期</p>
+  <p>本教案借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

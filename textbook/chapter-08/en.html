@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">Chapter 08 · Module 2 · Week 8</div>
+  <h1>Sequence Models and Text Data</h1>
+  <p class="overview">Chapter 7 chose an architecture and counted what it cost. This chapter is about the plumbing underneath any text model, and about a bug that lives inside that plumbing and almost never announces itself. The task is small enough to hold in your head: given one English passage, decide which week of this course it came from (6 classes). The corpus is the course's own Weeks 1-6 materials, 748 passages, scrubbed of the week labels in 262 places so the task is not trivially solvable, with no download and no third-party licence. The spine of the week is not "the LSTM scores well" - it does not. The spine is that a single line deciding how a (B, T, 96) tensor becomes a (B, 96) vector moves the result from <strong>0.2407</strong> to <strong>0.5027</strong>, a gap of <strong>0.2620</strong>, while everything else stays identical. Along the way the chapter quantifies what masking buys (<strong>+11.0 points</strong>), shows why the worst arm's macro F1 (<strong>0.0711</strong>) sits <em>below</em> the 1/6 random baseline, and reaches the week's most honest conclusion: with only <strong>523</strong> training passages the binding constraint is data, so Week 6's regularisation, which helped there, <em>lowers</em> the score here from <strong>0.5027</strong> to <strong>0.4672</strong>. Same tool, opposite answer, because the bottleneck changed.</p>
+</div>
+
+<!-- ========== 8.1 ========== -->
+<div class="section">
+  <h2>8.1 From Text to Tensor: The Complete Pipeline</h2>
+  <p>An <code class="inline">nn.Embedding</code> is a lookup table indexed by integer. A recurrent layer at step <em>t</em> consumes one integer and reads one row out of that table. Neither of them can hold a Python string, and neither of them has any notion of what a word is. That single fact is why every text task, however clever the model on top, begins with the same four-step conversion, and why an error in any of the four is invisible until the numbers come out wrong.</p>
+
+  <h3>8.1.1 Why the Model Only Ever Sees Integers</h3>
+  <p>Two layers define the contract. <code class="inline">nn.Embedding(V, D)</code> stores a matrix of shape <code class="inline">(V, D)</code> and, given a tensor of integer indices, returns the corresponding rows. <code class="inline">nn.LSTM(input_size, hidden_size)</code> accepts a tensor of shape <code class="inline">(B, T, input_size)</code> - floats - and steps over the <em>T</em> axis. So the integer is not a detail of the tokeniser; it is the index into a learned table, and the meaning of a word lives entirely in the row that training eventually writes there. Change the mapping from token to integer and you change which row learns which word. That is why the vocabulary must be built once and frozen before training begins, and why building it from the wrong data is not a cosmetic mistake.</p>
+
+  <h3>8.1.2 The Four Steps, and the One Error Each Invites</h3>
+  <div class="steps">
+    <div class="step"><h4>Tokenisation (tokenisation)</h4><p>Turn a string into a list of tokens. For English, lowercase and split on a regular expression; for Chinese, this is the step where a naive implementation silently destroys the input (Section 8.2). <strong>The typical error:</strong> splitting Chinese on whitespace, which yields one token per sentence and a vocabulary that never transfers.</p></div>
+    <div class="step"><h4>Vocabulary (vocabulary)</h4><p>Assign every token a stable integer id, reserving <code class="inline">0</code> for padding and <code class="inline">1</code> for the unknown token. <strong>The typical error:</strong> counting token frequencies over the whole corpus instead of the training set only - data leakage, and the reported OOV rate becomes a fiction (Section 8.3).</p></div>
+    <div class="step"><h4>Encoding (encoding)</h4><p>Replace each token with its id, mapping anything unseen to <code class="inline">&lt;unk&gt;=1</code>. <strong>The typical error:</strong> forgetting the unknown branch, so an out-of-vocabulary word crashes the batch - or, worse, letting an empty document produce an empty tensor.</p></div>
+    <div class="step"><h4>Padding and masking (padding &amp; masking)</h4><p>Make every document in a batch the same length by appending <code class="inline">&lt;pad&gt;=0</code>, and carry the true lengths alongside so the model can ignore the padding. <strong>The typical error:</strong> reading the padding as if it were content. This is the bug the rest of the chapter is about (Sections 8.4 and 8.5).</p></div>
+  </div>
+
+  <h3>8.1.3 Tokenisation and Vocabulary, in Code</h3>
+  <p>The two functions below are the whole English half of the pipeline. They are written so that the single decision that matters - which documents the vocabulary is counted from - is a visible argument rather than a buried default.</p>
+  <pre><span class="kw">import</span> re
+<span class="kw">import</span> torch
+
+<span class="cm"># A token starts with a letter and continues with letters, apostrophes or</span>
+<span class="cm"># hyphens, so "don't" and "state-of-the-art" are each ONE token.</span>
+WORD = re.compile(<span class="str">r"[a-z][a-z'-]*"</span>)
+
+
+<span class="kw">def</span> <span class="fn">tokenise</span>(text):
+    <span class="str">"""Lowercase, then keep only tokens that start with a letter."""</span>
+    <span class="kw">return</span> WORD.<span class="fn">findall</span>(text.lower())
+
+
+<span class="kw">def</span> <span class="fn">build_vocab</span>(train_docs, min_freq=<span class="num">2</span>, max_vocab=<span class="num">6000</span>):
+    <span class="str">"""Count tokens over the TRAINING SET ONLY.
+
+    Counting over the full corpus is data leakage: the test set's rare words
+    would already be in the vocabulary, the OOV rate the report quotes would
+    be understated, and the accuracy would be measured on a task easier than
+    the one the model will face in production.
+    """</span>
+    freq = {}
+    <span class="kw">for</span> doc <span class="kw">in</span> train_docs:
+        <span class="kw">for</span> t <span class="kw">in</span> <span class="fn">tokenise</span>(doc):
+            freq[t] = freq.get(t, <span class="num">0</span>) + <span class="num">1</span>
+    kept = [t <span class="kw">for</span> t, c <span class="kw">in</span> freq.items() <span class="kw">if</span> c &gt;= min_freq]   <span class="cm"># drop hapax-ish tokens</span>
+    kept.sort(key=<span class="kw">lambda</span> t: (-freq[t], t))          <span class="cm"># frequent first, ties alphabetical</span>
+    kept = kept[:max_vocab - <span class="num">2</span>]                          <span class="cm"># reserve ids 0 and 1</span>
+    <span class="kw">return</span> {t: i + <span class="num">2</span> <span class="kw">for</span> i, t <span class="kw">in</span> <span class="fn">enumerate</span>(kept)}          <span class="cm"># &lt;pad&gt;=0, &lt;unk&gt;=1</span>
+
+
+<span class="kw">def</span> <span class="fn">encode</span>(doc, vocab, max_len):
+    ids = [vocab.get(t, <span class="num">1</span>) <span class="kw">for</span> t <span class="kw">in</span> <span class="fn">tokenise</span>(doc)]   <span class="cm"># unseen token -&gt; &lt;unk&gt;=1</span>
+    ids = ids[:max_len]                                 <span class="cm"># truncate long documents</span>
+    <span class="kw">return</span> ids <span class="kw">or</span> [<span class="num">1</span>]                                  <span class="cm"># never return an empty list</span></pre>
+
+  <div class="callout warn">
+    <span class="label">Leakage is a one-word change, which is why it keeps happening</span>
+    Swap <code class="inline">train_docs</code> for <code class="inline">all_docs</code> and the code still runs, the model still trains, and the accuracy usually goes <em>up</em>. Nothing crashes and nothing warns. The vocabulary has simply been told about words it will not see until test time, so the OOV rate you measure is lower than the OOV rate you will get. This chapter returns to that trap with a measured number in Section 8.9, because the fix looks like a regression.
+  </div>
+
+  <h3>8.1.4 Padding and the Mask, in Code</h3>
+  <p>Padding makes a batch rectangular; the lengths vector is what keeps the padding from being read as content. The masked mean is the reduction used by the best arm in this chapter, and its correctness is entirely in the two lines where the mask enters and where the divisor is chosen.</p>
+  <pre><span class="kw">def</span> <span class="fn">pad_batch</span>(docs, vocab, max_len):
+    <span class="str">"""Right-pad with &lt;pad&gt;=0. Returns (ids, lengths).
+
+    `lengths` is not decoration. It is the only thing that lets the model tell
+    a real token from a padded one, and it is what pack_padded_sequence needs.
+    """</span>
+    enc = [<span class="fn">encode</span>(d, vocab, max_len) <span class="kw">for</span> d <span class="kw">in</span> docs]
+    lengths = torch.<span class="fn">tensor</span>([<span class="fn">len</span>(e) <span class="kw">for</span> e <span class="kw">in</span> enc])
+    T = <span class="fn">int</span>(lengths.<span class="fn">max</span>())            <span class="cm"># this batch's width, not the global max_len</span>
+    x = torch.<span class="fn">zeros</span>(<span class="fn">len</span>(enc), T, dtype=torch.long)
+    <span class="kw">for</span> i, e <span class="kw">in</span> <span class="fn">enumerate</span>(enc):
+        x[i, :<span class="fn">len</span>(e)] = torch.<span class="fn">tensor</span>(e)
+    <span class="kw">return</span> x, lengths
+
+
+<span class="kw">def</span> <span class="fn">masked_mean</span>(out, x):
+    <span class="str">"""Average the real timesteps only.
+
+    out: (B, T, H) hidden states   x: (B, T) ids, 0 where padded.
+    The mask must be multiplied in BEFORE the sum, and the divisor must be the
+    number of real steps, not T. Both halves matter; either one alone is wrong.
+    """</span>
+    mask = (x != <span class="num">0</span>).unsqueeze(-<span class="num">1</span>).float()                <span class="cm"># (B, T, 1), 1 = real token</span>
+    <span class="kw">return</span> (out * mask).<span class="fn">sum</span>(<span class="num">1</span>) / mask.<span class="fn">sum</span>(<span class="num">1</span>).clamp(min=<span class="num">1</span>)     <span class="cm"># (B, H)</span></pre>
+
+  <div class="callout tip">
+    <span class="label">Frozen protocol, restated exactly</span>
+    Every number in this chapter comes from one fixed recipe, so that a change in the numbers can only come from the change under test.
+    <ul>
+      <li><strong>Task.</strong> Given one English passage, name the course week it came from: 6 classes, weeks 1 to 6.</li>
+      <li><strong>Corpus.</strong> This repository's own Weeks 1-6 materials - <code class="inline">lesson-plans/week-XX/lecture-en.html</code>, <code class="inline">lab-en.html</code>, <code class="inline">textbook/chapter-XX/en.html</code> and <code class="inline">labs/week-XX/lab-handout.md</code>. <strong>748 passages</strong> over 6 classes, under <strong>CC BY-NC-SA 4.0</strong>, built by <code class="inline">scripts/build_text_corpus.py</code>. The run is <strong>fully offline and downloads nothing</strong>: a design choice that removes any dependency on third-party data and its licence.</li>
+      <li><strong>Anti-leakage scrub.</strong> Every literal week, lab and unit identifier (<code class="inline">Week 3</code>, <code class="inline">W3</code>, <code class="inline">CU(3)</code>, <code class="inline">Lab 3</code>, dates) is replaced with <code class="inline">&lt;WEEK&gt;</code>, <code class="inline">&lt;UNIT&gt;</code>, <code class="inline">&lt;LAB&gt;</code>, <code class="inline">&lt;DATE&gt;</code> - <strong>262 replacements</strong> in total. Without this scrub the label is literally in the text and every accuracy is meaningless. The count is reported so the scrub can be audited rather than trusted.</li>
+      <li><strong>Split.</strong> 70 / 15 / 15, <strong>stratified by week</strong>, <code class="inline">random_state = seed</code>; for seed 42 that is 523 / 112 / 113.</li>
+      <li><strong>Tokeniser.</strong> Lowercase, then the regex <code class="inline">[a-z][a-z'-]*</code>.</li>
+      <li><strong>Vocabulary.</strong> From the <strong>training set only</strong>, <code class="inline">min_freq = 2</code>, capped at 6000, <code class="inline">&lt;pad&gt;=0</code>, <code class="inline">&lt;unk&gt;=1</code>.</li>
+      <li><strong>Model.</strong> <code class="inline">Embedding(64, padding_idx=0)</code> then <code class="inline">LSTM(96, batch_first=True)</code> then <code class="inline">Linear(6)</code>.</li>
+      <li><strong>Optimisation.</strong> <code class="inline">Adam(lr = 1e-3)</code>, batch 64, <strong>30 epochs</strong>, <code class="inline">max_len = 96</code>.</li>
+      <li><strong>Replication.</strong> Five seeds (42, 43, 44, 45, 46); every figure is the <strong>mean plus or minus 1 standard deviation over the five seeds</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Token</strong> - the unit the model sees: a word-like string for English, a segment or a character for Chinese.</li>
+      <li><strong>Vocabulary</strong> - the frozen map from token to integer id, with <code class="inline">0</code> reserved for padding and <code class="inline">1</code> for the unknown token.</li>
+      <li><strong>Encoding</strong> - turning a token list into an id list, with every unseen token replaced by <code class="inline">&lt;unk&gt;</code>.</li>
+      <li><strong>Padding</strong> - appending <code class="inline">&lt;pad&gt;</code> so that every document in a batch has the same length.</li>
+      <li><strong>Data leakage</strong> - information from the test set reaching the model or the preprocessing; here, building the vocabulary from more than the training set.</li>
+      <li><strong>Text-to-tensor pipeline</strong> - the four steps from a raw string to a padded integer tensor plus its lengths.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.2 ========== -->
+<div class="section">
+  <h2>8.2 Tokenisation: English, and the Chinese Trap</h2>
+  <p>Tokenisation looks like the least interesting step and is the one that can be wrong by a factor of 39. The English recipe is uncontroversial; the Chinese recipe is where a student who has never segmented a language without spaces will produce a pipeline that appears to run and produces a vocabulary that transfers nothing.</p>
+
+  <h3>8.2.1 English: Lowercase, Then One Regex</h3>
+  <p>The rule used throughout this chapter is: lowercase the text, then extract every run that <em>starts</em> with a letter and continues with letters, apostrophes or hyphens. The pattern <code class="inline">[a-z][a-z'-]*</code> has three consequences worth stating plainly, because each is a choice.</p>
+  <ul>
+    <li><strong>Case is thrown away on purpose.</strong> <code class="inline">LSTM</code> and <code class="inline">lstm</code> become one token. The vocabulary shrinks and the model no longer has to learn two rows for one word - at the cost of losing the cue that a capitalised word often begins a sentence or names a thing.</li>
+    <li><strong>Contractions and hyphenated words stay whole.</strong> <code class="inline">don't</code> is one token, not two; <code class="inline">state-of-the-art</code> is one token, not four. This is usually what you want for a small corpus, because splitting them multiplies the vocabulary with pieces that carry almost no signal on their own.</li>
+    <li><strong>Numbers and punctuation disappear.</strong> A passage containing <code class="inline">17,226</code> contributes no token for it at all, because no run there starts with a letter. If a number is the signal you care about, this regex is the wrong tokeniser and you have to say so explicitly.</li>
+  </ul>
+  <p>On this corpus the recipe is stable: the full 748-passage vocabulary is <strong>3142</strong> word types, and the median passage is <strong>35</strong> word tokens long (p25 26, p75 50, p95 87, max 285). Those two numbers - a modest vocabulary over short passages - are what make the task hard for the reason described in Section 8.10.</p>
+
+  <h3>8.2.2 Chinese: Whitespace Tokenisation Is Simply Wrong</h3>
+  <p>Chinese is written without spaces between words, so the English recipe has no equivalent. A tempting shortcut is to split on whitespace anyway. It is a shortcut that does not work, and here it is measured rather than asserted. Running both schemes on this repository's own Chinese textbook text (750 segments, split into 375 for the vocabulary and 375 for the test):</p>
+  <table>
+    <tr><th>Scheme</th><th>Vocabulary</th><th>Singleton share</th><th>Test tokens</th><th>OOV rate</th></tr>
+    <tr><td>Whitespace split (wrong)</td><td>372</td><td><strong>0.9946</strong></td><td>375</td><td><strong>0.9973</strong></td></tr>
+    <tr><td>Character level (right)</td><td>880</td><td>0.2170</td><td>14,860</td><td><strong>0.0254</strong></td></tr>
+  </table>
+  <p>Read the two rows together and the failure is total. Under whitespace splitting the test set contributes only <strong>375</strong> tokens for <strong>375</strong> segments - one "word" per segment, because a segment of Chinese with no spaces is a single string. The out-of-vocabulary rate is <strong>0.9973</strong>, which is not "high"; it means <strong>the whole passage is recognised as a single <code class="inline">&lt;unk&gt;</code></strong>. The vocabulary is almost entirely singletons (<strong>0.9946</strong>) because no two segments happen to be identical, so nothing is shared and nothing is learned. Character level, by contrast, produces <strong>14,860</strong> test tokens from the same segments, an OOV rate of <strong>0.0254</strong>, and a singleton share of <strong>0.2170</strong>.</p>
+  <p>The OOV rate falls from <strong>0.9973</strong> to <strong>0.0254</strong> - a factor of <strong>39</strong>. That is the size of the mistake, and it costs one line of code to avoid.</p>
+  <div class="callout tip">
+    <span class="label">The engineering rule for a language without spaces</span>
+    Use a real segmenter first - <code class="inline">jieba</code> is the common one - which splits a sentence into word-like units. If no segmenter is available, fall back to <strong>character level</strong>, which is crude but correct: every segment becomes a sequence of characters, OOV is low, and the model can still learn from character patterns. What you must <em>not</em> do is fall back to whitespace, which is the one option that guarantees a vocabulary of length one per sentence.
+  </div>
+  <pre><span class="cm"># Right: a segmenter, or character level as the fallback. Never whitespace.</span>
+<span class="kw">def</span> <span class="fn">tokenise_zh</span>(s, use_jieba=<span class="kw">True</span>):
+    <span class="kw">if</span> use_jieba:
+        <span class="kw">try</span>:
+            <span class="kw">import</span> jieba
+            <span class="kw">return</span> [t <span class="kw">for</span> t <span class="kw">in</span> jieba.lcut(s) <span class="kw">if</span> t.strip()]
+        <span class="kw">except</span> ImportError:
+            <span class="kw">pass</span>
+    <span class="kw">return</span> <span class="fn">list</span>(s)          <span class="cm"># character level: crude, but OOV = 0.0254, not 0.9973</span>
+    <span class="cm"># return s.split()    # &lt;- the bug: one token per sentence, OOV = 0.9973</span></pre>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Tokenisation</strong> - splitting a string into the units the vocabulary will hold.</li>
+      <li><strong>Word segmentation</strong> - recovering word boundaries in a language that does not mark them with spaces; the step Chinese needs and English does not.</li>
+      <li><strong>Character-level tokenisation</strong> - taking one token per character; a correct fallback when no segmenter is available.</li>
+      <li><strong>Out-of-vocabulary (OOV) rate</strong> - the fraction of test tokens that are not in the training vocabulary; here 0.9973 versus 0.0254.</li>
+      <li><strong>Singleton</strong> - a token that occurs exactly once in the training vocabulary; a high singleton share means the vocabulary is not reusable.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.3 ========== -->
+<div class="section">
+  <h2>8.3 Vocabulary and Encoding</h2>
+  <p>The vocabulary is a contract between the tokeniser and the embedding table, and it is frozen before training. Three parameters define it in this chapter, and each is chosen for a reason that can be defended.</p>
+
+  <h3>8.3.1 Three Settings and Why They Are Set That Way</h3>
+  <table>
+    <tr><th>Setting</th><th>Value</th><th>Reason</th></tr>
+    <tr><td>Minimum frequency</td><td><code class="inline">min_freq = 2</code></td><td>A token seen once in training cannot be learned; it becomes a row that is barely updated. Dropping it keeps <code class="inline">&lt;unk&gt;</code> meaningful and shrinks the table.</td></tr>
+    <tr><td>Vocabulary cap</td><td><code class="inline">6000</code></td><td>An upper bound on the embedding table. This corpus never reaches it, but the cap bounds parameter growth and memory if the corpus grows.</td></tr>
+    <tr><td>Reserved ids</td><td><code class="inline">&lt;pad&gt;=0</code>, <code class="inline">&lt;unk&gt;=1</code></td><td>Padding needs a fixed id so that the mask <code class="inline">x != 0</code> works; the unknown token needs a fixed id so encoding never fails.</td></tr>
+  </table>
+  <p>The vocabulary is counted over the training documents only, and the count is produced at the same time the ids are assigned, so frequencies and ids cannot drift apart. For seed 42 the result is a vocabulary of <strong>1617</strong> entries; averaged over the five seeds the model sees <strong>1592</strong>. The full corpus, if you counted every passage, holds <strong>3142</strong> word types - and that second number is the one the model must <em>not</em> have been given.</p>
+
+  <h3>8.3.2 Counted From the Training Set Only</h3>
+  <p>Two vocabularies, two stories. The honest one counts tokens over the 523 training passages and nothing else, so a token the model meets for the first time at test is genuinely unknown and genuinely maps to <code class="inline">&lt;unk&gt;</code>. The leaky one counts over all 748 passages, which means the test set's rare words already sit in the table with an id, and the model is graded on a task that has been quietly made easier.</p>
+  <div class="callout warn">
+    <span class="label">Why this is the most common leakage in text modelling</span>
+    Splitting the arrays is easy to remember; splitting the <em>preprocessing</em> is not. The tokens are already sitting in a list, and counting them is a two-line loop that does not obviously belong to either side of the split. The discipline is the same as Chapter 3's and Chapter 6's: <strong>anything that is fit - a scaler, an imputer, a vocabulary - is fit on the training split, and the test split is only ever transformed, never fit on.</strong> A vocabulary is fit. Section 8.9 measures what happens when you forget.
+  </div>
+
+  <h3>8.3.3 <code class="inline">padding_idx=0</code> and the Gradient That Never Arrives</h3>
+  <p>Passing <code class="inline">padding_idx=0</code> to <code class="inline">nn.Embedding</code> does more than document which row is padding. At every backward pass, PyTorch zeroes the gradient contribution of that row, so the embedding vector for <code class="inline">&lt;pad&gt;</code> <strong>never receives an update</strong>. It starts as zeros and stays zeros. This matters because pooling that ignores the mask will still multiply real hidden states by a zero vector; the row not moving does not save you, but it does mean the padding row carries no learned signal to mislead the optimiser elsewhere.</p>
+  <pre>emb = nn.Embedding(<span class="num">1617</span>, <span class="num">64</span>, padding_idx=<span class="num">0</span>)
+
+ids = torch.<span class="fn">tensor</span>([[<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">0</span>, <span class="num">0</span>]])
+out = emb(ids)                       <span class="cm"># (1, 5, 64); rows 3 and 4 come from row 0</span>
+out.<span class="fn">sum</span>().<span class="fn">backward</span>()                  <span class="cm"># a non-trivial loss, to force a gradient</span>
+<span class="fn">print</span>(emb.weight.grad[<span class="num">0</span>].<span class="fn">abs</span>().<span class="fn">sum</span>())     <span class="cm"># tensor(0.) - the pad row never learns</span></pre>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Vocabulary size</strong> - the number of distinct ids, including the two reserved ones; 1617 for seed 42, 1592 on average.</li>
+      <li><strong><code class="inline">&lt;pad&gt;</code> / <code class="inline">&lt;unk&gt;</code></strong> - the two reserved ids: <code class="inline">0</code> for padding and <code class="inline">1</code> for everything out of vocabulary.</li>
+      <li><strong><code class="inline">padding_idx</code></strong> - tells the embedding layer which row is padding, so its gradient is forced to zero on every step.</li>
+      <li><strong>Frozen vocabulary</strong> - built once from the training split and never updated during training or evaluation.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.4 ========== -->
+<div class="section">
+  <h2>8.4 Padding and Masking</h2>
+  <p>An LSTM steps over a fixed <em>T</em> axis, but documents come in different lengths. Padding is the reconciliation - and the mask is what stops the reconciliation from corrupting the answer. This section is the core of the chapter, because every failure later in the chapter is a masking failure wearing a different hat.</p>
+
+  <h3>8.4.1 Variable Length to Fixed Length</h3>
+  <p>In a batch of 64 documents, the array has to be rectangular: shape <code class="inline">(64, T)</code>. <em>T</em> is either the longest document in that batch or the global cap <code class="inline">max_len = 96</code>, whichever is smaller. Every shorter document is filled with <code class="inline">&lt;pad&gt;=0</code> on the right. The lengths vector records the true length of each row, and it is the only place that information survives.</p>
+  <p>The scale of the padding is not small. On the seed-42 test set, <strong>95.58%</strong> of the documents are shorter than <code class="inline">max_len = 96</code>. In other words, almost every document in almost every batch has a tail of padding, and any code that reads the tail is reading padding on almost every example. That single percentage is why the bug in Section 8.5 does as much damage as it does.</p>
+  <table>
+    <tr><th>Passage length (word tokens)</th><th>Statistic on this corpus</th></tr>
+    <tr><td>Minimum</td><td>20</td></tr>
+    <tr><td>25th percentile</td><td>26</td></tr>
+    <tr><td>Median</td><td>35</td></tr>
+    <tr><td>75th percentile</td><td>50</td></tr>
+    <tr><td>95th percentile</td><td>87</td></tr>
+    <tr><td>Maximum</td><td>285</td></tr>
+    <tr><td>Mean</td><td>42.1</td></tr>
+  </table>
+  <p>The distribution is the point: the median passage is 35 tokens against a cap of 96, so the typical row is less than half real content. Padding is not an edge case here; it is the majority of the tensor.</p>
+
+  <h3>8.4.2 The Mask, and the Correct Masked Mean</h3>
+  <p>A mask is a tensor that is 1 wherever a position is a real token and 0 wherever it is padding. Built from the ids themselves, <code class="inline">(x != 0)</code> is already exactly that - no extra bookkeeping is needed, because <code class="inline">&lt;pad&gt;</code> is id 0. The mask is then shaped to broadcast against the hidden states and applied before the reduction.</p>
+  <pre>out, _ = rnn(emb(x))                    <span class="cm"># out: (B, T, H)</span>
+
+mask = (x != <span class="num">0</span>).unsqueeze(-<span class="num">1</span>).float()     <span class="cm"># (B, T, 1) -> broadcasts over H</span>
+
+<span class="cm"># correct: sum the real positions, divide by the number of real positions</span>
+z = (out * mask).<span class="fn">sum</span>(<span class="num">1</span>) / mask.<span class="fn">sum</span>(<span class="num">1</span>).clamp(min=<span class="num">1</span>)      <span class="cm"># (B, H)</span>
+
+<span class="cm"># the quiet bug: divide by T, so every padded position drags the mean toward 0</span>
+z_wrong = out.<span class="fn">mean</span>(<span class="num">1</span>)                      <span class="cm"># (B, H) - averages the padding too</span></pre>
+  <p>Both lines run, both return the right shape, and neither raises a warning. The difference is the divisor and the mask, and their effect is measured in Section 8.8: the correct masked mean <strong>0.5027</strong>, the unmasked mean <strong>0.3929</strong>, a gap of <strong>0.1098</strong> - about <strong>11.0 points</strong> - from a single missing multiply.</p>
+
+  <div class="callout warn">
+    <span class="label">The mask has to enter before the sum, and the divisor has to match</span>
+    Two ways to get this wrong, and they are not the same mistake. If you mask after the mean (<code class="inline">out.mean(1) * something</code>) the padded rows have already contributed. If you mask the sum but still divide by <em>T</em>, every short document is scaled down by its fraction of real tokens, so a 35-token document is divided by 96 and its vector is quietly shrunk to about a third. The mask must go into the sum, and the divisor must be the mask's own count.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Padding</strong> - appending <code class="inline">&lt;pad&gt;</code> so a batch is rectangular; 95.58% of test documents are shorter than the cap.</li>
+      <li><strong>Mask</strong> - a 0/1 tensor marking real positions; here <code class="inline">(x != 0)</code>, needing no separate bookkeeping.</li>
+      <li><strong>Masked mean</strong> - summing only the real positions and dividing by their count, <code class="inline">(h * mask).sum(1) / mask.sum(1)</code>.</li>
+      <li><strong>Variable-length sequence</strong> - a document whose true length differs from the batch width; the situation padding exists to resolve.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.5 ========== -->
+<div class="section">
+  <h2>8.5 Anatomy of the <code class="inline">out[:, -1, :]</code> Bug</h2>
+  <p>This is the bug the week is built around, and it deserves a full dissection because it has every property of a bug that ships: it is one line, it is idiomatic, it runs without error, its output has the correct shape, and its damage is concentrated in exactly the samples nobody inspects.</p>
+
+  <h3>8.5.1 The Wrong Line and the Right Line</h3>
+  <p>After the LSTM, <code class="inline">out</code> has shape <code class="inline">(B, T, H)</code>. The intent is "the model's reading of the document" - one vector of length <em>H</em> per example. The wrong line takes the last <em>column</em>:</p>
+  <pre><span class="cm"># ---- WRONG: out[:, -1, :] -------------------------------------------------</span>
+<span class="cm"># Column T-1 is the state after the LSTM consumed the LAST POSITION. For a</span>
+<span class="cm"># document shorter than the batch width, those positions are &lt;pad&gt;=0. So the</span>
+<span class="cm"># vector read here is the hidden state after reading the padding - not the</span>
+<span class="cm"># document. 95.58% of the test documents are shorter than max_len = 96, so</span>
+<span class="cm"># almost every example is read to the wrong place.</span>
+out, _ = rnn(emb(x))
+z_bad = out[:, -<span class="num">1</span>, :]                     <span class="cm"># (B, H) - the last COLUMN</span>
+
+<span class="cm"># ---- RIGHT: pack, then take the last REAL hidden state --------------------</span>
+<span class="cm"># pack_padded_sequence drops every padded timestep, so the LSTM stops at each</span>
+<span class="cm"># document's true length. It needs the batch sorted by length descending, OR</span>
+<span class="cm"># enforce_sorted=False, which sorts internally and restores the original order</span>
+<span class="cm"># on the way out. h[-1] is then the last hidden state of the top layer, per</span>
+<span class="cm"># sample, at each sample's own final real token.</span>
+packed = nn.utils.rnn.<span class="fn">pack_padded_sequence</span>(
+    emb(x), lengths, batch_first=<span class="kw">True</span>, enforce_sorted=<span class="kw">False</span>)
+_, (h, _) = rnn(packed)
+z_ok = h[-<span class="num">1</span>]                                <span class="cm"># (B, H) - the last REAL token</span></pre>
+  <p>Only one document in a batch is read correctly by the wrong line: the longest one, whose final position happens to be a real token. Every other document is read at a position that only exists because of padding. The shorter the document, the more padding stands between its true end and the position the model actually reads.</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+
+torch.<span class="fn">manual_seed</span>(<span class="num">0</span>)
+B, T, H, V = <span class="num">4</span>, <span class="num">8</span>, <span class="num">96</span>, <span class="num">100</span>
+emb = nn.<span class="fn">Embedding</span>(V, H, padding_idx=<span class="num">0</span>)
+rnn = nn.<span class="fn">LSTM</span>(H, H, batch_first=<span class="kw">True</span>)
+
+x = torch.<span class="fn">tensor</span>([[<span class="num">5</span>, <span class="num">6</span>, <span class="num">7</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>],     <span class="cm"># length 3</span>
+                  [<span class="num">8</span>, <span class="num">9</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>, <span class="num">0</span>],     <span class="cm"># length 7</span>
+                  [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="num">0</span>],     <span class="cm"># length 3</span>
+                  [<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>, <span class="num">10</span>, <span class="num">11</span>, <span class="num">12</span>, <span class="num">13</span>, <span class="num">14</span>]])  <span class="cm"># length 8 (full)</span>
+lengths = (x != <span class="num">0</span>).<span class="fn">sum</span>(<span class="num">1</span>)                        <span class="cm"># tensor([3, 7, 3, 8])</span>
+
+e = emb(x)
+out, _ = rnn(e)
+
+z_bad = out[:, -<span class="num">1</span>, :]                              <span class="cm"># reads the padding</span>
+packed = nn.utils.rnn.<span class="fn">pack_padded_sequence</span>(
+    e, lengths, batch_first=<span class="kw">True</span>, enforce_sorted=<span class="kw">False</span>)
+_, (h, _) = rnn(packed)
+z_ok = h[-<span class="num">1</span>]                                    <span class="cm"># reads the last real token</span>
+
+<span class="fn">print</span>(torch.<span class="fn">allclose</span>(z_bad[<span class="num">3</span>], z_ok[<span class="num">3</span>]))              <span class="cm"># True  - row 3 is full length</span>
+<span class="fn">print</span>(torch.<span class="fn">allclose</span>(z_bad[<span class="num">0</span>], z_ok[<span class="num">0</span>]))              <span class="cm"># False - row 0 is padded</span></pre>
+
+  <h3>8.5.2 Three Kinds of Evidence That the Diagnosis Is Right</h3>
+  <p>It is not enough to say "the wrong line reads padding"; a diagnosis has to predict something about the numbers, and the predictions have to hold. Three measurements do so, and each rules out a competing explanation.</p>
+  <p><strong>Evidence 1 - the damage lands on short documents.</strong> If the bug is "reads the padding", it should hurt a 20-token document more than a 100-token one, because the shorter the document the more padding sits between it and the last column. Bucketing the seed-42 test set by true length shows exactly that, and shows it only for the wrong line:</p>
+  <table>
+    <tr><th>Bucket (tokens)</th><th>n</th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th></tr>
+    <tr><td>20-29</td><td>38</td><td>0.4211</td><td><strong>0.1579</strong></td></tr>
+    <tr><td>30-49</td><td>41</td><td>0.3902</td><td><strong>0.1707</strong></td></tr>
+    <tr><td>50-99</td><td>29</td><td>0.4483</td><td>0.4138</td></tr>
+    <tr><td>100-max</td><td>5</td><td>0.6000</td><td>0.4000</td></tr>
+  </table>
+  <p>The correct arm is flat across buckets - between 0.39 and 0.60, roughly the class prior. The wrong arm is not: it collapses to <strong>0.1579</strong> and <strong>0.1707</strong> on the short buckets and only recovers to <strong>0.4138</strong> once documents are long enough that padding is a small fraction of the row. The damage tracks padding, which is what the diagnosis predicts.</p>
+  <p><strong>Evidence 2 - the hard boundary at <code class="inline">max_len</code>.</strong> The prediction sharpens at the cap. A document at or above <code class="inline">max_len = 96</code> has <em>no padding at all</em>, so <code class="inline">out[:, -1, :]</code> really does point at its end. A document below the cap does not. On the seed-42 test set:</p>
+  <ul>
+    <li>Documents of length <strong>at least 96</strong>: <strong>5</strong> of them, wrong-arm accuracy <strong>0.4000</strong>.</li>
+    <li>Documents of length <strong>below 96</strong>: <strong>108</strong> of them, wrong-arm accuracy <strong>0.2315</strong>.</li>
+  </ul>
+  <p>The five full-length documents are read correctly and score like the correct arm; the 108 padded ones collapse. This is the evidence that rules out the tempting alternative explanation - "the task is just too hard" - because if the task were the problem, the long documents would not do better.</p>
+  <p><strong>Evidence 3 - changing <code class="inline">max_len</code> does not save the wrong arm.</strong> If the bug is about where padding sits, then padding <em>less</em> or <em>more</em> should move the wrong arm, and it should barely touch the correct one. Sweeping the cap over three seeds (42, 43, 44):</p>
+  <table>
+    <tr><th><code class="inline">max_len</code></th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th></tr>
+    <tr><td>48</td><td>0.4572 (sd 0.0135)</td><td>0.2891</td></tr>
+    <tr><td>96</td><td>0.4454 (sd 0.0285)</td><td>0.2389</td></tr>
+    <tr><td>192</td><td>0.4454 (sd 0.0357)</td><td>0.2478</td></tr>
+  </table>
+  <p>The correct arm moves by 0.0118 across the whole sweep, which is well inside its own standard deviation, so <strong>tuning the cap is not a lever</strong>. The wrong arm moves around without ever catching up. The lesson is the one the whole section is for: <strong>if the pooling is wrong, no length setting fixes it.</strong></p>
+
+  <div class="callout key">
+    <span class="label">The mechanism in one sentence, and the general shape of the mistake</span>
+    <code class="inline">out[:, -1, :]</code> assumes the last position in the padded tensor is the last position of the document; <code class="inline">pack_padded_sequence</code> plus <code class="inline">h[-1]</code> (or a masked mean) uses the true lengths and stops where the document stops. The general shape of the mistake is <strong>a fixed reduction over a variable-length axis</strong>: whenever a tensor has a padded axis, any operation that treats every position as real - a last-position lookup, an unmasked mean, an unmasked max - is wrong, and the only question is how much it costs.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong><code class="inline">pack_padded_sequence</code></strong> - a PyTorch helper that drops padded timesteps so the recurrent layer stops at each document's true length.</li>
+      <li><strong><code class="inline">enforce_sorted</code></strong> - when <code class="inline">False</code>, the pack sorts the batch by length internally and restores the original order; when <code class="inline">True</code> you must pre-sort.</li>
+      <li><strong>Last real hidden state</strong> - the state after the final non-padded token; the correct target of a last-step read.</li>
+      <li><strong>Pooling</strong> - the reduction that turns the sequence of hidden states into one vector per document.</li>
+      <li><strong>Fixed reduction over a variable axis</strong> - the pattern of bug; reads padding as content, runs without error, and hides in short samples.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.6 ========== -->
+<div class="section">
+  <h2>8.6 RNNs and Vanishing Gradients</h2>
+  <p>The recurrent layer inherits the problem that every deep network has, but in a form that is worse and more specific. The recurrence is where the sequence model's reach comes from, and it is also where its gradients go to die.</p>
+
+  <h3>8.6.1 The Recurrence</h3>
+  <p>A plain recurrent layer keeps a hidden state of length <em>H</em> and updates it once per token:</p>
+  <p style="text-align:center; font-size:16px;"><strong>h<sub>t</sub> = tanh(W x<sub>t</sub> + U h<sub>t-1</sub> + b)</strong></p>
+  <p>where <em>x<sub>t</sub></em> is the embedding of the token at step <em>t</em> and <code class="inline">W</code>, <code class="inline">U</code>, <code class="inline">b</code> are shared across every step. The sharing is not an optimisation; it is the definition. It is what lets the same layer accept a 20-token document and a 285-token one, and it is what makes the whole thing trainable with one set of parameters.</p>
+  <pre><span class="kw">import</span> torch
+
+H, T = <span class="num">96</span>, <span class="num">5</span>
+W = torch.<span class="fn">randn</span>(H, H) * <span class="num">0.1</span>
+U = torch.<span class="fn">randn</span>(H, H) * <span class="num">0.1</span>
+b = torch.<span class="fn">zeros</span>(H)
+
+h = torch.<span class="fn">zeros</span>(H)                          <span class="cm"># initial state</span>
+xs = torch.<span class="fn">randn</span>(T, H)                      <span class="cm"># one embedding per step</span>
+<span class="kw">for</span> t <span class="kw">in</span> <span class="fn">range</span>(T):
+    h = torch.<span class="fn">tanh</span>(xs[t] @ W.T + h @ U.T + b)   <span class="cm"># the recurrence, written out</span></pre>
+  <p>Training a recurrent network is ordinary backpropagation through time: the loss at the last step is differentiated with respect to every earlier step, so the gradient reaching step <em>k</em> is a product of one Jacobian per intervening step. That product is where the trouble is.</p>
+
+  <h3>8.6.2 Why the Gradient Disappears, or Explodes</h3>
+  <p>Differentiate the recurrence and the transition factor appears:</p>
+  <p style="text-align:center; font-size:16px;"><strong>dh<sub>t</sub> / dh<sub>t-1</sub> = diag(1 - tanh<sup>2</sup>(...)) U</strong></p>
+  <p>So the gradient at a step <em>k</em> steps in the past is multiplied by a chain of these factors - about <em>T</em> of them. Two things happen to that chain.</p>
+  <ul>
+    <li><strong>Vanishing.</strong> The derivative of <code class="inline">tanh</code> is at most 1 and typically well below it, and the entries of <code class="inline">U</code> are small after initialisation. A product of many numbers each below 1 shrinks exponentially: by the time the gradient travels back across 50 steps it is a number so small it is indistinguishable from zero, and the parameters that shape the early part of the sequence stop learning.</li>
+    <li><strong>Exploding.</strong> If the entries of <code class="inline">U</code> happen to be large, the product grows instead, and the gradient overflows. The usual symptom is a loss that jumps to <code class="inline">nan</code>; the usual fix is gradient clipping, which caps the norm of the gradient before the optimiser step.</li>
+  </ul>
+  <p>On this corpus the problem is present but not the binding one: the median document is 35 tokens and the cap is 96, which is short enough that a vanished gradient is a nuisance rather than the reason the score is low. The reason the score is low is the thing Section 8.9 measures - too little data - and it is worth keeping the two apart, because they call for different fixes.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Hidden state</strong> - the vector the recurrent layer carries across steps; length <em>H</em>.</li>
+      <li><strong>Shared weights</strong> - one <code class="inline">W</code> and one <code class="inline">U</code> used at every timestep, which is what makes a variable-length input possible.</li>
+      <li><strong>Backpropagation through time (BPTT)</strong> - backpropagation applied across the unrolled recurrence.</li>
+      <li><strong>Vanishing gradient</strong> - the gradient's exponential decay across many steps, so early steps stop learning.</li>
+      <li><strong>Exploding gradient</strong> - the opposite; a gradient that overflows, usually cured by clipping its norm.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.7 ========== -->
+<div class="section">
+  <h2>8.7 LSTM and GRU: Gating, and What It Does Not Fix</h2>
+  <p>The long short-term memory cell was invented to give the gradient a path that does not have to survive a chain of <code class="inline">tanh</code> derivatives. It does this with gates, and the gates are easiest to understand one at a time as answers to a specific question.</p>
+
+  <h3>8.7.1 Three Gates, Three Questions</h3>
+  <table>
+    <tr><th>Gate</th><th>The question it answers</th><th>What it controls</th></tr>
+    <tr><td>Forget gate <code class="inline">f<sub>t</sub></code></td><td>How much of the old memory should survive?</td><td>Scales the previous cell state <code class="inline">C<sub>t-1</sub></code>; a value near 0 erases, near 1 keeps.</td></tr>
+    <tr><td>Input gate <code class="inline">i<sub>t</sub></code></td><td>How much of the new candidate should be written in?</td><td>Scales the candidate update; decides what is worth remembering from this token.</td></tr>
+    <tr><td>Output gate <code class="inline">o<sub>t</sub></code></td><td>How much of the memory should be exposed right now?</td><td>Scales the cell state on its way to the hidden state <code class="inline">h<sub>t</sub></code>.</td></tr>
+  </table>
+  <p>The mechanism that matters for gradients is the <strong>cell state</strong> <code class="inline">C<sub>t</sub></code>, updated as <code class="inline">C<sub>t</sub> = f<sub>t</sub> * C<sub>t-1</sub> + i<sub>t</sub> * candidate</code>. Along the cell-state path the transition is a multiplication by the forget gate rather than by a weight matrix times a <code class="inline">tanh</code> derivative. When the forget gate sits near 1, that path is close to an identity, and gradients can flow across many steps without shrinking as fast. This is what "LSTM solves vanishing gradients" actually means - not that the problem is gone, but that there is now a route on which it is much milder.</p>
+
+  <h3>8.7.2 The Cost: It Is Still Sequential</h3>
+  <p>Gating buys a better gradient path and costs nothing in correctness, but it does not change one structural fact: the recurrence is still a loop. Step <em>t</em> needs <code class="inline">h<sub>t-1</sub></code>, so the <em>T</em> steps of a document cannot be computed in parallel no matter how many cores are available. A GRU is a cheaper variant of the same idea - it merges the forget and input gates into one update gate and drops the separate cell state, with two gates instead of three - and it is sequential in exactly the same way.</p>
+  <div class="callout tip">
+    <span class="label">The bridge to Module 3</span>
+    That sequential dependency is the reason the field moved on. The attention mechanism, and the Transformer built from it, computes every position's representation from every other position at once, with no recurrence at all - so the whole sequence is parallel and the vanishing-gradient problem along a chain disappears. Chapter 10 takes that up directly, and it will use this week's LSTM as the contrast: same task, same data, a different answer to "how does a position see the others?" Keep this chapter's numbers, because they are the baseline the Transformer has to beat.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Gate</strong> - a sigmoid layer whose output, between 0 and 1, scales a signal; gates are how a cell decides what to keep.</li>
+      <li><strong>Forget gate</strong> - scales the previous cell state; near 0 forgets, near 1 keeps.</li>
+      <li><strong>Input gate</strong> - scales the new candidate written into the cell state.</li>
+      <li><strong>Output gate</strong> - scales the cell state on its way out to the hidden state.</li>
+      <li><strong>Cell state</strong> - the LSTM's long-term memory path; because its transition is a multiplication by the forget gate, it gives the gradient an easier route.</li>
+      <li><strong>GRU</strong> - a two-gate simplification of the LSTM; cheaper, and sequential in the same way.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.8 ========== -->
+<div class="section">
+  <h2>8.8 The Pooling Ledger: One Line, 26 Points</h2>
+  <p>Five configurations, five seeds each, one frozen protocol. The four pooling arms differ in exactly one thing: how the <code class="inline">(B, T, 96)</code> tensor of hidden states becomes one <code class="inline">(B, 96)</code> vector per document. Everything else - data, split, tokeniser, vocabulary rule, embedding size, hidden size, optimiser, epochs - is identical. The result is the tightest controlled comparison in the chapter, and it is uncomfortable.</p>
+
+  <table>
+    <tr><th>Arm</th><th>How <code class="inline">(B, T, 96)</code> becomes <code class="inline">(B, 96)</code></th><th>Test accuracy</th><th>Macro F1</th></tr>
+    <tr><td><code class="inline">mean_masked</code></td><td>mean over the real timesteps only</td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td></tr>
+    <tr><td><code class="inline">packed</code></td><td><code class="inline">pack_padded_sequence</code>, then the last real hidden state</td><td>0.4248 ± 0.0360</td><td>0.3843 ± 0.0422</td></tr>
+    <tr><td><code class="inline">mean_unmasked</code></td><td>mean over every position, padding included</td><td>0.3929 ± 0.0684</td><td>0.3315 ± 0.0935</td></tr>
+    <tr><td><code class="inline">last_step</code></td><td><code class="inline">out[:, -1, :]</code>, no packing</td><td><strong>0.2407 ± 0.0040</strong></td><td><strong>0.0711 ± 0.0095</strong></td></tr>
+    <tr><td><code class="inline">mean_masked_reg</code></td><td><code class="inline">mean_masked</code> + dropout 0.3 + weight decay 1e-3</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td></tr>
+  </table>
+
+  <h3>8.8.1 Reading the Ledger</h3>
+  <p>The best arm is <code class="inline">mean_masked</code> at <strong>0.5027</strong>; the worst is <code class="inline">last_step</code> at <strong>0.2407</strong>. The difference is <strong>0.2620</strong> - <strong>26.2 points</strong> - and the entire difference between the best and worst configurations is <em>one line of reduction code</em>. The model that produced both numbers is the same model, with the same parameters (166,278 for seed 42; 164,691 averaged over the five seeds), trained on the same data.</p>
+  <p>Three gaps are worth naming separately, because each is a different lesson:</p>
+  <ul>
+    <li><strong>Masking is worth about 11.0 points.</strong> The unmasked mean reaches 0.3929; the masked mean reaches 0.5027, a gain of <strong>0.1098</strong>. This is the cheapest fix in the chapter - adding a mask to a mean that was already being computed.</li>
+    <li><strong>Fixing <code class="inline">[-1]</code> with packing is worth about 18.4 points.</strong> From 0.2407 to 0.4248, a gain of <strong>0.1841</strong>. This is the value of not reading padding.</li>
+    <li><strong>Fixing <code class="inline">[-1]</code> with a masked mean is worth 26.2 points.</strong> From 0.2407 to 0.5027, a gain of <strong>0.2620</strong>. Averaging the real timesteps beats taking the final hidden state on this data, which is not obvious in advance and is exactly why the arms were run.</li>
+  </ul>
+
+  <h3>8.8.2 The Honest Baseline: The Worst Arm Is Below Chance</h3>
+  <p>With 6 balanced-ish classes, random guessing reaches <strong>1/6 ≈ 0.1667</strong> on accuracy. That is the number every arm has to beat before it is doing anything at all. <code class="inline">last_step</code> reaches 0.2407 on accuracy, which clears 0.1667 - but its <strong>macro F1 is 0.0711</strong>, which is <em>below</em> the random baseline. The reason is simple once the confusion matrix of Section 8.10 is in front of you: the wrong arm predicts the largest class almost always, so it collects accuracy from prior alone and finds almost no examples of the small classes. Macro F1, which weights every class equally, sees through it.</p>
+  <div class="callout warn">
+    <span class="label">0.5027 is a real result, not a good one</span>
+    It is <strong>three times the random baseline</strong>, and the sample of 113 test documents per seed is small enough that the ±0.0449 spread matters. No sentence in this chapter should read as "the LSTM classifies text well". The correct sentence is: <em>on this corpus, with this much data, the best configuration reaches 0.5027, and the size of the gap between configurations dwarfs the absolute level of any of them.</em> The chapter is about the gap, because the gap is what you control.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Arm</strong> - one configuration under test, with every other factor held fixed.</li>
+      <li><strong>Pooling</strong> - the reduction from a sequence of hidden states to one vector; here the only variable that changes.</li>
+      <li><strong>Random baseline</strong> - the score of guessing; 1/6 ≈ 0.1667 with 6 classes.</li>
+      <li><strong>Macro F1</strong> - the unweighted mean of per-class F1; the metric that exposes an arm relying on the class prior.</li>
+      <li><strong>Seed replication</strong> - repeating an arm over several seeds so the spread, not one run, is the measurement.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.9 ========== -->
+<div class="section">
+  <h2>8.9 Overfitting, Regularisation, and the Wrong Bottleneck</h2>
+  <p>Every arm overfits. The interesting question is not whether it does - with 523 training passages and a model that reaches 0.9885 on them, it does - but what kind of overfitting it is, and therefore what would fix it. This section answers that question with two measurements and reaches the week's most important honest conclusion.</p>
+
+  <h3>8.9.1 The Training Curve, for One Seed</h3>
+  <p>For <code class="inline">packed</code> at seed 42, recorded every 3 epochs for 11 points, training accuracy climbs from <strong>0.2849</strong> to <strong>0.9885</strong> while validation accuracy climbs from <strong>0.2143</strong> to <strong>0.4196</strong>. At epoch 30 the gap is <strong>0.9885 - 0.4196 = 0.5689</strong>. The model has memorised the training set and its validation score has stalled at roughly the level of its test score.</p>
+  <table>
+    <tr><th>Recorded point</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th></tr>
+    <tr><td>Train accuracy</td><td>0.2849</td><td>0.2696</td><td>0.4857</td><td>0.6386</td><td>0.7400</td><td>0.8375</td><td>0.8853</td><td>0.8967</td><td>0.9675</td><td>0.9866</td><td><strong>0.9885</strong></td></tr>
+    <tr><td>Validation accuracy</td><td>0.2143</td><td>0.2411</td><td>0.2589</td><td>0.2500</td><td>0.3036</td><td>0.3393</td><td>0.3571</td><td>0.3036</td><td>0.3661</td><td>0.4196</td><td><strong>0.4196</strong></td></tr>
+  </table>
+  <p>Look at the validation column and note what it does <em>not</em> do: it never declines. There is no peak and no downward turn - the curve is still creeping upward at the last recorded point. That shapes the diagnosis. If the problem were simply "trained too long", the validation curve would have turned down and early stopping would be the answer. A validation curve that has never fallen is not the signature of training past the optimum; it is the signature of a model that has learned everything the data can teach and is now filling the rest of its capacity with noise.</p>
+
+  <h3>8.9.2 Applying Week 6's Regularisation Makes It Worse</h3>
+  <p>Chapter 6 taught two regularisers that worked there: dropout on the hidden representation and weight decay on the optimiser. Applying both to the best arm - <code class="inline">mean_masked</code> with dropout 0.3 and weight decay 1e-3 - is a controlled test of the bottleneck hypothesis:</p>
+  <table>
+    <tr><th>Arm</th><th>Test accuracy</th><th>Macro F1</th></tr>
+    <tr><td><code class="inline">mean_masked</code></td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td></tr>
+    <tr><td><code class="inline">mean_masked_reg</code> (dropout 0.3, wd 1e-3)</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td></tr>
+  </table>
+  <p>The score falls from <strong>0.5027</strong> to <strong>0.4672</strong> - a drop of <strong>0.0355</strong>, about <strong>3.6 percentage points</strong> - and macro F1 falls by <strong>0.0341</strong>, about 3.4 points. Worse than the fall is the change in spread: the standard deviation across seeds grows from <strong>±0.0449</strong> to <strong>±0.0595</strong>, so the regularised arm is both lower and less stable. On this task, the two tools that help a model with plenty of data and too much capacity do the opposite: they remove capacity the model still needed.</p>
+  <div class="callout key">
+    <span class="label">The conclusion, stated plainly</span>
+    <strong>The binding constraint this week is the data, not the capacity.</strong> There are <strong>523</strong> training passages. The train-validation gap of 0.5689 looks like overfitting, but it is overfitting on a model whose capacity is not the limiting factor - so constraining that capacity (dropout, weight decay) only removes the little signal the model had. The lever that would move this number is more passages, or a different task definition; regularisation is not the lever here.
+  </div>
+  <div class="callout warn">
+    <span class="label">The same tool, two opposite answers</span>
+    In Week 6 the same two regularisers <em>raised</em> the score: there the data was plentiful and the model was large, so capacity was the bottleneck and constraining it helped. Here the data is scarce and capacity is not the bottleneck, so the identical tool hurts. This is not a contradiction in the tools; it is a reminder that <strong>a technique is not a rule, it is a response to a diagnosed bottleneck.</strong> The procedure is always the same: measure which constraint is binding first, then choose the tool. Applying the tool that worked last time, without the measurement, is how a working model gets worse while the engineer believes they improved it.
+  </div>
+
+  <h3>8.9.3 The False Improvement of Building the Vocabulary on Everything</h3>
+  <p>The other tempting "fix" is to widen the vocabulary by counting tokens over all 748 passages instead of the 523 training ones. It raises the vocabulary from <strong>1592</strong> (the five-seed mean) toward the full-corpus count of <strong>3142</strong>, and it usually raises the score. It is also leakage, and the rise is a lie: the vocabulary now contains the test set's rare words, so the OOV rate the report measures is lower than the OOV rate the model will meet on genuinely new text. The measured rise is <em>because</em> the task has been made easier, and no honest report can quote it as an improvement. Exercise 2 makes you run it and see the shape of the false gain for yourself.</p>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Overfitting</strong> - a model that fits the training set much better than unseen data; here the train-validation gap is 0.5689.</li>
+      <li><strong>Dropout</strong> - randomly zeroing hidden units during training to reduce effective capacity.</li>
+      <li><strong>Weight decay</strong> - an L2 penalty on the weights, shrinking them toward zero.</li>
+      <li><strong>Binding constraint</strong> - the factor that actually limits the score; here the 523 training passages, not the model's size.</li>
+      <li><strong>False improvement</strong> - a gain that comes from leaking test information rather than from a better model.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.10 ========== -->
+<div class="section">
+  <h2>8.10 Error Analysis and the Choice of Metric</h2>
+  <p>An accuracy number is a sentence with the important part left out. This section opens the confusion matrix, reads the recall column per class, and shows the one signal that decides whether a model ships or does not: the split between accuracy and macro F1.</p>
+
+  <h3>8.10.1 The Confusion Matrix, Summed Over Five Seeds</h3>
+  <p>Rows are the true week, columns the predicted week, for the <code class="inline">packed</code> arm across all five seeds - <strong>565</strong> test predictions in total.</p>
+  <table>
+    <tr><th>true / pred</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th><th>Recall</th></tr>
+    <tr><td>W1 (n=80)</td><td><strong>14</strong></td><td>12</td><td>10</td><td>22</td><td>8</td><td>14</td><td>0.1750</td></tr>
+    <tr><td>W2 (n=75)</td><td>16</td><td><strong>14</strong></td><td>13</td><td>11</td><td>13</td><td>8</td><td>0.1867</td></tr>
+    <tr><td>W3 (n=85)</td><td>12</td><td>4</td><td><strong>36</strong></td><td>13</td><td>7</td><td>13</td><td>0.4235</td></tr>
+    <tr><td>W4 (n=90)</td><td>7</td><td>4</td><td>16</td><td><strong>43</strong></td><td>10</td><td>10</td><td>0.4778</td></tr>
+    <tr><td>W5 (n=95)</td><td>6</td><td>10</td><td>9</td><td>11</td><td><strong>40</strong></td><td>19</td><td>0.4211</td></tr>
+    <tr><td>W6 (n=140)</td><td>8</td><td>8</td><td>11</td><td>11</td><td>9</td><td><strong>93</strong></td><td><strong>0.6643</strong></td></tr>
+  </table>
+  <p>The matrix sums to <strong>565</strong>, of which <strong>240</strong> are on the diagonal - an accuracy of <strong>0.4248</strong>. Two features stand out, and they are the whole story.</p>
+  <p><strong>The off-diagonal is almost flat.</strong> Every off-diagonal cell sits between <strong>4</strong> and <strong>22</strong>. There is no pair of weeks the model confuses more than any other - no 8-and-1 of this task. The only cell on the diagonal that stands out is <strong>W6 at 93</strong>, and that is not the model being good at Week 6; it is Week 6 being the largest class (140 test examples against Week 1's 80).</p>
+  <p><strong>Recall rises with class size (Spearman rho = 0.77).</strong> Recall is <strong>0.1750</strong> for W1, <strong>0.1867</strong> for W2, <strong>0.4235</strong> for W3, <strong>0.4778</strong> for W4, <strong>0.4211</strong> for W5 and <strong>0.6643</strong> for W6. There are two small inversions — W2 above W1, and W5 against W4 — in an otherwise rising sequence, and the trend is unmistakable: the bigger the class, the better the model finds it. W6's recall is <strong>3.80 times</strong> W1's. A model that finds big classes well and small classes badly is not learning the content - it is learning the prior, and predicting the common week more often. This is the direct evidence behind the flat off-diagonal: with no pair of weeks more separable than the others, predicting by frequency is as good a strategy as the model has found.</p>
+
+  <h3>8.10.2 Accuracy and Macro F1 Split: The Signal That Stops a Bad Model Shipping</h3>
+  <p>For the <code class="inline">last_step</code> arm the two metrics disagree by a wide margin:</p>
+  <table>
+    <tr><th>Arm</th><th>Test accuracy</th><th>Macro F1</th><th>Random baseline</th></tr>
+    <tr><td><code class="inline">last_step</code></td><td>0.2407 ± 0.0040</td><td><strong>0.0711 ± 0.0095</strong></td><td>1/6 ≈ 0.1667</td></tr>
+  </table>
+  <p>Accuracy is <strong>0.2407</strong>; macro F1 is <strong>0.0711</strong>. The gap is <strong>0.1696</strong> - about <strong>17 points</strong> - and the direction matters: accuracy sits above the random baseline while macro F1 sits <em>below</em> it. A report that quoted only accuracy would describe a model that looks better than a coin flip, and would send it to production. Macro F1, which scores every class equally, exposes a model that has learned to say the largest class and almost nothing else. <strong>The metric is not a formality; it is the difference between a working model and a confident one.</strong></p>
+  <div class="callout warn">
+    <span class="label">The metric follows from the cost of being wrong</span>
+    When classes are imbalanced and the cost of a missed small class is as high as a missed large one, accuracy is the wrong instrument and macro F1 is the right one. When the cost is genuinely proportional to class size, accuracy is defensible. The choice is a statement about what a mistake costs - which is why it belongs to the people who own the consequence, not to a default. This is the week's civic point: <strong>choosing a metric is choosing whose errors you are willing to accept.</strong>
+  </div>
+
+  <h3>8.10.3 The Fourteen Misses, Read as Text</h3>
+  <p>The <code class="inline">packed</code> arm at seed 42 misses 14 of the 113 test passages. Read as text rather than as cells, they fall into three kinds, and none of them is the model failing.</p>
+  <div class="steps">
+    <div class="step"><h4>Short sentences, where the vocabulary has the least to work with (20 tokens) - true W4, predicted W3</h4><p><em>"Hidden layers transform the features first; the output layer decides afterwards. The same data becomes separable in the new space."</em> At 20 tokens this is the minimum length the corpus admits, and it names generic concepts with few tokens to anchor them to a week.</p></div>
+    <div class="step"><h4>General engineering sentences, true of every week (26 tokens) - true W1, predicted W2</h4><p><em>"Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary - not scattered through the code and not in your memory."</em> This sentence is good advice in Week 1 and in Week 6; it carries no week-specific vocabulary at all, so no classifier could place it by content.</p></div>
+    <div class="step"><h4>Terminology reused across weeks (22 tokens) - true W6, predicted W4</h4><p><em>"Explain how a training set of 80 samples against 17,226 parameters produces overfitting on purpose, and why that is the point of the lab."</em> The passage contains 17,226, a number that appears in the Week 4 material as well; the model has the vocabulary but the vocabulary does not belong to one week.</p></div>
+  </div>
+  <div class="callout key">
+    <span class="label">None of these is the model looking at the wrong thing</span>
+    In all three cases the model's prediction is defensible from the words in the passage: the sentences genuinely belong to more than one week. <strong>"Which week is this passage from" has no unique answer for a passage that reuses another week's vocabulary</strong> - the label is a property of where the passage was filed, not of what it says. That is not a failure to be fixed with a bigger model; it is the boundary of the task definition. The honest response is to name it in the report, and to consider whether the task should be redefined (predict the topic, accept multiple labels) rather than whether the model should be retrained.
+  </div>
+
+  <div class="callout key">
+    <span class="label">Key terms</span>
+    <ul>
+      <li><strong>Confusion matrix</strong> - rows true class, columns predicted; the diagonal counts correct decisions and each off-diagonal cell is a specific confusion.</li>
+      <li><strong>Recall</strong> - of a class's true examples, the fraction found; here from 0.1750 for W1 to 0.6643 for W6.</li>
+      <li><strong>Class prior</strong> - the base rate of a class; a model that predicts the largest class exploits it.</li>
+      <li><strong>Accuracy / macro F1 split</strong> - accuracy above the baseline while macro F1 is below it; the signal that a model only predicts the prior.</li>
+      <li><strong>Error analysis</strong> - reading the misclassified samples as text to find what the aggregate number hid.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 8.11 ========== -->
+<div class="section">
+  <h2>8.11 Summary and Exercises</h2>
+
+  <div class="callout key">
+    <span class="label">Six takeaways</span>
+    <ol>
+      <li>A text model never sees a string. Four steps turn text into a tensor - tokenise, build the vocabulary, encode, pad and mask - and <strong>the vocabulary is built from the training split only</strong>. Anything else is leakage, and Section 8.9 shows why the resulting gain is a lie.</li>
+      <li>Tokenisation is not cosmetic. On Chinese text, splitting on whitespace gives an OOV rate of <strong>0.9973</strong> - one token per sentence, so each passage is one <code class="inline">&lt;unk&gt;</code> - against <strong>0.0254</strong> at character level, a factor of <strong>39</strong>. Segment first, fall back to characters, never to whitespace.</li>
+      <li>Padding is the majority of the tensor: <strong>95.58%</strong> of test documents are shorter than <code class="inline">max_len = 96</code>. The mask must enter the sum before the reduction and the divisor must be the mask's own count; the masked mean is worth about <strong>11.0 points</strong> over the unmasked one.</li>
+      <li><code class="inline">out[:, -1, :]</code> reads padding on every short document. Its signature is that the damage tracks document length - 0.1579 on 20-29 tokens, 0.2315 below <code class="inline">max_len</code> versus 0.4000 at or above it - while the correct arm is flat. Fixing the reduction moves the score by <strong>26.2 points</strong>, and no <code class="inline">max_len</code> setting substitutes for it.</li>
+      <li>Regularisation is a response to a bottleneck, not a rule. This week the bottleneck is <strong>523 training passages</strong>: dropout and weight decay take the score from <strong>0.5027</strong> to <strong>0.4672</strong>, and widen the spread from ±0.0449 to ±0.0595. In Week 6 the same tools helped, because there the bottleneck was capacity. Diagnose first.</li>
+      <li>Report the metric that matches the cost of a mistake. The <code class="inline">last_step</code> arm shows accuracy <strong>0.2407</strong> against macro F1 <strong>0.0711</strong> - above chance on one, below it on the other. And the fourteen misses are not model errors: the passages belong to more than one week, so the task itself has no unique answer for them.</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 1 · Read the Pooling Ledger (Required)</h4>
+    <ol>
+      <li>Give the test accuracy of the best and worst arms, and the difference. <em>(0.5027 and 0.2407; 0.2620, or 26.2 points.)</em></li>
+      <li>State, in one sentence, the only thing that differs between those two arms. <em>(How the (B, T, 96) hidden-state tensor is reduced to (B, 96) - one line of pooling code.)</em></li>
+      <li>Compute the gain from masking (unmasked mean to masked mean) and from packing (last-step to packed). <em>(0.5027 - 0.3929 = 0.1098, about 11.0 points; 0.4248 - 0.2407 = 0.1841, about 18.4 points.)</em></li>
+      <li>The random baseline is 1/6. Which arm's macro F1 falls below it, and by how much? <em>(<code class="inline">last_step</code>, 0.0711, which is 0.0956 below 0.1667.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 2 · Build the Vocabulary on Everything, and Watch the False Gain (Required, hands-on)</h4>
+    <ol>
+      <li>Run <code class="inline">build_vocab</code> on the training documents only and record the vocabulary size; then run it on all 748 passages and record the new size. <em>(The training-only vocabulary averages 1592 over five seeds; the full-corpus vocabulary is 3142.)</em></li>
+      <li>Train <code class="inline">mean_masked</code> both ways with the same seed and compare the test accuracy and the measured OOV rate. <em>(The full-corpus vocabulary usually raises accuracy and lowers the measured OOV rate - both for the wrong reason.)</em></li>
+      <li>Explain, in three sentences, why the higher number is not an improvement, and state what would expose it. <em>(The vocabulary now contains words that only ever occur in the test split, so the model is being evaluated on a task easier than deployment. Measuring OOV on passages that were never available when the vocabulary was built exposes it: the OOV rate is restored to the training-only value.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 3 · Replace <code class="inline">[-1]</code> With a Masked Mean (Required, hands-on)</h4>
+    <ol>
+      <li>Change the <code class="inline">last_step</code> branch so that instead of <code class="inline">out[:, -1, :]</code> it computes <code class="inline">(out * mask).sum(1) / mask.sum(1).clamp(min=1)</code> with <code class="inline">mask = (x != 0).unsqueeze(-1).float()</code>. Train one seed and report the change. <em>(From 0.2389 to 0.5133 at seed 42 - roughly 27 points.)</em></li>
+      <li>Now remove only the mask from the sum but keep dividing by the mask count; then keep the mask in the sum but divide by <em>T</em>. Report both scores. <em>(Both land far below the correct 0.5133 - the first sums padding, the second shrinks every short document by its real fraction.)</em></li>
+      <li>State which of the two half-fixes is more dangerous and why. <em>(Dividing by T: it runs cleanly, produces a plausible score, and the shrinkage is systematic in length, so it hides in the same short documents the <code class="inline">[-1]</code> bug hides in.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 4 · Read the Training Curve (Required)</h4>
+    <ol>
+      <li>Give the training and validation accuracies at the first and last recorded point, and the gap at the last. <em>(0.2849 to 0.9885 and 0.2143 to 0.4196; gap 0.5689.)</em></li>
+      <li>Does the validation curve ever fall? What does that rule out as the diagnosis? <em>(It never falls; it rules out "trained too long" - early stopping is not the fix.)</em></li>
+      <li>Adding dropout 0.3 and weight decay 1e-3 changes the score from 0.5027 to what, and the spread from ±0.0449 to what? <em>(To 0.4672; the spread widens to ±0.0595.)</em></li>
+      <li>State the binding constraint in one sentence, and contrast it with Week 6. <em>(The 523 training passages, not the model's capacity; in Week 6 the data was plentiful and capacity was the bottleneck, so the same regularisers helped there and hurt here.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 5 · Confusion Matrix and Recall (Required)</h4>
+    <ol>
+      <li>From the matrix, give the total predictions, the number correct and the accuracy. <em>(565, 240, 0.4248.)</em></li>
+      <li>List the six per-class recalls. What is the largest, the smallest, and their ratio? <em>(0.1750, 0.1867, 0.4235, 0.4778, 0.4211, 0.6643; largest 0.6643 for W6, smallest 0.1750 for W1, ratio 3.80.)</em></li>
+      <li>Describe the off-diagonal. How many cells exceed 22, and what does the answer say about whether there is a "worst pair"? <em>(None - every off-diagonal cell is between 4 and 22, so there is no dominant confusion pair; the model is not confusing two specific weeks, it is leaning on the class prior.)</em></li>
+      <li>For the <code class="inline">last_step</code> arm, give accuracy and macro F1 and the random baseline. Which metric would you report to a product owner, and why? <em>(0.2407, 0.0711, 1/6 ≈ 0.1667. Report macro F1: accuracy sits above the baseline and would let a below-chance model ship.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 6 · Explain a Miss (Required)</h4>
+    <ol>
+      <li>Take the passage <em>"Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary..."</em>, true W1, predicted W2. Name which of the three miss types it is and why. <em>(A general engineering sentence, true of every week - it carries no week-specific vocabulary.)</em></li>
+      <li>Take the passage <em>"Explain how a training set of 80 samples against 17,226 parameters produces overfitting..."</em>, true W6, predicted W4. Which type, and what is the giveaway? <em>(Terminology reused across weeks; the number 17,226 also appears in the Week 4 material.)</em></li>
+      <li>Write one sentence arguing that neither of these is a model failure, and one sentence on what that implies for the task definition. <em>(Both passages genuinely belong to more than one week, so the prediction is defensible from the text. It implies the task - "name the week" - has no unique answer for passages that reuse another week's vocabulary, and may need to be redefined rather than retrained.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 7 · The Chinese OOV Gap (Required)</h4>
+    <ol>
+      <li>On the Chinese text, give the OOV rate, singleton share and vocabulary size under whitespace splitting, and the same under character level. <em>(Whitespace: 0.9973, 0.9946, 372. Character: 0.0254, 0.2170, 880, over 14,860 test tokens.)</em></li>
+      <li>Compute the ratio of the two OOV rates. <em>(0.9973 / 0.0254 is about 39.)</em></li>
+      <li>Explain why the whitespace test set contributes only 375 tokens for 375 segments, and what that means for the model. <em>(A Chinese segment has no spaces, so whitespace splitting returns the whole segment as one token; the model sees one <code class="inline">&lt;unk&gt;</code> per passage and can learn nothing from it.)</em></li>
+      <li>State the engineering rule for a language without spaces. <em>(Segment first with a real segmenter; if none is available, fall back to character level; never whitespace.)</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>Exercise 8 · Packing and <code class="inline">enforce_sorted</code> (Required, hands-on)</h4>
+    <ol>
+      <li>Build a batch of four rows with lengths <code class="inline">[3, 7, 3, 8]</code>. Call <code class="inline">pack_padded_sequence</code> with <code class="inline">enforce_sorted=True</code> without sorting first and read the error. <em>(PyTorch raises a <code class="inline">RuntimeError</code> telling you the lengths must be sorted in decreasing order.)</em></li>
+      <li>Set <code class="inline">enforce_sorted=False</code> and run. Confirm that the packed result matches the correct per-sample last hidden state, in the original row order. <em>(It does - the pack sorts internally and restores the input order on the way out.)</em></li>
+      <li>Now compare, for the same batch, <code class="inline">out[:, -1, :]</code> with the packed last hidden state. Which rows agree, and why only those? <em>(Only the rows whose length equals the batch width agree, because for those the final position is a real token rather than padding.)</em></li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <span class="label">Where this week's numbers come from</span>
+    Every figure in this chapter was produced by <code class="inline">scripts/w8_sequence_experiment.py</code> writing <code class="inline">outputs/w8_sequence.json</code>: five pooling arms across five seeds, the length-bucket and long-document breakdowns, the <code class="inline">max_len</code> sweep, the seed-42 training curve, the five-seed confusion matrix, the misclassified passages, and the Chinese tokenisation comparison. The corpus was built by <code class="inline">scripts/build_text_corpus.py</code> writing <code class="inline">data/raw/course-text-corpus.jsonl</code> and <code class="inline">outputs/w8_corpus_facts.json</code> (748 passages, SHA-256 <code class="inline">87e41aac89ef59903abca15eea4250e68eb9d29537c1cd78d251ad497a16b4b1</code>). The data is this course's own Weeks 1-6 material, and the whole experiment runs <strong>fully offline with no external download</strong>.
+  </div>
+</div>
+
+<div class="footer">
+  <p>School of Software · AI Application Development - Chapter 8 · Sequence Models and Text Data</p>
+  <p>Generated with AI assistance; the instructor may adapt the chapter to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

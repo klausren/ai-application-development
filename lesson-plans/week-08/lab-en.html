@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 8 · Lab Part (In-Class Lab 80 min + Summary &amp; Assignment 10 min)</div>
+  <h1>Lab 7 — Build a Text-Classification Pipeline: four pooling arms, the confusion matrix, error analysis</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the In-Class Lab 80 min and the Summary &amp; Assignment 10 min</span>
+    <span>📚 Course textbook Chapter 8 (tokenisation, embedding, LSTM gates, padding and masking)</span>
+    <span>🔧 Hands-on Lab · Official lab number Lab 7 · 1.0 class hour in the official map, with the post-class report counted separately</span>
+    <span>🧩 Lesson Plan ID: LP-W8-B · Unit CU(8) · Week 8</span>
+    <span>🖼 Deck: 30 pages (this part covers p4-p22; the reference tables are p7, p10, p19 and p21)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>State the fixed items of the experiment protocol and explain why each one is fixed</li>
+      <li>Explain why the vocabulary must come from the training split only, and what leaks when it does not (the model sees a mean of 1592 words; the full corpus has 3142)</li>
+      <li>Explain why 95.58% of the test documents fall short of max_len = 96, and what <code class="inline">out[:, -1, :]</code> returns on a short document</li>
+      <li>Explain why the pooling choice alone is worth 26.2 points (0.5027 against 0.2407) with everything else held fixed</li>
+      <li>Explain why masking is correctness, not an optimisation (bare mean → masked mean is +11.0 points)</li>
+      <li>Explain why <code class="inline">last_step</code>'s macro F1 of 0.0711 is below the 6-class chance level of 1/6 ≈ 0.1667 while its accuracy of 0.2407 only looks weak</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Write <code class="inline">tokenise</code>, <code class="inline">build_vocab</code> and <code class="inline">encode</code>, and keep the per-sample length <code class="inline">lens</code> alive to the pooling line</li>
+      <li>Build the model with <code class="inline">nn.Embedding(padding_idx=0)</code> → <code class="inline">nn.LSTM(batch_first=True)</code> → <code class="inline">nn.Linear(6)</code>, and count its parameters (166,278 at seed 42)</li>
+      <li>Compute the masked mean <code class="inline">(h * mask).sum(1) / mask.sum(1)</code> and, in a second arm, pack with <code class="inline">pack_padded_sequence</code></li>
+      <li>Train, plot the training and validation curves, and fill the four-arm pooling table with mean ± standard deviation over five seeds</li>
+      <li>Print the confusion matrix, name the worst class pair with its count, and present at least 3 misclassified passages with their model confidence</li>
+      <li>Ask an AI to generate the pipeline, locate the padding/masking error, and record the before/after accuracy difference in a three-column log</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes · Civic Education</span>
+  <strong>Report an experiment that did not work, and report the metric that changed the conclusion.</strong> This lab keeps two uncomfortable facts in the report: the best arm reaches only 0.5027, and the same model reports macro F1 0.0711 — below chance — while its accuracy of 0.2407 reads as "merely weak". The user-centred habit is to report both numbers and explain the gap, because an accuracy-only report would ship a model that has almost stopped recognising its smallest classes.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The fixed protocol; the four pipeline steps and their classic bugs; the model shape and parameter count; the masked-mean and packed arms; the training curves; the four-arm pooling ledger; the confusion matrix and the worst class pair; the AI co-pilot log with before/after numbers</td><td>Every phase ends with a checkpoint written into a Markdown cell before the student moves on; the instructor demos each phase for 3-5 minutes and then patrols while students reproduce it</td></tr>
+  <tr><td>Difficulties</td><td>Building the vocabulary on train only, not on all data; keeping <code class="inline">lens</code> (throw it away and you are left with the two worst pooling choices); seeing that the pooling line is worth 26.2 points when nothing else changed; accepting that masking is +11.0 points of correctness, not a tuning trick; telling a real error pattern (a short passage, or a term reused across weeks) apart from a vague claim; writing the third column of the AI log as a number</td><td>Leakage: build the vocabulary twice, once on train and once on all data, and compare the reported test accuracy; <code class="inline">lens</code>: require the length tensor to be printed before the model is defined; pooling: point at the single changed line between <code class="inline">mean_masked</code> and <code class="inline">last_step</code>; metrics: print accuracy and macro F1 side by side for every arm</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar">
+  <div class="lab" style="flex:10">A 10</div>
+  <div style="background:var(--accent);flex:20">B 20</div>
+  <div style="background:var(--blue);flex:20">C 20</div>
+  <div style="background:var(--orange);flex:15">D 15</div>
+  <div style="background:var(--accent-bright);flex:15">E 15</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">The In-Class Lab is 80 min (Lab A-E), followed by the Summary &amp; Assignment 10 min. The post-class report and the M8 pack are submitted separately.</p>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity, Checkpoint &amp; Slides</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Protocol and one pre-registered prediction</strong> (p4). Fix the protocol: this course's own 748-passage corpus, 6 classes, 70/15/15 stratified by week with <code class="inline">random_state = seed</code>, n_train 523, vocabulary from train only with <code class="inline">min_freq=2</code> and a cap of 6000, <code class="inline">Embedding(64, padding_idx=0)</code> → <code class="inline">LSTM(96, batch_first=True)</code> → <code class="inline">Linear(6)</code>, Adam 1e-3, batch 64, 30 epochs, max_len 96, seeds 42-46. Write one prediction: which pooling arm will end with the lowest test accuracy. <em>Checkpoint: the protocol table plus the written prediction, in the notebook.</em></td></tr>
+  <tr><td>Lab B</td><td>20 min</td><td><strong>Build the pipeline and the model</strong> (p5-p7). Write <code class="inline">tokenise</code>, <code class="inline">build_vocab</code> and <code class="inline">encode</code>; build the vocabulary on the train split only and verify the mean vocabulary is 1592 (the full corpus is 3142); keep the <code class="inline">lens</code> tensor; instantiate the model and count 166,278 parameters at seed 42. <em>Checkpoint: the vocabulary size printed, <code class="inline">lens</code> printed, and the parameter count in the notebook.</em></td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>Train it and fill the four-arm pooling table</strong> (p9-p12). Train the four arms that differ only in the pooling line: <code class="inline">mean_masked</code> 0.5027 ± 0.0449, <code class="inline">packed</code> 0.4248 ± 0.0360, <code class="inline">mean_unmasked</code> 0.3929 ± 0.0684, <code class="inline">last_step</code> 0.2407 ± 0.0040. Plot the training and validation curves for the packed arm and record the epoch-30 gap 0.9885 − 0.4196 = 0.5689. <em>Checkpoint: the four-arm table filled with mean ± standard deviation, and the curves plotted.</em></td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>Confusion matrix and error analysis</strong> (p19-p22). Print the confusion matrix over 5 seeds: total 565, correct 240, accuracy 0.4248, and the 14 misclassified passages at seed 42. Pull the raw text of the failures and quote at least 3, with model confidence. Confirm the largest diagonal cell (W6, 93) and that the off-diagonal mass is flat (4 to 22 per cell). <em>Checkpoint: the three totals (565 / 240 / 0.4248) and 3 quoted passages with confidence in the notebook.</em></td></tr>
+  <tr><td>Lab E</td><td>15 min</td><td><strong>The AI co-pilot log, and the M8 pack check</strong> (p26, p28). Ask the AI to generate a complete LSTM forward pass for variable-length input; run the four-item checklist against it; record the three-column table (AI code / your change / accuracy difference). Reference magnitudes: bare mean → masked mean +11.0 points; <code class="inline">[-1]</code> → packed +18.4 points. Then confirm the three M8 items. <em>Checkpoint: the AI log with at least one measured accuracy difference, and the three M8 items present.</em></td></tr>
+  <tr><td>Wrap</td><td>10 min</td><td><strong>Quiz, summary and assignment</strong> (p27-p29). The in-class quiz, 4 items (which split builds the vocabulary; what <code class="inline">out[:, -1, :]</code> returns; how to report 0.2407 against 0.0711; what regularisation does at 0.5027 and why); hand-vote then debrief; assign the post-class report, the prediction task and the M8 deadline; takeaways and next week's preview.</td></tr>
+</table>
+
+<h2>4. Deliverables &amp; Acceptance Criteria</h2>
+<table>
+  <tr><th style="width:130px;">Deliverable</th><th>What it must contain</th><th style="width:130px;">Acceptance</th></tr>
+  <tr><td>Pipeline code</td><td><code class="inline">tokenise</code>, <code class="inline">build_vocab</code> (train split only, <code class="inline">min_freq=2</code>, cap 6000), <code class="inline">encode</code> with <code class="inline">&lt;pad&gt;=0</code> and <code class="inline">&lt;unk&gt;=1</code>, and a <code class="inline">lens</code> tensor kept to the pooling line</td><td>Runs top-to-bottom; the vocabulary is built on train only and the length tensor is present</td></tr>
+  <tr><td>Four-arm pooling table</td><td>The four arms that differ only in the pooling line, each reported as mean ± standard deviation over 5 seeds: <code class="inline">mean_masked</code> 0.5027 ± 0.0449, <code class="inline">packed</code> 0.4248 ± 0.0360, <code class="inline">mean_unmasked</code> 0.3929 ± 0.0684, <code class="inline">last_step</code> 0.2407 ± 0.0040</td><td>All four rows filled; the best-to-worst spread 0.2620 is stated, and the only difference is the pooling line</td></tr>
+  <tr><td>Confusion matrix</td><td>The 6×6 matrix printed (row = true week, column = prediction), total 565, correct 240, accuracy 0.4248, largest diagonal cell W6 = 93</td><td>The matrix prints and the three totals are stated; accuracy alone is not enough</td></tr>
+  <tr><td>Error analysis</td><td>At least 3 raw misclassified passages with model confidence (14 exist at seed 42), a testable hypothesis per case, and the next step with its success criterion; the per-class recall spread 0.1750 (W1) to 0.6643 (W6) is named</td><td>All items present; the passages are quoted, not paraphrased; cases carry confidence, not just labels</td></tr>
+  <tr><td>AI co-pilot log</td><td>A three-column table: the AI's original code / what you changed it to / the accuracy difference. At least one row must carry a real number</td><td>"I found a bug" alone does not pass; the before/after difference must be measured</td></tr>
+</table>
+<div class="callout info">
+  <span class="label">The corpus — offline by design</span>
+  The corpus is <strong>this course's own Week 1-6 material</strong>: every English passage from <code class="inline">lesson-plans/week-XX/lecture-en.html</code>, <code class="inline">lab-en.html</code>, <code class="inline">textbook/chapter-XX/en.html</code> and <code class="inline">labs/week-XX/lab-handout.md</code>. It has <strong>748 passages in 6 classes</strong> (W1 105 · W2 97 · W3 114 · W4 119 · W5 128 · W6 185), is licensed <strong>CC BY-NC-SA 4.0</strong>, and has been anti-leakage scrubbed in <strong>262 places</strong> (Week N / WN / CU(N) / Lab N / dates replaced with <code class="inline">&lt;WEEK&gt;</code> / <code class="inline">&lt;UNIT&gt;</code> / <code class="inline">&lt;LAB&gt;</code> / <code class="inline">&lt;DATE&gt;</code>, so the label is not written into the text). <strong>There is zero download and the whole lab is fully offline, CPU-only.</strong> The corpus is rebuilt with <code class="inline">python scripts/build_text_corpus.py</code> and fingerprinted by SHA-256 <code class="inline">87e41aac89ef59903abca15eea4250e68eb9d29537c1cd78d251ad497a16b4b1</code>. A student who sees a network fetch during this lab has a broken environment, not a slow one.
+</div>
+<div class="callout info">
+  <span class="label">M8 pack — an extra deliverable this week</span>
+  Week 8 is also the <strong>M8 midterm checkpoint</strong>, so every student also hands in a three-piece pack, demoed in class: ① a working prototype that runs from a fresh clone; ② <code class="inline">DATA.md</code> v1 (source, licence, sample count, split, leakage check, known traps — this week's lab 7 is the template); ③ a 3-slide deck where slide 3 is <strong>where it fails</strong>. The demo is a live 3 minutes plus 2 minutes of questions; <strong>no screen recordings, and slide 3 carries the marks</strong>.
+</div>
+
+<h2>5. Code Skeleton</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">Fill in the four pipeline functions and the model. The shape chain is <code class="inline">(B, 96)</code> ids → <code class="inline">(B, 96, 64)</code> embeddings → <code class="inline">(B, 96, 96)</code> LSTM outputs → masked mean <code class="inline">(B, 96)</code> → <code class="inline">(B, 6)</code> logits. The two pooling arms below are the whole point of the lab.</p>
+<pre>import re, collections, torch, torch.nn as nn
+from torch.nn.utils.rnn import pack_padded_sequence
+
+TOKEN = re.compile(r"[a-z][a-z'-]*")
+
+def tokenise(text):                        # lowercase + regex; keep don't whole
+    return TOKEN.findall(text.lower())
+
+def build_vocab(texts, min_freq=2, cap=6000):
+    freq = collections.Counter()
+    for t in texts:                        # texts = TRAIN split only
+        freq.update(tokenise(t))
+    words = [w for w, c in freq.most_common() if c >= min_freq][:cap]
+    return {"&lt;pad&gt;": 0, "&lt;unk&gt;": 1,
+            **{w: i + 2 for i, w in enumerate(words)}}
+
+def encode(text, vocab, max_len=96):
+    ids = [vocab.get(w, 1) for w in tokenise(text)][:max_len]
+    ids += [0] * (max_len - len(ids))      # pad to a fixed length
+    return torch.tensor(ids)
+
+class TextLSTM(nn.Module):
+    def __init__(self, vocab_size, hidden=96, n_classes=6):
+        super().__init__()
+        self.emb  = nn.Embedding(vocab_size, 64, padding_idx=0)  # pad stays frozen
+        self.lstm = nn.LSTM(64, hidden, batch_first=True)
+        self.fc   = nn.Linear(hidden, n_classes)
+
+    def forward(self, x, lens):
+        e = self.emb(x)                      # (B, 96, 64)
+        out, _ = self.lstm(e)                # (B, 96, 96)
+        mask = (x != 0).unsqueeze(-1)        # (B, 96, 1)  1 = real token
+        h = (out * mask).sum(1) / mask.sum(1).clamp(min=1)   # masked mean
+        return self.fc(h)                    # (B, 6)
+
+# the packed arm: same model, different last three lines
+def forward_packed(self, x, lens):
+    e = self.emb(x)
+    order = torch.argsort(lens, descending=True)
+    inv   = torch.argsort(order)
+    packed = pack_padded_sequence(e[order], lens[order].cpu(),
+                                  batch_first=True, enforce_sorted=True)
+    out, (h, _) = self.lstm(packed)
+    return self.fc(h[-1][inv])               # h[-1] = each sample's last REAL token</pre>
+<p style="font-size:13.5px;color:var(--text-sec);">The two arms differ only in how <code class="inline">(B, 96, 96)</code> becomes <code class="inline">(B, 96)</code>: a masked mean over real positions, or the packed last hidden state. Dropping the mask (the bare-mean arm) is worth −11.0 points; reading <code class="inline">out[:, -1, :]</code> without packing is worth −26.2 points. Run all four and fill the table.</p>
+
+<h2>6. AI Collaboration Protocol</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Ask, test, label — and write the number</h4>
+  <ol style="font-size:13.5px;">
+    <li><strong>Ask:</strong> prompt the AI to write a complete PyTorch LSTM forward pass for a 6-class text task with variable-length input, and to explain how it handles padding. Demand runnable code, not prose. <strong>Do not read the reference implementation first</strong> — get the AI's first draft.</li>
+    <li><strong>Find the bug (this is the graded part):</strong> work down the checklist against the AI's code. ① Does it accept <code class="inline">lens</code>? If not, it can only use <code class="inline">[-1]</code>. ② Is the vocabulary built on all data? That is leakage. ③ Is <code class="inline">padding_idx=0</code> set? If not, the pad embedding receives gradient. ④ Is the pooling a masked mean or a bare <code class="inline">mean</code>? A bare mean is this week's 4th place.</li>
+    <li><strong>Measure:</strong> run the corrected code and the AI's original, and record the accuracy difference. Reference magnitudes: bare mean → masked mean is <strong>+11.0 points</strong> (0.3929 → 0.5027); <code class="inline">[-1]</code> → packed is <strong>+18.4 points</strong> (0.2407 → 0.4248).</li>
+    <li><strong>Record:</strong> keep the log in the report — the prompt, the AI's code, your change, the measurement, the verdict. A suggestion can be valid in general and still be irrelevant here; the third column, a number, is what is assessed.</li>
+  </ol>
+</div>
+<div class="callout warn">
+  <span class="label">Typical AI claims to check</span>
+  "Just take the last hidden state with <code class="inline">out[:, -1, :]</code>" ignores that 95.58% of the documents are shorter than max_len, so that position is a pad vector — measured, it costs 26.2 points. "You can build the vocabulary from the whole dataset" is leakage; it inflates the reported test accuracy and will not survive a real deployment. "Masking is an optional optimisation" is wrong; the bare mean is 11.0 points behind the masked mean. Each claim is labelled from the student's own measurement, not from the AI text.
+</div>
+
+<h2>7. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Reference result</td><td>The instructor's five-seed rule, measured on this machine and stored in <code class="inline">outputs/w8_sequence.json</code> — used only to check that a student run is in the right regime, never as a target to copy. The four arm rows and the confusion matrix are in the reference tables below</td><td>—</td></tr>
+  <tr><td>Deliverable</td><td><code class="inline">lab-08.ipynb</code> + <code class="inline">textmodel.py</code>: Restart &amp; Run All clean, the vocabulary built on train only, <code class="inline">lens</code> kept, the four-arm pooling table filled, the training curves plotted, the confusion matrix printed, the error analysis with at least 3 quoted passages and their confidence, and the AI log with a measured before/after number; at least 2 meaningful commits pushed to a public repository</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Protocol check 10 · pipeline and model 20 · training curves and the four-arm table 20 · confusion matrix and error analysis 20 · AI co-pilot log 20 · exit ticket and M8 pack 10</td><td>100 pts</td></tr>
+  <tr><td>Course assessment</td><td>This lab supports the assessment line <em>building and tuning CNNs and sequence models</em> — <strong>not a key topic, but a difficulty, worth 6%</strong>, assessed by the experiment report (apply level). Weeks 7 and 8 share this single 6% line. The post-class report carries it, together with the explanation of why the model does worse on some classes</td><td>6%</td></tr>
+  <tr><td>Post-class task</td><td>Submit the text-classification experiment report. Also write the one-page prediction: <em>if the text gets long, what will the current pipeline hit?</em> — this is the official homework and is discussed next week</td><td>Lab 7 report</td></tr>
+  <tr><td>Late policy</td><td>Lab deliverable: -10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
+</table>
+
+<h3>Reference Table · Four Pooling Arms + Regularisation, Five Seeds (measured on this machine)</h3>
+<table>
+  <tr><th>Arm</th><th>How it pools</th><th>Test accuracy</th><th>Macro F1</th><th>Gap to best</th></tr>
+  <tr><td><code class="inline">mean_masked</code></td><td>masked mean over real positions</td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td><td>—</td></tr>
+  <tr><td><code class="inline">packed</code></td><td><code class="inline">pack_padded_sequence</code> + last hidden state</td><td>0.4248 ± 0.0360</td><td>0.3843 ± 0.0422</td><td>−7.8 points</td></tr>
+  <tr><td><code class="inline">mean_unmasked</code></td><td>mean over all positions, padding included</td><td>0.3929 ± 0.0684</td><td>0.3315 ± 0.0935</td><td>−11.0 points</td></tr>
+  <tr><td><code class="inline">last_step</code></td><td>no pack, <code class="inline">out[:, -1, :]</code></td><td><strong>0.2407 ± 0.0040</strong></td><td><strong>0.0711 ± 0.0095</strong></td><td>−26.2 points</td></tr>
+  <tr><td><code class="inline">mean_masked_reg</code></td><td><code class="inline">mean_masked</code> + Dropout 0.3 + wd 1e-3</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td><td>−3.6 percentage points</td></tr>
+</table>
+<table>
+  <tr><th>true / pred</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th></tr>
+  <tr><td>W1 (n=80)</td><td>14</td><td>12</td><td>10</td><td>22</td><td>8</td><td>14</td></tr>
+  <tr><td>W2 (n=75)</td><td>16</td><td>14</td><td>13</td><td>11</td><td>13</td><td>8</td></tr>
+  <tr><td>W3 (n=85)</td><td>12</td><td>4</td><td>36</td><td>13</td><td>7</td><td>13</td></tr>
+  <tr><td>W4 (n=90)</td><td>7</td><td>4</td><td>16</td><td>43</td><td>10</td><td>10</td></tr>
+  <tr><td>W5 (n=95)</td><td>6</td><td>10</td><td>9</td><td>11</td><td>40</td><td>19</td></tr>
+  <tr><td>W6 (n=140)</td><td>8</td><td>8</td><td>11</td><td>11</td><td>9</td><td>93</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Protocol for every arm: this course's own 748-passage corpus (6 classes) → tokenise with the lowercase regex → vocabulary from train only, <code class="inline">min_freq=2</code>, cap 6000 → <code class="inline">Embedding(64, padding_idx=0)</code> → <code class="inline">LSTM(96, batch_first=True)</code> → <code class="inline">Linear(6)</code>, 166,278 parameters at seed 42 → Adam 1e-3, batch 64, 30 epochs, max_len 96 → 5 seeds (42, 43, 44, 45, 46), reported as mean ± standard deviation. Fully offline, CPU-only.</p>
+<div class="callout info">
+  <span class="label">How to read the measured arms · four honest conclusions</span>
+  <strong>1.</strong> The pooling choice is worth 26.2 points: <code class="inline">mean_masked</code> 0.5027 against <code class="inline">last_step</code> 0.2407, with the parameter count, data, epochs and optimiser all identical. <strong>2.</strong> Masking is correctness, not an optimisation: the bare mean is 11.0 points behind the masked mean (0.3929 against 0.5027). <strong>3.</strong> <code class="inline">last_step</code>'s macro F1 of 0.0711 is below the 6-class chance level 0.1667, while its accuracy of 0.2407 only looks weak — report both, or the report ships a broken model. <strong>4.</strong> Regularisation makes the best arm worse: 0.5027 → 0.4672, down 3.6 percentage points, because the bottleneck is 523 training passages, not capacity.
+</div>
+<div class="callout warn">
+  <span class="label">Before students leave</span>
+  Confirm five things for every student: the notebook runs top-to-bottom; the vocabulary was built on train only and the length tensor <code class="inline">lens</code> is present; the four-arm pooling table is filled with mean ± standard deviation; the confusion matrix and the three totals (565 / 240 / 0.4248) are in the notebook with at least 3 quoted misclassified passages and their confidence; and the AI log carries at least one measured before/after number. An experiment that did not work is still an experiment that was measured.
+</div>
+
+<h2>8. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Week 7 lab committed (the training loop and per-epoch log are reused unchanged)</li>
+      <li>Read the textbook sections on tokenisation, embedding, LSTM gates and padding/masking</li>
+      <li>Run the four-arm, five-seed reference once on your own machine, so you can tell a broken student run from an unusual seed</li>
+      <li>Laptop with the <code class="inline">ai-app</code> environment, <code class="inline">torch</code> and matplotlib importable, and the corpus present at <code class="inline">data/raw/course-text-corpus.jsonl</code></li>
+      <li>Check the run time: the whole sweep is CPU-only, so it fits inside the 80-minute lab</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Lab handout: <code class="inline">labs/week-08/lab-handout.md</code> (Lab 7)</li>
+      <li>Slides p4-p22; the reference tables are p7, p10, p19 and p21</li>
+      <li>Textbook Chapter 8</li>
+      <li>Experiment script: <code class="inline">scripts/w8_sequence_experiment.py</code>; measured output: <code class="inline">outputs/w8_sequence.json</code> and <code class="inline">outputs/w8_corpus_facts.json</code></li>
+      <li>Corpus: <code class="inline">data/raw/course-text-corpus.jsonl</code>, rebuilt with <code class="inline">scripts/build_text_corpus.py</code> (748 passages, 6 classes, CC BY-NC-SA 4.0, 262-place scrub, no download)</li>
+      <li>PyTorch documentation: pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development (52015CC3BV) — Lesson Plan LP-W8-B (Lab Part · In-Class Lab 80 min + Summary &amp; Assignment 10 min) · Week 8 · Module 2</p>
+  <p>School of Software, Dalian Neusoft University of Information · Department of Software and Big Data Technology · Instructor: Ren Zheng · Class: International Software Engineering 24401 (2026-2027 Semester 1)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1185 @@
+{
+ "protocol": {
+  "corpus": "data/raw/course-text-corpus.jsonl (built from this repo's own W1-6 text)",
+  "n_passages": 748,
+  "classes": 6,
+  "split": "70/15/15 stratified by week, random_state = seed",
+  "tokeniser": "lowercase, regex [a-z][a-z'-]*",
+  "vocab": "from train only, min_freq=2, cap 6000, <pad>=0 <unk>=1",
+  "model": "Embedding(64) -> LSTM(96) -> Linear(6)",
+  "optimizer": "Adam",
+  "lr": 0.001,
+  "batch": 64,
+  "epochs": 30,
+  "max_len": 96,
+  "seeds": [
+   42,
+   43,
+   44,
+   45,
+   46
+  ],
+  "sweep_seeds": [
+   42,
+   43,
+   44
+  ],
+  "regularisation_arm": {
+   "base": "mean_masked",
+   "dropout": 0.3,
+   "weight_decay": 0.001,
+   "why": "Week 6's regularisation applied to the best pooling arm, to test whether the low accuracy is a capacity problem or a data problem"
+  }
+ },
+ "arms": {
+  "packed": {
+   "rows": [
+    {
+     "arm": "packed",
+     "seed": 42,
+     "max_len": 96,
+     "vocab_size": 1617,
+     "params": 166278,
+     "test_acc": 0.4248,
+     "test_macro_f1": 0.3851,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.4211
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.3902
+      },
+      "50-99": {
+       "n": 29,
+       "acc": 0.4483
+      },
+      "100-max": {
+       "n": 5,
+       "acc": 0.6
+      }
+     },
+     "share_shorter_than_max_len": 0.9558,
+     "long_doc_split": null
+    },
+    {
+     "arm": "packed",
+     "seed": 43,
+     "max_len": 96,
+     "vocab_size": 1556,
+     "params": 162374,
+     "test_acc": 0.4779,
+     "test_macro_f1": 0.4554,
+     "by_length": {
+      "20-29": {
+       "n": 48,
+       "acc": 0.5417
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.3902
+      },
+      "50-99": {
+       "n": 21,
+       "acc": 0.4762
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    },
+    {
+     "arm": "packed",
+     "seed": 44,
+     "max_len": 96,
+     "vocab_size": 1612,
+     "params": 165958,
+     "test_acc": 0.4336,
+     "test_macro_f1": 0.3605,
+     "by_length": {
+      "20-29": {
+       "n": 42,
+       "acc": 0.4524
+      },
+      "30-49": {
+       "n": 50,
+       "acc": 0.4
+      },
+      "50-99": {
+       "n": 15,
+       "acc": 0.3333
+      },
+      "100-max": {
+       "n": 6,
+       "acc": 0.8333
+      }
+     },
+     "share_shorter_than_max_len": 0.9469,
+     "long_doc_split": null
+    },
+    {
+     "arm": "packed",
+     "seed": 45,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.4071,
+     "test_macro_f1": 0.3732,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.3158
+      },
+      "30-49": {
+       "n": 42,
+       "acc": 0.4286
+      },
+      "50-99": {
+       "n": 31,
+       "acc": 0.4839
+      },
+      "100-max": {
+       "n": 2,
+       "acc": 0.5
+      }
+     },
+     "share_shorter_than_max_len": 0.9823,
+     "long_doc_split": null
+    },
+    {
+     "arm": "packed",
+     "seed": 46,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.3805,
+     "test_macro_f1": 0.3474,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.2895
+      },
+      "30-49": {
+       "n": 40,
+       "acc": 0.325
+      },
+      "50-99": {
+       "n": 32,
+       "acc": 0.5
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 1.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    }
+   ],
+   "stats": {
+    "test_acc": {
+     "mean": 0.4248,
+     "sd": 0.036
+    },
+    "test_macro_f1": {
+     "mean": 0.3843,
+     "sd": 0.0422
+    },
+    "vocab_size": {
+     "mean": 1592.2,
+     "sd": 24.2528
+    },
+    "params": {
+     "mean": 164690.8,
+     "sd": 1552.1814
+    }
+   }
+  },
+  "last_step": {
+   "rows": [
+    {
+     "arm": "last_step",
+     "seed": 42,
+     "max_len": 96,
+     "vocab_size": 1617,
+     "params": 166278,
+     "test_acc": 0.2389,
+     "test_macro_f1": 0.0795,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.1579
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.1707
+      },
+      "50-99": {
+       "n": 29,
+       "acc": 0.4138
+      },
+      "100-max": {
+       "n": 5,
+       "acc": 0.4
+      }
+     },
+     "share_shorter_than_max_len": 0.9558,
+     "long_doc_split": {
+      "docs_at_or_above_max_len": 5,
+      "acc_at_or_above_max_len": 0.4,
+      "docs_below_max_len": 108,
+      "acc_below_max_len": 0.2315
+     }
+    },
+    {
+     "arm": "last_step",
+     "seed": 43,
+     "max_len": 96,
+     "vocab_size": 1556,
+     "params": 162374,
+     "test_acc": 0.2389,
+     "test_macro_f1": 0.0643,
+     "by_length": {
+      "20-29": {
+       "n": 48,
+       "acc": 0.2083
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.1707
+      },
+      "50-99": {
+       "n": 21,
+       "acc": 0.4286
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.3333
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": {
+      "docs_at_or_above_max_len": 3,
+      "acc_at_or_above_max_len": 0.3333,
+      "docs_below_max_len": 110,
+      "acc_below_max_len": 0.2364
+     }
+    },
+    {
+     "arm": "last_step",
+     "seed": 44,
+     "max_len": 96,
+     "vocab_size": 1612,
+     "params": 165958,
+     "test_acc": 0.2389,
+     "test_macro_f1": 0.0643,
+     "by_length": {
+      "20-29": {
+       "n": 42,
+       "acc": 0.2143
+      },
+      "30-49": {
+       "n": 50,
+       "acc": 0.26
+      },
+      "50-99": {
+       "n": 15,
+       "acc": 0.3333
+      },
+      "100-max": {
+       "n": 6,
+       "acc": 0.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9469,
+     "long_doc_split": {
+      "docs_at_or_above_max_len": 6,
+      "acc_at_or_above_max_len": 0.0,
+      "docs_below_max_len": 107,
+      "acc_below_max_len": 0.2523
+     }
+    },
+    {
+     "arm": "last_step",
+     "seed": 45,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.2478,
+     "test_macro_f1": 0.0833,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.2105
+      },
+      "30-49": {
+       "n": 42,
+       "acc": 0.1905
+      },
+      "50-99": {
+       "n": 31,
+       "acc": 0.3871
+      },
+      "100-max": {
+       "n": 2,
+       "acc": 0.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9823,
+     "long_doc_split": {
+      "docs_at_or_above_max_len": 2,
+      "acc_at_or_above_max_len": 0.0,
+      "docs_below_max_len": 111,
+      "acc_below_max_len": 0.2523
+     }
+    },
+    {
+     "arm": "last_step",
+     "seed": 46,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.2389,
+     "test_macro_f1": 0.0643,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.1053
+      },
+      "30-49": {
+       "n": 40,
+       "acc": 0.25
+      },
+      "50-99": {
+       "n": 32,
+       "acc": 0.3438
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": {
+      "docs_at_or_above_max_len": 3,
+      "acc_at_or_above_max_len": 0.6667,
+      "docs_below_max_len": 110,
+      "acc_below_max_len": 0.2273
+     }
+    }
+   ],
+   "stats": {
+    "test_acc": {
+     "mean": 0.2407,
+     "sd": 0.004
+    },
+    "test_macro_f1": {
+     "mean": 0.0711,
+     "sd": 0.0095
+    },
+    "vocab_size": {
+     "mean": 1592.2,
+     "sd": 24.2528
+    },
+    "params": {
+     "mean": 164690.8,
+     "sd": 1552.1814
+    }
+   }
+  },
+  "mean_masked": {
+   "rows": [
+    {
+     "arm": "mean_masked",
+     "seed": 42,
+     "max_len": 96,
+     "vocab_size": 1617,
+     "params": 166278,
+     "test_acc": 0.5133,
+     "test_macro_f1": 0.4999,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.5
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.4634
+      },
+      "50-99": {
+       "n": 29,
+       "acc": 0.5517
+      },
+      "100-max": {
+       "n": 5,
+       "acc": 0.8
+      }
+     },
+     "share_shorter_than_max_len": 0.9558,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 43,
+     "max_len": 96,
+     "vocab_size": 1556,
+     "params": 162374,
+     "test_acc": 0.5664,
+     "test_macro_f1": 0.5365,
+     "by_length": {
+      "20-29": {
+       "n": 48,
+       "acc": 0.5
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.5854
+      },
+      "50-99": {
+       "n": 21,
+       "acc": 0.6667
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 44,
+     "max_len": 96,
+     "vocab_size": 1612,
+     "params": 165958,
+     "test_acc": 0.5044,
+     "test_macro_f1": 0.4848,
+     "by_length": {
+      "20-29": {
+       "n": 42,
+       "acc": 0.5238
+      },
+      "30-49": {
+       "n": 50,
+       "acc": 0.44
+      },
+      "50-99": {
+       "n": 15,
+       "acc": 0.6
+      },
+      "100-max": {
+       "n": 6,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9469,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 45,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.4425,
+     "test_macro_f1": 0.4077,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.3684
+      },
+      "30-49": {
+       "n": 42,
+       "acc": 0.4286
+      },
+      "50-99": {
+       "n": 31,
+       "acc": 0.5484
+      },
+      "100-max": {
+       "n": 2,
+       "acc": 0.5
+      }
+     },
+     "share_shorter_than_max_len": 0.9823,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 46,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.4867,
+     "test_macro_f1": 0.4583,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.4737
+      },
+      "30-49": {
+       "n": 40,
+       "acc": 0.375
+      },
+      "50-99": {
+       "n": 32,
+       "acc": 0.5938
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 1.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    }
+   ],
+   "stats": {
+    "test_acc": {
+     "mean": 0.5027,
+     "sd": 0.0449
+    },
+    "test_macro_f1": {
+     "mean": 0.4774,
+     "sd": 0.0482
+    },
+    "vocab_size": {
+     "mean": 1592.2,
+     "sd": 24.2528
+    },
+    "params": {
+     "mean": 164690.8,
+     "sd": 1552.1814
+    }
+   }
+  },
+  "mean_unmasked": {
+   "rows": [
+    {
+     "arm": "mean_unmasked",
+     "seed": 42,
+     "max_len": 96,
+     "vocab_size": 1617,
+     "params": 166278,
+     "test_acc": 0.469,
+     "test_macro_f1": 0.4515,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.3421
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.5122
+      },
+      "50-99": {
+       "n": 29,
+       "acc": 0.5862
+      },
+      "100-max": {
+       "n": 5,
+       "acc": 0.4
+      }
+     },
+     "share_shorter_than_max_len": 0.9558,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_unmasked",
+     "seed": 43,
+     "max_len": 96,
+     "vocab_size": 1556,
+     "params": 162374,
+     "test_acc": 0.4336,
+     "test_macro_f1": 0.3109,
+     "by_length": {
+      "20-29": {
+       "n": 48,
+       "acc": 0.4792
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.2683
+      },
+      "50-99": {
+       "n": 21,
+       "acc": 0.619
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_unmasked",
+     "seed": 44,
+     "max_len": 96,
+     "vocab_size": 1612,
+     "params": 165958,
+     "test_acc": 0.292,
+     "test_macro_f1": 0.1925,
+     "by_length": {
+      "20-29": {
+       "n": 42,
+       "acc": 0.2143
+      },
+      "30-49": {
+       "n": 50,
+       "acc": 0.3
+      },
+      "50-99": {
+       "n": 15,
+       "acc": 0.3333
+      },
+      "100-max": {
+       "n": 6,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9469,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_unmasked",
+     "seed": 45,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.3628,
+     "test_macro_f1": 0.3565,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.2105
+      },
+      "30-49": {
+       "n": 42,
+       "acc": 0.4286
+      },
+      "50-99": {
+       "n": 31,
+       "acc": 0.4839
+      },
+      "100-max": {
+       "n": 2,
+       "acc": 0.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9823,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_unmasked",
+     "seed": 46,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.4071,
+     "test_macro_f1": 0.3463,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.3421
+      },
+      "30-49": {
+       "n": 40,
+       "acc": 0.4
+      },
+      "50-99": {
+       "n": 32,
+       "acc": 0.4688
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    }
+   ],
+   "stats": {
+    "test_acc": {
+     "mean": 0.3929,
+     "sd": 0.0684
+    },
+    "test_macro_f1": {
+     "mean": 0.3315,
+     "sd": 0.0935
+    },
+    "vocab_size": {
+     "mean": 1592.2,
+     "sd": 24.2528
+    },
+    "params": {
+     "mean": 164690.8,
+     "sd": 1552.1814
+    }
+   }
+  },
+  "mean_masked_reg": {
+   "rows": [
+    {
+     "arm": "mean_masked",
+     "seed": 42,
+     "max_len": 96,
+     "vocab_size": 1617,
+     "params": 166278,
+     "test_acc": 0.5221,
+     "test_macro_f1": 0.4852,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.5
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.4146
+      },
+      "50-99": {
+       "n": 29,
+       "acc": 0.6207
+      },
+      "100-max": {
+       "n": 5,
+       "acc": 1.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9558,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 43,
+     "max_len": 96,
+     "vocab_size": 1556,
+     "params": 162374,
+     "test_acc": 0.5221,
+     "test_macro_f1": 0.4939,
+     "by_length": {
+      "20-29": {
+       "n": 48,
+       "acc": 0.4792
+      },
+      "30-49": {
+       "n": 41,
+       "acc": 0.4878
+      },
+      "50-99": {
+       "n": 21,
+       "acc": 0.6667
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 44,
+     "max_len": 96,
+     "vocab_size": 1612,
+     "params": 165958,
+     "test_acc": 0.4425,
+     "test_macro_f1": 0.4293,
+     "by_length": {
+      "20-29": {
+       "n": 42,
+       "acc": 0.4048
+      },
+      "30-49": {
+       "n": 50,
+       "acc": 0.44
+      },
+      "50-99": {
+       "n": 15,
+       "acc": 0.5333
+      },
+      "100-max": {
+       "n": 6,
+       "acc": 0.5
+      }
+     },
+     "share_shorter_than_max_len": 0.9469,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 45,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.3805,
+     "test_macro_f1": 0.3406,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.2632
+      },
+      "30-49": {
+       "n": 42,
+       "acc": 0.3571
+      },
+      "50-99": {
+       "n": 31,
+       "acc": 0.5161
+      },
+      "100-max": {
+       "n": 2,
+       "acc": 1.0
+      }
+     },
+     "share_shorter_than_max_len": 0.9823,
+     "long_doc_split": null
+    },
+    {
+     "arm": "mean_masked",
+     "seed": 46,
+     "max_len": 96,
+     "vocab_size": 1588,
+     "params": 164422,
+     "test_acc": 0.469,
+     "test_macro_f1": 0.4673,
+     "by_length": {
+      "20-29": {
+       "n": 38,
+       "acc": 0.5
+      },
+      "30-49": {
+       "n": 40,
+       "acc": 0.325
+      },
+      "50-99": {
+       "n": 32,
+       "acc": 0.5938
+      },
+      "100-max": {
+       "n": 3,
+       "acc": 0.6667
+      }
+     },
+     "share_shorter_than_max_len": 0.9735,
+     "long_doc_split": null
+    }
+   ],
+   "stats": {
+    "test_acc": {
+     "mean": 0.4672,
+     "sd": 0.0595
+    },
+    "test_macro_f1": {
+     "mean": 0.4433,
+     "sd": 0.0625
+    },
+    "vocab_size": {
+     "mean": 1592.2,
+     "sd": 24.2528
+    },
+    "params": {
+     "mean": 164690.8,
+     "sd": 1552.1814
+    }
+   },
+   "regularisation": {
+    "dropout": 0.3,
+    "weight_decay": 0.001
+   }
+  }
+ },
+ "confusion_packed_5seeds": [
+  [
+   14,
+   12,
+   10,
+   22,
+   8,
+   14
+  ],
+  [
+   16,
+   14,
+   13,
+   11,
+   13,
+   8
+  ],
+  [
+   12,
+   4,
+   36,
+   13,
+   7,
+   13
+  ],
+  [
+   7,
+   4,
+   16,
+   43,
+   10,
+   10
+  ],
+  [
+   6,
+   10,
+   9,
+   11,
+   40,
+   19
+  ],
+  [
+   8,
+   8,
+   11,
+   11,
+   9,
+   93
+  ]
+ ],
+ "length_buckets": [
+  "20-29",
+  "30-49",
+  "50-99",
+  "100-max"
+ ],
+ "detail_seed42": {
+  "packed": {
+   "test_acc": 0.4248,
+   "test_macro_f1": 0.3851,
+   "by_length": {
+    "20-29": {
+     "n": 38,
+     "acc": 0.4211
+    },
+    "30-49": {
+     "n": 41,
+     "acc": 0.3902
+    },
+    "50-99": {
+     "n": 29,
+     "acc": 0.4483
+    },
+    "100-max": {
+     "n": 5,
+     "acc": 0.6
+    }
+   },
+   "long_doc_split": null,
+   "share_shorter_than_max_len": 0.9558,
+   "curve": {
+    "train_acc": [
+     0.2849,
+     0.2696,
+     0.4857,
+     0.6386,
+     0.74,
+     0.8375,
+     0.8853,
+     0.8967,
+     0.9675,
+     0.9866,
+     0.9885
+    ],
+    "val_acc": [
+     0.2143,
+     0.2411,
+     0.2589,
+     0.25,
+     0.3036,
+     0.3393,
+     0.3571,
+     0.3036,
+     0.3661,
+     0.4196,
+     0.4196
+    ]
+   },
+   "params": 166278,
+   "vocab_size": 1617
+  },
+  "last_step": {
+   "test_acc": 0.2389,
+   "test_macro_f1": 0.0795,
+   "by_length": {
+    "20-29": {
+     "n": 38,
+     "acc": 0.1579
+    },
+    "30-49": {
+     "n": 41,
+     "acc": 0.1707
+    },
+    "50-99": {
+     "n": 29,
+     "acc": 0.4138
+    },
+    "100-max": {
+     "n": 5,
+     "acc": 0.4
+    }
+   },
+   "long_doc_split": {
+    "docs_at_or_above_max_len": 5,
+    "acc_at_or_above_max_len": 0.4,
+    "docs_below_max_len": 108,
+    "acc_below_max_len": 0.2315
+   },
+   "share_shorter_than_max_len": 0.9558
+  }
+ },
+ "misclassified_seed42": [
+  {
+   "true_week": 4,
+   "pred_week": 3,
+   "tokens": 20,
+   "text": "Hidden layers transform the features first; the output layer decides afterwards. The same data becomes separable in the new space."
+  },
+  {
+   "true_week": 2,
+   "pred_week": 3,
+   "tokens": 20,
+   "text": "Paste the repository URL plus the commit hash. **A commit hash counts as your timestamp**, not the LMS upload time."
+  },
+  {
+   "true_week": 4,
+   "pred_week": 2,
+   "tokens": 21,
+   "text": "Dozens to hundreds of layers. Architecturally they are still stacked affine maps plus non-linearities, with structure and tricks added on top."
+  },
+  {
+   "true_week": 2,
+   "pred_week": 3,
+   "tokens": 21,
+   "text": "Keep the failures in the record — shape errors and debugging are evidence of skill, not marks to hide. A report that"
+  },
+  {
+   "true_week": 6,
+   "pred_week": 4,
+   "tokens": 22,
+   "text": "Explain how a training set of 80 samples against 17,226 parameters produces overfitting on purpose, and why that is the point of the lab"
+  },
+  {
+   "true_week": 3,
+   "pred_week": 5,
+   "tokens": 22,
+   "text": "In-Class Quiz: 4 items on the board (leakage, splitting, the Dataset contract, imbalance); hand-vote, then debrief; students who answer correctly explain their reasoning"
+  },
+  {
+   "true_week": 2,
+   "pred_week": 1,
+   "tokens": 22,
+   "text": "Mixing (n,) with (n,1) and getting a silent (n,n). In a regression loss this changes the scale of the MSE entirely."
+  },
+  {
+   "true_week": 1,
+   "pred_week": 4,
+   "tokens": 22,
+   "text": "AI application development is an end-to-end pipeline — define, data, model, evaluate, deploy, operate — and the model is only one link in it."
+  },
+  {
+   "true_week": 5,
+   "pred_week": 1,
+   "tokens": 23,
+   "text": "Pick the loss by task — cross-entropy for classification, MSE for regression — and always feed raw logits to any WithLogits loss or to CrossEntropyLoss."
+  },
+  {
+   "true_week": 1,
+   "pred_week": 5,
+   "tokens": 24,
+   "text": "When something is broken, the first useful question is \"which layer is this?\" The answer decides who fixes it and how long it takes."
+  },
+  {
+   "true_week": 3,
+   "pred_week": 5,
+   "tokens": 24,
+   "text": "Do **not** delete these rows. They are correct measurements written in the wrong unit — the number is a fact, the label `_c` was wrong."
+  },
+  {
+   "true_week": 6,
+   "pred_week": 3,
+   "tokens": 26,
+   "text": "Predict what σ=0.15 noise plus a ±1px shift would do to a 224×224 image, and say why the same transform helps at that resolution but destroys this one."
+  },
+  {
+   "true_week": 1,
+   "pred_week": 4,
+   "tokens": 26,
+   "text": "Baseline first, then a simple model, then a stronger one. The baseline is not optional — without it, \"our model reaches 0.87\" is a number with no meaning."
+  },
+  {
+   "true_week": 1,
+   "pred_week": 2,
+   "tokens": 26,
+   "text": "Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary — not scattered through the code and not in your memory."
+  }
+ ],
+ "max_len_sweep": {
+  "packed": {
+   "48": {
+    "mean": 0.4572,
+    "sd": 0.0135
+   },
+   "96": {
+    "mean": 0.4454,
+    "sd": 0.0285
+   },
+   "192": {
+    "mean": 0.4454,
+    "sd": 0.0357
+   }
+  },
+  "last_step": {
+   "48": {
+    "mean": 0.2891,
+    "sd": 0.0358
+   },
+   "96": {
+    "mean": 0.2389,
+    "sd": 0.0
+   },
+   "192": {
+    "mean": 0.2478,
+    "sd": 0.0
+   }
+  }
+ },
+ "cjk_tokenisation": {
+  "corpus": "textbook/chapter-01..06/zh.html (this repository's own Chinese text)",
+  "segments": 750,
+  "schemes": [
+   {
+    "scheme": "whitespace (no segmentation)",
+    "train_segments": 375,
+    "test_segments": 375,
+    "vocab_train": 372,
+    "singletons": 370,
+    "singleton_share": 0.9946,
+    "test_tokens": 375,
+    "oov_tokens": 374,
+    "oov_rate": 0.9973
+   },
+   {
+    "scheme": "character level",
+    "train_segments": 375,
+    "test_segments": 375,
+    "vocab_train": 880,
+    "singletons": 191,
+    "singleton_share": 0.217,
+    "test_tokens": 14860,
+    "oov_tokens": 378,
+    "oov_rate": 0.0254
+   }
+  ]
+ }
+}

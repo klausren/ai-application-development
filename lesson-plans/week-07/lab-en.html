@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #059669; --accent-bright: #10b981; --accent-bg: #ecfdf5;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+    --blue: #1e40af; --blue-bg: #eff6ff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  .callout.info { background: var(--blue-bg); border-left: 4px solid var(--blue); }
+  .callout.info .label { color: var(--blue); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lab { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">Lesson Plan · Week 7 · Lab Part (In-Class Lab 80 min + Summary &amp; Assignment 10 min)</div>
+  <h1>Lab 6 — Build a CNN for Image Classification: curves, confusion matrix, error analysis</h1>
+  <div class="meta">
+    <span>⏱ Weekly 180-min integrated session · this plan covers the In-Class Lab 80 min and the Summary &amp; Assignment 10 min</span>
+    <span>📚 Course textbook Chapter 7 (convolution, pooling, augmentation, GPU memory)</span>
+    <span>🔧 Hands-on Lab · Official lab number Lab 6 · 1.0 class hour in the official map, with the post-class report counted separately</span>
+    <span>🧩 Lesson Plan ID: LP-W7-B · Unit CU(7) · Week 7</span>
+    <span>🖼 Deck: 29 pages (this part covers p22-p26; the reference tables are p12, p15, p16 and p19)</span>
+    <span>🌐 English</span>
+  </div>
+</div>
+
+<h2>1. Learning Objectives</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Knowledge</h4>
+    <ul>
+      <li>State the fixed items of the experiment protocol and explain why each one is fixed</li>
+      <li>Reconcile the parameter count of the CNN (1,898) against the dense control (17,226) layer by layer</li>
+      <li>Explain why the CNN and the 9.07x larger dense net differ by only 0.0023 in test accuracy, and why that is written up as <em>not observed</em></li>
+      <li>Explain why 4.1 points of test accuracy hang on the pooling function alone</li>
+      <li>Explain why augmentation trades 3.0 points of clean accuracy for 29 points of translation robustness</li>
+      <li>Explain why the digit 8 carries 12 of the 26 errors in the confusion matrix</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Skills</h4>
+    <ul>
+      <li>Build a CNN with <code class="inline">nn.Conv2d</code>, <code class="inline">nn.MaxPool2d</code> and <code class="inline">nn.Linear</code>, and assert the shape of every layer against the formula before training</li>
+      <li>Count the parameters with a small script instead of estimating them</li>
+      <li>Train the CNN, plot the training and validation curves, and read the five-architecture ledger as mean ± standard deviation</li>
+      <li>Print the confusion matrix, name the worst class pair with its count, and present 3 or more misclassified cases with their probabilities</li>
+      <li>Measure peak memory against batch size and reproduce the effective batch with gradient accumulation</li>
+      <li>Ask an AI for memory optimisations, test each one, and label it valid or invalid</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">Attitudes · Civic Education</span>
+  <strong>Report an experiment that did not work, and report the optimisation that did not help.</strong> In this lab augmentation lowers the clean test score on purpose (0.9808 to 0.9504) and one AI memory suggestion will not survive measurement. Both stay in the report and get explained. This is also the green-computing habit in practice: the 1,898-parameter CNN matches the 17,226-parameter dense net, so compute the parameter budget before adding parameters, and measure the memory peak before asking for hardware.
+</div>
+
+<h2>2. Key Points &amp; Difficulties</h2>
+<table>
+  <tr><th style="width:120px;">Type</th><th>Content</th><th>Strategy</th></tr>
+  <tr><td>Key Points</td><td>The fixed protocol; building the CNN; the layer-by-layer parameter reconciliation; the shape chain and the receptive field; the training curves; the five-architecture ledger; the confusion matrix and the worst class pair; peak memory against batch size; gradient accumulation with the right weighting; the AI optimisation trace</td><td>Every phase ends with a checkpoint written into a Markdown cell before the student moves on; the instructor demos each phase for 3-5 minutes and then patrols while students reproduce it</td></tr>
+  <tr><td>Difficulties</td><td>Asserting the shapes before training instead of after a runtime error; seeing that the 1,898-parameter model is not worse (0.9808 against 0.9785) and writing <em>not observed</em>; accepting that augmentation can be a net loss on clean accuracy; telling a real error pattern (8 read as 1, three times) apart from a vague claim; getting the gradient-accumulation weighting right so it matches the true batch</td><td>Shapes: require every <code class="inline">assert</code> to print before the training loop starts; parameters: count them with <code class="inline">sum(p.numel() ...)</code> and paste the 1,898 and 17,226 rows side by side; augmentation: point at the augmentation arm's training accuracy (0.9535) before its test number; accumulation: run the <code class="inline">exact</code> weighting and confirm 5/5 against the true batch-128 run</td></tr>
+</table>
+
+<h2>3. Time Allocation</h2>
+<div class="timebar">
+  <div class="lab" style="flex:10">A 10</div>
+  <div style="background:var(--accent);flex:20">B 20</div>
+  <div style="background:var(--blue);flex:20">C 20</div>
+  <div style="background:var(--orange);flex:15">D 15</div>
+  <div style="background:var(--accent-bright);flex:15">E 15</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">The In-Class Lab is 80 min (Lab A-E), followed by the Summary &amp; Assignment 10 min. The post-class report is submitted separately.</p>
+<table>
+  <tr><th style="width:70px;">Phase</th><th style="width:80px;">Time</th><th>Activity, Checkpoint &amp; Slides</th></tr>
+  <tr><td>Lab A</td><td>10 min</td><td><strong>Protocol and one pre-registered prediction</strong> (p22-p23). Fix the protocol: <code class="inline">load_digits</code> 8×8 grayscale, 10 classes, 1797 samples, normalized to 0-1, 70/15/15 stratified split with <code class="inline">random_state = seed</code>, n_train ≈ 1258, Adam at <code class="inline">1e-3</code>, batch 64, 120 epochs, seeds 42, 43, 44, 45, 46. Write one prediction: which arm will end with the lowest test accuracy. <em>Checkpoint: the protocol table plus the written prediction, in the notebook.</em></td></tr>
+  <tr><td>Lab B</td><td>20 min</td><td><strong>Build the CNN and reconcile the parameters</strong> (p5-p6). Instantiate the model from the code skeleton, assert the shape chain 8×8 → 8×8 → 4×4 → 4×4 → 2×2 → flatten 64 → FC 10, then count the parameters: conv1 3·3·1·8 + 8 = 80, conv2 3·3·8·16 + 16 = 1,168, FC 64·10 + 10 = 650, total 1,898; the dense control is 8,320 + 8,256 + 650 = 17,226. <em>Checkpoint: every shape assertion passes, and the two parameter rows (1,898 and 17,226) appear in the reconciliation table.</em></td></tr>
+  <tr><td>Lab C</td><td>20 min</td><td><strong>Train it and read the curves</strong> (p14-p15). Train the CNN; plot the training and validation curves; record the test accuracy. Reproduce the key rows of the five-architecture ledger: dense 17,226 → 0.9785, CNN 1,898 → 0.9808, CNN wide 21,312 → 0.9867, average pooling 1,898 → 0.9400, and the ±1 px augmentation arm 1,898 → 0.9504 with training accuracy 0.9535. <em>Checkpoint: curves plotted per arm and the five rows filled with their mean ± standard deviation.</em></td></tr>
+  <tr><td>Lab D</td><td>15 min</td><td><strong>Confusion matrix and error analysis</strong> (p19-p21). Print the confusion matrix over the test predictions; confirm 1,350 total, 1,324 correct (0.9807), 26 off-diagonal errors, and that 12 of the 26 involve the digit 8; name the worst class pair 8 → 1 (three times). Draw at least 3 misclassified cases with their model probabilities. <em>Checkpoint: the four numbers (1,350 / 1,324 / 26 / 15) and 3 cases with probabilities in the notebook.</em></td></tr>
+  <tr><td>Lab E</td><td>15 min</td><td><strong>Memory, gradient accumulation and the AI trace</strong> (p23-p24). Measure peak memory over the batch sweep (baseline 306.5 MB; increments 83.6, 91.3, 104.3, 129.7, 176.5, 275.5 MB; peak 582.0 MB at batch 1024). Reproduce the effective batch with 4×32 gradient accumulation and the share-of-group weighting, and confirm 5/5 against the true batch-128 run. Then run the AI step: ask the AI for memory optimisations and label each valid or invalid. <em>Checkpoint: the memory table and the AI suggestion list with valid/invalid labels and one line of evidence each.</em></td></tr>
+  <tr><td>Wrap</td><td>10 min</td><td><strong>Quiz, summary and assignment</strong> (p27-p29). The in-class quiz, 4 items; hand-vote then debrief; assign the post-class task (the CNN experiment report) and the deadline; takeaways and next week's preview.</td></tr>
+</table>
+
+<h2>4. Deliverables &amp; Acceptance Criteria</h2>
+<table>
+  <tr><th style="width:120px;">Deliverable</th><th>What it must contain</th><th style="width:130px;">Acceptance</th></tr>
+  <tr><td>Training curves</td><td>Training and validation curves for the CNN and the augmentation arm, on the same axes; the epoch of the last point and the arm labels; a sentence reading the shape</td><td>Curves render; both arms present; a written reading, not just an image</td></tr>
+  <tr><td>Confusion matrix</td><td>The 10×10 matrix printed (row = true, column = predicted), the total 1,350, the correct count 1,324, the off-diagonal count 26</td><td>The matrix prints and the three totals are stated; accuracy alone is not enough</td></tr>
+  <tr><td>Error analysis</td><td>The worst class pair 8 → 1 with its count (three times); that 12 of 26 errors involve the digit 8; at least 3 misclassified cases with model probabilities and a testable hypothesis per case; the next step with its success criterion</td><td>All five items present; cases carry probabilities, not just labels</td></tr>
+  <tr><td>Parameter reconciliation table</td><td>conv1 80, conv2 1,168, FC 650, total 1,898; dense 8,320 + 8,256 + 650 = 17,226; the ratio 9.07x and the test gap 0.0023 against the standard deviation 0.0084</td><td>Figures counted by code, not estimated; the ratio and the gap are both stated</td></tr>
+  <tr><td>Memory table and AI trace</td><td>The batch sweep with the peak over baseline; the gradient-accumulation match (5/5 for the share-of-group weighting); the AI suggestion list with each item labelled valid or invalid</td><td>The AI list contains at least one suggestion that did not survive measurement</td></tr>
+</table>
+<div class="callout info">
+  <span class="label">Offline by design</span>
+  The dataset is <code class="inline">sklearn.datasets.load_digits</code>: 8×8 grayscale, 10 classes, 1797 samples, shipped with scikit-learn. <strong>There is no external download anywhere in this lab.</strong> The whole run is local and CPU-only. This is a deliberate course design: it removes any dependency on a third-party data source and its licence. A student who sees a network fetch during this lab has a broken environment, not a slow one.
+</div>
+
+<h2>5. Code Skeleton</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">Fill in the three layer types; the shape chain is <code class="inline">8×8 → conv+P → 8×8 → pool → 4×4 → conv+P → 4×4 → pool → 2×2 → flatten 64 → FC 10</code>. The assertions must pass before any training starts.</p>
+<pre>import torch, torch.nn as nn, torch.nn.functional as F
+
+class CNN(nn.Module):
+    def __init__(self, channels=(8, 16), n_classes=10):
+        super().__init__()
+        c1, c2 = channels
+        self.conv1 = nn.Conv2d(1,  c1, kernel_size=3, stride=1, padding=1)  # 1x8x8 -> c1x8x8
+        self.conv2 = nn.Conv2d(c1, c2, kernel_size=3, stride=1, padding=1)  # c1x4x4 -> c2x4x4
+        self.pool  = nn.MaxPool2d(2)                                        # stride 2, halves the map
+        self.fc    = nn.Linear(c2 * 2 * 2, n_classes)                       # flatten 16*2*2 = 64
+
+    def forward(self, x):                      # x: (B, 1, 8, 8)
+        x = self.pool(F.relu(self.conv1(x)))   # (B, 8, 4, 4)
+        x = self.pool(F.relu(self.conv2(x)))   # (B, 16, 2, 2)
+        x = x.flatten(1)                       # (B, 64)
+        return self.fc(x)                      # (B, 10)
+
+# 1) shapes: assert the formula against the real forward
+def out_size(size, k, s, p):
+    return (size + 2 * p - k) // s + 1
+assert out_size(8, 3, 1, 1) == 8   # conv + padding keeps the size
+assert out_size(8, 2, 2, 0) == 4   # pooling halves it
+
+# 2) parameters: count them, do not estimate
+n_conv = sum(p.numel() for p in CNN().parameters())
+# conv1 = 3*3*1*8 + 8 = 80 ; conv2 = 3*3*8*16 + 16 = 1168 ; fc = 64*10 + 10 = 650
+assert n_conv == 80 + 1168 + 650 == 1898</pre>
+<p style="font-size:13.5px;color:var(--text-sec);">The dense control reuses an MLP from Week 4: <code class="inline">nn.Linear(64, 128)</code> → <code class="inline">nn.Linear(128, 64)</code> → <code class="inline">nn.Linear(64, 10)</code>, 17,226 parameters. The augmentation arm applies a random ±1 pixel shift to the <em>training</em> batch only; the test batch is never shifted. The average-pooling variant is the same class with <code class="inline">nn.AvgPool2d(2)</code> in place of <code class="inline">nn.MaxPool2d(2)</code>, byte-for-byte identical otherwise.</p>
+
+<h2>6. AI Collaboration Protocol</h2>
+<div class="card" style="margin-bottom:12px;">
+  <h4>Ask, test, label — in that order</h4>
+  <ol style="font-size:13.5px;">
+    <li><strong>Ask:</strong> prompt the AI for ways to reduce GPU memory for this week's model. Expect a list such as "halve the batch", "use gradient accumulation", "use mixed precision with <code class="inline">torch.amp.autocast</code> and <code class="inline">GradScaler</code>", "shrink the input".</li>
+    <li><strong>Test:</strong> run each suggestion on this machine and measure it. Halving the batch changes memory only; gradient accumulation with the share-of-group weighting reproduces the true batch-128 run at 5/5 and costs time, not accuracy; mixed precision changes the numerics, so the metric must be re-checked.</li>
+    <li><strong>Label:</strong> mark each suggestion <strong>valid</strong> or <strong>invalid</strong>, with the measured evidence and the cost beside it. A suggestion can be valid in general and still be invalid for this task — measured this week, this model never runs out of memory (the peak at batch 1024 is 582.0 MB), so "shrink the input to 16×16" is a cost with no benefit here.</li>
+    <li><strong>Record:</strong> keep the trace in the report — the prompt, the suggestions, the measurement, the verdict. Deleting an AI suggestion on the basis of your own measurement is the skill being assessed.</li>
+  </ol>
+</div>
+<div class="callout warn">
+  <span class="label">Typical AI claims to check</span>
+  "Gradient accumulation always saves memory" is only true when the accumulated gradient is weighted correctly; with the <code class="inline">none</code> and <code class="inline">unscaled</code> weightings the result no longer matches the true batch (2/5 seeds). "Always use mixed precision" trades numerics for memory and must be verified against the metric. Both claims are labelled from the student's own measurement, not from the AI text.
+</div>
+
+<h2>7. Assignment &amp; Assessment</h2>
+<table>
+  <tr><th style="width:150px;">Item</th><th>Content</th><th style="width:110px;">Weight</th></tr>
+  <tr><td>Reference result</td><td>The instructor's five-seed rule, measured on this machine and stored in <code class="inline">outputs/w7_cnn.json</code> — used only to check that a student run is in the right regime, never as a target to copy. The five architectures and the shift probe are in the reference tables below</td><td>—</td></tr>
+  <tr><td>Deliverable</td><td><code class="inline">lab-07.ipynb</code> + <code class="inline">cnn.py</code>: Restart &amp; Run All clean, all shape assertions passing, the parameter reconciliation table filled, the training curves plotted, the confusion matrix printed, the error analysis with at least 3 cases and their probabilities, the memory table and the AI trace, at least 2 meaningful commits pushed to a public repository</td><td>100 pts</td></tr>
+  <tr><td>Rubric</td><td>Protocol check 10 · build and parameter reconciliation 20 · training curves and the five-architecture ledger 20 · confusion matrix and error analysis 20 · memory, gradient accumulation and the AI trace 20 · exit ticket 10</td><td>100 pts</td></tr>
+  <tr><td>Course assessment</td><td>This lab supports the assessment line <em>building and tuning CNNs and sequence models</em> — <strong>not a key topic, but a difficulty, worth 6%</strong>, assessed by the experiment report (apply level). The 6% is carried by the post-class report, which includes the misclassification case analysis and the explanation of why the model is worse on some classes</td><td>6%</td></tr>
+  <tr><td>Post-class task</td><td>Submit the CNN experiment report: the training curves, the confusion matrix, the parameter reconciliation table, and at least 3 misclassified cases with probabilities. Explain <em>why the model is worse on some classes</em> — this week 12 of the 26 errors involve the digit 8, and the worst class pair is 8 → 1</td><td>Lab 6 report</td></tr>
+  <tr><td>Late policy</td><td>Lab deliverable: -10% per day, max 3 days, then 0. A commit hash is the timestamp, not the LMS upload time</td><td>—</td></tr>
+</table>
+
+<h3>Reference Table · Five Architectures, Five Seeds (measured on this machine)</h3>
+<table>
+  <tr><th>Architecture</th><th>Params</th><th>Train acc</th><th>Val acc</th><th>Test acc</th></tr>
+  <tr><td>Dense 64-128-64-10</td><td>17,226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td>0.9785 ± 0.0084</td></tr>
+  <tr><td>CNN 8/16 (baseline, MaxPool2d)</td><td>1,898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td>0.9808 ± 0.0084</td></tr>
+  <tr><td>CNN wide 16/32 (+ FC 128)</td><td>21,312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td>0.9867 ± 0.0081</td></tr>
+  <tr><td>CNN + average pooling</td><td>1,898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td>0.9400 ± 0.0081</td></tr>
+  <tr><td>CNN + ±1 px augmentation</td><td>1,898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td>0.9504 ± 0.0217</td></tr>
+</table>
+<table>
+  <tr><th>Arm</th><th>dx = -2</th><th>dx = -1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+  <tr><td>Dense</td><td>0.1667</td><td>0.4555</td><td>0.9785</td><td>0.5089</td><td>0.1822</td></tr>
+  <tr><td>CNN 8/16</td><td>0.2348</td><td>0.6481</td><td>0.9808</td><td>0.6504</td><td>0.2778</td></tr>
+  <tr><td>CNN + ±1 px augmentation</td><td>0.5170</td><td>0.9415</td><td>0.9504</td><td>0.9526</td><td>0.5518</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">Protocol for every arm: <code class="inline">load_digits</code> (8×8 grayscale, 10 classes, 1797 samples) → normalized to 0-1 → 70/15/15 stratified split, <code class="inline">random_state = seed</code>, n_train ≈ 1258 → Adam at <code class="inline">1e-3</code>, batch 64, 120 epochs → 5 seeds (42, 43, 44, 45, 46), reported as mean ± standard deviation. Fully offline, CPU-only.</p>
+<div class="callout info">
+  <span class="label">How to read the measured arms · three honest conclusions</span>
+  <strong>1.</strong> The CNN matches a 9.07x larger dense net: 0.9808 against 0.9785 is a 0.0023 gap against a 0.0084 standard deviation, so the only defensible sentence is <em>no significant difference was observed</em>. <strong>2.</strong> The pooling function is a design choice: max 0.9808 against average 0.9400 is a 4.1-point gap on identical parameter counts. <strong>3.</strong> Augmentation is a trade, not a win: it buys 29 points of translation robustness (0.6481 to 0.9415 at dx = -1) and pays 3.0 points of clean accuracy (0.9808 to 0.9504 at dx = 0).
+</div>
+<div class="callout warn">
+  <span class="label">Before students leave</span>
+  Confirm five things for every student: the notebook runs top-to-bottom; every shape assertion passes; the parameter reconciliation table holds both 1,898 and 17,226; the confusion matrix and the four numbers (1,350 / 1,324 / 26 / 15) are in the notebook with at least 3 misclassified cases; and the AI suggestion list labels at least one suggestion invalid. An experiment that did not work is still an experiment that was measured.
+</div>
+
+<h2>8. Preparation &amp; Resources</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>Before Class</h4>
+    <ul>
+      <li>Week 6 lab committed (the training loop and per-epoch log are reused unchanged)</li>
+      <li>Read the textbook sections on convolution, pooling, classic CNNs and GPU training</li>
+      <li>Run the five-architecture, five-seed reference once on your own machine, so you can tell a broken student run from an unusual seed</li>
+      <li>Laptop with the <code class="inline">ai-app</code> environment, <code class="inline">torch</code> and matplotlib importable, and scikit-learn available offline</li>
+      <li>Check the run time: the whole sweep is CPU-only, so it fits inside the 80-minute lab</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Resources</h4>
+    <ul>
+      <li>Lab handout: <code class="inline">labs/week-07/lab-handout.md</code> (Lab 6)</li>
+      <li>Slides p22-p26; the reference tables are p12, p15, p16 and p19</li>
+      <li>Textbook Chapter 7</li>
+      <li>Experiment script: <code class="inline">scripts/w7_cnn_experiment.py</code>; measured output: <code class="inline">outputs/w7_cnn.json</code></li>
+      <li>Dataset ships with scikit-learn — <code class="inline">load_digits</code>, 8×8, 10 classes, 1797 samples, no download needed</li>
+      <li>PyTorch documentation: pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI Application Development (52015CC3BV) — Lesson Plan LP-W7-B (Lab Part · In-Class Lab 80 min + Summary &amp; Assignment 10 min) · Week 7 · Module 2</p>
+  <p>School of Software, Dalian Neusoft University of Information · Department of Software and Big Data Technology · Instructor: Ren Zheng · Class: International Software Engineering 24401 (2026-2027 Semester 1)</p>
+  <p>Generated with AI assistance; the instructor may adapt the plan to the class.</p>
+</div>
+
+</div>
+</body>
+</html>

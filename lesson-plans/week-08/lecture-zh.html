@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff; --text: #1f2937; --text-sec: #6b7280; --border: #e5e7eb; --card-bg: #f9fafb;
+    --accent: #1e40af; --accent-bright: #2563eb; --accent-bg: #eff6ff;
+    --green: #059669; --green-bg: #ecfdf5; --orange: #d97706; --orange-bg: #fffbeb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+  .header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 32px; }
+  .header .tag { font-size: 12px; font-weight: 800; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .header h1 { font-size: 27px; font-weight: 800; margin-top: 4px; }
+  .header .meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: 13.5px; color: var(--text-sec); }
+  h2 { font-size: 19px; font-weight: 800; margin: 30px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--border); display: flex; align-items: baseline; gap: 10px; }
+  h2::before { content: ""; width: 5px; height: 20px; background: var(--accent-bright); border-radius: 3px; transform: translateY(2px); flex-shrink: 0; }
+  h3 { font-size: 15.5px; font-weight: 700; margin: 16px 0 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .card { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .card h4 { font-size: 14.5px; margin-bottom: 6px; color: var(--accent); }
+  .card ul, .card ol { padding-left: 18px; font-size: 13.5px; }
+  .card li { margin-bottom: 4px; }
+  .callout { border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; }
+  .callout .label { font-weight: 800; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { color: var(--accent-bright); }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { color: var(--green); }
+  .callout.warn { background: var(--orange-bg); border-left: 4px solid var(--orange); }
+  .callout.warn .label { color: var(--orange); }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  code.inline { background: var(--card-bg); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-size: 13px; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; overflow-x: auto; font-size: 12.5px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  .timebar { display: flex; border-radius: 10px; overflow: hidden; margin: 12px 0; font-size: 12.5px; font-weight: 700; text-align: center; color: #fff; }
+  .timebar div { padding: 10px 4px; }
+  .timebar .lec { background: var(--accent-bright); }
+  .footer { text-align: center; margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } .container { padding: 24px 16px 48px; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="tag">教案 · 第 8 周 · 授课部分（理论 · 90 min，含于 180 分钟一体课）</div>
+  <h1>序列模型与文本数据处理</h1>
+  <div class="meta">
+    <span>⏱ 每周 180 分钟一体课 · 本教案覆盖复习与导入 10 分钟 + 新课讲授 80 分钟（8.1 + 8.2）；实验部分另立教案</span>
+    <span>📚 教材第 8 章（分词、词表、词嵌入、RNN、LSTM/GRU 门控、填充与掩码、文本分类）</span>
+    <span>🎯 模块二 · 深度学习核心技术与模型训练（W5–8）</span>
+    <span>🧩 教案编号：LP-W8-A · 单元 CU(8) · Week 8 · 4 学时</span>
+    <span>🖼 课件共 30 页（本部分用到 p3–p26，Part 1 至 Part 5）</span>
+    <span>🌐 中文</span>
+  </div>
+</div>
+
+<h2>1. 教学目标</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>知识目标</h4>
+    <ul>
+      <li><strong>建立文本到张量（text-to-tensor）的链路。</strong>把一个段落走完<strong>分词 Tokenisation</strong>、<strong>词表 Vocabulary</strong>、<strong>编码 Encoding</strong>、<strong>填充 Padding</strong> 四步，并说出每一步的典型错误</li>
+      <li>解释为什么词表必须<em>只从训练集</em>统计，以及用全量数据建表会带来什么样的数据泄漏；本周模型实际只见到均值 1592 个词，而全语料词表是 3142</li>
+      <li>说清<strong>词嵌入 Embedding</strong> 是什么、<code class="inline">padding_idx=0</code> 冻结了什么，以及为什么第 0、1 号位置要留给 <code class="inline">&lt;pad&gt;</code> 与 <code class="inline">&lt;unk&gt;</code></li>
+      <li><strong>理解 RNN/LSTM 的门控机制。</strong>解释<strong>梯度消失与爆炸（vanishing &amp; exploding gradients）</strong>在朴素 RNN 上破坏了什么，以及遗忘门、输入门、输出门如何把“记住什么”变成可学的量</li>
+      <li>说清<strong>填充 Padding</strong> 与<strong>掩码 Masking</strong>：为什么需要定长张量、为什么本周 95.58% 的测试文档达不到 max_len = 96、以及不掩码的池化为什么会读到填充向量</li>
+      <li><strong>完成一个端到端的文本分类。</strong>把一次 6 分类实验整体读懂：五臂对照表、训练曲线、混淆矩阵与错分分析</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>能力目标</h4>
+    <ul>
+      <li>会写 <code class="inline">tokenise</code>、<code class="inline">build_vocab</code> 与 <code class="inline">encode_batch</code>，并把每个样本的真实长度 <code class="inline">lens</code> 一直留到池化那一行为止</li>
+      <li>会搭出模型 <code class="inline">Embedding(64, padding_idx=0)</code> → <code class="inline">LSTM(96, batch_first=True)</code> → <code class="inline">Linear(6)</code>，并读出参数量（种子 42 为 166,278）</li>
+      <li>会用 <code class="inline">(h * mask).sum(1) / mask.sum(1)</code> 算掩码均值，并用 <code class="inline">pack_padded_sequence</code> 打包一个 batch 取最后一个真词的隐状态</li>
+      <li>会把五个池化臂读成“5 个种子的均值 ± 标准差”，并报出最好与最差之间的差（0.2620）</li>
+      <li>会读混淆矩阵，点名最差类对及其次数，并贴出至少 3 段错分原文</li>
+      <li>会给指标排序：准确率与宏 F1（macro F1）同时报，并认出一个低于随机的模型（宏 F1 0.0711 对 1/6 ≈ 0.1667 的随机基线）</li>
+    </ul>
+  </div>
+</div>
+<div class="callout key">
+  <span class="label">素质目标 · 思政</span>
+  <strong>以用户为中心：文本分类的错误代价并不对称，指标选择要贴合业务。</strong>本周这条不是口号，而是当堂实测：<code class="inline">last_step</code> 臂的准确率是 0.2407，看上去“只是弱”；它的宏 F1 是 0.0711，<em>低于</em> 6 分类随机基线 1/6 ≈ 0.1667。各类召回率从 0.1750（W1）到 0.6643（W6），差 3.80 倍——只有宏 F1 能让这个差距可见。一份只报准确率的报告，会放过一个几乎不再识别最小类别的模型。
+</div>
+
+<h2>2. 重点与难点</h2>
+<table>
+  <tr><th style="width:120px;">类别</th><th>内容</th><th>处理策略</th></tr>
+  <tr><td>知识点群</td><td>KT15 · 文本分词与词表构建、词嵌入（Embedding）、序列填充与掩码、文本分类任务——认知层次“运用”。KT16 · RNN 与梯度消失、LSTM/GRU 门控机制、序列建模——认知层次“运用”。官方任务线：<em>掌握文本数据从原始文本到张量的完整处理链路；理解循环网络的门控机制及其解决的问题；能够完成一个端到端的文本分类应用</em></td><td>课程地图把本单元拆为 8.1 文本表示与词嵌入（1.5 学时，讲课）、8.2 RNN/LSTM/GRU 与序列建模（1.5 学时，讲课）、8.3 实验 7（1.0 学时，课内实践）</td></tr>
+  <tr><td>重点</td><td>文本到张量的链路（分词 → 词表 → 编码 → 填充）；词表只从训练集建；词嵌入与 <code class="inline">padding_idx=0</code>；RNN 门控解决什么问题；填充与掩码；池化方式的选择；如何读一份 5 种子结果；混淆矩阵；准确率与宏 F1 的分裂</td><td>每个结论都锚在本机实测、并已落盘到 <code class="inline">outputs/w8_sequence.json</code> 的数字上；严格执行官方教学实施建议——把“变长序列 → 定长张量”这条链路讲透（对齐、填充、掩码），因为它是文本任务最常见的错误来源</td></tr>
+  <tr><td>难点</td><td>为什么只改“怎么把序列压成一个向量”这一步就值 26.2 个点（0.5027 对 0.2407），而参数量、数据、轮数完全没变；为什么掩码是正确性而不是优化（裸均值 → 掩码均值 +11.0 个点）；为什么正则化会让最好的一臂<em>更差</em>（0.5027 → 0.4672，−3.6 个百分点），因为瓶颈是 523 个训练段落而不是容量；为什么满页“98%”不是一个结果；为什么“这一段属于哪一周”是一个有边界的任务</td><td>池化：摆出两个只差最后一行的臂，让班级自己找出差异（p9–p10）；掩码：先把短文档的桶画出来再解释机制（p11–p12）；过拟合：先把两条曲线画好再点出瓶颈（p14）；正则化：跑一遍第 6 周的手段，如实读那个下降（p16）；指标：把准确率与宏 F1 两列并排摆（p21）</td></tr>
+</table>
+
+<h2>3. 教学进程安排</h2>
+<div class="timebar">
+  <div class="lec" style="flex:10">复习导入 10</div>
+  <div style="background:var(--accent);flex:80">新课讲授 80</div>
+  <div style="background:var(--green);flex:80">随堂实验 80</div>
+  <div style="background:var(--orange);flex:10">小结作业 10</div>
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">官方教学进程为：一、复习与导入 10 min → 二、新课讲授 80 min → 三、随堂实验 80 min（实验 7）→ 四、小结与作业布置 10 min。合计 180 min = 4 学时。本教案（LP-W8-A）给出完整进程并主讲前两段；第三段由实验部分（LP-W8-B）承担。</p>
+<table>
+  <tr><th style="width:70px;">环节</th><th style="width:80px;">时长</th><th>活动与内容</th><th style="width:80px;">页码</th><th style="width:90px;">方式</th></tr>
+  <tr><td>一</td><td>10 min</td><td><strong>复习与导入</strong>：第 7 周回顾（卷积、池化、混淆矩阵）；检查上次课的 CNN 实验报告；导入——本周实验要撞上的问题：图像有固定形状，文本没有，而那个 batch 张量必须在 LSTM 看到它之前就建好</td><td>p1–p4</td><td>讲授 + 举手投票</td></tr>
+  <tr><td>二 · 8.1</td><td>40 min</td><td><strong>8.1 文本表示与词嵌入</strong>：四步链路与每一步的典型错误；词表只从训练集建（数据泄漏）；为本周专门构造的语料；中文按空白切分与字符级的对照（OOV 0.9973 对 0.0254）</td><td>p3–p7</td><td>讲授 + 代码走读 + 读表</td></tr>
+  <tr><td>二 · 8.2</td><td>40 min</td><td><strong>8.2 RNN/LSTM/GRU 与序列建模</strong>：填充与掩码；五臂池化总账；长度分桶与那个安静的 bug；训练曲线与真正的瓶颈；正则化救不回来；混淆矩阵与错分分析；序列模型谱系（RNN → LSTM → Attention → Transformer）</td><td>p8–p26</td><td>读图 + 先猜后揭</td></tr>
+  <tr><td>三</td><td>80 min</td><td><strong>随堂实验 实验 7（LP-W8-B）</strong>：搭建文本分类管道（分词 → 词表 → 嵌入 → LSTM → 分类）；四种池化的对照表；混淆矩阵；≥3 段错分原文及模型置信度；填充/掩码错误的 AI 协同环节</td><td>p4–p22</td><td>自主练习 + 巡场 + 清单核对</td></tr>
+  <tr><td>四</td><td>10 min</td><td><strong>小结与作业布置</strong>：随堂小测（4 题）；归纳本次课的知识与技能要点；布置课后任务、预判题与 M8 三件套；明确提交时点</td><td>p27–p29</td><td>投票 + 讲评 + 布置作业</td></tr>
+</table>
+
+<h2>4. 讲授内容详解</h2>
+<p style="font-size:13.5px;color:var(--text-sec);">与 30 页课件的 Part 1 至 Part 5 对齐。下列每个数字都来自 <code class="inline">scripts/w8_sequence_experiment.py</code>（语料来自 <code class="inline">scripts/build_text_corpus.py</code>），并经 <code class="inline">outputs/w8_sequence.json</code> 与 <code class="inline">outputs/w8_corpus_facts.json</code> 落盘。</p>
+
+<h3>4.1 Part 1 · 从一段文本到一个张量：四步链路，每步一个典型错误（p3–p7，KT15）</h3>
+<p style="font-size:14px;">LSTM 不认识字。它认识的是一个 <code class="inline">(batch, seq_len)</code> 的整数张量。本周 80% 的错误不发生在模型里，而发生在构造这个张量的那四步里——而每一步的失败，最后都会以“准确率不高”的形式出现，而不是在你写错的那一行。</p>
+<table>
+  <tr><th style="width:110px;">步骤</th><th>做什么</th><th>典型错误</th><th style="width:210px;">本周证据</th></tr>
+  <tr><td>① 分词</td><td>把字符串切成 token 序列。英文：小写 + 正则 <code class="inline">[a-z][a-z'-]*</code>，让 <em>don't</em>、<em>state-of-the-art</em> 保持完整</td><td>直接按空白切分、然后祈祷。对中文来说这几乎必错</td><td>按空白切分的 OOV 率为 0.9973，字符级为 0.0254——差 39 倍</td></tr>
+  <tr><td>② 词表</td><td>把 token 映射成整数 id。<code class="inline">min_freq=2</code> 过滤只出现一次的词，上限 6000</td><td>用<em>全量</em>数据建词表——那是把测试集信息漏进训练</td><td>本周模型只见到均值 1592 个词（只从训练集统计）；全语料词表是 3142</td></tr>
+  <tr><td>③ 编码</td><td>每个 token 换成 id：<code class="inline">&lt;pad&gt;=0</code>、<code class="inline">&lt;unk&gt;=1</code>，真词从 2 开始</td><td>忘了 <code class="inline">padding_idx=0</code>，于是填充向量会吃到梯度、跟着漂</td><td><code class="inline">nn.Embedding(vocab, 64, padding_idx=0)</code> 让填充向量冻结；这个约定正是后面掩码要对齐的东西</td></tr>
+  <tr><td>④ 填充</td><td>把同一个 batch 里的样本补零到等长</td><td>补完零，然后把这些填充位置当成正常的词来读</td><td>语料长度为中位 35、95 分位 87、最长 285 词；95.58% 的测试文档达不到 max_len = 96</td></tr>
+</table>
+<p style="font-size:14px;">语料是本课程第 1–6 周自己的材料：来自 <code class="inline">lesson-plans/week-XX/lecture-en.html</code>、<code class="inline">lab-en.html</code>、<code class="inline">textbook/chapter-XX/en.html</code> 与 <code class="inline">labs/week-XX/lab-handout.md</code> 的英文段落。许可为 <strong>CC BY-NC-SA 4.0</strong>，用 <code class="inline">python scripts/build_text_corpus.py</code> 离线重建，指纹 SHA-256 为 <code class="inline">87e41aac89ef59903abca15eea4250e68eb9d29537c1cd78d251ad497a16b4b1</code>。</p>
+<table>
+  <tr><th style="width:130px;">项目</th><th style="width:150px;">数值</th><th>说明</th><th>为什么这样设计</th></tr>
+  <tr><td>段落总数</td><td>748</td><td>训练 523 / 验证 112 / 测试 113</td><td>按周分层切分 70/15/15</td></tr>
+  <tr><td>类别数</td><td>6</td><td>W1 105 · W2 97 · W3 114 · W4 119 · W5 128 · W6 185</td><td>类别天然不平衡；最小的类 97 段，最大的类 185 段</td></tr>
+  <tr><td>词表</td><td>3142</td><td>模型实际只见到均值 1592 个（只从训练集统计）</td><td>训练集之外的词一律变成 <code class="inline">&lt;unk&gt;</code></td></tr>
+  <tr><td>段落长度（词）</td><td>中位 35 · 95 分位 87 · 最长 285</td><td>均值 42.1 词</td><td>长度差异大——填充必然发生</td></tr>
+  <tr><td>反泄漏清洗</td><td>262</td><td>把 Week N / WN / CU(N) / Lab N / 日期替换成 <code class="inline">&lt;WEEK&gt;</code> / <code class="inline">&lt;UNIT&gt;</code> / <code class="inline">&lt;LAB&gt;</code> / <code class="inline">&lt;DATE&gt;</code></td><td>否则答案的字面就写在题面里</td></tr>
+  <tr><td>语料指纹</td><td>87e41aac89ef…</td><td>SHA-256，可用 <code class="inline">build_text_corpus.py</code> 重建</td><td>可复现：同一份语料，任何机器上结果一致</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">为什么不用公开数据集</span>
+  最自然的选择是 <code class="inline">sklearn.datasets.fetch_20newsgroups</code>，但它依赖 figshare，而实测该下载通道不可用（<code class="inline">ndownloader.figshare.com</code> 返回 202/403，<code class="inline">api.figshare.com</code> 返回 403）。改用本课程自有文本，还额外换来三件对课堂重要的事：零第三方许可风险、零下载、完全离线可复现。代价是它很小——748 段对 6 分类来说太少了，而这正是 Part 3 的根因。
+</div>
+<div class="callout tip">
+  <span class="label">中文不能按空白分词——而且这件事可以量化</span>
+  同一份中文文本（本课程自有的第 1–6 章材料，750 段）用两种方式切分。按空白切分：375 个训练片段，词表只有 372 个“词”，其中单例词占 0.9946；测试集 375 个 token 里，0.9973 是词表外——整段文本等于只被识别成一个 <code class="inline">&lt;unk&gt;</code>。按字符级切分：词表 880 个字符，单例占比 0.2170，14,860 个测试 token 里 OOV 只有 0.0254。工程上通常先上分词器（jieba 等），不可用时退回字符级——<strong>但绝不能什么都不做就按空格切。</strong>
+</div>
+
+<h3>4.2 Part 2 · 填充与掩码：那个安静的 bug（p8–p12，KT15）</h3>
+<p style="font-size:14px;">两个模型，除最后一行的写法外逐字节相同，却讲完了整个故事。上半在 LSTM 之后取 <code class="inline">out[:, -1, :]</code>——那是<em>第 96 个位置</em>，在短文档上就是填充向量，不是句子。下半用 <code class="inline">pack_padded_sequence</code> 让循环在真词结束处停下，取最后一个真词的隐状态。参数量相同（166,278）、数据相同、轮数相同——唯一的差别就是“怎么把 <code class="inline">(B, 96, 96)</code> 压成 <code class="inline">(B, 96)</code>”。</p>
+<table>
+  <tr><th>臂</th><th>怎么池化</th><th>测试准确率</th><th>宏 F1</th><th>与最优差</th></tr>
+  <tr><td><code class="inline">mean_masked</code></td><td>只按真实位置求均值：<code class="inline">(h * mask).sum(1) / mask.sum(1)</code></td><td><strong>0.5027 ± 0.0449</strong></td><td><strong>0.4774 ± 0.0482</strong></td><td>—</td></tr>
+  <tr><td><code class="inline">packed</code></td><td><code class="inline">pack_padded_sequence</code> + 末隐状态</td><td>0.4248 ± 0.0360</td><td>0.3843 ± 0.0422</td><td>−7.8 个点</td></tr>
+  <tr><td><code class="inline">mean_unmasked</code></td><td>对含填充的全部位置求均值</td><td>0.3929 ± 0.0684</td><td>0.3315 ± 0.0935</td><td>−11.0 个点</td></tr>
+  <tr><td><code class="inline">last_step</code></td><td>不 pack，直接取 <code class="inline">out[:, -1, :]</code></td><td><strong>0.2407 ± 0.0040</strong></td><td><strong>0.0711 ± 0.0095</strong></td><td>−26.2 个点</td></tr>
+  <tr><td><code class="inline">mean_masked_reg</code></td><td><code class="inline">mean_masked</code> + Dropout 0.3 + 权重衰减 1e-3</td><td>0.4672 ± 0.0595</td><td>0.4433 ± 0.0625</td><td>−3.6 个百分点</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">最好与最差两臂相差 <strong>0.2620</strong>——26.2 个点——而唯一的差别就是一行池化代码。请注意 <code class="inline">last_step</code>：6 分类随机基线是 1/6 ≈ 0.1667，它的宏 F1 是 0.0711，<strong>低于随机</strong>；而它的准确率 0.2407，看上去只是“效果不好”。掩码相对裸均值值 <strong>+11.0 个点</strong>（0.3929 → 0.5027）；打包相对 <code class="inline">[-1]</code> 值 <strong>+18.4 个点</strong>（0.2407 → 0.4248）。</p>
+<table>
+  <tr><th>桶（词数）</th><th>n</th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th></tr>
+  <tr><td>20–29</td><td>38</td><td>0.4211</td><td><strong>0.1579</strong></td></tr>
+  <tr><td>30–49</td><td>41</td><td>0.3902</td><td><strong>0.1707</strong></td></tr>
+  <tr><td>50–99</td><td>29</td><td>0.4483</td><td>0.4138</td></tr>
+  <tr><td>100–max</td><td>5</td><td>0.6000</td><td>0.4000</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">按长度分桶，伤害就露出来了：伤害最重的地方，正好是填充占比最大的地方，并且随文档变长而消失。长度分界线上还有一条更硬的证据：<code class="inline">last_step</code> 种子 42 下，长度 ≥ 96 的文档（n = 5）准确率 0.4000，长度 &lt; 96 的文档（n = 108）准确率 0.2315——长度够的文档没有填充位置，<code class="inline">[-1]</code> 就真的指向句末。<strong>这排除了“只是任务太难”的解释。</strong>一次 <code class="inline">max_len</code> 扫描又封掉了另一个借口：<code class="inline">packed</code> 在 48 / 96 / 192 上分别是 0.4572 / 0.4454 / 0.4454（波动在一个标准差以内），而 <code class="inline">last_step</code> 始终停在 0.2891 / 0.2389 / 0.2478。<strong>调 max_len 不是杠杆；选错池化方式，调什么长度都白搭。</strong></p>
+<div class="callout key">
+  <span class="label">掩码是正确性，不是优化</span>
+  两个求均值的臂做的是同一件“对时间维求平均”的事，代码几乎逐字相同，差别只有一个布尔参数。不掩码 0.3929 对掩码 0.5027，是 +11.0 个点，标准差从 ±0.0684 收窄到 ±0.0449。注意哪一个桶涨得最多——最短的那一桶——因为那里填充向量在均值里占的比例最大。一个“写了就等于没写”的错误，是最贵的那种：程序不会崩，数字悄悄掉一半。
+</div>
+
+<h3>4.3 Part 3 · 训练曲线与真正的瓶颈（p13–p17）</h3>
+<p style="font-size:14px;">本周 5 个臂、每个 5 个随机种子（42–46），同一套协议：本课程自有 748 段语料、6 类 · 按周分层 70/15/15 · Adam 1e-3 · batch 64 · 30 轮 · max_len 96。所有差异都写成“均值 ± 标准差”。<code class="inline">packed</code> 臂种子 42 每 3 轮记一次，共 11 个点。</p>
+<table>
+  <tr><th>轮次</th><th>0</th><th>3</th><th>9</th><th>15</th><th>21</th><th>24</th><th>27</th><th>30</th></tr>
+  <tr><td>训练准确率</td><td>0.2849</td><td>0.2696</td><td>0.6386</td><td>0.8375</td><td>0.8967</td><td>0.9675</td><td>0.9866</td><td><strong>0.9885</strong></td></tr>
+  <tr><td>验证准确率</td><td>0.2143</td><td>0.2411</td><td>0.2500</td><td>0.3393</td><td>0.3036</td><td>0.3661</td><td>0.4196</td><td><strong>0.4196</strong></td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">第 30 轮的差距是 0.9885 − 0.4196 = 0.5689——严重过拟合。但验证曲线<em>从未下降</em>，所以这不是“训练过头”，而是“容量用错了地方”。这正是第 6 周讲过的形状——同一张脸，换了数据集。</p>
+<table>
+  <tr><th>max_len</th><th><code class="inline">packed</code></th><th><code class="inline">last_step</code></th><th><code class="inline">packed</code> 标准差</th><th>解读</th></tr>
+  <tr><td>48（更短，切掉长文）</td><td>0.4572</td><td>0.2891</td><td>0.0135</td><td>packed 略好，<code class="inline">last_step</code> 也涨——符合机制</td></tr>
+  <tr><td>96（本周默认）</td><td>0.4454</td><td>0.2389</td><td>0.0285</td><td>基准</td></tr>
+  <tr><td>192（更长，补更多）</td><td>0.4454</td><td>0.2478</td><td>0.0357</td><td><strong>完全没涨</strong>——补更多零不产生信息</td></tr>
+</table>
+<div class="callout warn">
+  <span class="label">正则化救不回来——这是本周最重要的诚实结论</span>
+  把第 6 周最有效的两样东西（Dropout 0.3 + 权重衰减 1e-3）加到本周最好的一臂上。测试准确率 <strong>0.5027 → 0.4672，下降 3.6 个百分点</strong>；宏 F1 从 0.4774 降到 0.4433，下降 3.4 个点；而且标准差反而从 ±0.0449 <em>扩大</em> 到 ±0.0595。第 6 周这两招是有效的，因为那里的数据够、模型大。<strong>同一个技术手段，在“容量瓶颈”和“数据瓶颈”下的正确答案是相反的。</strong>本周的瓶颈是 523 个训练段落，不是模型容量——所以要先诊断出瓶颈，再决定用不用正则化，而不是反过来。
+</div>
+<p style="font-size:14px;">最后一条证据是召回模式。把六个类按大小排序，召回率就几乎单调地排好了：W1 0.1750、W2 0.1867、W3 0.4235、W4 0.4778、W5 0.4211、W6 0.6643。有两处小逆序：W2（n=75）略高于 W1（n=80），W5（n=95）略低于 W4（n=90）。W6 的召回是 W1 的 <strong>3.80 倍</strong>。<strong>这是“模型在学先验，而不是在学内容”的直接证据——也正是“加正则化”没有用的原因：欠的是样本，不是约束。</strong></p>
+
+<h3>4.4 Part 4 · 它错在哪（p18–p22）</h3>
+<p style="font-size:14px;">0.5027 这个准确率几乎不提供信息。这一部分换成两个更好用的东西：一个 6×6 混淆矩阵，以及准确率与宏 F1 之间的分裂。</p>
+<table>
+  <tr><th>真 / 判</th><th>W1</th><th>W2</th><th>W3</th><th>W4</th><th>W5</th><th>W6</th></tr>
+  <tr><td>W1（n=80）</td><td>14</td><td>12</td><td>10</td><td>22</td><td>8</td><td>14</td></tr>
+  <tr><td>W2（n=75）</td><td>16</td><td>14</td><td>13</td><td>11</td><td>13</td><td>8</td></tr>
+  <tr><td>W3（n=85）</td><td>12</td><td>4</td><td>36</td><td>13</td><td>7</td><td>13</td></tr>
+  <tr><td>W4（n=90）</td><td>7</td><td>4</td><td>16</td><td>43</td><td>10</td><td>10</td></tr>
+  <tr><td>W5（n=95）</td><td>6</td><td>10</td><td>9</td><td>11</td><td>40</td><td>19</td></tr>
+  <tr><td>W6（n=140）</td><td>8</td><td>8</td><td>11</td><td>11</td><td>9</td><td>93</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">行＝真实周次，列＝模型判断；对角是正确。5 个种子合计 565 个测试预测，正确 240（0.4248）。读法只有一句：<strong>看非对角，而且看它是均匀的还是集中的。</strong>这一张几乎是平的——每一格都在 4 到 22 之间，没有任何“重灾区”；对角线上只有 W6 明显突出（93）。一个“什么都能错一点、什么都学不精”的矩阵，诊断是数据不足，不是模型不对。</p>
+<table>
+  <tr><th>臂</th><th>准确率</th><th>宏 F1</th><th>差距</th><th>诊断</th></tr>
+  <tr><td><code class="inline">mean_masked</code></td><td>0.5027</td><td>0.4774</td><td>2.5 个点</td><td>两个数字一致——报告可信</td></tr>
+  <tr><td><code class="inline">packed</code></td><td>0.4248</td><td>0.3843</td><td>4.1 个点</td><td>轻微分裂，可接受</td></tr>
+  <tr><td><code class="inline">mean_unmasked</code></td><td>0.3929</td><td>0.3315</td><td>6.1 个点</td><td>分裂开始明显</td></tr>
+  <tr><td><code class="inline">last_step</code></td><td>0.2407</td><td>0.0711</td><td><strong>17.0 个点</strong></td><td><strong>宏 F1 0.0711 低于随机 0.1667——这是坏掉，不是一般</strong></td></tr>
+</table>
+<div class="callout tip">
+  <span class="label">把错分的那几段亲自读一遍</span>
+  打印矩阵只是第一步；第二步是把错分样本的<em>原文</em>调出来看。种子 42 一共 14 篇，读一遍诊断就立刻清楚了：它们都是好句子，只是不属于任何单独一周。有三类反复出现。<strong>（1）短句，词表负担最重</strong>——真 W4、判 W3，20 词：<em>"Hidden layers transform the features first; the output layer decides afterwards. The same data becomes separable in the new space."</em> <strong>（2）通用工程句子，哪一周都成立</strong>——真 W1、判 W2，26 词：<em>"Hyper-parameters, data paths, batch size and split ratios live in a file or a single dictionary — not scattered through the code and not in your memory."</em> <strong>（3）术语跨周复用</strong>——真 W6、判 W4，22 词（17,226 这个数字在第 4 周也讲过）：<em>"Explain how a training set of 80 samples against 17,226 parameters produces overfitting on purpose, and why that is the point of the lab."</em> 14 篇里没有一篇是“模型看错了”——它们是任务定义的边界。正确的做法是把这个发现写进报告，而不是继续调参。
+</div>
+<p style="font-size:13.5px;color:var(--text-sec);">错分分析的交付标准有四条可检查项，对应官方课后任务（“说明为什么模型在某些类别上表现更差”）：① 打印矩阵并写出三个总数（565 / 240 / 0.4248），以及对角线上最大的一格（W6，93）；② 准确率与宏 F1 <em>同时</em>报并解释差距；③ 至少 3 段错分原文并附模型置信度；④ 写出一条能被下一步推翻的可检验假设，然后去跑它、把结果写回报告——不管涨没涨。</p>
+
+<h3>4.5 Part 5 · 序列模型谱系与 M8 伏笔（p23–p26，KT16）</h3>
+<p style="font-size:14px;">本周的 LSTM 是模块三全部内容的对照组。谱系里每一次升级都修掉一个具体缺陷，而下周开始学生会亲手把这三步走一遍，基准线就是本周的 0.5027。</p>
+<table>
+  <tr><th>模型</th><th>解决了什么</th><th>留下了什么</th><th>关键机制</th><th>课程位置</th></tr>
+  <tr><td>RNN</td><td>第一次让参数跨时间共享</td><td>长序列上的梯度消失 / 爆炸</td><td><code class="inline">h_t = tanh(Wx + Uh_{t-1})</code></td><td>本周知识点（KT16）</td></tr>
+  <tr><td>LSTM / GRU</td><td>用门控把“记住什么”变成可学的</td><td>仍然必须顺序计算，无法并行</td><td>遗忘门 / 输入门 / 输出门</td><td><strong>本周实验 7 用的就是它</strong></td></tr>
+  <tr><td>Attention</td><td>取消“必须压成一个向量”的瓶颈</td><td>本身不含位置信息</td><td>Q·Kᵀ → softmax → V</td><td>第 10 周（CU(10)）</td></tr>
+  <tr><td>Transformer</td><td>把注意力堆深，训练可完全并行</td><td>对数据与算力的需求陡增</td><td>多头 + 位置编码 + 残差</td><td>第 10–11 周（CU(10–11)）</td></tr>
+</table>
+<p style="font-size:13.5px;color:var(--text-sec);">注意最后一行：<strong>Transformer 会把“数据不够”这个问题放大，而不是缩小。</strong>你刚刚亲眼看到 523 个训练段落能把一个 166K 参数的 LSTM 逼到什么程度——同一个瓶颈在第 10 周会以更贵的形式回来。这才是本周最该带走的东西，也正是官方教学实施建议要求对比 RNN 与后续 Transformer 的原因。</p>
+
+<h2>5. 思政与 AI 赋能</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>【思政】以用户为中心：指标选择是一种责任</h4>
+    <ul>
+      <li>错误的代价并不对称，所以指标要贴合业务；当同一个模型换一个指标就得出相反结论时，这句口号就变成了可检查的东西</li>
+      <li>准确率会放过一个坏模型：<code class="inline">last_step</code> 报 0.2407，看上去“只是弱”，而它的宏 F1 0.0711 <strong>低于 6 分类随机基线 0.1667</strong>——代价落在少数类用户身上，他们几乎从不被正确识别</li>
+      <li>类别大小决定了谁被牺牲：W1（n = 80）召回 0.1750，W6（n = 140）召回 0.6643，<strong>差 3.80 倍</strong>，且总体随类别大小上升（Spearman ρ = 0.77）。<strong>只有宏 F1 能让这件事被看见</strong>；用加权 F1 或准确率，这个差距会被平均数抹平</li>
+      <li>回看第 6 周：那里“最大化准确率”是对的（数据平衡、代价对称）；本周它是错的，因为它奖励模型去猜大类的先验。选指标之前先问：这一次，谁的错误更贵？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>【AI 赋能】AI 生成整条管道，你去抓它的错</h4>
+    <ul>
+      <li>第 1 步：让 AI 为一个变长输入的 6 分类文本任务写出完整的 PyTorch LSTM 前向传播，并说明它怎么处理填充——要求它给可运行代码而不是散文，而且<strong>先不要看老师给的参考实现</strong></li>
+      <li>第 2 步：拿一张检查清单，逐条在 AI 的代码里找错——没有传 <code class="inline">lens</code>（于是它只能取 <code class="inline">[-1]</code>）；词表建在全量数据上（数据泄漏）；漏了 <code class="inline">padding_idx=0</code>；池化用的是裸 <code class="inline">mean</code> 而不是掩码均值（裸均值就是本周第 4 名）</li>
+      <li>第 3 步：用一张三列表记录修正前后的结果差异——<em>AI 原代码怎么写</em> / <em>你改成了什么</em> / <em>修正前后准确率差多少</em>。第三列是硬要求：“我发现了 bug”不算数，要有数字</li>
+      <li>第三列的参考量级：裸均值 → 掩码均值是 <strong>+11.0 个点</strong>（0.3929 → 0.5027）；<code class="inline">[-1]</code> → packed 是 <strong>+18.4 个点</strong>（0.2407 → 0.4248）</li>
+      <li>必须核查的典型 AI 回答：忽略长度时它常常直接写 <code class="inline">out[:, -1, :]</code>，也可能用全量数据建词表——这两点恰好就是本周的核心错误</li>
+    </ul>
+  </div>
+</div>
+
+<h2>6. 期中检查点 · M8 ★</h2>
+<div class="callout key">
+  <span class="label">M8 · 期中检查点 —— 模块二里程碑（4 分）</span>
+  第 8 周同时是大作业的第一次正式评审。M8 不是额外任务，它是课程“阶段评审 15 分”里的一块（M4 / M8 / M12 / M16 各 4 分，合计 16 分），本周课内完成。
+</div>
+<table>
+  <tr><th style="width:130px;">交付物</th><th>必须包含</th><th style="width:210px;">验收</th></tr>
+  <tr><td>① 能跑的原型</td><td>在一台干净机器上 clone 下来能跑起来</td><td>跑不起来就没有这一项——“在我机器上能跑”不算演示</td></tr>
+  <tr><td>② <code class="inline">DATA.md</code> v1</td><td>数据来源、许可、样本数、切分方式、泄漏检查、已知的坑</td><td>本周的实验 7（自有语料、748 段、CC BY-NC-SA 4.0、262 处清洗）就是模板</td></tr>
+  <tr><td>③ 3 页幻灯片</td><td>第 1 页做什么、第 2 页数字、<strong>第 3 页你错在哪</strong></td><td><strong>第 3 页是评分重点——只讲成绩的幻灯片按未完成处理</strong></td></tr>
+  <tr><td>④ 当场演示</td><td><strong>当场演示 3 分钟 + 提问 2 分钟</strong></td><td><strong>不许放录屏，不许用 PPT 动画代替运行。</strong>会问“如果我改这个参数会怎样”——当场回答，或者当场试</td></tr>
+</table>
+
+<h2>7. 课后学习任务、考核与主要参考资料</h2>
+<table>
+  <tr><th style="width:150px;">项目</th><th>内容</th><th style="width:100px;">权重</th></tr>
+  <tr><td>课后学习任务</td><td>提交文本分类实验报告：管道代码、四种池化的对照表、混淆矩阵、至少 3 段错分原文及模型置信度与可检验假设、AI 协同记录表（含修正前后数字）。并写出一页预判：<em>若换成长文本，现有方案会遇到什么问题</em>——这是官方课后任务，下周讲评</td><td>实验 7 · 4 学时</td></tr>
+  <tr><td>考核对应</td><td>课程考核表对应行：<em>CNN 与序列模型的搭建与调优</em> · <strong>非重点 · 是难点 · 6%</strong> · 以实验报告考核（运用）。第 7 周与第 8 周共用这一行 6%。实验下课前的小测为 4 题</td><td>6%</td></tr>
+  <tr><td>课中衔接</td><td>授课部分（90 min）后进入实验部分（LP-W8-B，实验 7，80 min + 小结 10 min）：协议核对 → 搭建管道 → 训练并读曲线 → 四种池化对照表 → 混淆矩阵与错分分析 → 填充/掩码错误的 AI 协同环节</td><td>—</td></tr>
+  <tr><td>M8 三件套</td><td>原型 + <code class="inline">DATA.md</code> v1 + 3 页幻灯片，本周课内演示，不延期</td><td>4 分</td></tr>
+</table>
+<h3>主要参考资料</h3>
+<ul>
+  <li>《动手学深度学习（PyTorch 版）》对应章节及 d2l 配套代码</li>
+  <li>PyTorch 官方文档与教程：https://pytorch.org/docs/</li>
+  <li>课程双语课件 W08 与实验/项目实践包相关模板</li>
+</ul>
+
+<h2>8. 课后总结分析</h2>
+<div class="callout key">
+  <span class="label">课后总结分析 Reflection</span>
+  关注点：文本到张量的处理链路；填充与掩码；LSTM 门控机制。课后根据随堂实验的完成质量与常见报错，在下一次课的复习导入环节做针对性补救；同时记录学生在 AI 协同环节暴露的典型问题——例如直接采信 AI 生成的 LSTM 代码而不核查 <code class="inline">padding_idx</code>、因为 AI 忽略了 <code class="inline">lens</code> 而跟着用 <code class="inline">[-1]</code>、未核查 AI 结论就写进报告——纳入课程持续改进清单。
+</div>
+
+<h2>9. 课前准备与资源</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>课前准备</h4>
+    <ul>
+      <li>回顾第 7 周（卷积、池化与混淆矩阵，从现在起视为已知）</li>
+      <li>阅读教材对应章节（分词、词嵌入、RNN/LSTM 门控、填充与掩码）</li>
+      <li>自己先跑一遍 <code class="inline">python scripts/build_text_corpus.py</code> 与 <code class="inline">python scripts/w8_sequence_experiment.py</code>，并打开 <code class="inline">outputs/w8_sequence.json</code>，把五臂对照表在讲授前先看熟</li>
+      <li>确认环境可离线运行：语料是本课程自有文本、本地构建，全程不拉取任何外部数据集；5 臂 × 5 种子的全流程只用 CPU</li>
+      <li>反思：你有没有在诊断出瓶颈是容量还是数据之前，就先加了正则化？</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>教学资源</h4>
+    <ul>
+      <li>课件：第 8 周，共 30 页（p3–p26 为本部分详解；p27 为小测，p28 为 M8 清单，p29 为小结）</li>
+      <li>教材第 8 章</li>
+      <li>实测数据：<code class="inline">outputs/w8_sequence.json</code>（5 臂 × 5 种子，外加长度分桶、长文档分界、max_len 扫描、混淆矩阵、训练曲线与 14 段错分样本）与 <code class="inline">outputs/w8_corpus_facts.json</code></li>
+      <li>语料：<code class="inline">data/raw/course-text-corpus.jsonl</code>，用 <code class="inline">scripts/build_text_corpus.py</code> 重建</li>
+      <li>实验指导书：<code class="inline">labs/week-08/lab-handout.md</code>（实验 7）</li>
+      <li>d2l 配套代码；PyTorch 官方文档：pytorch.org/docs/</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发（课程代码 52015CC3BV）—— 教案 LP-W8-A（授课部分 · 理论 · 第 8 周 · 4 学时）· 模块二</p>
+  <p>大连东软信息学院 软件学院 · 软件与大数据技术系 · 授课教师 任政 · 授课班级 留软工 24401（来华项目）· 2026-2027 学年第 1 学期</p>
+  <p>本教案借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>

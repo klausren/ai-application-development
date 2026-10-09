@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1f2937;
+    --text-sec: #6b7280;
+    --border: #e5e7eb;
+    --card-bg: #f9fafb;
+    --accent: #1e40af;
+    --accent-bright: #2563eb;
+    --accent-bg: #eff6ff;
+    --code-bg: #0f172a;
+    --code-text: #e2e8f0;
+    --green: #059669;
+    --green-bg: #ecfdf5;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 860px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  /* Chapter header */
+  .chapter-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 3px solid var(--accent); }
+  .chapter-header .chapter-no { font-size: 13px; font-weight: 700; color: var(--accent-bright); letter-spacing: 1px; text-transform: uppercase; }
+  .chapter-header h1 { font-size: 30px; font-weight: 800; margin-top: 6px; letter-spacing: -0.5px; }
+  .chapter-header .overview { margin-top: 16px; font-size: 14.5px; color: var(--text-sec); }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  h2 {
+    font-size: 21px; font-weight: 800; color: var(--text);
+    padding: 12px 0 8px; margin: 32px 0 14px;
+    border-bottom: 2px solid var(--border);
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  h2::before { content: ""; width: 5px; height: 22px; background: var(--accent-bright); border-radius: 3px; flex-shrink: 0; transform: translateY(2px); }
+  h3 { font-size: 17px; font-weight: 700; margin: 22px 0 10px; color: var(--text); }
+  p { margin-bottom: 10px; }
+
+  /* Callout boxes */
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 14px; }
+  .callout.key { background: var(--accent-bg); border-left: 4px solid var(--accent-bright); }
+  .callout.key .label { font-weight: 800; color: var(--accent-bright); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.tip { background: var(--green-bg); border-left: 4px solid var(--green); }
+  .callout.tip .label { font-weight: 800; color: var(--green); font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .callout.warn { background: #fffbeb; border-left: 4px solid #d97706; }
+  .callout.warn .label { font-weight: 800; color: #b45309; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  /* Code blocks */
+  pre {
+    background: var(--code-bg); color: var(--code-text);
+    border-radius: 10px; padding: 16px 20px; margin: 12px 0;
+    font-family: "SF Mono", Menlo, Consolas, "JetBrains Mono", monospace;
+    font-size: 13px; line-height: 1.7; overflow-x: auto;
+  }
+  pre .cm { color: #64748b; }
+  pre .kw { color: #93c5fd; }
+  pre .fn { color: #fbbf24; }
+  pre .str { color: #6ee7b7; }
+  pre .num { color: #f9a8d4; }
+  code.inline {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 1px 6px; border-radius: 5px; font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { background: var(--card-bg); padding: 9px 14px; text-align: left; font-weight: 700; border: 1px solid var(--border); font-size: 13px; }
+  td { padding: 9px 14px; border: 1px solid var(--border); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+
+  /* Lists */
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+
+  /* Terminology grid */
+  .terms { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .term { border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; background: var(--card-bg); }
+  .term h4 { font-size: 15px; margin-bottom: 4px; }
+  .term p { font-size: 13.5px; color: var(--text); margin-top: 6px; margin-bottom: 0; }
+
+  /* Steps */
+  .steps { counter-reset: step; margin: 14px 0; }
+  .steps .step { counter-increment: step; display: flex; gap: 14px; margin-bottom: 12px; align-items: flex-start; }
+  .steps .step::before {
+    content: counter(step); flex-shrink: 0; width: 28px; height: 28px;
+    background: var(--accent); color: #fff; border-radius: 8px;
+    font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+  .steps .step .body { font-size: 14.5px; }
+
+  /* Exercise */
+  .exercise { border: 1px solid var(--border); border-left: 4px solid var(--green); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--card-bg); }
+  .exercise h4 { font-size: 14.5px; margin-bottom: 8px; color: var(--green); }
+  .exercise ol { font-size: 14px; }
+
+  /* Footer */
+  .footer { text-align: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-sec); }
+
+  @media (max-width: 640px) {
+    .container { padding: 24px 16px 48px; }
+    .terms { grid-template-columns: 1fr; }
+    .chapter-header h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- ========== CHAPTER HEADER ========== -->
+<div class="chapter-header">
+  <div class="chapter-no">第 07 章 · 模块 2 · 第 7 周</div>
+  <h1>卷积神经网络与计算机视觉应用</h1>
+  <p class="overview">第 5 周搭起了训练循环，第 6 周教会你不轻信单个数字。这一章面对的是另一种决定：不是选哪个优化器，而是<strong>选哪个架构</strong>，以及这个架构要付出什么代价。本周的主线刻意<em>不是</em>「卷积更准」——在这份数据上，实测不支持这个说法。它讲的是一个更窄、也更有用的结论：两层卷积用 <strong>1898 个参数</strong>拿到 <strong>0.9808</strong>，而全连接网用 <strong>17226 个参数</strong>拿到 <strong>0.9785</strong>，这 0.0023 的差距还不到一个标准差。于是我们把整章花在让它成立的算术上——滑动点积、与真实张量逐项核对的输出尺寸公式、感受野递推 <strong>3 → 4 → 8 → 10</strong>——然后花在两个「诚实答案并不方便」的地方：池化方式是一个值 <strong>4.1 个点</strong>的设计选择；数据增强<em>买到 29 个点的鲁棒性，付出 3 个点的干净精度</em>。章末是覆盖 <strong>1350 个测试预测</strong>的混淆矩阵、峰值内存随批大小的实测扫描，以及四种梯度累积权重写法中哪些能真正复现大 batch。</p>
+</div>
+
+<!-- ========== 7.1 ========== -->
+<div class="section">
+  <h2>7.1 从全连接到卷积</h2>
+  <p>最自然的第一反应，正是第 5 周已经用过的：把图像铺平成向量，喂给多层感知机。在 8×8 的数字图上，这个向量只有 64 维，想法完全可行。但换到照片上就不行了，原因不在哲学，而在算术——所以它可以被数出来。</p>
+
+  <h3>7.1.1 为什么图像不能直接铺平</h3>
+  <p>像素被排成一行的那一刻，三件互不相同的事同时出问题，而每一件都能在本周的实验里找到对应的数字。</p>
+  <div class="steps">
+    <div class="step"><h4>参数量会爆炸</h4><p>一个把 64 维输入映射到 128 维输出的全连接层，光权重就有 64 × 128 + 128 = 8320 个。本周用作对照的整个网络共有 <strong>17226 个参数</strong>。把输入换成真实照片——224 × 224 × 3 是 150528 个输入——一个同样宽的隐藏层在第一个 ReLU 之前就需要一千九百多万个权重。增长是图像边长的二次函数，而驱动它的是输入的<em>维度</em>，不是类别数。</p></div>
+    <div class="step"><h4>铺平会破坏空间结构</h4><p>8×8 的网格一旦变成 64 维向量，原本相邻的两个像素，和隔着整张图的两个像素，就变成同一类东西：两个下标。全连接层的权重矩阵里没有任何东西知道下标 8 和下标 9 在同一行上相邻，也不知道下标 0 离它们整整隔了一行。图像中真正承载信息的空间结构，在学习开始之前就被丢掉了。</p></div>
+    <div class="step"><h4>平移被当成全新对象</h4><p>全连接网必须为每一个位置把每个模式重新学一遍。这不是理论抱怨，它是被实测出来的：把测试图平移一列，全连接网从零平移的 <strong>0.9785</strong> 掉到 <strong>0.5089</strong>，而卷积只掉到 <strong>0.6481</strong>。同一个数字，移动一个像素，对一个无法跨位置共享权重的网络来说就是半个新问题。</p></div>
+  </div>
+
+  <h3>7.1.2 局部连接与权值共享</h3>
+  <p>卷积层用两条结构性假设回应了全部三个问题。<strong>局部连接（local connectivity）</strong>说：一个输出值只由输入的一小块算出——一个 3×3 的窗口，而不是整张图——于是每个输出对应的权重数不随图像尺寸增长。<strong>权值共享（weight sharing）</strong>说：<em>同一个</em>小核被应用在每一个位置上，于是总权重数只取决于核的大小和通道数，与图像有多宽无关。</p>
+  <p>正是这两个决定，把「为每个位置分别学一个检测器」变成了「学一个检测器、然后滑动它」。代价是一条假设：有用的模式是局部的，而且这个模式出现在哪里都有用。当这条假设成立——手写数字的笔画就是如此——节省是巨大的。当它不成立，卷积可能比全连接还差，而这是一笔真实的代价，不是脚注。</p>
+
+  <h3>7.1.3 参数量对账：从 17226 到 1898</h3>
+  <p>官方教学实施建议明确要求用「参数量对比」来讲清卷积的权值共享，因为它是最直观的一种方式。下面两个架构用的是完全相同的数据、完全相同的切分和优化器。</p>
+  <table>
+    <tr><th>层</th><th>形状</th><th>参数量</th><th>累计</th></tr>
+    <tr><td>全连接 64 → 128</td><td>64 → 128</td><td>8320</td><td>8320</td></tr>
+    <tr><td>全连接 128 → 64</td><td>128 → 64</td><td>8256</td><td>16576</td></tr>
+    <tr><td>全连接 64 → 10</td><td>64 → 10</td><td>650</td><td><strong>17226</strong></td></tr>
+    <tr><td>卷积 1 → 8，3×3（k*k*C_in*C_out + C_out）</td><td>8×8×8</td><td>3*3*1*8 + 8 = 80</td><td>80</td></tr>
+    <tr><td>卷积 8 → 16，3×3</td><td>16×4×4</td><td>3*3*8*16 + 16 = 1168</td><td>1248</td></tr>
+    <tr><td>全连接 64 → 10</td><td>64 → 10</td><td>64*10 + 10 = 650</td><td><strong>1898</strong></td></tr>
+  </table>
+  <p>两层卷积合计 1248 个权重，线性头 650 个；全连接对照网则持有 <strong>17226</strong> 个。卷积的参数量少了 <strong>9.07 倍</strong>；而——这才是整周的关键——两者的测试准确率分别是 <strong>0.9785</strong> 与 <strong>0.9808</strong>，差距 <strong>0.0023</strong>，小于一个标准差（<strong>0.0084</strong>）。所以诚实的写法是<strong>「未观察到显著差异」</strong>，而不是「卷积更好」。</p>
+
+  <div class="callout tip">
+    <span class="label">冻结的协议，精确复述</span>
+    本章后面出现的所有数字都来自同一套固定配方，这样数字的变化就只能来自被检验的那个改动。
+    <ul>
+      <li><strong>数据。</strong><code class="inline">sklearn.datasets.load_digits</code>——8×8 灰度手写数字，10 类，共 <strong>1797</strong> 张，随 scikit-learn 自带。整个实验<strong>完全离线，不下载任何东西</strong>，这是刻意设计：它排除了对第三方数据源及其许可的依赖。像素缩放到 0–1。</li>
+      <li><strong>划分。</strong>70 / 15 / 15，<strong>分层</strong>，<code class="inline">random_state = seed</code>，留下 <strong>n_train = 1258</strong>，验证集与测试集各约 270 张。</li>
+      <li><strong>优化。</strong><code class="inline">Adam(lr = 1e-3)</code>，批大小 64，<strong>120 轮</strong>，不用权重衰减。</li>
+      <li><strong>重复。</strong>五个随机种子（42、43、44、45、46）；每个数字都是<strong>五种子的均值 ± 1 个标准差</strong>，绝不用单次运行。</li>
+    </ul>
+  </div>
+
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">from</span> sklearn.datasets <span class="kw">import</span> load_digits
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+
+
+<span class="kw">def</span> <span class="fn">load_split</span>(seed=<span class="num">42</span>):
+    <span class="str">"""1797 张数字图，8x8，缩放到 [0, 1]；分层 70 / 15 / 15。"""</span>
+    X, y = load_digits(return_X_y=<span class="kw">True</span>)          <span class="cm"># 8x8 像素，10 类</span>
+    X = (X / <span class="num">16.0</span>).astype(<span class="str">"float32"</span>)              <span class="cm"># 像素范围 0..16 -> 0..1</span>
+    Xtr, Xrest, ytr, yrest = train_test_split(
+        X, y, test_size=<span class="num">0.30</span>, stratify=y, random_state=seed)
+    Xva, Xte, yva, yte = train_test_split(
+        Xrest, yrest, test_size=<span class="num">0.50</span>, stratify=yrest, random_state=seed)
+    t = <span class="kw">lambda</span> a: torch.tensor(a)
+    <span class="kw">return</span> (t(Xtr), t(ytr), t(Xva), t(yva), t(Xte), t(yte))
+
+
+<span class="kw">class</span> <span class="fn">MLP</span>(nn.Module):
+    <span class="str">"""铺平 64 -> 128 -> 64 -> 10  =  17226 个参数。"""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="fn">super</span>().__init__()
+        self.net = nn.Sequential(nn.Linear(<span class="num">64</span>, <span class="num">128</span>), nn.ReLU(),
+                                 nn.Linear(<span class="num">128</span>, <span class="num">64</span>), nn.ReLU(),
+                                 nn.Linear(<span class="num">64</span>, <span class="num">10</span>))
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        <span class="kw">return</span> self.net(x.view(x.shape[<span class="num">0</span>], -<span class="num">1</span>))
+
+
+<span class="kw">class</span> <span class="fn">CNN</span>(nn.Module):
+    <span class="str">"""conv(1->8,3,pad1) ReLU maxpool2 -> conv(8->16,3,pad1) ReLU maxpool2 -> FC 10
+    = 1898 个参数。`pool` 是构造参数，让平均池化那一臂共用这段代码。"""</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, pool=nn.MaxPool2d, in_size=<span class="num">8</span>):
+        <span class="fn">super</span>().__init__()
+        self.in_size = in_size
+        self.body = nn.Sequential(
+            nn.Conv2d(<span class="num">1</span>, <span class="num">8</span>, <span class="num">3</span>, padding=<span class="num">1</span>), nn.ReLU(), pool(<span class="num">2</span>, stride=<span class="num">2</span>),
+            nn.Conv2d(<span class="num">8</span>, <span class="num">16</span>, <span class="num">3</span>, padding=<span class="num">1</span>), nn.ReLU(), pool(<span class="num">2</span>, stride=<span class="num">2</span>))
+        self.head = nn.Linear(<span class="num">16</span> * <span class="num">2</span> * <span class="num">2</span>, <span class="num">10</span>)      <span class="cm"># 铺平 64 -> 10</span>
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x):
+        x = self.body(x.view(-<span class="num">1</span>, <span class="num">1</span>, self.in_size, self.in_size))
+        <span class="kw">return</span> self.head(x.view(x.shape[<span class="num">0</span>], -<span class="num">1</span>))
+
+
+<span class="kw">for</span> m <span class="kw">in</span> (MLP(), CNN()):
+    <span class="fn">print</span>(<span class="fn">sum</span>(p.numel() <span class="kw">for</span> p <span class="kw">in</span> m.parameters()))   <span class="cm"># 17226，然后是 1898</span></pre>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>卷积（convolution）</strong>——每个输出由输入的局部小块算出，并在所有位置复用同一个核的层。</li>
+      <li><strong>特征图（feature map）</strong>——卷积产生的二维数组；每个输出通道对应一张。</li>
+      <li><strong>局部连接（local connectivity）</strong>——每个输出只依赖输入的一个小邻域。</li>
+      <li><strong>权值共享（weight sharing）</strong>——同一组核权重在每个空间位置被复用，这正是参数量与图像宽度无关的原因。</li>
+      <li><strong>平移等变性（translation equivariance）</strong>——输入平移，特征图跟着平移同样的距离；全连接层必须在每个位置从头学出这个性质。这里的词是等变（equivariance）而不是不变（invariance），因为响应是随输入一起移动的。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.2 ========== -->
+<div class="section">
+  <h2>7.2 卷积运算</h2>
+  <p>卷积里的全部算术就是一句话：取一块、与核逐元素相乘、求和。其余的一切——步长、填充、通道、分组——都是围绕这句话的记账。亲手把这句话写一次，术语才会变得具体。</p>
+
+  <h3>7.2.1 一次滑动点积</h3>
+  <p>下面的手写版本不是你要交付的代码，而是让<em>特征图</em>、<em>步长</em>、<em>填充</em>这三个词有具体含义的代码。它与 <code class="inline">nn.Conv2d</code> 的一致性用断言来核对，所以「手写实现与 PyTorch 一致」是程序验证过的事实，而不是教材里的一句声称。</p>
+  <pre><span class="kw">import</span> torch, torch.nn <span class="kw">as</span> nn
+<span class="kw">import</span> torch.nn.functional <span class="kw">as</span> F
+
+
+<span class="kw">def</span> <span class="fn">conv2d_naive</span>(img, kernel, stride=<span class="num">1</span>, pad=<span class="num">0</span>):
+    <span class="str">"""img: (H, W)   kernel: (kh, kw)  ->  一次滑动点积。"""</span>
+    H, W = img.shape
+    kh, kw = kernel.shape
+    <span class="kw">if</span> pad:
+        img = F.pad(img, (pad,) * <span class="num">4</span>)
+        H, W = H + <span class="num">2</span> * pad, W + <span class="num">2</span> * pad
+    oh = (H - kh) // stride + <span class="num">1</span>
+    ow = (W - kw) // stride + <span class="num">1</span>
+    out = torch.zeros(oh, ow)
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(oh):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="fn">range</span>(ow):
+            patch = img[i * stride:i * stride + kh,
+                        j * stride:j * stride + kw]
+            out[i, j] = (patch * kernel).<span class="fn">sum</span>()
+    <span class="kw">return</span> out
+
+
+torch.manual_seed(<span class="num">0</span>)
+img, kernel = torch.randn(<span class="num">8</span>, <span class="num">8</span>), torch.randn(<span class="num">3</span>, <span class="num">3</span>)
+mine = <span class="fn">conv2d_naive</span>(img, kernel, stride=<span class="num">1</span>, pad=<span class="num">1</span>)
+
+conv = nn.Conv2d(<span class="num">1</span>, <span class="num">1</span>, <span class="num">3</span>, stride=<span class="num">1</span>, padding=<span class="num">1</span>, bias=<span class="kw">False</span>)
+conv.weight.data = kernel.view(<span class="num">1</span>, <span class="num">1</span>, <span class="num">3</span>, <span class="num">3</span>)
+ref = conv(img.view(<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>))[<span class="num">0</span>, <span class="num">0</span>]
+
+<span class="kw">assert</span> mine.shape == ref.shape == (<span class="num">8</span>, <span class="num">8</span>)          <span class="cm"># padding=1 保持尺寸不变</span>
+<span class="kw">assert</span> torch.<span class="fn">allclose</span>(mine, ref, atol=<span class="num">1e-5</span>)
+<span class="fn">print</span>(<span class="str">"hand-written == nn.Conv2d"</span>)</pre>
+
+  <h3>7.2.2 多输入通道、多卷积核、多输出通道</h3>
+  <p>真正的层不是「一个核滑过一张图」。当输入有 <em>C_in</em> 个通道、需要 <em>C_out</em> 个核时，每个输出通道由它自己的核产生，而这个核跨越<strong>全部</strong>输入通道。因此该层的参数量是 <code class="inline">k * k * C_in * C_out + C_out</code>，第一项是权重，第二项是偏置。</p>
+  <pre><span class="cm"># 3 个输入通道，16 个 3x3 卷积核，padding 1 -> 16 个输出通道</span>
+conv = nn.Conv2d(in_channels=<span class="num">3</span>, out_channels=<span class="num">16</span>, kernel_size=<span class="num">3</span>, padding=<span class="num">1</span>)
+x = torch.randn(<span class="num">4</span>, <span class="num">3</span>, <span class="num">8</span>, <span class="num">8</span>)                       <span class="cm"># 一批 4 张图</span>
+y = conv(x)
+<span class="fn">print</span>(y.shape)                                     <span class="cm"># torch.Size([4, 16, 8, 8])</span>
+<span class="fn">print</span>(<span class="fn">sum</span>(p.numel() <span class="kw">for</span> p <span class="kw">in</span> conv.parameters()))    <span class="cm"># 3*3*3*16 + 16 = 448</span></pre>
+  <p>这正是 7.1.3 节里那个 80 和 1168 的来历：<code class="inline">conv1 = 3*3*1*8 + 8 = 80</code>，<code class="inline">conv2 = 3*3*8*16 + 16 = 1168</code>。</p>
+
+  <h3>7.2.3 输出通道意味着什么</h3>
+  <p>每个输出通道都是一个学到的特征检测器，被应用在整张图上，而它的特征图告诉你这个检测器<em>在哪里</em>响应强烈。8 个输出通道就有 8 张 8×8 的特征图；16 个就有 16 张。所以通道数是这一层被允许去寻找的模式种数，它与图像尺寸无关——无论输入是 8×8 还是 1024×1024，用的都是同一个 3×3 核。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>卷积核 / 滤波器（kernel / filter）</strong>——被滑动过输入的小权重张量；一个核产生一个输出通道。</li>
+      <li><strong>滑动点积（sliding dot product）</strong>——运算本身：把小块与核逐元素相乘，再求和成一个数。</li>
+      <li><strong>输入 / 输出通道（input / output channel）</strong>——输入体的深度，以及卷积核的个数，后者成为输出的深度。</li>
+      <li><strong>偏置（bias）</strong>——每个输出通道一个学到的标量，加到该通道特征图的每一个位置上。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.3 ========== -->
+<div class="section">
+  <h2>7.3 步长、填充与输出尺寸公式</h2>
+  <p>形状错误是深度学习里最常见的报错，也是最容易消除的，因为它们纯粹是算术。一个公式同时覆盖卷积、池化和带步长的卷积：</p>
+  <p style="text-align:center; font-size:16px;"><strong>out = (in + 2p − k) / s + 1</strong></p>
+  <p>其中 <em>in</em> 是输入的边长，<em>k</em> 是核大小，<em>s</em> 是步长（stride），<em>p</em> 是每一侧的填充（padding），除法取整数部分。下面四种常用取值几乎覆盖了你将要写的一切：</p>
+  <table>
+    <tr><th>k</th><th>s</th><th>p</th><th>8×8 输入的输出</th><th>什么时候用</th></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>8</td><td>尺寸不变的卷积；每个 CNN 的主力配置。</td></tr>
+    <tr><td>3</td><td>1</td><td>0</td><td>6</td><td>valid 卷积；每次缩小 k − 1。</td></tr>
+    <tr><td>2</td><td>2</td><td>0</td><td>4</td><td>池化：特征图减半，感受野的 jump 翻倍。</td></tr>
+    <tr><td>3</td><td>2</td><td>1</td><td>4</td><td>带步长的卷积：一个可学习的下采样。</td></tr>
+  </table>
+
+  <h3>7.3.1 公式与真实张量逐项核对</h3>
+  <p>脚本不会去「估算」这些形状；它把公式算出来，再与真实前向的形状逐项比对，并在每一阶段断言相等。结果是本周 CNN 的形状链路：<code class="inline">8×8 → conv+P → 8×8 → pool → 4×4 → conv+P → 4×4 → pool → 2×2 → 铺平 64 → FC 10</code>。</p>
+  <pre><span class="kw">def</span> <span class="fn">out_size</span>(size, k, s, p):
+    <span class="kw">return</span> (size + <span class="num">2</span> * p - k) // s + <span class="num">1</span>
+
+
+stages = [(<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>),
+          (<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>)]
+size = <span class="num">8</span>
+<span class="kw">for</span> kind, k, s, p <span class="kw">in</span> stages:
+    size = <span class="fn">out_size</span>(size, k, s, p)
+    <span class="fn">print</span>(kind, <span class="str">"->"</span>, size)          <span class="cm"># conv -> 8, pool -> 4, conv -> 4, pool -> 2</span>
+<span class="fn">print</span>(<span class="str">"flatten ="</span>, <span class="num">16</span> * <span class="num">2</span> * <span class="num">2</span>)       <span class="cm"># 64</span>
+
+<span class="cm"># 同一组数字，从真实前向读出，而不是从公式推出</span>
+h = torch.zeros(<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>)
+<span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+    <span class="kw">for</span> layer <span class="kw">in</span> <span class="fn">CNN</span>().body:
+        h = <span class="fn">layer</span>(h)
+        <span class="fn">print</span>(<span class="fn">tuple</span>(h.shape[<span class="num">1</span>:]))     <span class="cm"># (8,8,8) (8,8,8) (8,4,4) (16,4,4) (16,2,2)</span></pre>
+  <p>四条核对全部与真实前向一致。当「shape mismatch」报错时，有产出的第一步是拿这套算术手算一遍，而不是改代码——大多数形状错误都能在一分钟内在此定位。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>步长（stride）</strong>——核在相邻位置之间移动的距离；步长 2 会把输出边长减半。</li>
+      <li><strong>填充（padding）</strong>——在边界补零，好让核能对准边缘像素；3×3 核配 padding 1 可保持尺寸不变。</li>
+      <li><strong>输出尺寸公式（output-size formula）</strong>——<code class="inline">out = (in + 2p − k)/s + 1</code>，卷积与池化共用。</li>
+      <li><strong>铺平维度（flatten dimension）</strong>——卷积主体末尾的 通道 × 高 × 宽，此处为 64，它成为线性头的输入宽度。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.4 ========== -->
+<div class="section">
+  <h2>7.4 感受野</h2>
+  <p>一个单元的感受野（receptive field），是它能看到的原始输入范围。它回答的是「你的网络有没有能力关联图像上相距很远的两处」，而一旦涉及池化，它的增长速度会比直觉更快。</p>
+
+  <h3>7.4.1 递推公式</h3>
+  <p>逐阶段跟踪两个量：感受野 <em>rf</em> 与 <em>jump</em>——即两个相邻输出之间对应的输入像素距离。每个阶段的更新是</p>
+  <p style="text-align:center; font-size:16px;"><strong>rf = rf + (k − 1) × jump</strong>　且　<strong>jump = jump × s</strong></p>
+  <p>从 rf = 1、jump = 1 出发。步长为 2 的池化层把 jump 翻倍，这就是它后面那一层感受野增长快一倍的原因。</p>
+  <table>
+    <tr><th>阶段</th><th>k</th><th>s</th><th>特征图</th><th>感受野</th><th>jump</th></tr>
+    <tr><td>输入</td><td>—</td><td>—</td><td>8×8</td><td>1</td><td>1</td></tr>
+    <tr><td>卷积 1</td><td>3</td><td>1</td><td>8×8</td><td>3</td><td>1</td></tr>
+    <tr><td>最大池化</td><td>2</td><td>2</td><td>4×4</td><td>4</td><td>2</td></tr>
+    <tr><td>卷积 2</td><td>3</td><td>1</td><td>4×4</td><td><strong>8</strong></td><td>2</td></tr>
+    <tr><td>最大池化</td><td>2</td><td>2</td><td>2×2</td><td>10</td><td>4</td></tr>
+  </table>
+  <p>感受野沿 <strong>3 → 4 → 8 → 10</strong> 递推。承载教训的是<strong>「卷积 2」这一行：感受野 8，正好等于整张图的边长。</strong>在这份 8×8 数据上，第二层卷积已经能看到全部能看到的东西；再叠多少层也不可能增加平移不变性，因为已经没有未被覆盖的区域——这是数据太小，不是模型太弱。</p>
+  <pre><span class="kw">def</span> <span class="fn">receptive_field</span>(stages, size=<span class="num">8</span>):
+    rf, jump = <span class="num">1</span>, <span class="num">1</span>
+    <span class="kw">for</span> kind, k, s, p <span class="kw">in</span> stages:
+        size = (size + <span class="num">2</span> * p - k) // s + <span class="num">1</span>
+        rf = rf + (k - <span class="num">1</span>) * jump
+        jump = jump * s
+        <span class="fn">print</span>(f<span class="str">"{kind:<4} k={k} s={s}  map {size}x{size}  RF={rf}  jump={jump}"</span>)
+
+
+<span class="fn">receptive_field</span>([(<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>),
+                 (<span class="str">"conv"</span>, <span class="num">3</span>, <span class="num">1</span>, <span class="num">1</span>), (<span class="str">"pool"</span>, <span class="num">2</span>, <span class="num">2</span>, <span class="num">0</span>)])
+<span class="cm"># conv k=3 s=1  map 8x8  RF=3   jump=1</span>
+<span class="cm"># pool k=2 s=2  map 4x4  RF=4   jump=2</span>
+<span class="cm"># conv k=3 s=1  map 4x4  RF=8   jump=2</span>
+<span class="cm"># pool k=2 s=2  map 2x2  RF=10  jump=4</span></pre>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>感受野（receptive field）</strong>——能影响某个单元取值的输入区域。</li>
+      <li><strong>jump</strong>——特征图上两个相邻输出所对应的输入空间距离；每个阶段乘以步长。</li>
+      <li><strong>有效感受野（effective receptive field）</strong>——实际有贡献的区域；在感受野边缘处，它比中心处更窄。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.5 ========== -->
+<div class="section">
+  <h2>7.5 池化</h2>
+  <p>池化通常被讲成「降维」，那只是它三个作用中的一个，而且是最没意思的一个。它还扩大感受野，并换来对小范围平移的容忍——而关键在于，它是一个<strong>有实测代价的选择</strong>。</p>
+
+  <h3>7.5.1 三个作用，一个代价</h3>
+  <table>
+    <tr><th>作用</th><th>它做了什么</th><th>没有它会怎样</th></tr>
+    <tr><td>缩小特征图</td><td>8×8 → 4×4 → 2×2；后续层的算力与显存按面积下降</td><td>后面每一层都付满额的空间代价</td></tr>
+    <tr><td>扩大感受野</td><td>步长 2 的池化让 jump 翻倍，于是下一层卷积看得远一倍</td><td>叠再多 3×3 卷积也只有 3、5、7……</td></tr>
+    <tr><td>容忍小范围平移</td><td>「这一片里有强响应」比「正好在第 3 行第 5 列有强响应」更稳</td><td>输入动一个像素，输出跟着动</td></tr>
+  </table>
+  <p>代价是池化丢掉了位置信息。对于需要知道<em>在哪里</em>的任务——分割、检测、关键点定位——这些信息必须被补回来。而<em>选哪种</em>池化函数，也不是一个会互相抵消的口味问题。</p>
+
+  <h3>7.5.2 池化方式的选择，值 4.1 个点</h3>
+  <p>下面两个架构只有一处不同：池化函数。通道数、核、学习率、轮数完全相同，参数量也一样。这是本周关于「这是设计选择」最清晰的一次实测。</p>
+  <table>
+    <tr><th>架构</th><th>池化</th><th>参数量</th><th>训练 acc</th><th>验证 acc</th><th>测试 acc</th></tr>
+    <tr><td>CNN 小</td><td>最大池化</td><td>1898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+    <tr><td>CNN 小</td><td>平均池化</td><td>1898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td><strong>0.9400 ± 0.0081</strong></td></tr>
+  </table>
+  <p>最大池化到 <strong>0.9808</strong>，平均池化到 <strong>0.9400</strong>。差距是 <strong>4.1 个百分点</strong>，是好几个标准差，而两个网络的<strong>参数量相同</strong>。平均池化把「最强的那个响应」抹平了，而手写数字的判别信息恰恰在笔画最集中的地方。选池化函数，就是在选你愿意保留什么——而它可能比在一个错误选择之上做的任何调参都值钱。</p>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>池化（pooling）</strong>——在小窗口上做的、无参数的固定归约，用于缩小特征图并扩大感受野。</li>
+      <li><strong>最大池化（max pooling）</strong>——保留每个窗口里的最大值；保住最强响应，代价是位置细节。</li>
+      <li><strong>平均池化（average pooling）</strong>——保留每个窗口的均值；更平滑，但会稀释单个强响应。</li>
+      <li><strong>全局平均池化（global average pooling）</strong>——把每个通道平均成一个数，常用来替代「铺平 + 全连接」头。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.6 ========== -->
+<div class="section">
+  <h2>7.6 经典 CNN 结构各自解决了什么</h2>
+  <p>CNN 的设计史，是一串具体的瓶颈，每一个都被一个思想解决。把它读成年表是常识题；把它读成「问题清单」，就是一套你以后会反复用到的设计词汇。</p>
+  <table>
+    <tr><th>架构</th><th>它面对的问题</th><th>它引入的思想</th></tr>
+    <tr><td>LeNet</td><td>网络到底能不能读出一个数字？</td><td>那套模板本身：卷积与池化交替，再接一个小全连接头。体量小，足以应付 8×8 到 32×32 的数字图；本周的模型基本上就是它。</td></tr>
+    <tr><td>AlexNet</td><td>真实的高分辨率彩色图像、类别众多；训练太慢且过拟合。</td><td>往深、往宽走，用 ReLU 取代饱和型激活，用 Dropout 与数据增强压住过拟合——再加上 GPU 让它变得可负担。</td></tr>
+    <tr><td>VGG</td><td>随意的卷积核尺寸让架构难以推理与复现。</td><td>一套统一的配方：只用 3×3 卷积堆叠，块与块之间用池化。用简单、可重复的模式换深度，小核则压住参数开销。</td></tr>
+    <tr><td>ResNet</td><td>超过一定深度后，加层反而让训练<em>更差</em>，而不是更好。</td><td>跳跃连接（skip connection）：让一个块学习围绕恒等的残差，使梯度能穿过很深的堆叠。深度从「自我拆台」变成「可用」。</td></tr>
+  </table>
+  <p>这里要的是<em>思想</em>，不是实现细节。本周的考核点不是「把 ResNet 写出来」，而是认出这四个架构各自解决了前一个架构造成的瓶颈——当你手上的模型训不动时，要找的正是那个瓶颈。</p>
+</div>
+
+<!-- ========== 7.7 ========== -->
+<div class="section">
+  <h2>7.7 数据增强</h2>
+  <p>数据增强（data augmentation）把变换后的训练输入副本喂给模型，它依赖「正确标签能在变换下存活」这一前提。这个前提精确且极易被忽略：<strong>该变换必须保持标签（label-preserving）。</strong>把数字水平翻转，会把 6 转向 9；垂直翻转会毁掉 9。不保持标签的增强并不增加信息——它在制造贴错标签的样本，同时看起来像个高级的正则化手段。</p>
+
+  <h3>7.7.1 本实验用什么做增强</h3>
+  <p>增强那一臂对<strong>训练批</strong>施加每个轴最多 1 个像素的随机平移；测试时输入不做任何改动。训练增强与测试探针用的是同一个函数，因此两者天然可比。</p>
+  <pre><span class="kw">def</span> <span class="fn">shift_batch</span>(imgs, dx, dy):
+    <span class="str">"""对 (n, 1, 8, 8) 批做零填充平移。既作训练增强，也作测试时扰动。"""</span>
+    out = torch.<span class="fn">roll</span>(imgs, shifts=(dy, dx), dims=(<span class="num">2</span>, <span class="num">3</span>))
+    <span class="kw">if</span> dy &gt; <span class="num">0</span>:   out[:, :, :dy, :] = <span class="num">0</span>
+    <span class="kw">elif</span> dy &lt; <span class="num">0</span>: out[:, :, dy:, :] = <span class="num">0</span>
+    <span class="kw">if</span> dx &gt; <span class="num">0</span>:   out[:, :, :, :dx] = <span class="num">0</span>
+    <span class="kw">elif</span> dx &lt; <span class="num">0</span>: out[:, :, :, dx:] = <span class="num">0</span>
+    <span class="kw">return</span> out
+
+
+<span class="cm"># 训练循环里，仅对增强那一臂</span>
+<span class="kw">if</span> arm == <span class="str">"cnn_aug"</span>:
+    dx = <span class="fn">int</span>(torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">1</span>,), generator=g))   <span class="cm"># 取 {-1, 0, +1}</span>
+    dy = <span class="fn">int</span>(torch.<span class="fn">randint</span>(-<span class="num">1</span>, <span class="num">2</span>, (<span class="num">1</span>,), generator=g))
+    xb = <span class="fn">shift_batch</span>(xb.view(-<span class="num">1</span>, <span class="num">1</span>, <span class="num">8</span>, <span class="num">8</span>), dx, dy).view(-<span class="num">1</span>, <span class="num">64</span>)</pre>
+
+  <h3>7.7.2 账本：买 +29 个点，付 −3 个点</h3>
+  <p>在测试时把测试图做整体平移，不重训任何东西，看各个模型撑不撑得住。三条曲线迅速分开。</p>
+  <table>
+    <tr><th>方案</th><th>dx = −2</th><th>dx = −1</th><th>dx = 0</th><th>dx = +1</th><th>dx = +2</th></tr>
+    <tr><td>全连接</td><td>0.1667</td><td>0.4555</td><td><strong>0.9785</strong></td><td>0.5089</td><td>0.1822</td></tr>
+    <tr><td>CNN</td><td>0.2348</td><td>0.6481</td><td><strong>0.9808</strong></td><td>0.6504</td><td>0.2778</td></tr>
+    <tr><td>CNN + 增强</td><td>0.5170</td><td><strong>0.9415</strong></td><td><strong>0.9504</strong></td><td><strong>0.9526</strong></td><td>0.5518</td></tr>
+  </table>
+  <p>读中间两行，账本自己就写出来了。在 dx = −1 处，普通 CNN 掉到 <strong>0.6481</strong>，而增强后的 CNN 稳在 <strong>0.9415</strong>——增强<strong>买到了大约 29 个点</strong>的鲁棒性。但看 dx = 0，也就是干净测试集：增强模型的 <strong>0.9504</strong> 是三者中<em>最低</em>的，低于全连接的 0.9785 与普通 CNN 的 0.9808——增强<strong>付出了约 3 个点</strong>的干净精度。</p>
+  <div class="callout key">
+    <span class="label">增强的账本</span>
+    <strong>买到：</strong>dx = −1 时 +29 个点（0.6481 → 0.9415）；而且训练曲线不再冲上 1.000（第 115 轮为 0.9292），过拟合被压住。
+    <br><strong>付出：</strong>dx = 0 时 −3 个点（0.9808 → 0.9504）。
+    <br><strong>教训：</strong>增强没有提升上限，它把曲线<em>压平</em>了——用干净精度去换平移鲁棒性。这笔交易划不划算，问的是你的输入，不是模型。如果用户是拿手机拍的（输入会被平移），就买；如果输入已经被裁齐对齐，那你就是在白买。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>数据增强（data augmentation）</strong>——生成标签不变的训练输入变换副本。</li>
+      <li><strong>保持标签的变换（label-preserving transform）</strong>——正确标签能在其上存活的变换；增强有效的前提。</li>
+      <li><strong>测试时扰动（test-time perturbation）</strong>——只在测量时施加的变换，用来探测鲁棒性，而不是用来训练。</li>
+      <li><strong>鲁棒性 / 干净精度权衡（robustness trade-off）</strong>——用未扰动测试集上的精度，换取扰动条件下精度的实测交换。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.8 ========== -->
+<div class="section">
+  <h2>7.8 训练与评估：五个架构</h2>
+  <p>五个架构，每个五个种子，一套冻结的协议。本章的每一个差异都是五种子的均值——而小于一个标准差的差异，一律写成「未观察到显著差异」，正是这条规则让结论保持诚实。</p>
+
+  <h3>7.8.1 五架构总账</h3>
+  <table>
+    <tr><th>方案</th><th>参数量</th><th>训练 acc</th><th>验证 acc</th><th>测试 acc</th></tr>
+    <tr><td>全连接 64-128-64-10</td><td>17226</td><td>1.0000 ± 0.0000</td><td>0.9660 ± 0.0084</td><td><strong>0.9785 ± 0.0084</strong></td></tr>
+    <tr><td>CNN 8/16（最大池化）</td><td>1898</td><td>0.9987 ± 0.0009</td><td>0.9704 ± 0.0101</td><td><strong>0.9808 ± 0.0084</strong></td></tr>
+    <tr><td>CNN 8/16（平均池化）</td><td>1898</td><td>0.9497 ± 0.0089</td><td>0.9289 ± 0.0164</td><td><strong>0.9400 ± 0.0081</strong></td></tr>
+    <tr><td>CNN 宽 16/32（+ FC 128）</td><td>21312</td><td>0.9992 ± 0.0010</td><td>0.9763 ± 0.0062</td><td><strong>0.9867 ± 0.0081</strong></td></tr>
+    <tr><td>CNN 8/16 + ±1px 增强</td><td>1898</td><td>0.9535 ± 0.0120</td><td>0.9385 ± 0.0171</td><td><strong>0.9504 ± 0.0217</strong></td></tr>
+  </table>
+  <p>三条结论，每一条都只说到数字允许的程度：</p>
+  <div class="callout key">
+    <span class="label">1 · 卷积用少 9.07 倍的参数追平了全连接</span>
+    CNN 用 <strong>1898</strong> 个参数拿到 <strong>0.9808</strong>；全连接用 <strong>17226</strong> 个参数拿到 <strong>0.9785</strong>。差距 <strong>0.0023</strong>，小于一个标准差（<strong>0.0084</strong>），所以正确的句子是<strong>「未观察到显著差异」</strong>——而不是「卷积更准」。成就是参数量，不是分数。
+  </div>
+  <div class="callout key">
+    <span class="label">2 · 变宽确实有用，但并不便宜</span>
+    宽 CNN 用 <strong>21312</strong> 个参数，约为小 CNN 的 <strong>11.2 倍</strong>，达到 <strong>0.9867</strong>——比小 CNN 高约 <strong>0.6 个点</strong>，而标准差约为 0.008。收益是真实的，但不大，而代价是参数。
+  </div>
+  <div class="callout key">
+    <span class="label">3 · 单看干净测试集，增强那一臂更差</span>
+    增强臂达到 <strong>0.9504</strong>，而普通 CNN 是 <strong>0.9808</strong>。这不是方法的失败；7.7 节已经说明，这是为平移鲁棒性付出的价格。两节要合起来读。
+  </div>
+
+  <h3>7.8.2 单种子的曲线</h3>
+  <p>种子 42，每 24 轮取一点。验证曲线讲的故事与表格一致：CNN 起步比全连接慢，但在中途反超；增强那条曲线全程更低也更稳——它在解一个更难的题目。</p>
+  <table>
+    <tr><th>取样轮次</th><th>1</th><th>25</th><th>49</th><th>73</th><th>97</th><th>115</th></tr>
+    <tr><td>全连接验证 acc</td><td>0.7037</td><td>0.9556</td><td>0.9593</td><td>0.9704</td><td>0.9741</td><td>0.9741</td></tr>
+    <tr><td>CNN 验证 acc</td><td>0.3111</td><td>0.9407</td><td>0.9667</td><td>0.9704</td><td>0.9667</td><td>0.9741</td></tr>
+    <tr><td>CNN + 增强验证 acc</td><td>0.1889</td><td>0.7519</td><td>0.8481</td><td>0.8667</td><td>0.8667</td><td>0.9000</td></tr>
+  </table>
+
+  <h3>7.8.3 混淆矩阵</h3>
+  <p>单个准确率数字是一句没说完的话。把五个种子合计起来的混淆矩阵，才是把「98%」翻译成「它在哪两类之间犹豫」的那张表。行是真标签，列是预测；对角线是判对，其余每个格子都是一次具体的混淆。</p>
+  <table>
+    <tr><th>真 ↓ / 判 →</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th></tr>
+    <tr><td>0</td><td><strong>135</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+    <tr><td>1</td><td>0</td><td><strong>132</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>2</td><td>2</td></tr>
+    <tr><td>2</td><td>0</td><td>0</td><td><strong>131</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+    <tr><td>3</td><td>0</td><td>1</td><td>0</td><td><strong>134</strong></td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+    <tr><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>136</strong></td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+    <tr><td>6</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>2</td><td>0</td></tr>
+    <tr><td>7</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong>133</strong></td><td>0</td><td>1</td></tr>
+    <tr><td>8</td><td>0</td><td><strong>3</strong></td><td><strong>1</strong></td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td><td><strong>1</strong></td><td><strong>124</strong></td><td>0</td></tr>
+    <tr><td>9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td><strong>133</strong></td></tr>
+  </table>
+  <p>矩阵合计 <strong>1350</strong> 个测试预测（270 × 5），其中 <strong>1324</strong> 个正确——准确率 <strong>0.9807</strong>——剩下 <strong>26</strong> 个非对角错误。读法只有一句：<strong>看非对角。</strong>数字 0 是满分（135/135），数字 8 最差（124/130，召回 0.9538）。全部 26 个错误里，有 <strong>12 个与数字 8 有关</strong>，约占全部错误的 <strong>46.2%</strong>；最差的单个类对是 <strong>8 → 1</strong>，出现 <strong>3 次</strong>。26 个错误落到的都是视觉上相近的类对（8 与 1、8 与 9、3 与 8），没有一个是随机误读。</p>
+  <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> confusion_matrix
+
+model.<span class="fn">eval</span>()
+<span class="kw">with</span> torch.<span class="fn">no_grad</span>():
+    y_pred = model(Xte).argmax(<span class="num">1</span>).numpy()
+
+cm = <span class="fn">confusion_matrix</span>(yte.numpy(), y_pred)     <span class="cm"># 行是真类别，列是预测类别</span>
+off = cm.copy()
+np.<span class="fn">fill_diagonal</span>(off, <span class="num">0</span>)                       <span class="cm"># 只留下错误</span>
+<span class="fn">print</span>(<span class="str">"errors:"</span>, off.<span class="fn">sum</span>(), <span class="str">"accuracy:"</span>, cm.<span class="fn">trace</span>() / cm.<span class="fn">sum</span>())</pre>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>方案（arm）</strong>——被检验的一种配置，协议中其余所有因素都保持不变。</li>
+      <li><strong>种子重复（seed replication）</strong>——在多个随机种子上重复同一方案，使离散度而不是单次运行成为测量结果。</li>
+      <li><strong>均值 ± 标准差</strong>——本章所有数字的报告形式；单次运行的值不算结果。</li>
+      <li><strong>混淆矩阵（confusion matrix）</strong>——真类别与预测类别构成的表；对角线统计判对，每个非对角格子都是一次具体的混淆。</li>
+      <li><strong>召回率（recall）</strong>——某一类真实样本中被模型找出的比例；本实验中最差一类是 0.9538。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.9 ========== -->
+<div class="section">
+  <h2>7.9 错分分析：从矩阵走到具体样本</h2>
+  <p>「准确率 0.98」不是结论，是起点。错分分析（error analysis）是一门纪律：从一个聚合数字，一路走到模型具体错在哪些样本上，再走到一个关于<em>原因</em>、并且可以检验的假设。这正是课程标准明确要求的交付物：<em>重点看模型到底错在哪类样本上</em>。</p>
+
+  <h3>7.9.1 方法，五步</h3>
+  <div class="steps">
+    <div class="step"><h4>打印混淆矩阵，而不只是准确率</h4><p>0.9807 底下藏着 26 个错误，其中 12 个与数字 8 有关。准确率一个都没提；矩阵才是起点。</p></div>
+    <div class="step"><h4>点名最差的类对，并给出次数</h4><p>「8 被当成 1，三次」比「模型在某些类上表现较差」有用一百倍。次数重要，因为一次可能是噪声，三次可能已是模式。</p></div>
+    <div class="step"><h4>取出具体样本，附上模型的概率</h4><p>不是「它错了一些 8」，而是「真 8，判 7，置信 0.9829，真类概率 0.0144」。概率能把「犹豫」和「错了还自信」分开，而这两者需要不同的修法。</p></div>
+    <div class="step"><h4>每条错误配一个可检验的假设</h4><p>「这个 6 的下半环闭合了」是一个假设，而且可以检验：把下半环闭合的 6 收集起来，看是不是都被判成 8。这一步把一个故事变成了一个实验。</p></div>
+    <div class="step"><h4>写出下一步，以及怎么判断有没有用</h4><p>同一个切分、同一个指标、一次只改一处——全课程不变的这条规则。</p></div>
+  </div>
+
+  <h3>7.9.2 这次运行里的两个错误，画出来</h3>
+  <p>下面的数字是种子 42 真实测试样本的像素，灰度用字符表示（空格 = 0，@ = 最亮）。它们不是示意图，而是模型真正做错的样本。</p>
+  <pre><span class="cm">真 8，被判成 7（置信 0.9829，真类概率 0.0144）</span>
+   +@*  
+  .#+#: 
+   * *. 
+   ++@: 
+ .@@@=  
+ .@-*   
+  %:#   
+  .%+   
+
+<span class="cm">真 6，被判成 8（置信 0.8852，真类概率 0.0271）</span>
+   *@#  
+  -@*@: 
+ .@* +  
+ -@+    
+ +@@+   
+ .@*@-  
+  *@@=  
+   +%   </pre>
+  <p>第一个案例里，8 的下半环被写断了，只剩上部一撇，于是它读起来像 7——人眼也会同意。第二个案例里，这个 6 的<em>下半环是闭合的</em>，而 6 不该闭合，模型就把它叫成了 8。两者都具体、都能用笔画解释，也都指向明确的补救：补这类形状的样本，或者调整损失权重。这就是「模型还不够好」（不可操作）与「它会在一个下半环闭合的 6 上把 8 叫出来」（可操作）之间的差别。</p>
+
+  <div class="callout tip">
+    <span class="label">一份完整错分分析的交付标准</span>
+    只有一句聚合数字的报告，等于没做这件事。完整的报告必须同时包含：（1）打印出来的混淆矩阵本身；（2）点名的最差类对及其次数；（3）至少三个具体错分案例，各带模型在预测类与真类上的概率；（4）每条错误配一个可检验的假设；（5）下一个实验，以及判断它有没有用的准则。缺任何一条，都是本周报告最常见的失分方式。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>错分分析（error analysis）</strong>——从聚合指标走到具体失败样本及其原因的过程。</li>
+      <li><strong>类对（class pair）</strong>——一个有序的（真类、预测类）对；混淆就是按它来计数的。</li>
+      <li><strong>置信 vs 真类概率</strong>——模型对它那个（错误）答案有多确定，对照正确类别分到了多少概率质量。</li>
+      <li><strong>可检验假设（testable hypothesis）</strong>——把原因写成「再做一次测量就能证伪」的形式。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.10 ========== -->
+<div class="section">
+  <h2>7.10 GPU 显存管理与绿色计算</h2>
+  <p>显存不足（out of memory, OOM）是本周实验里最常见的卡点，而它几乎从来不是硬件问题，而是批大小（batch size）的问题。正确的回应是先测量，再按一个明确的顺序处置，而不是下单买卡。</p>
+
+  <h3>7.10.1 峰值内存随批大小增长</h3>
+  <p>峰值常驻内存（peak RSS）是每个批大小各起一个独立进程测出来的；输入被最近邻上采样到 32×32，否则在这个模型规模上根本测不出差别。基线——导入 torch 并建好模型、但不训练——是 <strong>306.5 MB</strong>，下面全部按「超出基线的增量」报告。</p>
+  <table>
+    <tr><th>批大小</th><th>峰值 RSS（MB）</th><th>超出基线（MB）</th></tr>
+    <tr><td>0（仅基线）</td><td>306.5</td><td>0.0</td></tr>
+    <tr><td>32</td><td>390.1</td><td>83.6</td></tr>
+    <tr><td>64</td><td>397.8</td><td>91.3</td></tr>
+    <tr><td>128</td><td>410.8</td><td>104.3</td></tr>
+    <tr><td>256</td><td>436.2</td><td>129.7</td></tr>
+    <tr><td>512</td><td>483.0</td><td>176.5</td></tr>
+    <tr><td>1024</td><td>582.0</td><td>275.5</td></tr>
+  </table>
+  <p>增量随批大小近似线性增长——从批 32 的 83.6 MB 到批 1024 的 275.5 MB，是 3.3 倍——而在批 1024 时整个进程的峰值达到 <strong>582.0 MB</strong>。降低批大小，是唯一一个「不改变更新所依据的数学、只改变内存」的旋钮。</p>
+  <div class="callout warn">
+    <span class="label">一个值得知道的测量陷阱</span>
+    在 macOS 上，<code class="inline">ru_maxrss</code> 报告的单位是<strong>字节</strong>；在 Linux 上是<strong>千字节</strong>。除错常量会静默地报出偏差 1024 倍的 MB 数。探针用 <code class="inline">/ 1024 ** 2</code> 处理了这一点，上面这些原始数字就是在 macOS 上用这个除数产出的。
+  </div>
+
+  <h3>7.10.2 显存不足时的处置顺序</h3>
+  <p>从上往下试。越往下，代价越大；最后两步已经不是「调参」，而是换硬件或换方案。</p>
+  <div class="steps">
+    <div class="step"><h4>先把批大小减半（免费）</h4><p>改变的是内存，不是数学。副作用是梯度更吵，用更多步数或更高学习率补偿。先做这一步，别先怀疑硬件。</p></div>
+    <div class="step"><h4>梯度累积（免费）</h4><p>不占内存就把等效批大小买回来。下面的实测：4 × 32 配对的权重写法能精确复现真 batch 128。你付出的是时间，不是精度。</p></div>
+    <div class="step"><h4>混合精度（便宜，但不免费）</h4><p><code class="inline">torch.amp.autocast</code> 加 <code class="inline">GradScaler</code>，激活的存储减半。它改变数值，所以要重新确认指标没有漂。</p></div>
+    <div class="step"><h4>梯度检查点 / 更小的输入（有代价）</h4><p>用时间换内存，通常慢 20–30%。缩小输入分辨率会改变任务本身，改之前先想清楚你在测什么。</p></div>
+    <div class="step"><h4>降模型规模，或承认这个任务本机做不了（最后）</h4><p>买更大的 GPU 是最后一个选项，不是第一个。本周这个模型即使在批 1024 时峰值也只有 <strong>582.0 MB</strong>，永远不会 OOM——在申请算力之前，先算清楚你到底需要多少。</p></div>
+  </div>
+
+  <h3>7.10.3 梯度累积：把等效 batch 买回来，但要付对价钱</h3>
+  <p>梯度累积（gradient accumulation）把一个大的等效批拆成若干小的微批，累加它们的梯度，再走一步优化器。等效批 = 微批大小 × 累积步数——这里是 4 × 32 = 128。判定标准是每种权重写法能否<em>逐种子</em>复现真 batch 128。</p>
+  <table>
+    <tr><th>权重写法</th><th>精确形式</th><th>与真 batch 128 的一致性</th></tr>
+    <tr><td>exact</td><td><code class="inline">w = len(sel) / group_size</code></td><td><strong>5 / 5 完全一致</strong></td></tr>
+    <tr><td>naive</td><td><code class="inline">w = 1 / accum_steps</code></td><td>3 / 5</td></tr>
+    <tr><td>unscaled</td><td>不做缩放，也不做归约</td><td>2 / 5</td></tr>
+    <tr><td>none</td><td>不做缩放，梯度直接累加</td><td>2 / 5</td></tr>
+  </table>
+  <p>只有 <strong>exact</strong> 这一种能在五个种子上全部一致。原因很具体，值得说清楚：差异来自<strong>每个 epoch 最后一组微批的大小不等</strong>（n_train = 1258 无法被 64 × 累积步数整除，在探针里也无法被 32 × 4 整除）。只有按「每个微批在这一组里占的样本比例」——<code class="inline">len(sel)/group_size</code>——加权，累加出来的梯度才等于这一组的均值；而 naive 的 <code class="inline">1/accum_steps</code> 只在「所有微批一样大」时才等价。</p>
+  <div class="callout warn">
+    <span class="label">对这条结论的一条诚实边界</span>
+    <code class="inline">naive</code> 与 <code class="inline">unscaled</code> 在这里也大致收敛，是因为 <strong>Adam 对梯度的整体缩放不敏感</strong>——它按二阶矩做归一化，所以把每个梯度统一乘一个常数，几乎被它吃掉。这是优化器的性质，不是「可以不做加权」的许可。<strong>如果换成 SGD，这些差异会显著放大。</strong>所以正确的结论不是「加权无所谓」，而是「在 Adam 下这个错误被宽容了；换一个优化器就会暴露出来」。
+  </div>
+  <pre><span class="cm"># 一组 `size` 个样本，被切成若干长度 len(sel) 的微批</span>
+<span class="kw">if</span> accum_mode == <span class="str">"exact"</span>:
+    w = <span class="fn">len</span>(sel) / size          <span class="cm"># 这个微批在组里占的样本比例</span>
+<span class="kw">elif</span> accum_mode == <span class="str">"naive"</span>:
+    w = <span class="num">1.0</span> / accum_steps        <span class="cm"># 只在所有微批等大时才正确</span>
+<span class="kw">else</span>:                            <span class="cm"># none / unscaled</span>
+    w = <span class="num">1.0</span>
+(loss * w).<span class="fn">backward</span>()</pre>
+
+  <div class="callout tip">
+    <span class="label">绿色计算：算力是有限资源</span>
+    同一份数据、同一个准确率，用少 9.07 倍的参数也能达到——而这是本章测出来的，不是喊出来的。参数就是账单：17226 个参数拿到 0.9785，1898 个拿到 0.9808，多出来的 15328 个权重在训练和推理时都要算、要搬、要供电。「用更少的成本达成目标」不是清高，它始于一句追问——这个规模是必要的吗？在申请算力之前先把峰值内存量出来；并且<strong>如实报告那些没起作用的优化</strong>：本周的增强让干净精度掉了 3 个点，只报平移实验那 29 个点，就是选择性汇报。
+  </div>
+
+  <div class="callout key">
+    <span class="label">关键术语</span>
+    <ul>
+      <li><strong>显存（GPU memory）</strong>——训练期间由激活、梯度和参数占用的内存；批大小缩放的就是它。</li>
+      <li><strong>显存不足（OOM）</strong>——申请量超过可用内存时抛出的错误；最常见的实验卡点。</li>
+      <li><strong>梯度累积（gradient accumulation）</strong>——在走一步优化器之前，先跨多个微批累加梯度，以在不占内存的前提下达到更大的等效批。</li>
+      <li><strong>等效 batch（effective batch）</strong>——微批大小 × 累积步数；也就是这次更新实际「看到」的批量。</li>
+      <li><strong>混合精度（mixed precision）</strong>——对大部分激活使用低精度算术，配合损失缩放让梯度保持可用。</li>
+      <li><strong>绿色计算（green computing）</strong>——以达成目标所需的最小算力来做设计，并如实报告没有奏效的优化。</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========== 7.11 ========== -->
+<div class="section">
+  <h2>7.11 本章小结与练习</h2>
+
+  <div class="callout key">
+    <span class="label">六条要点</span>
+    <ol>
+      <li>卷积不是「更强的层」，它是用<strong>局部性假设</strong>换来的参数效率。同一份数据上参数量差 <strong>9.07 倍</strong>，准确率差 <strong>0.0023</strong>——小于一个标准差，因此写「未观察到显著差异」。</li>
+      <li>先算形状，再写代码。输出尺寸公式 <code class="inline">(in + 2p − k)/s + 1</code> 与真实前向在每一阶段都一致；感受野沿 <strong>3 → 4 → 8 → 10</strong> 递推，第二层卷积就已经覆盖整张 8×8 图。</li>
+      <li>池化函数是<strong>选择</strong>，不是默认。最大对平均在参数量完全相同的情况下值 <strong>4.1 个点</strong>——好几个标准差。</li>
+      <li>增强买鲁棒性、付干净精度：dx = −1 处 <strong>+29 个点</strong>，dx = 0 处 <strong>−3 个点</strong>。要不要买，问的是你的输入会不会被平移——这是产品问题，不是模型问题。</li>
+      <li>「98%」不是结果。完整的错分分析有四件：混淆矩阵、最差类对及次数、带概率的具体案例、可检验的假设。本实验中剩下 26 个错误，<strong>12 个与数字 8 有关</strong>，最差类对是 <strong>8 → 1（3 次）</strong>。</li>
+      <li>显存不足时先降 batch，再用梯度累积把等效 batch 买回来；用「微批占组大小的比例」加权时，与真 batch 逐项一致（<strong>5/5</strong>）。并且如实报告没起作用的优化。</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 1 · 手算参数量（必做）</h4>
+    <ol>
+      <li>用 <code class="inline">k*k*C_in*C_out + C_out</code>，算出 <code class="inline">conv(1→8, 3×3)</code> 与 <code class="inline">conv(8→16, 3×3)</code> 的参数量。<em>（80 与 1168。）</em></li>
+      <li>加上线性头 <code class="inline">64 → 10</code>，给出 CNN 的总参数量。<em>（80 + 1168 + 650 = 1898。）</em></li>
+      <li>算出 64-128-64-10 全连接网的总参数量，并给出它与 CNN 的比值。<em>（17226；17226 / 1898 = 9.07 倍。）</em></li>
+      <li>全连接是 0.9785，CNN 是 0.9808，种子间标准差 0.0084。用一句话写出数据支持得起的结论。<em>（未观察到显著差异；成就是参数量少了 9.07 倍，不是分数。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 2 · 形状链路与感受野（必做）</h4>
+    <ol>
+      <li>8×8 输入依次通过 conv(3×3, s=1, p=1)、MaxPool(2, s=2)、conv(3×3, s=1, p=1)、MaxPool(2, s=2)。写出每一阶段后的特征图尺寸。<em>（8、4、4、2。）</em></li>
+      <li>用 <code class="inline">rf = rf + (k − 1) × jump</code> 与 <code class="inline">jump = jump × s</code>，算出每一阶段后的感受野。<em>（3、4、8、10。）</em></li>
+      <li>最后一层卷积的感受野是多少？在这份 8×8 数据上意味着什么？<em>（8——它已经覆盖整张图，所以在这里再叠深度也无法增加平移不变性。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 3 · 用代码验证公式（必做，动手改代码）</h4>
+    <ol>
+      <li>写出 <code class="inline">out_size(size, k, s, p)</code>，打印上面四个阶段的输出；再建出 CNN，在 <code class="inline">model.body</code> 的每一层之后打印 <code class="inline">tuple(h.shape[1:])</code>。确认公式与真实前向在每一阶段都一致。</li>
+      <li>把第一层卷积改成 <code class="inline">padding=0</code>，在运行前先预测四个特征图尺寸以及铺平维度会变成多少，然后运行核对。<em>（6、3、3、1；铺平维度变成 16 × 1 × 1 = 16，线性头必须重建以匹配。）</em></li>
+      <li>把池化从 <code class="inline">MaxPool2d</code> 换成 <code class="inline">AvgPool2d</code>，其余保持不变。在训练之前，说明你预期哪个方案的测试准确率、以及为什么。<em>（平均池化那一臂的 0.9400——它抹平了最强响应，值 4.1 个点。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 4 · 读懂增强的账本（必做）</h4>
+    <ol>
+      <li>在 dx = −1 处，给出普通 CNN 与增强 CNN 的测试准确率，以及变化量。<em>（0.6481 与 0.9415，约 +29 个点。）</em></li>
+      <li>在 dx = 0 处，给出同样两个数，以及变化量。<em>（0.9808 与 0.9504，约 −3 个点。）</em></li>
+      <li>「增强改善了模型」——这个概括正确吗？用两句话解释，并说出真正决定「要不要用它」的那个问题。<em>（不正确：它没有提升上限，而是把曲线压平了，用干净精度换鲁棒性。决定性的问题是：真实输入是否会被平移。）</em></li>
+      <li>在 dx = 0 处三者中哪一条最低？这说明了鲁棒性的代价是什么？<em>（增强那一臂，0.9504——鲁棒性是用干净精度买的。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 5 · 给出一份可操作的错分分析（必做）</h4>
+    <ol>
+      <li>从混淆矩阵里点名最差类对及其次数，并说出 26 个错误中有多少与数字 8 有关。<em>（8 → 1，3 次；26 个错误里有 12 个与数字 8 有关，46.2%。）</em></li>
+      <li>对「真 8，判 7，置信 0.9829，真类概率 0.0144」这一案例，用一句话写出假设。<em>（下半环被写断，于是这个数字读起来像 7。）</em></li>
+      <li>把这个假设变成一次可以执行的检验。<em>（收集下半环被写断的测试 8，测量它们是否被不成比例地判成 7；或合成这类 8，测它们上的错误率。）</em></li>
+      <li>列出完整的错分分析报告必须包含的五项。<em>（混淆矩阵；最差类对及次数；至少三个带概率的案例；每条配一个可检验假设；下一个实验及其准则。）</em></li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>练习 6 · 复现，然后写错梯度累积（必做，动手改代码）</h4>
+    <ol>
+      <li>先用真 batch 128 训练一次 CNN，记录五个种子各自的测试准确率；再用 4 × 32 累积、权重 <code class="inline">w = len(sel) / group_size</code> 训练一次，逐种子比较。<em>（五个全部一致——5/5。）</em></li>
+      <li>把权重改成 <code class="inline">w = 1 / accum_steps</code> 再跑。还有几个种子一致？其余为什么不一致？<em>（3/5；每个 epoch 最后一组微批大小不等，naive 的均值在那一组上是有偏的。）</em></li>
+      <li>现在完全去掉加权（<code class="inline">w = 1</code>）再跑。几个一致？<em>（2/5。）</em></li>
+      <li>用三句话解释：为什么写错权重的运行在 Adam 下仍然大致收敛，什么情况下会变。<em>（Adam 按二阶矩归一化，所以梯度被统一缩放基本被它吃掉；换成 SGD 差异会显著放大，所以这份宽容是优化器的性质，不是可以省略加权的许可。）</em></li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <span class="label">本周这些数字的来源</span>
+    本章所有数字都由 <code class="inline">scripts/w7_cnn_experiment.py</code> 产出并写入 <code class="inline">outputs/w7_cnn.json</code>：五个架构 × 五个种子，外加平移探针、跨种子混淆矩阵、感受野与形状断言、四种梯度累积权重写法，以及内存扫描。数据是 <code class="inline">sklearn.datasets.load_digits</code>，整个实验<strong>完全离线、无任何外部下载</strong>。
+  </div>
+</div>
+
+<div class="footer">
+  <p>AI 应用开发 —— 第 7 章 · 卷积神经网络与计算机视觉应用</p>
+  <p>本章借助 AI 辅助生成；教师可根据班级情况调整。</p>
+</div>
+
+</div>
+</body>
+</html>
