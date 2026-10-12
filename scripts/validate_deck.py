@@ -3,16 +3,29 @@
 Usage:
     python scripts/validate_deck.py lectures/week-01/lecture-en.pptx [more.pptx ...]
 
-Reports slide count and, for files whose name ends in -en.pptx, any slide that
-still contains CJK characters (a sign that a zh/en field was swapped).
+Per deck it prints the slide count and a language verdict chosen by the file
+suffix — the same suffix the builder uses for the output language:
+
+  -en.pptx   no CJK anywhere; Chinese on a slide means a zh/en field got swapped
+  -zh.pptx   every slide carries Chinese
+  -bi.pptx   every slide carries *both* scripts (the whole point of the deck:
+             one page must serve the international students and the swap-in
+             reading for everyone else, without a second file)
+
+Any deck that embeds media also fails.  Every slide in this course is drawn from
+native shapes and charts — there is not a single picture in the package — so a
+`ppt/media/` part means something was pasted in by hand and will not survive the
+next rebuild from the spec.
 """
 
 import re
 import sys
+import zipfile
 
 from pptx import Presentation
 
 CJK = re.compile(r"[\u4e00-\u9fff]")
+LATIN = re.compile(r"[A-Za-z]{2,}")
 
 
 def slide_text(slide):
@@ -30,14 +43,26 @@ def slide_text(slide):
 def check(path):
     prs = Presentation(path)
     n = len(prs.slides)
-    leaks = []
+    pages = [slide_text(s) for s in prs.slides]
+
     if path.endswith("-en.pptx"):
-        for i, s in enumerate(prs.slides, 1):
-            if CJK.search(slide_text(s)):
-                leaks.append(i)
-    ok = "OK" if not leaks else "LEAK"
-    print(f"{ok:4}  {path}  slides={n}  cjk_leak={leaks if leaks else 'none'}")
-    return not leaks
+        bad, what = [i for i, t in enumerate(pages, 1) if CJK.search(t)], "cjk_leak"
+    elif path.endswith("-zh.pptx"):
+        bad, what = [i for i, t in enumerate(pages, 1) if not CJK.search(t)], "no_cjk"
+    elif path.endswith("-bi.pptx"):
+        bad = [i for i, t in enumerate(pages, 1)
+               if not (CJK.search(t) and LATIN.search(t))]
+        what = "monolingual"
+    else:
+        bad, what = [], "cjk_leak"
+
+    media = [p for p in zipfile.ZipFile(path).namelist()
+             if p.startswith("ppt/media/")]
+
+    ok = not bad and not media
+    print(f"{'OK' if ok else 'FAIL':4}  {path}  slides={n}  "
+          f"{what}={bad if bad else 'none'}  media={len(media)}")
+    return ok
 
 
 if __name__ == "__main__":

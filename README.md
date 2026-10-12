@@ -106,7 +106,8 @@ single source of truth for this repo's scope and sequencing.
 ai-application-development/
 ├── README.md                  ← you are here
 ├── syllabus.md                ← full bilingual syllabus outline — this repo's 口径源
-├── lectures/                  ← original weekly slide decks (EN + CN), week-XX/lecture-{en,zh}.pptx
+├── lectures/                  ← weekly slide decks, week-XX/lecture-{en,zh}.pptx
+│                                  + lecture-bi.pptx for Week 5–8 (one page, both languages)
 ├── lesson-plans/              ← original lesson plans (90-min lecture + 80-min lab), EN + CN
 ├── textbook/                  ← original bilingual textbook chapters
 ├── labs/                      ← student-facing lab materials
@@ -124,7 +125,8 @@ ai-application-development/
 ├── scripts/
 │   ├── build_deck.py          ← deck generator (native shapes only — no image can fail to display)
 │   ├── deck_specs/week-XX.py  ← language-neutral spec, one per week
-│   ├── validate_deck.py       ← page-count / CJK-leak / media-file checker
+│   ├── validate_deck.py       ← page-count / language-parity / media-file checker
+│   ├── qa_deck_layout.py      ← rendered-geometry QA (collisions, overflow, straddles)
 │   └── download_cs224n.sh     ← one-click downloader for all 19 CS224n slide PDFs
 ├── THIRD_PARTY_NOTICES.md     ← attribution & redistribution terms for bundled materials
 └── LICENSE                    ← CC BY-NC-SA 4.0 (this repo's own materials)
@@ -144,24 +146,28 @@ Every week ships four assets, each in **English** and **Chinese** (or bilingual)
 
 | Folder | What's inside | Files per week |
 |---|---|---|
-| `lectures/` | the slide deck students see in class (27–30 slides) | `lecture-en.pptx`, `lecture-zh.pptx` |
+| `lectures/` | the slide deck students see in class (27–30 slides) | `lecture-en.pptx`, `lecture-zh.pptx` (+ `lecture-bi.pptx`, W5–8) |
 | `lesson-plans/` | lecture plan + lab plan (objectives, timing, activities, rubric) | `lecture-{en,zh}.html`, `lab-{en,zh}.html` |
 | `textbook/` | self-contained bilingual chapter notes (8 sections + practice) | `chapter-XX/{en,zh}.html` |
 | `labs/` | the student-facing lab guide | `lab-handout.md` |
 
-**Currently published (Week 1–6 = CU1–CU6, 实验 0–5):**
+**Currently published (Week 1–8 = CU1–CU8, 实验 0–7):**
 
-| Week | Deck (EN+CN) | Lesson plans | Textbook | Lab handout |
-|:---:|:---:|:---:|:---:|:---:|
-| 1 | ✅ | ✅ | ✅ | ✅ |
-| 2 | ✅ | ✅ | ✅ | ✅ |
-| 3 | ✅ | ✅ | ✅ | ✅ |
-| 4 | ✅ | ✅ | ✅ | ✅ |
-| 5 | ✅ | ✅ | ✅ | ✅ |
-| 6 | ✅ | ✅ | ✅ | ✅ |
-| 7–16 | — | — | — | — (landing weekly) |
+| Week | Deck (EN+CN) | Bilingual deck | Lesson plans | Textbook | Lab handout |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 1 | ✅ | — | ✅ | ✅ | ✅ |
+| 2 | ✅ | — | ✅ | ✅ | ✅ |
+| 3 | ✅ | — | ✅ | ✅ | ✅ |
+| 4 | ✅ | — | ✅ | ✅ | ✅ |
+| 5 | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 6 | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 7 | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 8 | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 9–16 | — | — | — | — | — (landing weekly) |
 
-Decks are built by `scripts/build_deck.py` from a language-neutral spec (`scripts/deck_specs/week-XX.py`) — every visual is a native PowerPoint shape, table or chart, so **no image ever fails to display** (0 media files per deck). `scripts/validate_deck.py` checks the page count, the EN/CN parity and CJK leakage on every build.
+**`lecture-bi.pptx` (Week 5–8)** is the mixed-cohort deck: one page carrying both languages instead of two files, so a slide shown in an English-medium class still reads for anyone who needs the Chinese. English keeps the full size of the monolingual deck; the Chinese sits directly under it as a second, smaller line in grey, and on dark fills it switches to a light tint so it stays legible. Nothing is dropped to make room — the deck has the same page count as `lecture-en` / `lecture-zh` (29 / 27 / 29 / 30 for W5–8).
+
+Decks are built by `scripts/build_deck.py` from a language-neutral spec (`scripts/deck_specs/week-XX.py`) — every visual is a native PowerPoint shape, table or chart, so **no image ever fails to display** (0 media files per deck). The spec picks its language at build time: `-en`, `-zh`, or `-bi`, where `-bi` renders the same spec bilingually with no per-slide edits. `scripts/validate_deck.py` checks the page count, the language verdict per suffix (EN = no CJK, ZH = some CJK, BI = both on every slide) and media files; `scripts/qa_deck_layout.py` renders the deck and checks the laid-out geometry — text collisions, text running out of the card it sits in (vertically *and* sideways), off-canvas lines and lines straddling the header rule.
 
 ### Lab Handouts 实验指导书 — `labs/week-XX/lab-handout.md`
 
@@ -223,11 +229,12 @@ This repo grows with the live semester — one week of courseware lands roughly 
 
 - [x] Curated slide pack: MIT 6.S191 (bundled) + CS224n downloader
 - [x] **Week 1–6 — module 1 and the first half of module 2** (decks EN+CN, lesson plans, textbook chapters, lab handouts 实验 0–5)
-- [x] Deck generator with zero media files (`scripts/build_deck.py` + `validate_deck.py`)
+- [x] **Week 7 — CNNs & computer vision** (实验 6: CNN classification + confusion-matrix error analysis)
+- [x] **Week 8 — sequence models & text data** (实验 7)
+- [x] **Bilingual decks for Week 5–8** — `lecture-bi.pptx`: one page carrying both languages, same page count as the EN/CN pair
+- [x] Deck generator with zero media files (`scripts/build_deck.py` + `validate_deck.py` + `qa_deck_layout.py`)
 - [x] Capstone converted to an **individual** project (brief, rubrics, milestones, templates)
-- [ ] **Week 7 — CNNs & computer vision** (实验 6: CNN classification + confusion-matrix error analysis) *(next)*
-- [ ] **Week 8 — sequence models & text data** (实验 7)
-- [ ] **Weeks 9–12** — transfer learning, Transformers, LLM prompting, RAG
+- [ ] **Weeks 9–12** — transfer learning, Transformers, LLM prompting, RAG *(next)*
 - [ ] **Weeks 13–16** — deployment, MLOps, responsible AI, capstone acceptance
 - [ ] Starter notebooks for weeks 2–16 (week-01 shipped)
 - [ ] Micro-lesson video series (animated, 1080p)
