@@ -115,6 +115,9 @@ ai-application-development/
 │   └── week-XX/
 │       ├── lab-handout.md     ← weekly lab guides (Parts A–F, checkpoints, rubric)
 │       └── starter-notebook.ipynb, env-check.py, setup-guide.html   ← week-01
+├── docs/
+│   └── repo-handbook.md         ← student Git handbook — where to submit, the weekly
+│                                  workflow, commit-message rules, troubleshooting (EN + CN)
 ├── projects/
 │   └── capstone/              ← individual final project: brief, project &
 │       │                         defence rubrics, weekly milestones, DATA/MODEL_CARD/DEVLOG templates
