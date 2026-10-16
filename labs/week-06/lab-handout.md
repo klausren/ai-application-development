@@ -437,7 +437,7 @@ git commit -m "feat: complete lab 05 (six-arm overfitting and regularisation stu
 git push origin main
 ```
 
-Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
+**Pushing to GitHub is the submission** — there is nothing to upload anywhere else. **A commit hash counts as your timestamp**, not the file's last-modified time.
 
 ## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
 

@@ -188,7 +188,8 @@ Late policy: −10% per day, max 3 days, then 0.
 
 ## 6. Submission · 提交方式
 
-Paste **two** things into the LMS box:
+**Pushing to GitHub is the submission** — there is nothing to upload anywhere else.
+Bring **two** things to the next standup:
 
 1. the record-repository URL, and
 2. the commit hash of your Lab 00 commit.
@@ -200,7 +201,7 @@ git push origin main
 git log --oneline -1        # copy this hash
 ```
 
-**A commit hash counts as your timestamp**, not the LMS upload time.
+**A commit hash counts as your timestamp**, not the file's last-modified time.
 
 ## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell or at the end of `report.md`)
 
@@ -215,7 +216,7 @@ git log --oneline -1        # copy this hash
 三个必须理解的点：
 1. **环境要隔离**：一个项目一个 conda 环境，`environment.yml` 入库，换机器能重建。
 2. **可复现性三要素**：固定种子、集中配置、版本管理。缺一项，结果就无法被追溯，别人（包括三天后的你自己）复算不出来。
-3. **Git 提交就是时间戳**——截止以 commit 为准，不是以平台上传时间为准；记录仓库的目录与命名从第一周就固定。
+3. **Git 提交就是时间戳**——截止以 commit 为准，不是以文件修改时间为准；记录仓库的目录与命名从第一周就固定。
 
 常见翻车点：kernel / 解释器选错（表现为 `import torch` 报错，其实是装的在别的环境里）；GitHub 推送用密码被拒（要用 PAT）；`.gitignore` 在第一次 commit 之后才加（等于没加）；报告里的两次输出是「手打」的而不是真跑出来的。
 

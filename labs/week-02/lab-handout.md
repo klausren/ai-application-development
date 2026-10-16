@@ -198,10 +198,10 @@ Late policy: −10% per day, max 3 days, then 0.
 git add .
 git commit -m "feat(w02): lab 1 linear regression with tensors and autograd"
 git push origin main
-git log --oneline -1        # paste this hash into the LMS box
+git log --oneline -1        # copy this hash for the standup
 ```
 
-Paste the repository URL plus the commit hash. **A commit hash counts as your timestamp**, not the LMS upload time.
+**Pushing to GitHub is the submission** — there is nothing to upload anywhere else. Bring the repository URL plus the commit hash to the standup. **A commit hash counts as your timestamp**, not the file's last-modified time.
 
 ## 7. Exit Ticket · 课后反思 (answer at the end of `report.md`)
 

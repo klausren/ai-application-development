@@ -1,17 +1,18 @@
 # Lab 04 · Training Loop, Loss and Optimizer — the 3 × 3 controlled experiment
+
 > **AI Application Development (52015CC3BV)** · School of Software (软件学院), Dalian Neusoft University of Information · Week 5 Lab (80 min) · English with Chinese summary at the end · 中文摘要见文末
 >
 > Official lab number: **实验 4** (this is the Week 5 lab). Module 2 opens here.
 
-| | |
-|---|---|
-| **Week / 周次** | 5 |
-| **Duration** | 80 min lab + 10 min quiz & wrap-up |
-| **Module** | 2 · Core Deep Learning: Techniques and Model Training (Week 5–8) — first week |
-| **Stack** | Python 3.11, PyTorch 2.x, scikit-learn (`load_digits`), matplotlib |
-| **Dataset** | `sklearn.datasets.load_digits` — 1,797 samples × 64 raw pixel features, 10 classes (ships with scikit-learn, no download) |
+|                  |                                                                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| **Week / 周次**    | 5                                                                                                                               |
+| **Duration**     | 80 min lab + 10 min quiz & wrap-up                                                                                              |
+| **Module**       | 2 · Core Deep Learning: Techniques and Model Training (Week 5–8) — first week                                                   |
+| **Stack**        | Python 3.11, PyTorch 2.x, scikit-learn (`load_digits`), matplotlib                                                              |
+| **Dataset**      | `sklearn.datasets.load_digits` — 1,797 samples × 64 raw pixel features, 10 classes (ships with scikit-learn, no download)       |
 | **Deliverables** | `lab-05.ipynb` + `train_sweep.py`, the 3 × 3 hyper-parameter table, loss/accuracy curves, one "does not converge" debugging log |
-| **Weight** | Formative: in-class labs (实验 0–13) = 15 marks of the course (this lab is 1/14 of them) |
+| **Weight**       | Formative: in-class labs (实验 0–13) = 15 marks of the course (this lab is 1/14 of them)                                          |
 
 ## 1. Learning Objectives · 学习目标
 
@@ -52,7 +53,7 @@ print("using", device)
 
 When you are done, compare with this page of the deck: **slide p17** (the flow diagram). Score yourself honestly and write one sentence next to any step you got wrong.
 
-> **Checkpoint A** — your handwritten five steps, photographed or typed into a Markdown cell, with the corrected version beside it.
+> **Checkpoint A** — your handwritten five steps, photographed or typed into a Markdown cell, with the corrected version beside it.  
 > **Pitfall**: the step people drop is step 1, `optimizer.zero_grad()`. If you dropped it, say so — this is the single most common bug in the course.
 
 **Why step 1 matters.** PyTorch *accumulates* gradients into `.grad` by default; it does not overwrite them. Run this and watch the number grow:
@@ -206,11 +207,11 @@ The gap looks small on an untrained model. Let it train for 30 epochs and the tw
 
 Now the controlled experiment. **Nine runs: 3 optimizers × 3 learning rates.** Exactly two variables change; the data, the split, the network, the batch size, the epoch count and the initial weights are all pinned.
 
-| | `lr=1e-1` | `lr=1e-3` | `lr=1e-5` |
-|---|---|---|---|
-| **SGD** | run 1 | run 2 | run 3 |
-| **SGD + momentum (0.9)** | run 4 | run 5 | run 6 |
-| **Adam** | run 7 | run 8 | run 9 |
+|                          | `lr=1e-1` | `lr=1e-3` | `lr=1e-5` |
+| ------------------------ | --------- | --------- | --------- |
+| **SGD**                  | run 1     | run 2     | run 3     |
+| **SGD + momentum (0.9)** | run 4     | run 5     | run 6     |
+| **Adam**                 | run 7     | run 8     | run 9     |
 
 ```python
 import json
@@ -243,21 +244,22 @@ with open("grid_results.json", "w") as f:   # evidence, not a screenshot
     json.dump([{k: v for k, v in r.items() if k != "history"} for r in results], f, indent=2)
 ```
 
+
 > **Checkpoint C** — all nine lines printed. Before moving on, answer in writing: which runs did **not** converge, and what is the symptom of each?
 
 The instructor's reference run (same code, same seed) gives this table. Your numbers will differ slightly — machine, PyTorch version and thread count all move the last digit. **Do not copy these numbers into your submission.**
 
-| # | Optimizer | lr | Min val loss | Max val acc | Verdict |
-|:--:|---|---|---:|---:|---|
-| 1 | SGD | 1e-1 | 0.209 | 0.944 | converges, but below the winner |
-| 2 | SGD | 1e-3 | 0.434 | 0.906 | converging too slowly for 30 epochs |
-| 3 | SGD | 1e-5 | 2.853 | 0.153 | crawls — loss barely moves |
-| 4 | SGD + momentum | 1e-1 | 1.701 | 0.300 | **diverges** — train loss rises 2.13 → 2.31 |
-| 5 | SGD + momentum | 1e-3 | 0.116 | 0.972 | converges well |
-| 6 | SGD + momentum | 1e-5 | 1.871 | 0.364 | crawls |
-| 7 | Adam | 1e-1 | 1.612 | 0.361 | **unstable** — first loss already 7.35 |
-| 8 | **Adam** | **1e-3** | **0.076** | **0.983** | **best on both metrics** |
-| 9 | Adam | 1e-5 | 2.220 | 0.239 | crawls |
+|  #  | Optimizer      | lr       | Min val loss | Max val acc | Verdict                                     |
+| :-: | -------------- | -------- | -----------: | ----------: | ------------------------------------------- |
+|  1  | SGD            | 1e-1     |        0.209 |       0.944 | converges, but below the winner             |
+|  2  | SGD            | 1e-3     |        0.434 |       0.906 | converging too slowly for 30 epochs         |
+|  3  | SGD            | 1e-5     |        2.853 |       0.153 | crawls — loss barely moves                  |
+|  4  | SGD + momentum | 1e-1     |        1.701 |       0.300 | **diverges** — train loss rises 2.13 → 2.31 |
+|  5  | SGD + momentum | 1e-3     |        0.116 |       0.972 | converges well                              |
+|  6  | SGD + momentum | 1e-5     |        1.871 |       0.364 | crawls                                      |
+|  7  | Adam           | 1e-1     |        1.612 |       0.361 | **unstable** — first loss already 7.35      |
+|  8  | **Adam**       | **1e-3** |    **0.076** |   **0.983** | **best on both metrics**                    |
+|  9  | Adam           | 1e-5     |        2.220 |       0.239 | crawls                                      |
 
 Three things worth noticing in that table, and you should be able to explain all three:
 
@@ -346,7 +348,7 @@ Fill in your own version of the 3 × 3 table in a Markdown cell, answer the exit
 - One row per experiment, one sentence per row on why it was kept or dropped.
 - A `DEVLOG.md` entry for W5.
 
-> **Checkpoint F** — the comparison table exists in the repo with at least three rows, each row changing exactly one thing, and the best row named. *"None of them beat the baseline, and here is what the curves say"* is an acceptable submission. Silence is not.
+> **Checkpoint F** — the comparison table exists in the repo with at least three rows, each row changing exactly one thing, and the best row named. *"None of them beat the baseline, and here is what the curves say"* is an acceptable submission. Silence is not.  
 > **Pitfall**: a milestone you push next week is a milestone you did not do. Late = −2 project points, each time, up to −20.
 
 ## 4. Deliverables Checklist · 交付清单
@@ -362,14 +364,14 @@ Fill in your own version of the 3 × 3 table in a Markdown cell, answer the exit
 
 ## 5. Grading Rubric · 评分标准 (100 pts)
 
-| Criterion | Pts | What "full marks" looks like |
-|---|:---:|---|
-| Five-step loop from memory (Part A) | 15 | all five steps correct and in order; the missing `zero_grad()` reproduced and explained |
-| Single honest run + logging (Part B) | 15 | loop is correct, log has one row per epoch with train and val, softmax pitfall reproduced with both numbers |
-| The 3 × 3 grid (Part C) | 30 | nine genuine runs, only optimizer and lr varied, results tabulated, non-converging runs identified with their symptom |
-| Curves and the verdict (Part D) | 20 | readable figures with legends; winner stated with number + comparison + mechanism; failing runs named |
-| Debugging log (Part D) | 10 | four labelled lines, learning rate checked first, evidence compared against a control run |
-| Exit ticket | 10 | three questions answered in your own words |
+| Criterion                            | Pts | What "full marks" looks like                                                                                          |
+| ------------------------------------ | :-: | --------------------------------------------------------------------------------------------------------------------- |
+| Five-step loop from memory (Part A)  |  15 | all five steps correct and in order; the missing `zero_grad()` reproduced and explained                               |
+| Single honest run + logging (Part B) |  15 | loop is correct, log has one row per epoch with train and val, softmax pitfall reproduced with both numbers           |
+| The 3 × 3 grid (Part C)              |  30 | nine genuine runs, only optimizer and lr varied, results tabulated, non-converging runs identified with their symptom |
+| Curves and the verdict (Part D)      |  20 | readable figures with legends; winner stated with number + comparison + mechanism; failing runs named                 |
+| Debugging log (Part D)               |  10 | four labelled lines, learning rate checked first, evidence compared against a control run                             |
+| Exit ticket                          |  10 | three questions answered in your own words                                                                            |
 
 Late policy: −10% per day, max 3 days, then 0.
 
@@ -383,7 +385,7 @@ git commit -m "feat: complete lab 04 (training loop, 3x3 optimizer x lr grid)"
 git push origin main
 ```
 
-Then paste your repo URL into the LMS submission box. **A commit hash counts as your timestamp**, not the LMS upload time.
+**Pushing to GitHub is the submission** — there is nothing to upload anywhere else. **A commit hash counts as your timestamp**, not the file's last-modified time.
 
 ## 7. Exit Ticket · 课后反思 (answer in the last Markdown cell)
 
