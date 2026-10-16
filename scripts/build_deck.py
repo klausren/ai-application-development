@@ -479,14 +479,24 @@ def header(slide, title, right, lang, subtitle=None):
     else:
         rect(slide, 0, 0, SW, band, fill=WHITE)
         rect(slide, 0, band, SW, 0.04, fill=BORDER)
+        # A Chinese title's *line box* is about a fifth taller than the Latin one
+        # the 0.62 / 1.38 pair was tuned against — the CJK fallback font carries
+        # deeper ascent and descent.  Measured from the render, a 19 pt Chinese
+        # title's box runs from y=0.71 to y=1.68, so a subtitle at 1.38 landed on
+        # its descenders (that is the COLLIDE the QA reports on every zh page that
+        # has both).  Fold the title up and drop the subtitle, but only when the
+        # title really is CJK: Latin decks keep the exact geometry they had.
+        cjk = any("\u3000" <= ch <= "\u303f" or "\u3400" <= ch <= "\u9fff"
+                  or "\uff00" <= ch <= "\uffef" for ch in str(L(title, lang)))
         if subtitle:
-            text(slide, M, 0.62, HEAD_BOX, 0.72, L(title, lang), size=19,
+            ty, sy = (0.30, 1.44) if cjk else (0.62, 1.38)
+            text(slide, M, ty, HEAD_BOX, 0.72, L(title, lang), size=19,
                  bold=True, color=DEEP)
-            text(slide, M, 1.38, HEAD_BOX, 0.5, L(subtitle, lang), size=11.5,
+            text(slide, M, sy, HEAD_BOX, 0.5, L(subtitle, lang), size=11.5,
                  color=MUTED)
         else:
-            text(slide, M, 0.71, HEAD_BOX, 0.72, L(title, lang), size=19,
-                 bold=True, color=DEEP)
+            text(slide, M, 0.41 if cjk else 0.71, HEAD_BOX, 0.72,
+                 L(title, lang), size=19, bold=True, color=DEEP)
     if right and not BI:
         text(slide, SW - M - HEAD_RIGHT_W, 0.82, HEAD_RIGHT_W, 0.5,
              L(right, lang), size=11, color=MUTED, align=PP_ALIGN.RIGHT)
@@ -1448,6 +1458,13 @@ RENDERERS = {
     "checklist": r_checklist, "quiz": r_quiz, "summary": r_summary,
     "closing": r_closing,
 }
+
+# The eleven vector figures ("kind": "conv", "descent1d", ...) live in their own
+# module and are handed this one rather than importing it — see the header of
+# deck_figures.py for why that direction matters.
+import deck_figures                                        # noqa: E402
+
+deck_figures.register(sys.modules[__name__])
 
 
 def build(spec, out_path, lang):

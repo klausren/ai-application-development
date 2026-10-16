@@ -92,7 +92,7 @@ SPEC = {
                        "en": "Manufacture overfitting first · then apply four remedies · quantify with validation loss"}},
          ]},
 
-        # ------------------------------------------------- Part 01 (p3-7) ---
+        # ------------------------------------------------- Part 01 (p3-8) ---
         {"type": "section", "num": "01",
          "title": {"zh": "评估指标：选对那个数字", "en": "Metrics: Choosing the Right Number"},
          "title_en": {"zh": "Metrics", "en": "Metrics"},
@@ -153,6 +153,38 @@ SPEC = {
                    "en": "4) Is there a downstream safety net, or is this the only gate?"},
               ]},
          ]},
+
+        # The four cells drawn before the table that names them: a student who
+        # cannot place TP / FP / FN / TN on a grid cannot use the table either.
+        # Metrics and the majority-class baseline are computed in the renderer
+        # from these four numbers, so the picture cannot drift from its own maths.
+        {"type": "figure", "kind": "cm", "h": 11.6, "top": 3.30,
+         "title": {"zh": "先把这四个格子数对：命中 / 误报 / 漏报 / 正确排除",
+                   "en": "Count These Four Cells First: Hit, False Alarm, Miss, Reject"},
+         "subtitle": {"zh": "四个指标只是这四个格子上的算术题",
+                      "en": "Every metric is just arithmetic on these four cells"},
+         "right": MOD,
+         "tp": 48, "fn": 12, "fp": 8, "tn": 132,
+         "row_cap": {"zh": "真实", "en": "Actual"},
+         "col_cap": {"zh": "模型判", "en": "Predicted"},
+         "row_labels": [{"zh": "缺陷 60", "en": "Defect 60"},
+                        {"zh": "正常 140", "en": "Fine 140"}],
+         "col_labels": [{"zh": "判为缺陷 56", "en": "Pred. defect 56"},
+                        {"zh": "判为正常 144", "en": "Pred. fine 144"}],
+         "tags": {"TP": {"zh": "命中", "en": "hit"},
+                  "FP": {"zh": "误报", "en": "false alarm"},
+                  "FN": {"zh": "漏报", "en": "missed"},
+                  "TN": {"zh": "正确排除", "en": "correct reject"}},
+         "metrics_cap": {"zh": "由这四个格子算出", "en": "Derived from those four cells"},
+         "m_acc": {"zh": "判对的比例", "en": "share it got right"},
+         "m_prec": {"zh": "判为缺陷的里面有多少是真的",
+                    "en": "of those flagged, how many were real"},
+         "m_rec": {"zh": "真正的缺陷找出来多少",
+                   "en": "of the real defects, how many it found"},
+         "m_f1": {"zh": "精确率与召回率的调和平均",
+                  "en": "harmonic mean of the two"},
+         "baseline": {"zh": "200 件里 140 件是好的：全判「正常」就已经有 {base}。",
+                      "en": "140 of 200 are fine: answering \"fine\" every time already scores {base}."}},
 
         {"type": "table",
          "title": {"zh": "四个格子推出全部指标", "en": "Four Cells Generate Every Metric"},
@@ -313,7 +345,7 @@ SPEC = {
          "note": {"zh": "汇报时给一个数字是不够的：写清「在什么阈值下、哪个类别的 P/R、类别比例多少」，否则无法被别人复核。",
                   "en": "One number is not a report. State the threshold, the per-class P/R and the class ratio — otherwise nobody can reproduce it."}},
 
-        # ------------------------------------------------- Part 02 (p8-12) --
+        # ------------------------------------------------- Part 02 (p9-12) --
         {"type": "section", "num": "02",
          "title": {"zh": "评估协议：数字可不可信", "en": "Protocol: Can the Number Be Trusted"},
          "title_en": {"zh": "Protocol", "en": "Protocol"},
@@ -417,7 +449,7 @@ SPEC = {
          "note": {"zh": "K 折不是为了让分数更高，而是为了让「分数不确定性」被看见。",
                   "en": "K-fold does not raise the score; it makes the uncertainty in the score visible."}},
 
-        # ------------------------------------------------- Part 03 (p13-17) -
+        # ------------------------------------------------- Part 03 (p13-18) -
         {"type": "section", "num": "03",
          "title": {"zh": "偏差-方差：按证据诊断", "en": "Bias and Variance: Diagnose with Evidence"},
          "title_en": {"zh": "Diagnosis", "en": "Diagnosis"},
@@ -430,6 +462,37 @@ SPEC = {
               "sub": {"zh": "训练与验证必须画在同一张图上", "en": "Train and validation on one chart"}},
              {"title": {"zh": "诊断先于开药", "en": "Diagnose Before Prescribing"},
               "sub": {"zh": "欠拟合和过拟合的对策相反", "en": "Underfit and overfit need opposite remedies"}},
+         ]},
+
+        # Shape before vocabulary.  These panels are deliberately schematic and
+        # claim no numbers: the compare below names the three states, and the two
+        # measured charts after it carry this week's real curves.  Students are
+        # asked to *read* a curve, so give them the shapes to read first.
+        {"type": "figure", "kind": "curves", "h": 12.2, "top": 3.30,
+         "title": {"zh": "先认形状：欠拟合 / 刚好 / 过拟合",
+                   "en": "Read the Shapes First: Under-, Well- and Over-fitted"},
+         "subtitle": {"zh": "这三张图只画形状，不声称任何数值",
+                      "en": "Three shapes only — these panels claim no particular numbers"},
+         "right": MOD,
+         "x_axis": {"zh": "训练过程 (epoch) →", "en": "training progress (epoch) →"},
+         "labels": {"train": {"zh": "训练集", "en": "train"},
+                    "val": {"zh": "验证集", "en": "validation"}},
+         "panels": [
+             {"shape": "underfit", "accent": "6B7280",
+              "title": {"zh": "欠拟合", "en": "Underfitting"},
+              "sub": {"zh": "两条线都高、都平、贴在一起",
+                      "en": "both high, both flat, close together"},
+              "verdict": {"zh": "还没学会", "en": "Has not learned yet"}},
+             {"shape": "good", "accent": "059669",
+              "title": {"zh": "刚好", "en": "Good fit"},
+              "sub": {"zh": "两条线都降下来，留一条稳定的缝",
+                      "en": "both fall, then a small stable gap"},
+              "verdict": {"zh": "缝不再变大", "en": "The gap stops growing"}},
+             {"shape": "overfit", "accent": "B91C1C",
+              "title": {"zh": "过拟合", "en": "Overfitting"},
+              "sub": {"zh": "训练线继续降，验证线掉头向上",
+                      "en": "train keeps falling, validation turns up"},
+              "verdict": {"zh": "分叉点就是该停的地方", "en": "The fork is where to stop"}},
          ]},
 
         {"type": "compare",
@@ -560,7 +623,7 @@ SPEC = {
          "note": {"zh": "本课程要求：把「诊断依据」写进实验报告，而不是只写结论。依据 = 训练/验证损失曲线的具体轮次与数值。",
                   "en": "Course rule: put the evidence in the report, not just the verdict. Evidence = concrete epochs and values from the train/validation loss curves."}},
 
-        # ------------------------------------------------- Part 04 (p18-23) -
+        # ------------------------------------------------- Part 04 (p19-23) -
         {"type": "section", "num": "04",
          "title": {"zh": "正则化：四个刹车及其代价", "en": "Regularization: Four Brakes and Their Cost"},
          "title_en": {"zh": "Regularization", "en": "Regularization"},
@@ -797,7 +860,7 @@ SPEC = {
          "note": {"zh": "这正是官方教案里那条思政要求的落点：实事求是——如实报告不成功的实验，是科研诚信的基本要求。",
                   "en": "This is exactly where the official lesson plan's value requirement lands: report unsuccessful experiments honestly — it is a basic requirement of research integrity."}},
 
-        # ------------------------------------------------- Part 05 (p24-27) -
+        # ------------------------------------------------- Part 05 (p24-29) -
         {"type": "section", "num": "05",
          "title": {"zh": "Lab · 实验 5 过拟合复现与正则化对比", "en": "Lab · Overfitting Reproduction and Regularization"},
          "title_en": {"zh": "Hands-On Lab", "en": "Hands-On Lab"},

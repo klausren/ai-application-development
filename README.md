@@ -128,6 +128,7 @@ ai-application-development/
 ├── scripts/
 │   ├── build_deck.py          ← deck generator (native shapes only — no image can fail to display)
 │   ├── deck_specs/week-XX.py  ← language-neutral spec, one per week
+│   ├── deck_figures.py        ← the 9 vector diagrams (gradient descent, convolution, …) as native shapes
 │   ├── validate_deck.py       ← page-count / language-parity / media-file checker
 │   ├── qa_deck_layout.py      ← rendered-geometry QA (collisions, overflow, straddles)
 │   └── download_cs224n.sh     ← one-click downloader for all 19 CS224n slide PDFs
@@ -149,7 +150,7 @@ Every week ships four assets, each in **English** and **Chinese** (or bilingual)
 
 | Folder | What's inside | Files per week |
 |---|---|---|
-| `lectures/` | the slide deck students see in class (27–30 slides) | `lecture-en.pptx`, `lecture-zh.pptx` (+ `lecture-bi.pptx`, W5–8) |
+| `lectures/` | the slide deck students see in class (29–32 slides) | `lecture-en.pptx`, `lecture-zh.pptx` (+ `lecture-bi.pptx`, W5–8) |
 | `lesson-plans/` | lecture plan + lab plan (objectives, timing, activities, rubric) | `lecture-{en,zh}.html`, `lab-{en,zh}.html` |
 | `textbook/` | self-contained bilingual chapter notes (8 sections + practice) | `chapter-XX/{en,zh}.html` |
 | `labs/` | the student-facing lab guide | `lab-handout.md` |
@@ -236,6 +237,7 @@ This repo grows with the live semester — one week of courseware lands roughly 
 - [x] **Week 8 — sequence models & text data** (实验 7)
 - [x] **Bilingual decks for Week 5–8** — `lecture-bi.pptx`: one page carrying both languages, same page count as the EN/CN pair
 - [x] Deck generator with zero media files (`scripts/build_deck.py` + `validate_deck.py` + `qa_deck_layout.py`)
+- [x] **9 vector diagrams for Week 5–8** — gradient-descent steps, a 1:6 ravine (SGD vs Adam), sliding convolution, max/mean pooling, receptive field, a confusion matrix, the three fit regimes, the text→tensor shape chain, and padding/masking. Drawn from native shapes in `scripts/deck_figures.py`, so the decks still contain **no image file at all** and every diagram scales to any resolution without blurring.
 - [x] Capstone converted to an **individual** project (brief, rubrics, milestones, templates)
 - [ ] **Weeks 9–12** — transfer learning, Transformers, LLM prompting, RAG *(next)*
 - [ ] **Weeks 13–16** — deployment, MLOps, responsible AI, capstone acceptance
@@ -336,7 +338,7 @@ Full details in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 | 目录 | 内容 |
 |---|---|
 | [`syllabus.md`](syllabus.md) | 课程大纲（与学校四份官方文档同口径，本仓库的口径源） |
-| `lectures/week-XX/` | 中英双版幻灯片（原生形状，零图片） |
+| `lectures/week-XX/` | 中英双版幻灯片（W5–8 另出双语版；含梯度下降、卷积、池化、感受野、混淆矩阵、形状链路等矢量示意图，全部由原生形状绘制，**零图片文件**） |
 | `lesson-plans/week-XX/` | 讲授教案与实验教案（中英双版） |
 | `textbook/chapter-XX/` | 双语教材章节（8 节 + 练习） |
 | `labs/week-XX/lab-handout.md` | 实验指导书（实验 0–13） |

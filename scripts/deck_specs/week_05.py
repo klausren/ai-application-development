@@ -231,7 +231,7 @@ SPEC = {
          "note": {"zh": "记住这条判据：损失在下降、指标却不动，第一反应就去看损失函数前面的那一行有没有多做一次激活。",
                   "en": "Keep this diagnostic: if the loss falls but the metric does not move, first look at the line just above the loss call for a redundant activation."}},
 
-        # -------------------------------------------------- Part 02 (p8-12) --
+        # -------------------------------------------------- Part 02 (p8-13) --
         {"type": "section", "num": "02",
          "title": {"zh": "优化器：参数怎么更新", "en": "Optimizers: How We Update"},
          "title_en": {"zh": "Optimizer", "en": "Optimizer"},
@@ -403,7 +403,36 @@ SPEC = {
          "note": {"zh": "选择策略：先用 Adam(lr=1e-3) 拿到一个能跑通的基线，再用 SGD+momentum 精调。但「哪个更好」这个结论，必须来自你自己跑出来的对照实验，而不是这一页。",
                   "en": "Strategy: get a working baseline with Adam(lr=1e-3) first, then refine with SGD+momentum. But the verdict on which is better must come from your own experiment, not from this slide."}},
 
-        # -------------------------------------------------- Part 03 (p13-15) -
+        # -------------------------------------------------- Part 03 (p14-17) -
+
+        # The one picture this part needs: the two optimizers are not two speeds
+        # of the same thing, they are two shapes of path.  Both rates are the
+        # swept ceiling each optimizer can survive on this surface (SGD past
+        # 0.028 is thrown off the wall), and the caption says so.
+        {"type": "figure", "kind": "contour", "h": 12.0, "plot_w": 19.6,
+         "top": 3.30,
+         "title": {"zh": "同一片损失地形上，SGD 与 Adam 走出的两条路",
+                   "en": "One Loss Surface, Two Walks: SGD and Adam"},
+         "subtitle": {"zh": "同一起点、同一片地形，各自用自己扫描出的学习率上限",
+                      "en": "Same start, same surface, each at the learning rate it can survive"},
+         "right": MOD,
+         "x_range": [-1.75, 2.10], "y_range": [-0.34, 0.34], "aniso": 36,
+         "levels": [0.25, 1.0, 2.25],
+         "start": [1.90, 0.24], "start_label": "start (1.90, 0.24)",
+         "y_axis": "w2", "x_axis": "w1",
+         "paths": [
+             {"mode": "sgd", "lr": 0.022, "steps": 16, "color": "D97706",
+              "name": {"zh": "SGD", "en": "SGD"},
+              "fact": {"zh": "lr = 0.022，只有 Adam 的 1/6 · w2 每一步都变号，16 步里变了 16 次",
+                       "en": "lr = 0.022, a sixth of Adam's · w2 flips sign on all 16 of its 16 steps"}},
+             {"mode": "adam", "lr": 0.14, "steps": 16, "color": "1E4FA8",
+              "name": {"zh": "Adam", "en": "Adam"},
+              "fact": {"zh": "lr = 0.14 · w2 只变号 3 次就沉下去，16 步后基本贴到谷底",
+                       "en": "lr = 0.14 · w2 flips just 3 times, settles, and ends at the bottom"}},
+         ],
+         "note": {"zh": "损失 f(w1, w2) = w1² + 36w2²，等高线是一条约 1:6 的窄谷。两个学习率都是各自扫描出来的上限：SGD 一超过 0.028 就被陡壁弹飞，只能压到 0.022，代价是沿谷底几乎走不动——「对学习率更宽容」在这里是看得见的。",
+                  "en": "Loss f(w1, w2) = w1^2 + 36w2^2, a narrow roughly 1:6 valley. Each rate is that optimizer's own swept ceiling: past 0.028 SGD is thrown off the steep wall, so it is pinned at 0.022 and can barely crawl along the floor. \"More forgiving of the learning rate\" is visible here."}},
+
         {"type": "section", "num": "03",
          "title": {"zh": "学习率：最重要的超参数", "en": "Learning Rate: The First Hyper-parameter"},
          "title_en": {"zh": "Learning rate", "en": "Learning rate"},
@@ -448,6 +477,32 @@ SPEC = {
                   {"zh": "PyTorch 里用 lr_scheduler 实现", "en": "Implemented with lr_scheduler in PyTorch"}]},
          ]},
 
+        # Mechanism before evidence: the three panels share one curve and one
+        # start, so the only thing moving is the step size.  The cards above say
+        # the symptoms in words; the measured chart below shows the same three
+        # regimes for real.
+        {"type": "figure", "kind": "descent1d", "h": 12.0, "top": 3.30,
+         "title": {"zh": "梯度下降：一步走多大，决定它落在哪",
+                   "en": "Gradient Descent: How Big a Step Decides Where You Land"},
+         "subtitle": {"zh": "同一段损失曲线，同一个起点，只改学习率",
+                      "en": "Same loss curve, same start — only the learning rate changes"},
+         "right": MOD,
+         "w_range": [0.0, 6.0], "loss_max": 9.0, "wstar": "w*",
+         "y_axis": "loss L(w)", "x_axis": "w ->",
+         "panels": [
+             {"title": {"zh": "太小", "en": "Too small"}, "sub": "lr = 0.06  ·  8 steps",
+              "w0": 0.40, "lr": 0.06, "steps": 8, "color": "6B7280",
+              "verdict": {"zh": "走了 8 步，还没到 w*", "en": "8 steps in, still short of w*"}},
+             {"title": {"zh": "刚好", "en": "Just right"}, "sub": "lr = 0.45  ·  3 steps",
+              "w0": 0.40, "lr": 0.45, "steps": 3, "color": "059669",
+              "verdict": {"zh": "3 步落到最低点", "en": "At the bottom in 3 steps"}},
+             {"title": {"zh": "太大", "en": "Too large"}, "sub": "lr = 1.15  ·  diverges",
+              "w0": 1.20, "lr": 1.15, "steps": 5, "color": "B91C1C",
+              "verdict": {"zh": "每走一步，离谷底更远", "en": "Every step lands further away"}},
+         ],
+         "note": {"zh": "损失 L(w) = (w − 3)²，梯度下降 w ← w − lr·2(w − 3)。三张图的曲线与起点完全一样，唯一变化的是每一步的步长。",
+                  "en": "Loss L(w) = (w - 3)^2 with plain gradient descent w <- w - lr*2(w-3). The curve and the start are identical in all three panels; the only thing that changes is the size of one step."}},
+
         {"type": "chart", "w": 19.0, "h": 11.8,
          "title": {"zh": "学习率诊断：同一模型、同一数据，只改 lr",
                    "en": "Diagnosing lr: Same Model, Same Data, Only lr Changes"},
@@ -478,7 +533,7 @@ SPEC = {
               "en": "Lab 4 requires you to produce these three curves yourself, not copy them"}],
         },
 
-        # -------------------------------------------------- Part 04 (p16-20) -
+        # -------------------------------------------------- Part 04 (p18-21) -
         {"type": "section", "num": "04",
          "title": {"zh": "训练循环五步法", "en": "The Five-Step Training Loop"},
          "title_en": {"zh": "Training loop", "en": "Training loop"},
@@ -622,7 +677,7 @@ SPEC = {
          "note": {"zh": "一条经验公式：显存 ≈ 批大小 × 单样本开销 + 模型参数 + 优化器状态（Adam 的优化器状态约为参数量的 2 倍，这就是 Adam 比 SGD 更吃显存的原因）。批大小翻倍时，学习率通常也同步放大。",
                   "en": "A useful estimate: VRAM ≈ batch size x per-sample cost + parameters + optimizer state (Adam's state is roughly twice the parameter count, which is why it costs more than SGD). When you double the batch size, you usually scale the learning rate up with it."}},
 
-        # -------------------------------------------------- Part 05 (p21-27) -
+        # -------------------------------------------------- Part 05 (p22-28) -
         {"type": "section", "num": "05",
          "title": {"zh": "Lab · 实验 4 优化器 × 学习率", "en": "Lab · Optimizers × Learning Rates"},
          "title_en": {"zh": "Hands-on: a 3 x 3 controlled experiment",
@@ -894,7 +949,7 @@ SPEC = {
                        "en": "Record one hyper-parameter suggestion from AI and the controlled run that confirmed or refuted it."}},
          ]},
 
-        # ------------------------------------------------------ quiz (p27) --
+        # ------------------------------------------------------ quiz (p29) --
         {"type": "quiz", "cols": 2,
          "title": {"zh": "随堂小测", "en": "Quick Check"},
          "right": MOD,
@@ -935,7 +990,7 @@ SPEC = {
                           {"zh": "C. 与学习率无关，只影响速度", "en": "C. Unrelated to the lr; it only affects speed"}]},
          ]},
 
-        # --------------------------------------------------- summary (p28) --
+        # --------------------------------------------------- summary (p30) --
         {"type": "summary",
          "title": {"zh": "本周小结", "en": "Week 5 Summary"},
          "right": MOD,
@@ -964,7 +1019,7 @@ SPEC = {
                        "en": "Dropout, weight decay and early stopping — making this week's training loop steadier and less prone to overfitting."}},
          ]},
 
-        # --------------------------------------------------- closing (p29) --
+        # --------------------------------------------------- closing (p31) --
         {"type": "closing",
          "quote": {"zh": "「调参不是碰运气，\n是有依据的实验设计。」",
                    "en": "\"Tuning is not luck;\nit is experimental design.\""},

@@ -145,7 +145,7 @@ SPEC = {
                          "the RNN→Transformer hook, the metric-choice ethics point, the midterm")},
          ]},
 
-        # ======================================================== Part 1 (03-07)
+        # ======================================================== Part 1 (03-08)
         {"type": "section", "num": "01",
          "title": zh("把一段文本变成一个张量", "From Text to a Tensor"),
          "title_en": zh("Part 1 · tokenise → vocabulary → encode → pad",
@@ -209,6 +209,40 @@ SPEC = {
                           "**" + _pct(SHARE_SHORT) + " of test documents never reach that length** — which is exactly the next part's problem.")],
               "tag": zh("代价马上兑现", "the bill arrives here")},
          ]},
+
+        # Part 1 in one line.  Every bug this week surfaces as "low accuracy" at
+        # the end, so the shapes need to be visible in one glance — the four step
+        # cards above name the steps, this page shows what shape each one emits.
+        {"type": "figure", "kind": "shapes", "h": 12.6, "top": 3.30,
+         "title": zh("一段文字变成张量：每一步的形状",
+                     "From a Passage to a Tensor: The Shape at Every Step"),
+         "subtitle": zh("这张图就是 Part 1 的全部内容；出错时先回到这里对一遍形状",
+                        "This picture is all of Part 1; when something breaks, check the shapes here first"),
+         "right": zh("Embedding(64) → LSTM(96)", "Embedding(64) → LSTM(96)"),
+         "box_h": 3.40,
+         "note_under": zh("748 篇短文 · 6 类 · Embedding(64) · max_len 96。"
+                          "**形状对不上时，错误不会出现在出错的那一行，而会出现在最后的准确率上。**",
+                          "748 passages · 6 classes · Embedding(64) · max_len 96. "
+                          "**A shape mismatch never surfaces on the line you broke; it surfaces in the final accuracy.**"),
+         "steps": [
+             {"title": zh("原始段落", "Passage"), "shape": "str", "color": "6B7280"},
+             {"title": zh("分词", "Tokenise"), "shape": "(96 tokens)", "color": "6B7280"},
+             {"title": zh("查词表", "Vocab → ids"), "shape": "(96,)", "color": "1E4FA8"},
+             {"title": zh("词向量", "Embedding(64)"), "shape": "(96, 64)", "color": "1E4FA8"},
+             {"title": zh("加批维", "Add batch"), "shape": "(B, 96, 64)", "color": "1E4FA8"},
+             {"title": zh("LSTM(96)", "LSTM(96)"), "shape": "(B, 96, 96)", "color": "D97706"},
+         ],
+         "lower": {"cap": zh("然后是分类头——这一段决定「读哪一个位置」",
+                             "Then the classifier head — this is where 'which position do you read' is decided"),
+                   "box_h": 2.80,
+                   "steps": [
+                       {"title": zh("掩码求均 (B, 96)", "mask + mean (B, 96)"),
+                        "color": "1E4FA8"},
+                       {"title": zh("线性层 (B, 6)", "Linear(6) (B, 6)"),
+                        "color": "1E4FA8"},
+                       {"title": zh("logits · 6 类", "logits · 6 classes"),
+                        "color": "D97706"},
+                   ]}},
 
         {"type": "code",
          "title": zh("分词与建表——只从训练集", "Tokenise and build the vocabulary — train split only"),
@@ -393,7 +427,7 @@ SPEC = {
                     f"{CJK_WS['oov'] / CJK_CH['oov']:.0f}. In practice you reach for a segmenter (jieba, etc.) "
                     f"and fall back to character level — **but you never just split on spaces and hope.**")},
 
-        # ======================================================== Part 2 (08-12)
+        # ======================================================== Part 2 (09-14)
         {"type": "section", "num": "02",
          "title": zh("填充与掩码", "Padding and Masking"),
          "title_en": zh("Part 2 · the quiet bug", "Part 2 · the quiet bug"),
@@ -547,6 +581,32 @@ SPEC = {
                     f"**so it is below chance.** Its accuracy, {ARMS['last_step'][0]:.4f}, merely looks "
                     f"「mediocre」 rather than broken. That is Part 4's metric problem.")},
 
+        # The quiet bug, drawn before it is tabulated.  Row 1 is the document (24
+        # of the 96 slots, 9 of them real); row 2 is the mask the model should be
+        # multiplying by — 1s and 0s, not a second copy of the token ids.
+        {"type": "figure", "kind": "mask", "h": 10.9, "top": 3.30,
+         "title": zh("填充与掩码：一个不报错的错",
+                     "Padding and Masking: The Error That Never Errors"),
+         "subtitle": zh("同样的代码，不同的答案——差别只在分母是 96 还是 9",
+                        "Same code, different answer — the only difference is whether the divisor is 96 or 9"),
+         "right": zh("mean_unmasked vs mean_masked",
+                     "mean_unmasked vs mean_masked"),
+         "real": 9, "width": 24,
+         "cap_len": zh("一条 96 位置的张量，这里画 24 格 · 前 9 个是真实的词",
+                       "One 96-slot tensor, 24 drawn here — the first 9 are real tokens"),
+         "row_real": zh("真实词", "real tokens"),
+         "row_pad": zh("填充", "padding"),
+         "tick": zh("位置 1 ...", "slot 1 ..."),
+         "pad_mark": zh("从这里开始是填充", "padding starts here"),
+         # Same rule as every `code` page in this deck: the listing is picked per
+         # language and the bilingual deck reads the English one.
+         "code_wrong": zh(".mean(dim=1)         # 除以 96\nout[:, -1, :]       # 读到的是填充向量",
+                          ".mean(dim=1)         # divides by 96\nout[:, -1, :]       # reads a PAD vector"),
+         "code_right": zh("masked_mean(x, m)   # 除以 9\npacked, _ = pack_padded_sequence(x, lens)",
+                          "masked_mean(x, m)   # divides by 9\npacked, _ = pack_padded_sequence(x, lens)"),
+         "note": zh("掩码不是细节：它就是「模型真的算出的数」与「你以为的数」之间的差。文档越短，填充占比越大，伤害越重。",
+                    "The mask is not a detail: it is the difference between the number the model computes and the number you meant. The shorter the document, the larger the pad share, the heavier the damage.")},
+
         {"type": "compare",
          "title": zh("掩码：一个「写了就等于没写」的错误",
                                  "Masking: the error that looks like it was never written"),
@@ -625,7 +685,7 @@ SPEC = {
               "tag": zh("同一条 bug，两组证据", "one bug, two lines of evidence")},
          ]},
 
-        # ======================================================== Part 3 (13-17)
+        # ======================================================== Part 3 (15-19)
         {"type": "section", "num": "03",
          "title": zh("训练曲线与真正的瓶颈", "Curves and the Real Bottleneck"),
          "title_en": zh("Part 3 · it overfits, and that is not the main problem",
@@ -782,7 +842,7 @@ SPEC = {
                 "**So regularisation cannot help: what is missing is samples, not constraints.**"),
          ]},
 
-        # ======================================================== Part 4 (18-22)
+        # ======================================================== Part 4 (20-24)
         {"type": "section", "num": "04",
          "title": zh("它错在哪", "Where It Goes Wrong"),
          "title_en": zh("Part 4 · recommend a number you would defend",
@@ -1015,7 +1075,7 @@ SPEC = {
                          "Then **run it** and write the outcome back — win or lose.")},
          ]},
 
-        # ======================================================== Part 5 (23-26)
+        # ======================================================== Part 5 (25-28)
         {"type": "section", "num": "05",
          "title": zh("接下来，以及 M8", "Next, and M8"),
          "title_en": zh("Part 5 · the hook for Module 3, and the midterm checkpoint",
@@ -1165,7 +1225,7 @@ SPEC = {
                     f"bare mean → masked mean is +{(ARMS['mean_masked'][0] - ARMS['mean_unmasked'][0]) * 100:.1f} points; "
                     f"`[-1]` → packed is +{(ARMS['mean_masked'][0] - ARMS['last_step'][0]) * 100:.1f} points.")},
 
-        # ============================================================ 27 quiz
+        # ============================================================ 29 quiz
         {"type": "quiz",
          "title": zh("随堂小测", "In-class quiz"),
          "right": zh("4 题 · 口头回答", "4 items · spoken"),
@@ -1222,7 +1282,7 @@ SPEC = {
               ]},
          ]},
 
-        # ==================================================== 28 M8 checkpoint
+        # ==================================================== 30 M8 checkpoint
         {"type": "checklist",
          "title": zh("M8 · 期中检查点 ★ —— 本周同时也是大作业的第一次正式评审",
                                  "M8 · Midterm checkpoint ★ — this week is also the project's first graded review"),
@@ -1259,7 +1319,7 @@ SPEC = {
                          "「what happens if I change this parameter」 — answer live or try it live.")},
          ]},
 
-        # ========================================================= 29 summary
+        # ========================================================= 31 summary
         {"type": "summary",
          "title": zh("本周小结", "This week in four lines"),
          "right": zh("CU(8) · 实验 7", "CU(8) · Lab 7"),
@@ -1305,7 +1365,7 @@ SPEC = {
                          "**Demoed in class this week; no extension.**")},
          ]},
 
-        # ========================================================= 30 closing
+        # ========================================================= 32 closing
         {"type": "closing",
          "quote": zh("「准确率不是成绩，是一个你还没开始解释的数字。」",
                      "「Accuracy is not a result. It is a number you have not started explaining.」"),

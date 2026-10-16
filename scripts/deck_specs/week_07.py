@@ -52,6 +52,32 @@ MEM_PROTO = {"zh": "输入用最近邻上采样到 32×32（激活体量 ×16，
              "en": "Input nearest-neighbour upsampled to 32x32 (16x the activation volume, the order of a real vision model); one forward+backward per subprocess, peak RSS; ru_maxrss is in BYTES on macOS"}
 
 
+# --- the worked examples the vector figures draw -----------------------------
+# A picture of a convolution whose own arithmetic is wrong is worse than no
+# picture, so the input, the kernel and the expected 4x4 output are stated here
+# and the renderer recomputes the output at build time and asserts against
+# CONV_OUT.  Change one of the three and the build fails instead of lying.
+CONV_SRC = [[0, 0, 8, 8, 0, 0],
+            [0, 0, 9, 9, 0, 0],
+            [0, 0, 8, 8, 0, 0],
+            [0, 0, 9, 9, 0, 0],
+            [0, 0, 8, 8, 0, 0],
+            [0, 0, 9, 9, 0, 0]]
+CONV_KER = [[1, 0, -1], [1, 0, -1], [1, 0, -1]]
+CONV_OUT = [[-25, -25, 25, 25],
+            [-26, -26, 26, 26],
+            [-25, -25, 25, 25],
+            [-26, -26, 26, 26]]
+
+# Same discipline for pooling: 4x4 in, 2x2 windows.  POOL_MAX is what the
+# renderer has to reproduce.
+POOL_SRC = [[1, 2, 5, 6],
+            [3, 4, 7, 8],
+            [9, 10, 13, 14],
+            [11, 12, 15, 16]]
+POOL_MAX = [[4, 8], [12, 16]]
+
+
 def zh(en):  # tiny helper: same string both languages (numbers, code, symbols)
     return {"zh": en, "en": en}
 
@@ -147,6 +173,25 @@ SPEC = {
                         "en": "Convolution bakes \"a pattern, wherever it appears\" into the architecture."}],
               "accent": "059669"},
          ]},
+
+        # The sentence this page is about, drawn before it is written in code.
+        # The solid 3x3 outline is the window being computed; the dashed one is
+        # where the kernel lands next — that is what "sliding" means.
+        {"type": "figure", "kind": "conv", "h": 12.9, "top": 3.30,
+         "title": {"zh": "卷积：一次滑动的点积",
+                   "en": "Convolution: One Sliding Dot Product"},
+         "subtitle": {"zh": "3×3 的核每落一次，就产生一个输出数字",
+                      "en": "Each landing of the 3x3 kernel produces one output number"},
+         "right": {"zh": "KT13", "en": "KT13"},
+         "input": CONV_SRC, "kernel": CONV_KER, "window": [1, 1], "ghost": [1, 2],
+         "highlight": [1, 1], "cell": 1.30, "assert_out": CONV_OUT,
+         "in_cap": {"zh": "输入 6×6（灰阶 0–9）", "en": "Input 6x6 (grey level 0-9)"},
+         "k_cap": {"zh": "卷积核 3×3", "en": "Kernel 3x3"},
+         "out_cap": {"zh": "输出 4×4", "en": "Output 4x4"},
+         "kernel_note": {"zh": "竖直边缘检测核：左加右减",
+                         "en": "A vertical-edge detector: add the left, subtract the right"},
+         "arith_note": {"zh": "高亮窗口逐元素相乘再求和，就是右边那个数字。虚框是核下一步要落的位置。",
+                        "en": "The highlighted window multiplied out element by element gives the number on the right. The dashed square is where the kernel lands next."}},
 
         {"type": "code",
          "title": {"zh": "卷积就是一次滑动点积——先把这句话写成代码", "en": "A convolution is one sliding dot product — write it once by hand"},
@@ -379,6 +424,31 @@ SPEC = {
          "note": {"zh": "报「shape mismatch」时先算这一页，不要先改代码。90% 的形状错误在这一页就能定位。",
                   "en": "When a shape mismatch fires, do this page first, not the code. Most shape errors are located here."}},
 
+        # The recursive rule is in the table below; this is what it looks like.
+        # All three grids are the SAME 8x8 input, and the shading is the input
+        # area one output cell of that stage can see — 3, then 4, then the whole
+        # image.  The reaches match the table's rf column exactly.
+        {"type": "figure", "kind": "rf", "h": 12.6, "top": 3.30,
+         "title": {"zh": "感受野：一张 8×8 的图，两层就看完了",
+                   "en": "Receptive Field: Two Layers Already See the Whole 8x8"},
+         "subtitle": {"zh": "三个格子都是同一张 8×8 输入；阴影是那一层「一格的输出」能看见的区域",
+                      "en": "All three grids are the same 8x8 input; the shading is what one output cell of that stage can see"},
+         "right": {"zh": "KT13 · 关键", "en": "KT13 · key"},
+         "grid": 8, "cell": 1.00,
+         "layers": [
+             {"title": {"zh": "卷积 1", "en": "Conv 1"}, "sub": "k=3, s=1",
+              "reach": 3, "color": "1E4FA8",
+              "note": {"zh": "一格看到 3×3", "en": "one cell sees 3x3"}},
+             {"title": {"zh": "最大池化", "en": "+ MaxPool"}, "sub": "k=2, s=2",
+              "reach": 4, "color": "059669",
+              "note": {"zh": "4×4 —— 步长 2 把 jump 翻倍",
+                       "en": "4x4 - stride 2 doubles the jump"}},
+             {"title": {"zh": "卷积 2", "en": "+ Conv 2"}, "sub": "k=3, s=1",
+              "reach": 8, "color": "B91C1C",
+              "note": {"zh": "8×8 —— 整张图，到此为止",
+                       "en": "8x8 - the whole image, and that is the ceiling"}},
+         ]},
+
         {"type": "table",
          "title": {"zh": "感受野：每一层的输出，到底看了输入多少", "en": "Receptive field: how much input each stage can see"},
          "right": {"zh": "KT13 · 关键", "en": "KT13 · key"},
@@ -398,6 +468,26 @@ SPEC = {
          "bold_first": True,
          "note": {"zh": "**关键一行是「卷积 2」：感受野 8，正好等于整张图。** 换句话说，在本周这个 8×8 的数据上，第二层卷积已经能看到全图——网络不可能再靠「多叠卷积」获得更多平移不变性。这不是模型不好，是数据太小。",
                   "en": "The row that matters is Conv 2: receptive field 8, exactly the whole image. On this 8x8 data the second convolution already sees everything, so no amount of extra depth adds translation invariance. That is the data being small, not the model being weak."}},
+
+        # What pooling *is*, before the page that says what it is for.  The max
+        # panel's output is recomputed and asserted by the renderer.
+        {"type": "figure", "kind": "pool", "h": 12.4, "top": 3.30,
+         "title": {"zh": "池化：四个数变成一个",
+                   "en": "Pooling: Four Numbers Become One"},
+         "subtitle": {"zh": "同一个 4×4 输入、同一个 2×2 不重叠窗口，只有规则不同",
+                      "en": "Same 4x4 input, same non-overlapping 2x2 windows — only the rule differs"},
+         "right": {"zh": "KT13", "en": "KT13"},
+         "input": POOL_SRC, "k": [2, 2], "cell": 2.0, "assert_max": POOL_MAX,
+         "panels": [
+             {"title": {"zh": "最大池化", "en": "Max pooling"},
+              "sub": {"zh": "取四个里最大的", "en": "keep the largest of the four"},
+              "note": {"zh": "保留最强的响应", "en": "Keeps the strongest response"}},
+             {"title": {"zh": "平均池化", "en": "Average pooling"},
+              "sub": {"zh": "取四个的平均", "en": "keep the mean of the four"},
+              "note": {"zh": "把四个一起抹平", "en": "Smooths all four together"}},
+         ],
+         "note": {"zh": "本周实测：除池化函数外两个架构逐字节相同，最大池化比平均池化高 4.1 个点——手写数字的判别信息正好落在「笔画最集中的地方」，取最大保住了它，取平均把它摊薄了。",
+                  "en": "Measured this week: the two architectures are byte-for-byte identical apart from the pooling function, and max pooling wins by 4.1 points — a digit's evidence sits exactly where its stroke is densest, which max keeps and average dilutes."}},
 
         {"type": "cards", "cols": 3, "h": 11.6, "top": 3.7,
          "title": {"zh": "池化在做什么——三个作用，一个代价", "en": "What pooling does — three jobs, one price"},
