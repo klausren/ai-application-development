@@ -530,7 +530,7 @@ SPEC = {
                       "    return self.fc(h[-1][inv])",
                   ]}},
          ],
-         "note": zh("两段代码**参数量完全相同**（166 278），训练轮数相同，数据相同。"
+         "note": zh("两段代码**参数量完全相同**（166,278），训练轮数相同，数据相同。"
                     "唯一的差别是「第 96 个位置」还是「最后一个真词」。下一页看这个差别值多少。",
                     "Both blocks have **exactly the same parameter count** (166,278), the same epochs, "
                     "the same data. The only difference is 「position 96」 versus 「the last real token」. "
@@ -785,7 +785,7 @@ SPEC = {
                   zh(f"宏 F1 **{ARMS['mean_masked'][2]:.4f} ± {ARMS['mean_masked'][3]:.4f}**",
                      f"macro F1 **{ARMS['mean_masked'][2]:.4f} ± {ARMS['mean_masked'][3]:.4f}**"),
                   zh("无 Dropout，无权重衰减", "no Dropout, no weight decay"),
-                  zh("参数量 166 278", "166,278 parameters"),
+                  zh("参数量 166,278", "166,278 parameters"),
                   zh("**这是本周的最好成绩，就到这里了**",
                      "**this is this week's ceiling**"),
               ]},
